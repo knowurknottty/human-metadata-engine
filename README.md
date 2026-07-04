@@ -2,6 +2,8 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
+**v0.2.0** — Now with 5 encoders, graph analysis, and ~50 dimensions per identity.
+
 ## What This Is
 
 This engine computes multiple symbolic, linguistic, semantic, temporal, and graph-based signatures for identity strings. It treats numerology as one encoder among many — not the authority.
@@ -12,148 +14,62 @@ This engine computes multiple symbolic, linguistic, semantic, temporal, and grap
 > not:  
 > "What is this person?"
 
-That distinction keeps the system powerful without becoming delusional, invasive, or overconfident.
+## Encoder Suite
 
-## Components
+| Encoder | What It Computes | Dimensions |
+|---------|------------------|------------|
+| **Pythagorean** | Expression, Soul Urge, Personality, Balance, Hidden Passion, Karmic Lessons | ~15 |
+| **Chaldean** | Name Number, Compound Number, Soul/Personality (ancient system, no master numbers) | ~10 |
+| **Ordinal** | A1Z26 standard + reverse + digital root reduced, vowel/consonant totals | ~8 |
+| **Linguistic** | Shannon entropy, bigrams, trigrams, syllables, phonetics, symmetry, uniqueness | ~20 |
+| **Binary/Prime** | Vowel/consonant binary string, prime-index encoding, polarity score | ~10 |
 
-### Pythagorean Encoder (`src/encoders/pythagorean.py`)
+**Total: ~50 dimensions per identity string.**
 
-Implements the standard Pythagorean letter-to-number mapping:
+## Quick Start
 
+```bash
+# Run all tests (41 tests)
+python3 tests/test_pythagorean.py    # 17 Pythagorean tests
+python3 tests/test_extended.py       # 24 Chaldean/Ordinal/Linguistic/Binary tests
+
+# Generate unified signatures (all encoders)
+python3 src/engine.py
+
+# Run graph analysis
+python3 src/graph/analysis.py output/identity_graph.json
+```
+
+## Encoder Implementations
+
+### Pythagorean (`src/encoders/pythagorean.py`)
+Standard letter-to-number mapping:
 ```
 1: A J S    4: D M V    7: G P Y
 2: B K T    5: E N W    8: H Q Z
 3: C L U    6: F O X    9: I R
 ```
+Master numbers (11, 22, 33) preserved at intermediate reduction.
 
-Produces:
-- Expression number (all letters)
-- Soul Urge number (vowels only)
-- Personality number (consonants only)
-- Balance number (initials)
-- Hidden Passion (most frequent value)
-- Karmic Lessons (missing numbers 1-9)
-- Intensity table
-- Master number preservation (11, 22, 33)
-
-### Identity Graph (`output/identity_graph.json`)
-
-Nodes represent identities (human, alias, handle, project, persona).  
-Edges represent relationships (created_by, uses_alias, symbolically_resonates_with).
-
-Each edge includes:
-- Confidence score (0.0 to 1.0)
-- Interpretation level (factual, user_claimed, symbolic, inferred, speculative)
-
-### Comparative Matrix (`output/comparative_matrix.json`)
-
-Compares identity pairs across:
-- Expression match
-- Soul Urge match
-- Personality match
-- Shared active numbers
-
-### Interpretation Report (`output/interpretation_report.md`)
-
-Full analysis with strict sections:
-1. Verified facts
-2. Computed facts
-3. Symbolic interpretations
-4. Speculative synthesis
-5. Risks
-6. Naming recommendations
-7. Integration recommendations
-8. Safety & provenance policy
-
-## Quick Start
-
-```bash
-# Run tests
-python3 tests/test_pythagorean.py
-
-# Generate signatures
-python3 -c "
-import sys
-sys.path.insert(0, 'src')
-from encoders.pythagorean import pythagorean_signature
-sig = pythagorean_signature('Your Name')
-print(f'Expression: {sig.reduced}')
-print(f'Soul Urge: {sig.soul_urge}')
-print(f'Personality: {sig.personality}')
-"
+### Chaldean (`src/encoders/chaldean.py`)
+Ancient Babylonian mapping (9 is sacred, excluded):
 ```
-
-## Human Seed
-
-```yaml
-birth_identity:
-  full_birth_name: Kirk Evan Brown
-  birth_date: 1982-02-04
-  birth_time: 01:42
-  birth_place: Evanston, Wyoming, USA
-
-known_aliases:
-  - Capt
-  - Captain
-  - Knowurknot
-  - knowurknottty
-  - Captain Knowurknot
-
-project_entities:
-  - CAPT
-  - bioCAPT
-  - FrankenCAPT
-  - Jenn-ai
-  - SynSync
-  - Soul Fractal Engine
-  - Knowledge Bubbles
-  - Inversion Labs
-  - CAPT-RYS
-  - SYNCHEF
-  - Wyrd
+1: A I J Q Y    5: E H N X
+2: B K R         6: U V W
+3: C G L S       7: O Z
+4: D M T         8: F P
 ```
+No master numbers. Name numbers reduce to single digit.
 
-## Critical Rules
+### Ordinal (`src/encoders/ordinal.py`)
+Three ordinal variants:
+- **Standard**: A=1, B=2, ..., Z=26
+- **Reverse**: A=26, B=25, ..., Z=1
+- **Reduced**: Digital root of standard ordinal per letter
 
-1. **Never say numerology proves anything.**
-2. **Never conflate symbolic resonance with empirical validation.**
-3. **Never infer sensitive personal traits as fact.**
-4. **Every symbolic claim must be labeled symbolic, interpretive, or speculative.**
-5. **Every computed value must be reproducible.**
-
-## File Structure
-
-```
-human-metadata-engine/
-├── README.md
-├── src/
-│   └── encoders/
-│       └── pythagorean.py      # Pythagorean encoder
-├── tests/
-│   └── test_pythagorean.py     # 17 verification tests
-├── output/
-│   ├── identity_signatures.json  # 17 identity signatures
-│   ├── identity_graph.json       # Graph with nodes and edges
-│   ├── comparative_matrix.json   # Pair comparisons
-│   └── interpretation_report.md  # Full analysis
-├── schemas/                      # JSON schemas (future)
-└── examples/                     # Usage examples (future)
-```
-
-## Integration with CAPT/bioCAPT
-
-This engine is designed to integrate with:
-- **CAPT**: Identity metadata as graph nodes
-- **bioCAPT**: ECHO indexing by symbolic resonance
-- **CSG**: Identity state transitions
-- **PULSE**: Identity coherence monitoring
-- **Knowledge Bubbles**: Exportable identity analysis
-
-## Version History
-
-- **0.1.0** (2026-07-04): Initial release with Pythagorean encoder, 17 identity signatures, graph model, comparative matrix, interpretation report.
-
----
-
-*Part of the Inversion Labs ecosystem.*  
-*Symbolic systems are interpretive lenses, not empirical proof.*
+### Linguistic (`src/encoders/linguistic.py`)
+Measurable text properties (no symbolic claims):
+- Shannon entropy of character distribution
+- Bigram/trigram frequency tables
+- Syllable estimation
+- Phon...[truncated]
