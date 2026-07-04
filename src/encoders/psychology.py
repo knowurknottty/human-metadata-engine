@@ -295,7 +295,7 @@ def create_profile(
 if __name__ == "__main__":
     # Example: create a profile
     profile = create_profile(
-        subject_id="kirk_evan_brown",
+        subject_id="john_michael_smith",
         big_five={"openness": 0.9, "conscientiousness": 0.8, "extraversion": 0.6,
                   "agreeableness": 0.7, "neuroticism": 0.3, "confidence": 0.7},
         mbti_type="INTJ",

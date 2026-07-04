@@ -269,7 +269,7 @@ def life_path_number(
     """Compute life path numerology from birth date.
     
     Args:
-        year: Birth year (e.g., 1982)
+        year: Birth year (e.g., 1985)
         month: Birth month (1-12)
         day: Birth day (1-31)
         preserve_master: If True, preserve master numbers
@@ -327,12 +327,12 @@ def life_path_number(
 
 if __name__ == "__main__":
     names = [
-        ("Kirk Evan Brown", "birth_name"),
+        ("John Michael Smith", "birth_name"),
         ("Capt", "nickname"),
         ("CAPT", "project"),
         ("Captain", "persona"),
-        ("Knowurknot", "handle"),
-        ("Captain Knowurknot", "persona"),
+        ("testuser42", "handle"),
+        ("Captain testuser42", "persona"),
         ("bioCAPT", "project"),
         ("FrankenCAPT", "project"),
         ("Jenn-ai", "agent"),
@@ -362,12 +362,12 @@ if __name__ == "__main__":
         print(f"  Hidden Passion: {sig.hidden_passion}")
         print(f"  Karmic Lessons: {sig.karmic_lessons}")
     
-    # Life path for Kirk Evan Brown
+    # Life path for John Michael Smith
     print("\n" + "=" * 80)
     print("BIRTH DATE NUMEROLOGY")
     print("=" * 80)
     
-    lp = life_path_number(1982, 2, 4)
+    lp = life_path_number(1985, 6, 15)
     print(f"\nBirth Date: {lp.date}")
     print(f"  Year: {lp.year_total} → {reduce_number(lp.year_total, False)[0]}")
     print(f"  Month: {lp.month_total} → {reduce_number(lp.month_total, False)[0]}")

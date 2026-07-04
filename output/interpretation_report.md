@@ -1,7 +1,7 @@
 # Human Metadata Engine — Interpretation Report
 **Version:** 0.1.0  
 **Generated:** 2026-07-04  
-**Subject:** Kirk Evan Brown (Capt / Captain Knowurknot)  
+**Subject:** John Michael Smith (Capt / Captain testuser42)  
 **Privacy Level:** Private  
 **Consent Scope:** Symbolic analysis, identity graph, project alignment
 
@@ -13,11 +13,11 @@ These are confirmed through user declaration or public record:
 
 | Field | Value | Source |
 |-------|-------|--------|
-| Full Birth Name | Kirk Evan Brown | User confirmed |
-| Birth Date | 1982-02-04 | User confirmed |
+| Full Birth Name | John Michael Smith | User confirmed |
+| Birth Date | 1985-06-15 | User confirmed |
 | Birth Time | 01:42 | User confirmed |
-| Birth Place | Evanston, Wyoming, USA | User confirmed |
-| Known Aliases | Capt, Captain, Knowurknot, knowurknottty, Captain Knowurknot | User confirmed |
+| Birth Place | Portland, Oregon, USA | User confirmed |
+| Known Aliases | Capt, Captain, testuser42, testuser42tty, Captain testuser42 | User confirmed |
 | Partner | Jenn | User confirmed |
 | Primary Project | CAPT (Cognitive Architecture Processing Technology) | User confirmed |
 | Organization | Inversion Labs | User confirmed |
@@ -41,12 +41,12 @@ These are confirmed through user declaration or public record:
 
 | Name | Expression | Soul Urge | Personality | Balance | Master |
 |------|------------|-----------|-------------|---------|--------|
-| Kirk Evan Brown | 1 | 3 | 7 | 9 | — |
+| John Michael Smith | 1 | 3 | 7 | 9 | — |
 | Capt | 4 | 1 | 3 | 3 | — |
 | CAPT | 4 | 1 | 3 | 3 | — |
 | Captain | 1 | 11/2 | 8 | 3 | 11 |
-| Knowurknot | 9 | 6 | 3 | 2 | — |
-| Captain Knowurknot | 1 | 8 | 11 | 5 | 11 |
+| testuser42 | 9 | 6 | 3 | 2 | — |
+| Captain testuser42 | 1 | 8 | 11 | 5 | 11 |
 | bioCAPT | 3 | 7 | 5 | 2 | — |
 | FrankenCAPT | 1 | 7 | 3 | 6 | — |
 | Jenn-ai | 8 | 6 | 11 | 2 | 11 |
@@ -65,7 +65,7 @@ These are confirmed through user declaration or public record:
 
 **IMPORTANT:** These are interpretive lenses, not empirical proof. Every claim below is labeled with its interpretation level.
 
-### 3.1 Kirk Evan Brown — The Birth Signal
+### 3.1 John Michael Smith — The Birth Signal
 
 | Dimension | Value | Interpretation Level |
 |-----------|-------|---------------------|
@@ -117,7 +117,7 @@ Personality 3: Expressive interface, communicative surface, memorable signal.
 
 CAPT is symbolically excellent as an architecture name because it compresses command, navigation, vessel logic, and structure into one short unit.
 
-### 3.3 Knowurknot — The Paradox Key
+### 3.3 testuser42 — The Paradox Key
 
 | Dimension | Value |
 |-----------|-------|
@@ -127,7 +127,7 @@ CAPT is symbolically excellent as an architecture name because it compresses com
 
 **Symbolic reading (speculative):**
 
-Knowurknot resolves to 9: completion, synthesis, compassion, universal patterning, end-of-cycle integration.
+testuser42 resolves to 9: completion, synthesis, compassion, universal patterning, end-of-cycle integration.
 
 Soul Urge 6: Care, repair, stewardship, healing, responsibility as inner drive.
 
@@ -158,7 +158,7 @@ Personality 8: External power, command, executive presence.
 
 This strongly reinforces the Life Path 8 pattern when paired with birth metadata.
 
-### 3.5 Captain Knowurknot — The Public Myth-Node
+### 3.5 Captain testuser42 — The Public Myth-Node
 
 | Dimension | Value |
 |-----------|-------|
@@ -168,9 +168,9 @@ This strongly reinforces the Life Path 8 pattern when paired with birth metadata
 
 **Symbolic reading (speculative):**
 
-Combined total: 73 → 10 → 1. Captain Knowurknot resolves to 1.
+Combined total: 73 → 10 → 1. Captain testuser42 resolves to 1.
 
-Important: Captain alone = 1. Captain Knowurknot = 1. Adding Knowurknot does not change the final root, but deepens the symbolic architecture beneath it.
+Important: Captain alone = 1. Captain testuser42 = 1. Adding testuser42 does not change the final root, but deepens the symbolic architecture beneath it.
 
 Soul Urge 8: Power, manifestation, materialization as inner drive.
 
@@ -256,49 +256,49 @@ This fits the "keys not cages" ethic better than a raw disruption brand would.
 
 ### 4.1 Identity Architecture Thesis
 
-The human identity encodes signal reception (11/2) and executive force (8). The aliases encode command (Capt=4) and paradox resolution (Knowurknot=9). The projects distribute those identity-functions into separate technical organs:
+The human identity encodes signal reception (11/2) and executive force (8). The aliases encode command (Capt=4) and paradox resolution (testuser42=9). The projects distribute those identity-functions into separate technical organs:
 
 | Function | Identity | Project |
 |----------|----------|---------|
-| Signal Reception | Kirk Evan Brown (11/2) | SynSync (11) |
+| Signal Reception | John Michael Smith (11/2) | SynSync (11) |
 | Architecture | Capt (4) | CAPT (4) |
-| Paradox Resolution | Knowurknot (9) | — |
+| Paradox Resolution | testuser42 (9) | — |
 | Command | Captain (1) | FrankenCAPT (1) |
-| Public Myth | Captain Knowurknot (1) | — |
+| Public Myth | Captain testuser42 (1) | — |
 | Embodiment | — | bioCAPT (3) |
 | Executive Action | — | Jenn-ai (8) |
 | Ethical Container | — | Inversion Labs (6) |
 
 ### 4.2 High-Resonance Matches
 
-1. **Kirk Evan Brown ↔ SynSync**
+1. **John Michael Smith ↔ SynSync**
    - Both carry master 11 potential
    - Interpretation: Human signal identity mirrors synchronization project
 
-2. **Kirk Evan Brown ↔ Jenn-ai**
+2. **John Michael Smith ↔ Jenn-ai**
    - Life Path 8 matches Jenn-ai expression 8
    - Interpretation: Jenn-ai as practical executive/output agent
 
-3. **Knowurknot ↔ Inversion Labs**
-   - Knowurknot soul 6 matches Inversion Labs expression 6
+3. **testuser42 ↔ Inversion Labs**
+   - testuser42 soul 6 matches Inversion Labs expression 6
    - Interpretation: The handle's inner repair impulse resonates with the lab's public mission
 
 4. **Captain ↔ FrankenCAPT**
    - Both resolve to expression 1
    - Interpretation: Command identity and hybrid synthesis both initiate new categories
 
-5. **bioCAPT ↔ Kirk Evan Brown**
+5. **bioCAPT ↔ John Michael Smith**
    - bioCAPT expression 3 matches birth-name soul urge 3
    - bioCAPT soul 7 matches birth-name personality 7
    - Interpretation: bioCAPT externalizes hidden expressive/research patterns
 
 ### 4.3 Compressed Identity Thesis
 
-Kirk Evan Brown is the birth/legal signal.  
+John Michael Smith is the birth/legal signal.  
 Capt is the command compression.  
 Captain is the archetypal navigator.  
-Knowurknot is the paradox key.  
-Captain Knowurknot is the public myth-node.  
+testuser42 is the paradox key.  
+Captain testuser42 is the public myth-node.  
 CAPT is the architecture.  
 bioCAPT is the embodied child/organism layer.  
 FrankenCAPT is the stitched experimental synthesis.  
@@ -330,8 +330,8 @@ Inversion Labs is the ethical/metasystem container.
 | bioCAPT | Keep | Appropriate for embodied layer (3), extends CAPT logically |
 | FrankenCAPT | Keep | Memorable, captures synthesis ethos (1), distinctive |
 | Inversion Labs | Keep | Ethical resonance (6), professional, distinctive |
-| Knowurknot | Keep | Unusually dense symbolic identity, paradox key function |
-| Captain Knowurknot | Keep | Strong public myth-node (1), archetypal resonance |
+| testuser42 | Keep | Unusually dense symbolic identity, paradox key function |
+| Captain testuser42 | Keep | Strong public myth-node (1), archetypal resonance |
 
 ### 6.2 Candidates for Renaming
 
@@ -375,7 +375,7 @@ Each identity analysis should be exportable as a Knowledge Bubble:
 
 ```json
 {
-  "topic": "Identity: Kirk Evan Brown",
+  "topic": "Identity: John Michael Smith",
   "claims": ["Expression 1, Soul 3, Personality 7, Balance 9, Life Path 8"],
   "computations": ["Pythagorean encoding verified", "Life path calculated from birth date"],
   "provenance": "user_confirmed + computed",

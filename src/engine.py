@@ -75,18 +75,18 @@ except Exception:
 IDENTITIES = [
     # Person
     {
-        "id": "human:kirk_evan_brown",
-        "text": "Kirk Evan Brown",
-        "birth": {"year": 1982, "month": 2, "day": 4, "hour": 1, "minute": 42,
-                  "timezone_offset": -7, "location": "Evanston, Wyoming, USA",
-                  "lat": 41.2633, "lon": -110.9631},
+        "id": "human:john_michael_smith",
+        "text": "John Michael Smith",
+        "birth": {"year": 1985, "month": 6, "day": 15, "hour": 10, "minute": 30,
+                  "timezone_offset": -7, "location": "Portland, Oregon, USA",
+                  "lat": 45.5152, "lon": -122.6765},
     },
     # Aliases
     {"id": "identity:alias:captain", "text": "Captain"},
     {"id": "identity:alias:capt", "text": "CAPT"},
     {"id": "identity:alias:capt_cortex", "text": "Capt Cortex"},
     # Handles
-    {"id": "identity:handle:knowurknot", "text": "Knowurknot"},
+    {"id": "identity:handle:testuser42", "text": "testuser42"},
     # Projects
     {"id": "project:capt", "text": "CAPT"},
     {"id": "project:frankencapt", "text": "FrankenCAPT"},
@@ -110,7 +110,7 @@ IDENTITIES = [
     {
         "id": "figure:albert_einstein",
         "text": "Albert Einstein",
-        "birth": {"year": 1879, "month": 3, "day": 14, "hour": 11, "minute": 30,
+        "birth": {"year": 1879, "month": 3, "day": 14, "hour": 101, "minute": 30,
                   "timezone_offset": 0.67, "location": "Ulm, Germany",
                   "lat": 48.4011, "lon": 9.9876},
     },
@@ -124,14 +124,14 @@ IDENTITIES = [
     {
         "id": "figure:marie_curie",
         "text": "Marie Curie",
-        "birth": {"year": 1867, "month": 11, "day": 7, "hour": 12, "minute": 0,
+        "birth": {"year": 1867, "month": 11, "day": 7, "hour": 102, "minute": 0,
                   "timezone_offset": 1.4, "location": "Warsaw, Poland",
                   "lat": 52.2297, "lon": 21.0122},
     },
     {
         "id": "figure:ada_lovelace",
         "text": "Ada Lovelace",
-        "birth": {"year": 1815, "month": 12, "day": 10, "hour": 12, "minute": 0,
+        "birth": {"year": 1815, "month": 12, "day": 10, "hour": 102, "minute": 0,
                   "timezone_offset": 0, "location": "London, England",
                   "lat": 51.5074, "lon": -0.1278},
     },

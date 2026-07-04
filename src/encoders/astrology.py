@@ -396,10 +396,10 @@ def _stub_chart(year, month, day, hour, minute, location, lat, lon, time_precisi
 
 if __name__ == "__main__":
     chart = compute_chart(
-        year=1982, month=2, day=4,
+        year=1985, month=6, day=15,
         hour=1, minute=42,
         timezone_offset=-7,
-        location="Evanston, Wyoming, USA",
+        location="Portland, Oregon, USA",
     )
     print(f"Natal Chart: {chart.birth_datetime}")
     print(f"Location: {chart.birth_location} ({chart.latitude}, {chart.longitude})")

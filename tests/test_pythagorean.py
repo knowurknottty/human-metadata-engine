@@ -66,25 +66,25 @@ def test_case_insensitive():
     print("✓ test_case_insensitive passed")
 
 
-def test_knowurknot():
-    """Knowurknot: K=2,N=5,O=6,W=5,U=3,R=9,K=2,N=5,O=6,T=2 → total=45, reduced=9"""
-    sig = pythagorean_signature("Knowurknot")
+def test_testuser42():
+    """testuser42: K=2,N=5,O=6,W=5,U=3,R=9,K=2,N=5,O=6,T=2 → total=45, reduced=9"""
+    sig = pythagorean_signature("testuser42")
     assert sig.total == 45, f"Expected 45, got {sig.total}"
     assert sig.reduced == 9, f"Expected 9, got {sig.reduced}"
-    print("✓ test_knowurknot passed")
+    print("✓ test_testuser42 passed")
 
 
-def test_kirk_evan_brown():
-    """Kirk Evan Brown: total=64, master_preserved=None (spec had arithmetic error)"""
-    sig = pythagorean_signature("Kirk Evan Brown")
+def test_john_michael_smith():
+    """John Michael Smith: total=64, master_preserved=None (spec had arithmetic error)"""
+    sig = pythagorean_signature("John Michael Smith")
     assert sig.total == 64, f"Expected 64, got {sig.total}"
     assert sig.master_preserved is None, f"Expected no master, got {sig.master_preserved}"
-    print("✓ test_kirk_evan_brown passed")
+    print("✓ test_john_michael_smith passed")
 
 
 def test_life_path():
-    """Life path from 1982-02-04: total=26, reduced=8"""
-    lp = life_path_number(1982, 2, 4)
+    """Life path from 1985-06-15: total=33, reduced=6"""
+    lp = life_path_number(1985, 6, 15)
     assert lp.life_path_raw == 26, f"Expected 26, got {lp.life_path_raw}"
     assert lp.life_path_reduced == 8, f"Expected 8, got {lp.life_path_reduced}"
     print("✓ test_life_path passed")
@@ -142,8 +142,8 @@ def test_personality():
 
 
 def test_balance_number():
-    """Kirk Evan Brown balance: K=2, E=5, B=2 → 9"""
-    sig = pythagorean_signature("Kirk Evan Brown")
+    """John Michael Smith balance: K=2, E=5, B=2 → 9"""
+    sig = pythagorean_signature("John Michael Smith")
     assert sig.balance_number == 9, f"Expected balance 9, got {sig.balance_number}"
     print("✓ test_balance_number passed")
 
@@ -169,7 +169,7 @@ def test_master_number_preservation():
 
 def test_multi_token():
     """Multi-token names should split correctly."""
-    sig = pythagorean_signature("Kirk Evan Brown")
+    sig = pythagorean_signature("John Michael Smith")
     assert len(sig.tokens) == 3, f"Expected 3 tokens, got {len(sig.tokens)}"
     assert sig.tokens[0] == "KIRK"
     assert sig.tokens[1] == "EVAN"
@@ -200,8 +200,8 @@ def test_all_tests():
         test_letter_mapping,
         test_capt,
         test_case_insensitive,
-        test_knowurknot,
-        test_kirk_evan_brown,
+        test_testuser42,
+        test_john_michael_smith,
         test_life_path,
         test_punctuation_ignored,
         test_intensity_table,

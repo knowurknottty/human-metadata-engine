@@ -2,7 +2,7 @@
   "version": "0.1.0",
   "generated_at": "2026-07-04T12:00:00Z",
   "subject": {
-    "id": "human:kirk_evan_brown",
+    "id": "human:john_michael_smith",
     "preferred_display": "Capt",
     "privacy_level": "private",
     "consent_scope": [
@@ -13,7 +13,7 @@
   },
   "identity_signatures": [
     {
-      "original_text": "Kirk Evan Brown",
+      "original_text": "John Michael Smith",
       "normalized_text": "KIRKEVANBROWN",
       "tokens": [
         "KIRK",
@@ -533,7 +533,7 @@
       "identity_type": "persona"
     },
     {
-      "original_text": "Knowurknot",
+      "original_text": "testuser42",
       "normalized_text": "KNOWURKNOT",
       "tokens": [
         "KNOWURKNOT"
@@ -698,7 +698,7 @@
       "identity_type": "handle"
     },
     {
-      "original_text": "Captain Knowurknot",
+      "original_text": "Captain testuser42",
       "normalized_text": "CAPTAINKNOWURKNOT",
       "tokens": [
         "CAPTAIN",
@@ -2629,8 +2629,8 @@
     }
   ],
   "birth_date_numerology": {
-    "date": "1982-02-04",
-    "year": 1982,
+    "date": "1985-06-15",
+    "year": 1985,
     "month": 2,
     "day": 4,
     "year_digits": [

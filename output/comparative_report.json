@@ -86,8 +86,8 @@
       "entropy_ratio": 0.5365
     },
     {
-      "id": "human:kirk_evan_brown",
-      "text": "Kirk Evan Brown",
+      "id": "human:john_michael_smith",
+      "text": "John Michael Smith",
       "resonance": 65.0,
       "components": {
         "numerological_convergence": 0.5,
@@ -310,8 +310,8 @@
       "entropy_ratio": 0.5499
     },
     {
-      "id": "identity:handle:knowurknot",
-      "text": "Knowurknot",
+      "id": "identity:handle:testuser42",
+      "text": "testuser42",
       "resonance": 54.8,
       "components": {
         "numerological_convergence": 0.25,
@@ -410,11 +410,11 @@
   ],
   "similarity": {
     "ids": [
-      "human:kirk_evan_brown",
+      "human:john_michael_smith",
       "identity:alias:captain",
       "identity:alias:capt",
       "identity:alias:capt_cortex",
-      "identity:handle:knowurknot",
+      "identity:handle:testuser42",
       "project:capt",
       "project:frankencapt",
       "project:biocapt",
@@ -441,12 +441,12 @@
       "figure:carl_jung"
     ],
     "matrix": {
-      "human:kirk_evan_brown": {
-        "human:kirk_evan_brown": 1.0,
+      "human:john_michael_smith": {
+        "human:john_michael_smith": 1.0,
         "identity:alias:captain": 0.8612,
         "identity:alias:capt": 0.8351,
         "identity:alias:capt_cortex": 0.7976,
-        "identity:handle:knowurknot": 0.7701,
+        "identity:handle:testuser42": 0.7701,
         "project:capt": 0.8351,
         "project:frankencapt": 0.7999,
         "project:biocapt": 0.8699,
@@ -473,11 +473,11 @@
         "figure:carl_jung": 0.8228
       },
       "identity:alias:captain": {
-        "human:kirk_evan_brown": 0.8612,
+        "human:john_michael_smith": 0.8612,
         "identity:alias:captain": 1.0,
         "identity:alias:capt": 0.8522,
         "identity:alias:capt_cortex": 0.7876,
-        "identity:handle:knowurknot": 0.6903,
+        "identity:handle:testuser42": 0.6903,
         "project:capt": 0.8522,
         "project:frankencapt": 0.8807,
         "project:biocapt": 0.8869,
@@ -504,11 +504,11 @@
         "figure:carl_jung": 0.7793
       },
       "identity:alias:capt": {
-        "human:kirk_evan_brown": 0.8351,
+        "human:john_michael_smith": 0.8351,
         "identity:alias:captain": 0.8522,
         "identity:alias:capt": 1.0,
         "identity:alias:capt_cortex": 0.8867,
-        "identity:handle:knowurknot": 0.8485,
+        "identity:handle:testuser42": 0.8485,
         "project:capt": 1.0,
         "project:frankencapt": 0.8636,
         "project:biocapt": 0.9322,
@@ -535,11 +535,11 @@
         "figure:carl_jung": 0.8134
       },
       "identity:alias:capt_cortex": {
-        "human:kirk_evan_brown": 0.7976,
+        "human:john_michael_smith": 0.7976,
         "identity:alias:captain": 0.7876,
         "identity:alias:capt": 0.8867,
         "identity:alias:capt_cortex": 1.0,
-        "identity:handle:knowurknot": 0.8301,
+        "identity:handle:testuser42": 0.8301,
         "project:capt": 0.8867,
         "project:frankencapt": 0.7906,
         "project:biocapt": 0.84,
@@ -565,12 +565,12 @@
         "figure:hypatia": 0.7949,
         "figure:carl_jung": 0.7998
       },
-      "identity:handle:knowurknot": {
-        "human:kirk_evan_brown": 0.7701,
+      "identity:handle:testuser42": {
+        "human:john_michael_smith": 0.7701,
         "identity:alias:captain": 0.6903,
         "identity:alias:capt": 0.8485,
         "identity:alias:capt_cortex": 0.8301,
-        "identity:handle:knowurknot": 1.0,
+        "identity:handle:testuser42": 1.0,
         "project:capt": 0.8485,
         "project:frankencapt": 0.7169,
         "project:biocapt": 0.8499,
@@ -597,11 +597,11 @@
         "figure:carl_jung": 0.9064
       },
       "project:capt": {
-        "human:kirk_evan_brown": 0.8351,
+        "human:john_michael_smith": 0.8351,
         "identity:alias:captain": 0.8522,
         "identity:alias:capt": 1.0,
         "identity:alias:capt_cortex": 0.8867,
-        "identity:handle:knowurknot": 0.8485,
+        "identity:handle:testuser42": 0.8485,
         "project:capt": 1.0,
         "project:frankencapt": 0.8636,
         "project:biocapt": 0.9322,
@@ -628,11 +628,11 @@
         "figure:carl_jung": 0.8134
       },
       "project:frankencapt": {
-        "human:kirk_evan_brown": 0.7999,
+        "human:john_michael_smith": 0.7999,
         "identity:alias:captain": 0.8807,
         "identity:alias:capt": 0.8636,
         "identity:alias:capt_cortex": 0.7906,
-        "identity:handle:knowurknot": 0.7169,
+        "identity:handle:testuser42": 0.7169,
         "project:capt": 0.8636,
         "project:frankencapt": 1.0,
         "project:biocapt": 0.9455,
@@ -659,11 +659,11 @@
         "figure:carl_jung": 0.8163
       },
       "project:biocapt": {
-        "human:kirk_evan_brown": 0.8699,
+        "human:john_michael_smith": 0.8699,
         "identity:alias:captain": 0.8869,
         "identity:alias:capt": 0.9322,
         "identity:alias:capt_cortex": 0.84,
-        "identity:handle:knowurknot": 0.8499,
+        "identity:handle:testuser42": 0.8499,
         "project:capt": 0.9322,
         "project:frankencapt": 0.9455,
         "project:biocapt": 1.0,
@@ -690,11 +690,11 @@
         "figure:carl_jung": 0.8927
       },
       "project:inversion_labs": {
-        "human:kirk_evan_brown": 0.7532,
+        "human:john_michael_smith": 0.7532,
         "identity:alias:captain": 0.8555,
         "identity:alias:capt": 0.9246,
         "identity:alias:capt_cortex": 0.9315,
-        "identity:handle:knowurknot": 0.8415,
+        "identity:handle:testuser42": 0.8415,
         "project:capt": 0.9246,
         "project:frankencapt": 0.8908,
         "project:biocapt": 0.9044,
@@ -721,11 +721,11 @@
         "figure:carl_jung": 0.8384
       },
       "project:jennai": {
-        "human:kirk_evan_brown": 0.7655,
+        "human:john_michael_smith": 0.7655,
         "identity:alias:captain": 0.7291,
         "identity:alias:capt": 0.9283,
         "identity:alias:capt_cortex": 0.8888,
-        "identity:handle:knowurknot": 0.9034,
+        "identity:handle:testuser42": 0.9034,
         "project:capt": 0.9283,
         "project:frankencapt": 0.8195,
         "project:biocapt": 0.9223,
@@ -752,11 +752,11 @@
         "figure:carl_jung": 0.8276
       },
       "project:synsync": {
-        "human:kirk_evan_brown": 0.7877,
+        "human:john_michael_smith": 0.7877,
         "identity:alias:captain": 0.4971,
         "identity:alias:capt": 0.7304,
         "identity:alias:capt_cortex": 0.7117,
-        "identity:handle:knowurknot": 0.6137,
+        "identity:handle:testuser42": 0.6137,
         "project:capt": 0.7304,
         "project:frankencapt": 0.557,
         "project:biocapt": 0.662,
@@ -783,11 +783,11 @@
         "figure:carl_jung": 0.571
       },
       "project:sigil": {
-        "human:kirk_evan_brown": 0.8076,
+        "human:john_michael_smith": 0.8076,
         "identity:alias:captain": 0.7538,
         "identity:alias:capt": 0.7588,
         "identity:alias:capt_cortex": 0.7709,
-        "identity:handle:knowurknot": 0.7832,
+        "identity:handle:testuser42": 0.7832,
         "project:capt": 0.7588,
         "project:frankencapt": 0.859,
         "project:biocapt": 0.8806,
@@ -814,11 +814,11 @@
         "figure:carl_jung": 0.9058
       },
       "project:sentinel": {
-        "human:kirk_evan_brown": 0.8147,
+        "human:john_michael_smith": 0.8147,
         "identity:alias:captain": 0.7473,
         "identity:alias:capt": 0.8791,
         "identity:alias:capt_cortex": 0.9142,
-        "identity:handle:knowurknot": 0.8561,
+        "identity:handle:testuser42": 0.8561,
         "project:capt": 0.8791,
         "project:frankencapt": 0.695,
         "project:biocapt": 0.8176,
@@ -845,11 +845,11 @@
         "figure:carl_jung": 0.878
       },
       "project:titan": {
-        "human:kirk_evan_brown": 0.9088,
+        "human:john_michael_smith": 0.9088,
         "identity:alias:captain": 0.9325,
         "identity:alias:capt": 0.8661,
         "identity:alias:capt_cortex": 0.8365,
-        "identity:handle:knowurknot": 0.6476,
+        "identity:handle:testuser42": 0.6476,
         "project:capt": 0.8661,
         "project:frankencapt": 0.8256,
         "project:biocapt": 0.8665,
@@ -876,11 +876,11 @@
         "figure:carl_jung": 0.7536
       },
       "human:jenn": {
-        "human:kirk_evan_brown": 0.7367,
+        "human:john_michael_smith": 0.7367,
         "identity:alias:captain": 0.6843,
         "identity:alias:capt": 0.9215,
         "identity:alias:capt_cortex": 0.8362,
-        "identity:handle:knowurknot": 0.9204,
+        "identity:handle:testuser42": 0.9204,
         "project:capt": 0.9215,
         "project:frankencapt": 0.7759,
         "project:biocapt": 0.9,
@@ -907,11 +907,11 @@
         "figure:carl_jung": 0.8549
       },
       "partner:jenn": {
-        "human:kirk_evan_brown": 0.7367,
+        "human:john_michael_smith": 0.7367,
         "identity:alias:captain": 0.6843,
         "identity:alias:capt": 0.9215,
         "identity:alias:capt_cortex": 0.8362,
-        "identity:handle:knowurknot": 0.9204,
+        "identity:handle:testuser42": 0.9204,
         "project:capt": 0.9215,
         "project:frankencapt": 0.7759,
         "project:biocapt": 0.9,
@@ -938,11 +938,11 @@
         "figure:carl_jung": 0.8549
       },
       "collaborator:ornith": {
-        "human:kirk_evan_brown": 0.871,
+        "human:john_michael_smith": 0.871,
         "identity:alias:captain": 0.931,
         "identity:alias:capt": 0.914,
         "identity:alias:capt_cortex": 0.8419,
-        "identity:handle:knowurknot": 0.8522,
+        "identity:handle:testuser42": 0.8522,
         "project:capt": 0.914,
         "project:frankencapt": 0.9387,
         "project:biocapt": 0.9793,
@@ -969,11 +969,11 @@
         "figure:carl_jung": 0.8744
       },
       "platform:hermes": {
-        "human:kirk_evan_brown": 0.8751,
+        "human:john_michael_smith": 0.8751,
         "identity:alias:captain": 0.8675,
         "identity:alias:capt": 0.9763,
         "identity:alias:capt_cortex": 0.9452,
-        "identity:handle:knowurknot": 0.8563,
+        "identity:handle:testuser42": 0.8563,
         "project:capt": 0.9763,
         "project:frankencapt": 0.8437,
         "project:biocapt": 0.9152,
@@ -1000,11 +1000,11 @@
         "figure:carl_jung": 0.8004
       },
       "platform:openrouter": {
-        "human:kirk_evan_brown": 0.7784,
+        "human:john_michael_smith": 0.7784,
         "identity:alias:captain": 0.8989,
         "identity:alias:capt": 0.8119,
         "identity:alias:capt_cortex": 0.8458,
-        "identity:handle:knowurknot": 0.76,
+        "identity:handle:testuser42": 0.76,
         "project:capt": 0.8119,
         "project:frankencapt": 0.9308,
         "project:biocapt": 0.9142,
@@ -1031,11 +1031,11 @@
         "figure:carl_jung": 0.8696
       },
       "figure:albert_einstein": {
-        "human:kirk_evan_brown": 0.8167,
+        "human:john_michael_smith": 0.8167,
         "identity:alias:captain": 0.6587,
         "identity:alias:capt": 0.8412,
         "identity:alias:capt_cortex": 0.8871,
-        "identity:handle:knowurknot": 0.9458,
+        "identity:handle:testuser42": 0.9458,
         "project:capt": 0.8412,
         "project:frankencapt": 0.7257,
         "project:biocapt": 0.8384,
@@ -1062,11 +1062,11 @@
         "figure:carl_jung": 0.9057
       },
       "figure:nikola_tesla": {
-        "human:kirk_evan_brown": 0.8961,
+        "human:john_michael_smith": 0.8961,
         "identity:alias:captain": 0.9549,
         "identity:alias:capt": 0.9055,
         "identity:alias:capt_cortex": 0.8668,
-        "identity:handle:knowurknot": 0.7486,
+        "identity:handle:testuser42": 0.7486,
         "project:capt": 0.9055,
         "project:frankencapt": 0.9421,
         "project:biocapt": 0.9491,
@@ -1093,11 +1093,11 @@
         "figure:carl_jung": 0.8173
       },
       "figure:marie_curie": {
-        "human:kirk_evan_brown": 0.9543,
+        "human:john_michael_smith": 0.9543,
         "identity:alias:captain": 0.898,
         "identity:alias:capt": 0.884,
         "identity:alias:capt_cortex": 0.8513,
-        "identity:handle:knowurknot": 0.8604,
+        "identity:handle:testuser42": 0.8604,
         "project:capt": 0.884,
         "project:frankencapt": 0.8527,
         "project:biocapt": 0.9481,
@@ -1124,11 +1124,11 @@
         "figure:carl_jung": 0.8839
       },
       "figure:ada_lovelace": {
-        "human:kirk_evan_brown": 0.7964,
+        "human:john_michael_smith": 0.7964,
         "identity:alias:captain": 0.7812,
         "identity:alias:capt": 0.8446,
         "identity:alias:capt_cortex": 0.9281,
-        "identity:handle:knowurknot": 0.8483,
+        "identity:handle:testuser42": 0.8483,
         "project:capt": 0.8446,
         "project:frankencapt": 0.695,
         "project:biocapt": 0.7928,
@@ -1155,11 +1155,11 @@
         "figure:carl_jung": 0.8668
       },
       "figure:alan_turing": {
-        "human:kirk_evan_brown": 0.8339,
+        "human:john_michael_smith": 0.8339,
         "identity:alias:captain": 0.7697,
         "identity:alias:capt": 0.8973,
         "identity:alias:capt_cortex": 0.9546,
-        "identity:handle:knowurknot": 0.9364,
+        "identity:handle:testuser42": 0.9364,
         "project:capt": 0.8973,
         "project:frankencapt": 0.7874,
         "project:biocapt": 0.8786,
@@ -1186,11 +1186,11 @@
         "figure:carl_jung": 0.8416
       },
       "figure:leonardo_da_vinci": {
-        "human:kirk_evan_brown": 0.9096,
+        "human:john_michael_smith": 0.9096,
         "identity:alias:captain": 0.7484,
         "identity:alias:capt": 0.8129,
         "identity:alias:capt_cortex": 0.7786,
-        "identity:handle:knowurknot": 0.7898,
+        "identity:handle:testuser42": 0.7898,
         "project:capt": 0.8129,
         "project:frankencapt": 0.742,
         "project:biocapt": 0.8239,
@@ -1217,11 +1217,11 @@
         "figure:carl_jung": 0.773
       },
       "figure:frida_kahlo": {
-        "human:kirk_evan_brown": 0.8811,
+        "human:john_michael_smith": 0.8811,
         "identity:alias:captain": 0.8076,
         "identity:alias:capt": 0.8946,
         "identity:alias:capt_cortex": 0.8527,
-        "identity:handle:knowurknot": 0.8626,
+        "identity:handle:testuser42": 0.8626,
         "project:capt": 0.8946,
         "project:frankencapt": 0.8913,
         "project:biocapt": 0.9683,
@@ -1248,11 +1248,11 @@
         "figure:carl_jung": 0.9101
       },
       "figure:david_bowie": {
-        "human:kirk_evan_brown": 0.8351,
+        "human:john_michael_smith": 0.8351,
         "identity:alias:captain": 0.7288,
         "identity:alias:capt": 0.814,
         "identity:alias:capt_cortex": 0.8521,
-        "identity:handle:knowurknot": 0.8231,
+        "identity:handle:testuser42": 0.8231,
         "project:capt": 0.814,
         "project:frankencapt": 0.7502,
         "project:biocapt": 0.8237,
@@ -1279,11 +1279,11 @@
         "figure:carl_jung": 0.8742
       },
       "figure:hypatia": {
-        "human:kirk_evan_brown": 0.8948,
+        "human:john_michael_smith": 0.8948,
         "identity:alias:captain": 0.803,
         "identity:alias:capt": 0.7273,
         "identity:alias:capt_cortex": 0.7949,
-        "identity:handle:knowurknot": 0.7101,
+        "identity:handle:testuser42": 0.7101,
         "project:capt": 0.7273,
         "project:frankencapt": 0.8547,
         "project:biocapt": 0.828,
@@ -1310,11 +1310,11 @@
         "figure:carl_jung": 0.8064
       },
       "figure:carl_jung": {
-        "human:kirk_evan_brown": 0.8228,
+        "human:john_michael_smith": 0.8228,
         "identity:alias:captain": 0.7793,
         "identity:alias:capt": 0.8134,
         "identity:alias:capt_cortex": 0.7998,
-        "identity:handle:knowurknot": 0.9064,
+        "identity:handle:testuser42": 0.9064,
         "project:capt": 0.8134,
         "project:frankencapt": 0.8163,
         "project:biocapt": 0.8927,
@@ -1342,7 +1342,7 @@
       }
     },
     "nearest_neighbors": {
-      "human:kirk_evan_brown": [
+      "human:john_michael_smith": [
         {
           "id": "figure:marie_curie",
           "similarity": 0.9543
@@ -1398,7 +1398,7 @@
           "similarity": 0.9315
         }
       ],
-      "identity:handle:knowurknot": [
+      "identity:handle:testuser42": [
         {
           "id": "figure:albert_einstein",
           "similarity": 0.9458
@@ -1484,7 +1484,7 @@
       ],
       "project:synsync": [
         {
-          "id": "human:kirk_evan_brown",
+          "id": "human:john_michael_smith",
           "similarity": 0.7877
         },
         {
@@ -1534,7 +1534,7 @@
           "similarity": 0.9325
         },
         {
-          "id": "human:kirk_evan_brown",
+          "id": "human:john_michael_smith",
           "similarity": 0.9088
         }
       ],
@@ -1610,7 +1610,7 @@
       ],
       "figure:albert_einstein": [
         {
-          "id": "identity:handle:knowurknot",
+          "id": "identity:handle:testuser42",
           "similarity": 0.9458
         },
         {
@@ -1638,7 +1638,7 @@
       ],
       "figure:marie_curie": [
         {
-          "id": "human:kirk_evan_brown",
+          "id": "human:john_michael_smith",
           "similarity": 0.9543
         },
         {
@@ -1680,7 +1680,7 @@
       ],
       "figure:leonardo_da_vinci": [
         {
-          "id": "human:kirk_evan_brown",
+          "id": "human:john_michael_smith",
           "similarity": 0.9096
         },
         {
@@ -1726,7 +1726,7 @@
           "similarity": 0.8982
         },
         {
-          "id": "human:kirk_evan_brown",
+          "id": "human:john_michael_smith",
           "similarity": 0.8948
         },
         {
@@ -1740,7 +1740,7 @@
           "similarity": 0.9101
         },
         {
-          "id": "identity:handle:knowurknot",
+          "id": "identity:handle:testuser42",
           "similarity": 0.9064
         },
         {

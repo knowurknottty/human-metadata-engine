@@ -89,14 +89,14 @@ human-metadata-engine/
 from src.engine import compute_unified_signature
 
 identity = {
-    "id": "human:kirk_evan_brown",
-    "text": "Kirk Evan Brown",
+    "id": "human:john_michael_smith",
+    "text": "John Michael Smith",
     "birth": {
-        "year": 1982, "month": 2, "day": 4,
-        "hour": 1, "minute": 42,
+        "year": 1985, "month": 6, "day": 15,
+        "hour": 10, "minute": 30,
         "timezone_offset": -7,
-        "location": "Evanston, Wyoming, USA",
-        "lat": 41.2633, "lon": -110.9631,
+        "location": "Portland, Oregon, USA",
+        "lat": 45.5152, "lon": -122.6765,
     },
 }
 
@@ -160,9 +160,9 @@ Each bubble contains:
 ## Identity Graph
 
 19 nodes, 25 edges representing relationships between:
-- Humans (Kirk, Jenn)
+- Humans (John, Alice)
 - Aliases (Captain, CAPT, Capt Cortex)
-- Handles (Knowurknot)
+- Handles (testuser42)
 - Projects (CAPT, FrankenCAPT, bioCAPT, Inversion Labs, JennAI, SynSync)
 - Collaborators (Ornith)
 - Platforms (Hermes, OpenRouter)

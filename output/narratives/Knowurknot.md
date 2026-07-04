@@ -1,10 +1,10 @@
-# Knowurknot — Personality Profile
+# testuser42 — Personality Profile
 
 ## Core Identity (Expression 9)
-Knowurknot carries the energy of compassion, completion, and universal service.
+testuser42 carries the energy of compassion, completion, and universal service.
 
-Internally, Knowurknot is driven by a desire for love and service to others (Soul Urge 6).
-To the world, Knowurknot presents as charm, humor, and magnetic social energy (Personality 3).
+Internally, testuser42 is driven by a desire for love and service to others (Soul Urge 6).
+To the world, testuser42 presents as charm, humor, and magnetic social energy (Personality 3).
 
 ## Name Linguistics
 The name has balanced phonetic structure (entropy 2.72), suggesting clarity and approachability.

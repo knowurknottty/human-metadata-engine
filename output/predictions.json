@@ -1,5 +1,5 @@
 {
-  "Kirk Evan Brown": {
+  "John Michael Smith": {
     "big_five": {
       "openness": 35,
       "conscientiousness": 51,
@@ -99,7 +99,7 @@
     "method": "ensemble_heuristic",
     "feature_count": 7
   },
-  "Knowurknot": {
+  "testuser42": {
     "big_five": {
       "openness": 64,
       "conscientiousness": 56,

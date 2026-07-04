@@ -4,7 +4,7 @@
   "comparisons": [
     {
       "pair": [
-        "Kirk Evan Brown",
+        "John Michael Smith",
         "SynSync"
       ],
       "expression_a": 1,
@@ -21,7 +21,7 @@
     },
     {
       "pair": [
-        "Kirk Evan Brown",
+        "John Michael Smith",
         "Jenn-ai"
       ],
       "expression_a": 1,
@@ -38,7 +38,7 @@
     },
     {
       "pair": [
-        "Kirk Evan Brown",
+        "John Michael Smith",
         "CAPT"
       ],
       "expression_a": 1,
@@ -55,7 +55,7 @@
     },
     {
       "pair": [
-        "Knowurknot",
+        "testuser42",
         "Inversion Labs"
       ],
       "expression_a": 9,
@@ -90,7 +90,7 @@
     {
       "pair": [
         "bioCAPT",
-        "Kirk Evan Brown"
+        "John Michael Smith"
       ],
       "expression_a": 3,
       "expression_b": 1,
@@ -107,7 +107,7 @@
     {
       "pair": [
         "Captain",
-        "Knowurknot"
+        "testuser42"
       ],
       "expression_a": 1,
       "expression_b": 9,
@@ -123,7 +123,7 @@
     },
     {
       "pair": [
-        "Captain Knowurknot",
+        "Captain testuser42",
         "CAPT"
       ],
       "expression_a": 1,

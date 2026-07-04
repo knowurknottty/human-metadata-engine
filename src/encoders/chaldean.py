@@ -154,8 +154,8 @@ def chaldean_signature(text: str) -> ChaldeanSignature:
 
 if __name__ == "__main__":
     names = [
-        "Kirk Evan Brown", "Capt", "CAPT", "Captain", "Knowurknot",
-        "Captain Knowurknot", "bioCAPT", "FrankenCAPT", "Jenn-ai",
+        "John Michael Smith", "Capt", "CAPT", "Captain", "testuser42",
+        "Captain testuser42", "bioCAPT", "FrankenCAPT", "Jenn-ai",
         "SynSync", "Inversion Labs", "Jenn",
     ]
     for name in names:

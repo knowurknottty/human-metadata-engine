@@ -296,7 +296,7 @@ def create_identity_bubble(
             "chaldean": {"compound": 16, "name_number": 7},
         },
         {
-            "input": "Knowurknot",
+            "input": "testuser42",
             "pythagorean": {"total": 45, "reduced": 9},
             "chaldean": {"compound": 45, "name_number": 9},
         },

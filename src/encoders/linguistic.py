@@ -289,7 +289,7 @@ def linguistic_signature(text: str) -> LinguisticSignature:
 
 if __name__ == "__main__":
     names = [
-        "Kirk Evan Brown", "Capt", "CAPT", "Knowurknot", "bioCAPT",
+        "John Michael Smith", "Capt", "CAPT", "testuser42", "bioCAPT",
         "Inversion Labs", "Jenn", "FrankenCAPT",
     ]
     for name in names:

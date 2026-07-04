@@ -69,63 +69,63 @@ def test_isopsephy_greek_correspondence():
 
 def test_astrology_sun_sign():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert chart.sun_sign == "Aquarius"
     print("✓ test_astrology_sun_sign passed")
 
 
 def test_astrology_moon_sign():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert chart.moon_sign == "Gemini"
     print("✓ test_astrology_moon_sign passed")
 
 
 def test_astrology_ascendant():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert chart.ascendant == "Scorpio"
     print("✓ test_astrology_ascendant passed")
 
 
 def test_astrology_planets():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert len(chart.planets) == 10
     print("✓ test_astrology_planets passed")
 
 
 def test_astrology_aspects():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert len(chart.aspects) > 0
     print("✓ test_astrology_aspects passed")
 
 
 def test_astrology_confidence():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert chart.confidence == 0.95  # Exact time
     print("✓ test_astrology_confidence passed")
 
 
 def test_astrology_noon_default():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 12, 0, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 12, 0, -7, "Portland, Oregon, USA")
     assert chart.confidence == 0.4  # Noon default
     print("✓ test_astrology_noon_default passed")
 
 
 def test_astrology_chart_ruler():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert chart.chart_ruler == "Pluto"  # Scorpio ascendant → Pluto
     print("✓ test_astrology_chart_ruler passed")
 
 
 def test_astrology_lunar_phase():
     from encoders.astrology import compute_chart
-    chart = compute_chart(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert chart.lunar_phase != "Unknown"
     assert chart.is_waxing is not None
     print("✓ test_astrology_lunar_phase passed")
@@ -135,21 +135,21 @@ def test_astrology_lunar_phase():
 
 def test_human_design_type():
     from encoders.human_design import compute_human_design
-    hd = compute_human_design(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    hd = compute_human_design(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert hd.hd_type in ["Manifestor", "Generator", "Manifesting Generator", "Projector", "Reflector"]
     print("✓ test_human_design_type passed")
 
 
 def test_human_design_strategy():
     from encoders.human_design import compute_human_design
-    hd = compute_human_design(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    hd = compute_human_design(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert hd.strategy != ""
     print("✓ test_human_design_strategy passed")
 
 
 def test_human_design_gates():
     from encoders.human_design import compute_human_design
-    hd = compute_human_design(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    hd = compute_human_design(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert len(hd.personality_gates) > 0
     assert len(hd.design_gates) > 0
     for g in hd.personality_gates:
@@ -159,7 +159,7 @@ def test_human_design_gates():
 
 def test_human_design_profile():
     from encoders.human_design import compute_human_design
-    hd = compute_human_design(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    hd = compute_human_design(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert 1 <= hd.profile_number[0] <= 6
     assert 1 <= hd.profile_number[1] <= 6
     print("✓ test_human_design_profile passed")
@@ -167,7 +167,7 @@ def test_human_design_profile():
 
 def test_human_design_centers():
     from encoders.human_design import compute_human_design
-    hd = compute_human_design(1982, 2, 4, 1, 42, -7, "Evanston, Wyoming, USA")
+    hd = compute_human_design(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
     assert len(hd.centers) == 9
     print("✓ test_human_design_centers passed")
 
@@ -232,9 +232,9 @@ def test_pagerank():
     results = pagerank(graph)
     assert len(results) > 0
     assert results[0].rank > 0
-    # Kirk Evan Brown should be highest (most connections)
+    # John Michael Smith should be highest (most connections)
     # PageRank measures incoming link importance — projects with most inbound rank highest
-    assert results[0].node_id in ["human:kirk_evan_brown", "project:frankencapt", "project:capt"]
+    assert results[0].node_id in ["human:john_michael_smith", "project:frankencapt", "project:capt"]
     print("✓ test_pagerank passed")
 
 
@@ -271,9 +271,9 @@ def test_hits():
     hubs, auths = hits(graph)
     assert len(hubs) > 0
     assert len(auths) > 0
-    # Kirk should be top hub
+    # John should be top hub
     top_hub = max(hubs, key=hubs.get)
-    assert top_hub == "human:kirk_evan_brown"
+    assert top_hub == "human:john_michael_smith"
     print("✓ test_hits passed")
 
 

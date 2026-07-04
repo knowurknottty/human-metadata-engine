@@ -1,8 +1,8 @@
-# Identity Resonance Report — Kirk Evan Brown
+# Identity Resonance Report — John Michael Smith
 
 ## 1. Executive Summary
 
-This report is a full-spectrum symbolic and structural analysis of the identity **"Kirk Evan Brown"**, computed across nine independent encoding systems: Pythagorean numerology, Chaldean numerology, ordinal ciphers, quantitative linguistics, binary/prime encoding, Hebrew Gematria, Greek Isopsephy, and — where birth data permits — tropical astrology and Human Design. It is written for the person who carries this name, and for anyone who wants a structured, reproducible portrait of how this specific arrangement of letters (and, if provided, this specific birth moment) behaves under nine very different analytical lenses.
+This report is a full-spectrum symbolic and structural analysis of the identity **"John Michael Smith"**, computed across nine independent encoding systems: Pythagorean numerology, Chaldean numerology, ordinal ciphers, quantitative linguistics, binary/prime encoding, Hebrew Gematria, Greek Isopsephy, and — where birth data permits — tropical astrology and Human Design. It is written for the person who carries this name, and for anyone who wants a structured, reproducible portrait of how this specific arrangement of letters (and, if provided, this specific birth moment) behaves under nine very different analytical lenses.
 
 **Composite Resonance Score: 65.0/100.** This is a high reading: several independent systems arrive at compatible readings. The score synthesizes four measurable components — numerological convergence (0.50), linguistic harmony (0.79), polarity balance (0.72), and symbolic depth (0.67) — into one comparable number.
 
@@ -18,7 +18,7 @@ Everything below is deterministic: run the engine again on the same inputs and y
 
 ### Pythagorean Reading
 
-The Pythagorean system maps A–Z onto the digits 1–9 in alphabetical order and reads three separate channels from a name. For **"Kirk Evan Brown"** the letters total **64**, reducing to an **Expression Number of 1 — the Initiator**. The expression number is the name's overall operating system: its essence here is independence, originality, and the will to begin. In its strong form this looks like leadership that does not wait for permission, an instinct to originate rather than imitate, and the stamina to stand alone when a vision is not yet shared. Its shadow side, the pattern to watch for under stress, is impatience with slower processes, a tendency to equate asking for help with weakness, and friction with structures that demand conformity.
+The Pythagorean system maps A–Z onto the digits 1–9 in alphabetical order and reads three separate channels from a name. For **"John Michael Smith"** the letters total **64**, reducing to an **Expression Number of 1 — the Initiator**. The expression number is the name's overall operating system: its essence here is independence, originality, and the will to begin. In its strong form this looks like leadership that does not wait for permission, an instinct to originate rather than imitate, and the stamina to stand alone when a vision is not yet shared. Its shadow side, the pattern to watch for under stress, is impatience with slower processes, a tendency to equate asking for help with weakness, and friction with structures that demand conformity.
 
 The vowels alone — the breath inside the name — total 21, giving a **Soul Urge of 3 — the Communicator**. The soul urge is what the identity *wants* rather than what it does: expression, imagination, and social radiance. When this channel is fed, you see verbal and creative fluency, an instinct for timing and delivery, and the gift of making complex things feel light. When starved, scattering energy across too many openings, performing instead of connecting, and avoiding depths that cannot be joked about.
 
@@ -36,11 +36,11 @@ Stripped of all symbolism, the raw alphabet arithmetic gives a standard A1Z26 to
 
 ### Cross-Numerology Synthesis
 
-Pythagorean and Chaldean are the two great rival systems, so their relationship is the first thing a professional numerologist checks. Here the two systems **agree**: both reduce "Kirk Evan Brown" to the 1 frequency. When the modern and the ancient mapping — built from entirely different letter-value logics — land on the same digit, numerologists read the name as "locked in": the outer instrument and the inner vibration are playing the same note. Practically, it suggests that the way this name performs socially and the way it works on its carrier are aligned, with little internal static.
+Pythagorean and Chaldean are the two great rival systems, so their relationship is the first thing a professional numerologist checks. Here the two systems **agree**: both reduce "John Michael Smith" to the 1 frequency. When the modern and the ancient mapping — built from entirely different letter-value logics — land on the same digit, numerologists read the name as "locked in": the outer instrument and the inner vibration are playing the same note. Practically, it suggests that the way this name performs socially and the way it works on its carrier are aligned, with little internal static.
 
 ## 3. Linguistic Identity
 
-Setting symbolism aside entirely, the name **"Kirk Evan Brown"** is a measurable signal: 13 letters, 10 of them unique, estimated at 4 syllables.
+Setting symbolism aside entirely, the name **"John Michael Smith"** is a measurable signal: 13 letters, 10 of them unique, estimated at 4 syllables.
 
 **Entropy.** Its Shannon entropy is 3.239 bits against a theoretical maximum of 4.700 for its length — an entropy ratio of 0.69. That is moderate — noticeable repetition gives the name rhythm and stickiness at the cost of surprise. Entropy is the honest mathematical answer to "how predictable is this name": high-entropy names cost more attention to learn but are harder to confuse with anything else; low-entropy names trade uniqueness for immediate retention.
 
@@ -54,7 +54,7 @@ Setting symbolism aside entirely, the name **"Kirk Evan Brown"** is a measurable
 
 ### Hebrew Gematria
 
-Transliterated into the Hebrew number-alphabet, **"Kirk Evan Brown"** carries an absolute (Mispar Hechrachi) value of **925**, an ordinal (Mispar Siduri) value of **163**, and a reduced (Mispar Katan) value of **43**. In the gematria tradition, the absolute total is the name's full metaphysical weight — the quantity of divine energy the letters carry — while the ordinal total is its worldly rank, and the reduced total its essence when all ornament is stripped. The absolute value reduces to **7 — the Analyst**: depth, skepticism, and the search for underlying pattern. Practitioners would search scripture for words sharing the total 925; structurally, what matters here is that this total is *independent* of the Pythagorean arithmetic — Hebrew values jump by tens and hundreds (K=20, R=200), so agreement between the systems is never automatic.
+Transliterated into the Hebrew number-alphabet, **"John Michael Smith"** carries an absolute (Mispar Hechrachi) value of **925**, an ordinal (Mispar Siduri) value of **163**, and a reduced (Mispar Katan) value of **43**. In the gematria tradition, the absolute total is the name's full metaphysical weight — the quantity of divine energy the letters carry — while the ordinal total is its worldly rank, and the reduced total its essence when all ornament is stripped. The absolute value reduces to **7 — the Analyst**: depth, skepticism, and the search for underlying pattern. Practitioners would search scripture for words sharing the total 925; structurally, what matters here is that this total is *independent* of the Pythagorean arithmetic — Hebrew values jump by tens and hundreds (K=20, R=200), so agreement between the systems is never automatic.
 
 ### Greek Isopsephy
 
@@ -88,7 +88,7 @@ The two ancient systems diverge: the Hebrew weighing yields 7 (the Analyst) whil
 
 ### Human Design
 
-The Human Design synthesis casts **Kirk Evan Brown** as a **Generator** — a sustainable life-force builder. Type is the chassis of the design; everything else is trim. The operating **strategy is "To Respond"** and the inner **authority is Emotional**: decisions are reliable when they respond to what shows up rather than initiating from the mind, and the recurring not-self signal — the emotional smoke-alarm indicating strategy has been abandoned — is **Frustration**. The promised signature state, when living correctly by design, is **Satisfaction**.
+The Human Design synthesis casts **John Michael Smith** as a **Generator** — a sustainable life-force builder. Type is the chassis of the design; everything else is trim. The operating **strategy is "To Respond"** and the inner **authority is Emotional**: decisions are reliable when they respond to what shows up rather than initiating from the mind, and the recurring not-self signal — the emotional smoke-alarm indicating strategy has been abandoned — is **Frustration**. The promised signature state, when living correctly by design, is **Satisfaction**.
 
 The **3/6 profile** combines line 3 — the Martyr (learns by trial, error, and collision) — with line 6 — the Role Model (three-act life arc toward exemplarhood). Read together: the conscious personality learns one way while the body's design socializes another, and maturity is learning to run both without apology.
 
@@ -121,7 +121,7 @@ The practical read: the dominant-auxiliary pair is where this identity is effort
 
 ## 7. Graph Position
 
-Every identity the engine has processed lives in a shared 14-dimensional feature space (eight reduced digits, entropy ratio, vowel ratio, binary balance, polarity, syllables, root-chain depth). Placing **"Kirk Evan Brown"** into that space and measuring cosine similarity against the reference population of pre-analyzed identities yields its *graph position* — where this name sits in the constellation of names.
+Every identity the engine has processed lives in a shared 14-dimensional feature space (eight reduced digits, entropy ratio, vowel ratio, binary balance, polarity, syllables, root-chain depth). Placing **"John Michael Smith"** into that space and measuring cosine similarity against the reference population of pre-analyzed identities yields its *graph position* — where this name sits in the constellation of names.
 
 **Nearest neighbors:**
 

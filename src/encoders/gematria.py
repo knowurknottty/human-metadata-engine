@@ -168,7 +168,7 @@ def gematria_signature(text: str) -> GematriaSignature:
 
 
 if __name__ == "__main__":
-    names = ["CAPT", "Knowurknot", "Kirk Evan Brown", "Jenn", "Inversion Labs"]
+    names = ["CAPT", "testuser42", "John Michael Smith", "Jenn", "Inversion Labs"]
     for name in names:
         sig = gematria_signature(name)
         print(f"{name:<25} Absolute={sig.absolute_total:>4}({sig.absolute_reduced})  "

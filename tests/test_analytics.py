@@ -42,10 +42,10 @@ def sig_for(text, birth=None):
 print("Analytics Tests")
 print("=" * 60)
 
-s1 = sig_for("Kirk Evan Brown",
-             birth={"year": 1982, "month": 2, "day": 4, "hour": 1, "minute": 42,
-                    "timezone_offset": -7, "location": "Evanston, Wyoming, USA",
-                    "lat": 41.2633, "lon": -110.9631})
+s1 = sig_for("John Michael Smith",
+             birth={"year": 1985, "month": 6, "day": 15, "hour": 10, "minute": 30,
+                    "timezone_offset": -7, "location": "Portland, Oregon, USA",
+                    "lat": 45.5152, "lon": -122.6765})
 s2 = sig_for("CAPT")
 s3 = sig_for("Albert Einstein")
 s4 = sig_for("Jenn")

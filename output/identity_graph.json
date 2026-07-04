@@ -2,17 +2,17 @@
   "human_metadata_graph_version": "0.1.0",
   "generated_at": "2026-07-04T12:00:00Z",
   "subject": {
-    "id": "human:kirk_evan_brown",
+    "id": "human:john_michael_smith",
     "preferred_display": "Capt",
     "privacy_level": "private",
     "consent_scope": ["symbolic_analysis", "identity_graph", "project_alignment"]
   },
   "nodes": [
     {
-      "id": "human:kirk_evan_brown",
-      "label": "Kirk Evan Brown",
+      "id": "human:john_michael_smith",
+      "label": "John Michael Smith",
       "type": "HUMAN",
-      "original_text": "Kirk Evan Brown",
+      "original_text": "John Michael Smith",
       "normalized_text": "KIRKEVANBROWN",
       "created_from": "user_confirmed",
       "source": "birth_certificate",
@@ -27,10 +27,10 @@
       "notes": "Birth name, legal identity"
     },
     {
-      "id": "identity:birth:kirk_evan_brown",
-      "label": "Kirk Evan Brown",
+      "id": "identity:birth:john_michael_smith",
+      "label": "John Michael Smith",
       "type": "BIRTH_NAME",
-      "original_text": "Kirk Evan Brown",
+      "original_text": "John Michael Smith",
       "normalized_text": "KIRKEVANBROWN",
       "created_from": "user_confirmed",
       "source": "birth_certificate",
@@ -81,10 +81,10 @@
       "notes": "Archetypal navigator identity"
     },
     {
-      "id": "identity:handle:knowurknot",
-      "label": "Knowurknot",
+      "id": "identity:handle:testuser42",
+      "label": "testuser42",
       "type": "HANDLE",
-      "original_text": "Knowurknot",
+      "original_text": "testuser42",
       "normalized_text": "KNOWURKNOT",
       "created_from": "user_confirmed",
       "source": "user_declaration",
@@ -99,10 +99,10 @@
       "notes": "Paradox key handle, contains know/unknown/knot/not"
     },
     {
-      "id": "identity:persona:captain_knowurknot",
-      "label": "Captain Knowurknot",
+      "id": "identity:persona:captain_testuser42",
+      "label": "Captain testuser42",
       "type": "PUBLIC_PERSONA",
-      "original_text": "Captain Knowurknot",
+      "original_text": "Captain testuser42",
       "normalized_text": "CAPTAINKNOWURKNOT",
       "created_from": "user_confirmed",
       "source": "user_declaration",
@@ -117,10 +117,10 @@
       "notes": "Public myth-node, navigator of knots"
     },
     {
-      "id": "identity:handle:knowurknottty",
-      "label": "knowurknottty",
+      "id": "identity:handle:testuser42tty",
+      "label": "testuser42tty",
       "type": "HANDLE",
-      "original_text": "knowurknottty",
+      "original_text": "testuser42tty",
       "normalized_text": "KNOWURKNOTTTY",
       "created_from": "user_confirmed",
       "source": "user_declaration",
@@ -353,118 +353,118 @@
   ],
   "edges": [
     {
-      "source": "human:kirk_evan_brown",
-      "target": "identity:birth:kirk_evan_brown",
+      "source": "human:john_michael_smith",
+      "target": "identity:birth:john_michael_smith",
       "edge_type": "HAS_BIRTH_NAME",
-      "claim": "Kirk Evan Brown is the birth name",
+      "claim": "John Michael Smith is the birth name",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "factual"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "identity:alias:capt",
       "edge_type": "USES_ALIAS",
-      "claim": "Kirk uses the alias Capt",
+      "claim": "John uses the alias Capt",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "user_claimed"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "identity:alias:captain",
       "edge_type": "USES_ALIAS",
-      "claim": "Kirk uses the alias Captain",
+      "claim": "John uses the alias Captain",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "user_claimed"
     },
     {
-      "source": "human:kirk_evan_brown",
-      "target": "identity:handle:knowurknot",
+      "source": "human:john_michael_smith",
+      "target": "identity:handle:testuser42",
       "edge_type": "USES_ALIAS",
-      "claim": "Kirk uses the handle Knowurknot",
+      "claim": "John uses the handle testuser42",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "user_claimed"
     },
     {
-      "source": "human:kirk_evan_brown",
-      "target": "identity:persona:captain_knowurknot",
+      "source": "human:john_michael_smith",
+      "target": "identity:persona:captain_testuser42",
       "edge_type": "USES_ALIAS",
-      "claim": "Kirk embodies the persona Captain Knowurknot",
+      "claim": "John embodies the persona Captain testuser42",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "user_claimed"
     },
     {
-      "source": "human:kirk_evan_brown",
-      "target": "identity:handle:knowurknottty",
+      "source": "human:john_michael_smith",
+      "target": "identity:handle:testuser42tty",
       "edge_type": "USES_ALIAS",
-      "claim": "Kirk uses the variant handle knowurknottty",
+      "claim": "John uses the variant handle testuser42tty",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "user_claimed"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "identity:alias:jenn",
       "edge_type": "ASSOCIATED_WITH",
-      "claim": "Kirk's partner is Jenn",
+      "claim": "John's partner is Jenn",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "user_claimed"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "project:capt",
       "edge_type": "CREATED_BY",
-      "claim": "Kirk created CAPT",
+      "claim": "John created CAPT",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "factual"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "project:biocapt",
       "edge_type": "CREATED_BY",
-      "claim": "Kirk created bioCAPT",
+      "claim": "John created bioCAPT",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "factual"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "project:frankencapt",
       "edge_type": "CREATED_BY",
-      "claim": "Kirk created FrankenCAPT",
+      "claim": "John created FrankenCAPT",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "factual"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "project:jennai",
       "edge_type": "CREATED_BY",
-      "claim": "Kirk created Jenn-ai for partner",
+      "claim": "John created Jenn-ai for partner",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "factual"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "project:synsync",
       "edge_type": "CREATED_BY",
-      "claim": "Kirk created SynSync",
+      "claim": "John created SynSync",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "factual"
     },
     {
-      "source": "human:kirk_evan_brown",
+      "source": "human:john_michael_smith",
       "target": "project:inversion_labs",
       "edge_type": "BUILDS_PROJECT",
-      "claim": "Kirk runs Inversion Labs",
+      "claim": "John runs Inversion Labs",
       "evidence": "user_confirmed",
       "confidence": 1.0,
       "interpretation_level": "factual"
@@ -479,10 +479,10 @@
       "interpretation_level": "factual"
     },
     {
-      "source": "identity:handle:knowurknot",
+      "source": "identity:handle:testuser42",
       "target": "project:inversion_labs",
       "edge_type": "SYMBOLICALLY_RESONATES_WITH",
-      "claim": "Knowurknot (unknotting) resonates with Inversion (reversal)",
+      "claim": "testuser42 (unknotting) resonates with Inversion (reversal)",
       "evidence": "semantic_analysis",
       "confidence": 0.75,
       "interpretation_level": "symbolic"
@@ -561,9 +561,9 @@
     },
     {
       "source": "project:wyrd",
-      "target": "identity:handle:knowurknot",
+      "target": "identity:handle:testuser42",
       "edge_type": "SYMBOLICALLY_RESONATES_WITH",
-      "claim": "Wyrd (fate) resonates with Knowurknot's recursive destiny",
+      "claim": "Wyrd (fate) resonates with testuser42's recursive destiny",
       "evidence": "semantic_analysis",
       "confidence": 0.6,
       "interpretation_level": "symbolic"

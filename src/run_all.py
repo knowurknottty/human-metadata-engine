@@ -138,7 +138,7 @@ def main():
     print("\n[7/10] Tracking identity drift...")
     drift_reports = {}
     # Test with Captain variants
-    captain_variants = ["Captain", "KnowUrKnot", "The Captain"]
+    captain_variants = ["Captain", "testuser42", "The Captain"]
     drift = track_drift("Captain", captain_variants, lambda n: compute_unified_signature({"name": n, "id": n}))
     drift_reports["Captain"] = {
         "identity": drift.identity,

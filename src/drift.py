@@ -8,7 +8,7 @@ Since encoders are deterministic, drift comes from INPUT changes
 
 Usage:
     from src.drift import track_drift
-    drift = track_drift("Captain", ["Captain", "KnowUrKnot", "The Captain"])
+    drift = track_drift("Captain", ["Captain", "testuser42", "The Captain"])
 """
 
 import json
