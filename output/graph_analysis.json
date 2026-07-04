@@ -1,0 +1,216 @@
+{
+  "pagerank": [
+    {
+      "node_id": "project:frankencapt",
+      "rank": 0.064228
+    },
+    {
+      "node_id": "project:capt",
+      "rank": 0.054644
+    },
+    {
+      "node_id": "project:biocapt",
+      "rank": 0.038345
+    },
+    {
+      "node_id": "project:inversion_labs",
+      "rank": 0.021264
+    },
+    {
+      "node_id": "project:jennai",
+      "rank": 0.01556
+    },
+    {
+      "node_id": "identity:handle:knowurknot",
+      "rank": 0.015121
+    },
+    {
+      "node_id": "identity:persona:captain_knowurknot",
+      "rank": 0.008411
+    },
+    {
+      "node_id": "project:synsync",
+      "rank": 0.008411
+    },
+    {
+      "node_id": "identity:alias:jenn",
+      "rank": 0.008411
+    },
+    {
+      "node_id": "identity:alias:capt",
+      "rank": 0.008411
+    },
+    {
+      "node_id": "identity:handle:knowurknottty",
+      "rank": 0.008411
+    },
+    {
+      "node_id": "identity:birth:kirk_evan_brown",
+      "rank": 0.008411
+    },
+    {
+      "node_id": "identity:alias:captain",
+      "rank": 0.008411
+    },
+    {
+      "node_id": "project:soul_fractal_engine",
+      "rank": 0.007895
+    },
+    {
+      "node_id": "project:wyrd",
+      "rank": 0.007895
+    },
+    {
+      "node_id": "project:syncchef",
+      "rank": 0.007895
+    },
+    {
+      "node_id": "human:kirk_evan_brown",
+      "rank": 0.007895
+    },
+    {
+      "node_id": "project:knowledge_bubbles",
+      "rank": 0.007895
+    },
+    {
+      "node_id": "project:capt_rys",
+      "rank": 0.007895
+    }
+  ],
+  "spectral_clusters": [
+    {
+      "id": 0,
+      "members": [
+        "human:kirk_evan_brown",
+        "project:knowledge_bubbles",
+        "project:wyrd",
+        "project:soul_fractal_engine",
+        "project:capt_rys",
+        "project:syncchef"
+      ],
+      "density": 0.0
+    },
+    {
+      "id": 1,
+      "members": [
+        "project:inversion_labs",
+        "project:frankencapt",
+        "identity:alias:capt",
+        "identity:alias:captain",
+        "project:synsync",
+        "identity:alias:jenn"
+      ],
+      "density": 0.0
+    },
+    {
+      "id": 2,
+      "members": [
+        "identity:birth:kirk_evan_brown",
+        "identity:handle:knowurknottty",
+        "identity:persona:captain_knowurknot",
+        "project:jennai",
+        "project:biocapt",
+        "identity:handle:knowurknot",
+        "project:capt"
+      ],
+      "density": 0.0476
+    }
+  ],
+  "connected_components": [
+    [
+      "human:kirk_evan_brown",
+      "identity:alias:capt",
+      "identity:alias:captain",
+      "identity:alias:jenn",
+      "identity:birth:kirk_evan_brown",
+      "identity:handle:knowurknot",
+      "identity:handle:knowurknottty",
+      "identity:persona:captain_knowurknot",
+      "project:biocapt",
+      "project:capt",
+      "project:frankencapt",
+      "project:inversion_labs",
+      "project:jennai",
+      "project:knowledge_bubbles",
+      "project:soul_fractal_engine",
+      "project:synsync",
+      "project:wyrd"
+    ],
+    [
+      "project:syncchef"
+    ],
+    [
+      "project:capt_rys"
+    ]
+  ],
+  "num_components": 3,
+  "diameter": 4,
+  "radius": 1,
+  "eccentricities": {
+    "project:soul_fractal_engine": 2,
+    "identity:persona:captain_knowurknot": 0,
+    "project:synsync": 2,
+    "identity:handle:knowurknot": 3,
+    "identity:alias:jenn": 1,
+    "project:wyrd": 4,
+    "project:syncchef": 0,
+    "project:inversion_labs": 2,
+    "human:kirk_evan_brown": 1,
+    "project:biocapt": 1,
+    "identity:alias:capt": 2,
+    "identity:handle:knowurknottty": 0,
+    "project:knowledge_bubbles": 2,
+    "project:jennai": 0,
+    "project:capt_rys": 0,
+    "identity:birth:kirk_evan_brown": 0,
+    "identity:alias:captain": 2,
+    "project:capt": 1,
+    "project:frankencapt": 0
+  },
+  "avg_clustering_coefficient": 0.414,
+  "clustering_coefficients": {
+    "project:soul_fractal_engine": 0.0,
+    "identity:persona:captain_knowurknot": 0.0,
+    "project:synsync": 1.0,
+    "identity:handle:knowurknot": 0.3333,
+    "identity:alias:jenn": 1.0,
+    "project:wyrd": 0.0,
+    "project:syncchef": 0.0,
+    "project:inversion_labs": 0.6667,
+    "human:kirk_evan_brown": 0.1154,
+    "project:biocapt": 0.5,
+    "identity:alias:capt": 1.0,
+    "identity:handle:knowurknottty": 0.0,
+    "project:knowledge_bubbles": 0.0,
+    "project:jennai": 1.0,
+    "project:capt_rys": 0.0,
+    "identity:birth:kirk_evan_brown": 0.0,
+    "identity:alias:captain": 1.0,
+    "project:capt": 0.25,
+    "project:frankencapt": 1.0
+  },
+  "hubs": {
+    "human:kirk_evan_brown": 0.9441,
+    "project:capt": 0.1672,
+    "project:synsync": 0.1016,
+    "project:inversion_labs": 0.1016,
+    "identity:alias:capt": 0.1016,
+    "project:knowledge_bubbles": 0.1016,
+    "identity:alias:captain": 0.1016,
+    "project:soul_fractal_engine": 0.0836,
+    "project:biocapt": 0.0836,
+    "identity:handle:knowurknot": 0.071
+  },
+  "authorities": {
+    "project:capt": 0.384,
+    "project:biocapt": 0.316,
+    "project:frankencapt": 0.316,
+    "identity:handle:knowurknot": 0.2685,
+    "project:inversion_labs": 0.2685,
+    "project:jennai": 0.2685,
+    "identity:persona:captain_knowurknot": 0.2497,
+    "project:synsync": 0.2497,
+    "identity:alias:jenn": 0.2497,
+    "identity:alias:capt": 0.2497
+  }
+}

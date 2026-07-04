@@ -1,44 +1,19 @@
-{
-  "engine_version": "0.2.0",
-  "generated_at": "2026-07-04T18:12:31.507424Z",
-  "subject": {
+[
+  {
     "id": "human:kirk_evan_brown",
-    "preferred_display": "Capt",
-    "birth": {
-      "date": "1982-02-04",
-      "time": "01:42",
-      "place": "Evanston, WY, USA"
-    }
-  },
-  "birth_numerology": {
-    "life_path_raw": 26,
-    "life_path_reduced": 8,
-    "life_path_master": null,
-    "birthday": 4,
-    "attitude": 6,
-    "birth_year": 2
-  },
-  "encoder_suite": {
-    "pythagorean": "Standard Pythagorean letter mapping (A=1..S=1, master 11/22/33)",
-    "chaldean": "Ancient Chaldean mapping (9 sacred, no master numbers)",
-    "ordinal": "A1Z26 standard + reverse + digital root reduced",
-    "linguistic": "Entropy, bigrams, phonetics, syllables, symmetry",
-    "binary_prime": "Vowel/consonant binary + prime-index encoding"
-  },
-  "signatures": [
-    {
-      "identity": {
-        "text": "Kirk Evan Brown",
-        "type": "birth_name",
-        "role": "human"
-      },
+    "text": "Kirk Evan Brown",
+    "computed_at": "2026-07-04T18:26:37.572481Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
+        "total": 64,
         "expression": 1,
         "master_preserved": null,
         "soul_urge": 3,
         "personality": 7,
-        "balance": 9,
-        "total": 64,
+        "soul_urge_total": 21,
+        "personality_total": 43,
+        "balance_number": 9,
         "hidden_passion": [
           5
         ],
@@ -58,11 +33,11 @@
           "8": 0,
           "9": 3
         },
-        "vowel_consonant_ratio": 0.3076923076923077
+        "vowel_ratio": 0.308
       },
       "chaldean": {
-        "name_number": 1,
         "compound_number": 46,
+        "name_number": 1,
         "soul_urge": 5,
         "personality": 5,
         "intensity_table": {
@@ -78,52 +53,32 @@
         }
       },
       "ordinal": {
-        "standard": 163,
-        "standard_reduced": 1,
+        "ordinal_total": 163,
+        "ordinal_reduced": 1,
         "reverse": 188,
         "reverse_reduced": 8,
-        "reduced": 64,
-        "reduced_final": 1,
-        "vowel_total": 30,
-        "consonant_total": 133
+        "reduced_total": 64
       },
       "linguistic": {
         "letter_count": 13,
-        "token_count": 3,
-        "vowel_ratio": 0.3076923076923077,
-        "shannon_entropy": 3.2389,
-        "entropy_ratio": 0.6891,
-        "syllable_estimate": 4,
         "unique_letters": 10,
-        "letter_repetition_ratio": 0.2308,
-        "is_palindrome": false,
+        "shannon_entropy": 3.2389,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.6891,
+        "vowel_ratio": 0.3076923076923077,
+        "syllable_estimate": 4,
         "plosive_count": 3,
         "fricative_count": 1,
         "nasal_count": 2,
-        "liquid_count": 2,
-        "consonant_cluster_count": 4,
         "bigrams_top5": [
-          {
-            "bigram": "KI",
-            "count": 1
-          },
-          {
-            "bigram": "IR",
-            "count": 1
-          },
-          {
-            "bigram": "RK",
-            "count": 1
-          },
-          {
-            "bigram": "KE",
-            "count": 1
-          },
-          {
-            "bigram": "EV",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='KI', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='IR', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='RK', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='KE', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='EV', count=1, frequency=0.08333333333333333)"
+        ],
+        "repetition_ratio": 0.2308,
+        "is_palindrome": false
       },
       "binary_prime": {
         "binary_string": "1011010111011",
@@ -135,237 +90,274 @@
         "consonant_power": 435,
         "polarity_score": -352,
         "polarity_ratio": 0.1908
-      }
-    },
-    {
-      "identity": {
-        "text": "Capt",
-        "type": "nickname",
-        "role": "alias"
       },
-      "pythagorean": {
-        "expression": 4,
-        "master_preserved": null,
-        "soul_urge": 1,
-        "personality": 3,
-        "balance": 3,
-        "total": 13,
-        "hidden_passion": [
-          1,
-          2,
-          3,
-          7
-        ],
-        "karmic_lessons": [
-          4,
-          5,
-          6,
-          8,
-          9
-        ],
-        "intensity_table": {
-          "1": 1,
-          "2": 1,
-          "3": 1,
-          "4": 0,
-          "5": 0,
-          "6": 0,
-          "7": 1,
-          "8": 0,
-          "9": 0
-        },
-        "vowel_consonant_ratio": 0.25
-      },
-      "chaldean": {
-        "name_number": 7,
-        "compound_number": 16,
-        "soul_urge": 1,
-        "personality": 6,
-        "intensity_table": {
-          "1": 1,
-          "2": 0,
-          "3": 1,
-          "4": 1,
-          "5": 0,
-          "6": 0,
-          "7": 0,
-          "8": 1,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 40,
-        "standard_reduced": 4,
-        "reverse": 68,
-        "reverse_reduced": 5,
-        "reduced": 13,
-        "reduced_final": 4,
-        "vowel_total": 1,
-        "consonant_total": 39
-      },
-      "linguistic": {
-        "letter_count": 4,
-        "token_count": 1,
-        "vowel_ratio": 0.25,
-        "shannon_entropy": 2.0,
-        "entropy_ratio": 0.4255,
-        "syllable_estimate": 1,
-        "unique_letters": 4,
-        "letter_repetition_ratio": 0.0,
-        "is_palindrome": false,
-        "plosive_count": 2,
-        "fricative_count": 0,
-        "nasal_count": 0,
-        "liquid_count": 0,
-        "consonant_cluster_count": 1,
-        "bigrams_top5": [
+      "gematria": {
+        "absolute_total": 925,
+        "absolute_reduced": 7,
+        "ordinal_total": 163,
+        "ordinal_reduced": 1,
+        "reduced_total": 43,
+        "letter_values": [
           {
-            "bigram": "CA",
-            "count": 1
+            "char": "K",
+            "absolute": 20,
+            "ordinal": 11,
+            "reduced": 2,
+            "index": 0
           },
           {
-            "bigram": "AP",
-            "count": 1
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 1
           },
           {
-            "bigram": "PT",
-            "count": 1
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 2
+          },
+          {
+            "char": "K",
+            "absolute": 20,
+            "ordinal": 11,
+            "reduced": 2,
+            "index": 3
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 4
+          },
+          {
+            "char": "V",
+            "absolute": 6,
+            "ordinal": 22,
+            "reduced": 6,
+            "index": 5
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 6
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 7
+          },
+          {
+            "char": "B",
+            "absolute": 2,
+            "ordinal": 2,
+            "reduced": 2,
+            "index": 8
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 9
+          },
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 10
+          },
+          {
+            "char": "W",
+            "absolute": 6,
+            "ordinal": 23,
+            "reduced": 6,
+            "index": 11
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 12
+          }
+        ],
+        "gematria_ordinal_ratio": 5.6748
+      },
+      "isopsephy": {
+        "total": 1628,
+        "reduced": 8,
+        "digital_root_chain": [
+          1628,
+          17,
+          8
+        ],
+        "letter_values": [
+          {
+            "char": "K",
+            "value": 20,
+            "index": 0
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 1
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 2
+          },
+          {
+            "char": "K",
+            "value": 20,
+            "index": 3
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 4
+          },
+          {
+            "char": "V",
+            "value": 400,
+            "index": 5
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 6
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 7
+          },
+          {
+            "char": "B",
+            "value": 2,
+            "index": 8
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 9
+          },
+          {
+            "char": "O",
+            "value": 70,
+            "index": 10
+          },
+          {
+            "char": "W",
+            "value": 800,
+            "index": 11
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 12
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "K",
+            "greek": "\u03ba",
+            "value": 20
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "K",
+            "greek": "\u03ba",
+            "value": 20
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "V",
+            "greek": "\u03c5",
+            "value": 400
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "B",
+            "greek": "\u03b2",
+            "value": 2
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "W",
+            "greek": "\u03c9",
+            "value": 800
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
           }
         ]
       },
-      "binary_prime": {
-        "binary_string": "1011",
-        "binary_weight": 3,
-        "binary_entropy": 0.8113,
-        "prime_total": 131,
-        "prime_reduced": 5,
-        "vowel_power": 2,
-        "consonant_power": 129,
-        "polarity_score": -127,
-        "polarity_ratio": 0.0155
+      "astrology": {
+        "error": "'AstrologicalChart' object has no attribute 'descendant'"
+      },
+      "human_design": {
+        "error": "'HumanDesignChart' object has no attribute 'definition'"
       }
-    },
-    {
-      "identity": {
-        "text": "CAPT",
-        "type": "project",
-        "role": "architecture"
-      },
+    }
+  },
+  {
+    "id": "identity:alias:captain",
+    "text": "Captain",
+    "computed_at": "2026-07-04T18:26:37.573835Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
-        "expression": 4,
-        "master_preserved": null,
-        "soul_urge": 1,
-        "personality": 3,
-        "balance": 3,
-        "total": 13,
-        "hidden_passion": [
-          1,
-          2,
-          3,
-          7
-        ],
-        "karmic_lessons": [
-          4,
-          5,
-          6,
-          8,
-          9
-        ],
-        "intensity_table": {
-          "1": 1,
-          "2": 1,
-          "3": 1,
-          "4": 0,
-          "5": 0,
-          "6": 0,
-          "7": 1,
-          "8": 0,
-          "9": 0
-        },
-        "vowel_consonant_ratio": 0.25
-      },
-      "chaldean": {
-        "name_number": 7,
-        "compound_number": 16,
-        "soul_urge": 1,
-        "personality": 6,
-        "intensity_table": {
-          "1": 1,
-          "2": 0,
-          "3": 1,
-          "4": 1,
-          "5": 0,
-          "6": 0,
-          "7": 0,
-          "8": 1,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 40,
-        "standard_reduced": 4,
-        "reverse": 68,
-        "reverse_reduced": 5,
-        "reduced": 13,
-        "reduced_final": 4,
-        "vowel_total": 1,
-        "consonant_total": 39
-      },
-      "linguistic": {
-        "letter_count": 4,
-        "token_count": 1,
-        "vowel_ratio": 0.25,
-        "shannon_entropy": 2.0,
-        "entropy_ratio": 0.4255,
-        "syllable_estimate": 1,
-        "unique_letters": 4,
-        "letter_repetition_ratio": 0.0,
-        "is_palindrome": false,
-        "plosive_count": 2,
-        "fricative_count": 0,
-        "nasal_count": 0,
-        "liquid_count": 0,
-        "consonant_cluster_count": 1,
-        "bigrams_top5": [
-          {
-            "bigram": "CA",
-            "count": 1
-          },
-          {
-            "bigram": "AP",
-            "count": 1
-          },
-          {
-            "bigram": "PT",
-            "count": 1
-          }
-        ]
-      },
-      "binary_prime": {
-        "binary_string": "1011",
-        "binary_weight": 3,
-        "binary_entropy": 0.8113,
-        "prime_total": 131,
-        "prime_reduced": 5,
-        "vowel_power": 2,
-        "consonant_power": 129,
-        "polarity_score": -127,
-        "polarity_ratio": 0.0155
-      }
-    },
-    {
-      "identity": {
-        "text": "Captain",
-        "type": "persona",
-        "role": "archetype"
-      },
-      "pythagorean": {
+        "total": 28,
         "expression": 1,
         "master_preserved": null,
         "soul_urge": 11,
         "personality": 8,
-        "balance": 3,
-        "total": 28,
+        "soul_urge_total": 11,
+        "personality_total": 17,
+        "balance_number": 3,
         "hidden_passion": [
           1
         ],
@@ -385,11 +377,11 @@
           "8": 0,
           "9": 1
         },
-        "vowel_consonant_ratio": 0.42857142857142855
+        "vowel_ratio": 0.429
       },
       "chaldean": {
-        "name_number": 5,
         "compound_number": 23,
+        "name_number": 5,
         "soul_urge": 3,
         "personality": 2,
         "intensity_table": {
@@ -405,52 +397,32 @@
         }
       },
       "ordinal": {
-        "standard": 64,
-        "standard_reduced": 1,
+        "ordinal_total": 64,
+        "ordinal_reduced": 1,
         "reverse": 125,
         "reverse_reduced": 8,
-        "reduced": 28,
-        "reduced_final": 1,
-        "vowel_total": 11,
-        "consonant_total": 53
+        "reduced_total": 28
       },
       "linguistic": {
         "letter_count": 7,
-        "token_count": 1,
-        "vowel_ratio": 0.42857142857142855,
-        "shannon_entropy": 2.5216,
-        "entropy_ratio": 0.5365,
-        "syllable_estimate": 2,
         "unique_letters": 6,
-        "letter_repetition_ratio": 0.1429,
-        "is_palindrome": false,
+        "shannon_entropy": 2.5216,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.5365,
+        "vowel_ratio": 0.42857142857142855,
+        "syllable_estimate": 2,
         "plosive_count": 2,
         "fricative_count": 0,
         "nasal_count": 1,
-        "liquid_count": 0,
-        "consonant_cluster_count": 1,
         "bigrams_top5": [
-          {
-            "bigram": "CA",
-            "count": 1
-          },
-          {
-            "bigram": "AP",
-            "count": 1
-          },
-          {
-            "bigram": "PT",
-            "count": 1
-          },
-          {
-            "bigram": "TA",
-            "count": 1
-          },
-          {
-            "bigram": "AI",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='CA', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='AP', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='PT', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='TA', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='AI', count=1, frequency=0.16666666666666666)"
+        ],
+        "repetition_ratio": 0.1429,
+        "is_palindrome": false
       },
       "binary_prime": {
         "binary_string": "1011001",
@@ -462,21 +434,642 @@
         "consonant_power": 172,
         "polarity_score": -145,
         "polarity_ratio": 0.157
-      }
-    },
-    {
-      "identity": {
-        "text": "Knowurknot",
-        "type": "handle",
-        "role": "paradox_key"
       },
+      "gematria": {
+        "absolute_total": 451,
+        "absolute_reduced": 1,
+        "ordinal_total": 64,
+        "ordinal_reduced": 1,
+        "reduced_total": 28,
+        "letter_values": [
+          {
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "absolute": 80,
+            "ordinal": 16,
+            "reduced": 8,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 3
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 4
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 5
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 6
+          }
+        ],
+        "gematria_ordinal_ratio": 7.0469
+      },
+      "isopsephy": {
+        "total": 742,
+        "reduced": 4,
+        "digital_root_chain": [
+          742,
+          13,
+          4
+        ],
+        "letter_values": [
+          {
+            "char": "C",
+            "value": 300,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "value": 80,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 3
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 4
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 5
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 6
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "P",
+            "greek": "\u03c0",
+            "value": 80
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "identity:alias:capt",
+    "text": "CAPT",
+    "computed_at": "2026-07-04T18:26:37.573918Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
+        "total": 13,
+        "expression": 4,
+        "master_preserved": null,
+        "soul_urge": 1,
+        "personality": 3,
+        "soul_urge_total": 1,
+        "personality_total": 12,
+        "balance_number": 3,
+        "hidden_passion": [
+          1,
+          2,
+          3,
+          7
+        ],
+        "karmic_lessons": [
+          4,
+          5,
+          6,
+          8,
+          9
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 1,
+          "8": 0,
+          "9": 0
+        },
+        "vowel_ratio": 0.25
+      },
+      "chaldean": {
+        "compound_number": 16,
+        "name_number": 7,
+        "soul_urge": 1,
+        "personality": 6,
+        "intensity_table": {
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 1,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 1,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 40,
+        "ordinal_reduced": 4,
+        "reverse": 68,
+        "reverse_reduced": 5,
+        "reduced_total": 13
+      },
+      "linguistic": {
+        "letter_count": 4,
+        "unique_letters": 4,
+        "shannon_entropy": 2.0,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.4255,
+        "vowel_ratio": 0.25,
+        "syllable_estimate": 1,
+        "plosive_count": 2,
+        "fricative_count": 0,
+        "nasal_count": 0,
+        "bigrams_top5": [
+          "BigramStats(bigram='CA', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='AP', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='PT', count=1, frequency=0.3333333333333333)"
+        ],
+        "repetition_ratio": 0.0,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "1011",
+        "binary_weight": 3,
+        "binary_entropy": 0.8113,
+        "prime_total": 131,
+        "prime_reduced": 5,
+        "vowel_power": 2,
+        "consonant_power": 129,
+        "polarity_score": -127,
+        "polarity_ratio": 0.0155
+      },
+      "gematria": {
+        "absolute_total": 390,
+        "absolute_reduced": 3,
+        "ordinal_total": 40,
+        "ordinal_reduced": 4,
+        "reduced_total": 21,
+        "letter_values": [
+          {
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "absolute": 80,
+            "ordinal": 16,
+            "reduced": 8,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 3
+          }
+        ],
+        "gematria_ordinal_ratio": 9.75
+      },
+      "isopsephy": {
+        "total": 681,
+        "reduced": 6,
+        "digital_root_chain": [
+          681,
+          15,
+          6
+        ],
+        "letter_values": [
+          {
+            "char": "C",
+            "value": 300,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "value": 80,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 3
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "P",
+            "greek": "\u03c0",
+            "value": 80
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "identity:alias:capt_cortex",
+    "text": "Capt Cortex",
+    "computed_at": "2026-07-04T18:26:37.574041Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 44,
+        "expression": 8,
+        "master_preserved": null,
+        "soul_urge": 3,
+        "personality": 5,
+        "soul_urge_total": 12,
+        "personality_total": 32,
+        "balance_number": 6,
+        "hidden_passion": [
+          2,
+          3,
+          6
+        ],
+        "karmic_lessons": [
+          4,
+          8
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 2,
+          "3": 2,
+          "4": 0,
+          "5": 1,
+          "6": 2,
+          "7": 1,
+          "8": 0,
+          "9": 1
+        },
+        "vowel_ratio": 0.3
+      },
+      "chaldean": {
+        "compound_number": 42,
+        "name_number": 6,
+        "soul_urge": 4,
+        "personality": 2,
+        "intensity_table": {
+          "1": 1,
+          "2": 1,
+          "3": 2,
+          "4": 2,
+          "5": 2,
+          "6": 0,
+          "7": 1,
+          "8": 1,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 125,
+        "ordinal_reduced": 8,
+        "reverse": 145,
+        "reverse_reduced": 1,
+        "reduced_total": 44
+      },
+      "linguistic": {
+        "letter_count": 10,
+        "unique_letters": 8,
+        "shannon_entropy": 2.9219,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.6216,
+        "vowel_ratio": 0.3,
+        "syllable_estimate": 3,
+        "plosive_count": 3,
+        "fricative_count": 0,
+        "nasal_count": 0,
+        "bigrams_top5": [
+          "BigramStats(bigram='CA', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='AP', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='PT', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='TC', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='CO', count=1, frequency=0.1111111111111111)"
+        ],
+        "repetition_ratio": 0.2,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "1011101101",
+        "binary_weight": 7,
+        "binary_entropy": 0.8813,
+        "prime_total": 415,
+        "prime_reduced": 1,
+        "vowel_power": 60,
+        "consonant_power": 355,
+        "polarity_score": -295,
+        "polarity_ratio": 0.169
+      },
+      "gematria": {
+        "absolute_total": 1349,
+        "absolute_reduced": 8,
+        "ordinal_total": 125,
+        "ordinal_reduced": 8,
+        "reduced_total": 53,
+        "letter_values": [
+          {
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "absolute": 80,
+            "ordinal": 16,
+            "reduced": 8,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 3
+          },
+          {
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 4
+          },
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 5
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 6
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 7
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 8
+          },
+          {
+            "char": "X",
+            "absolute": 90,
+            "ordinal": 24,
+            "reduced": 9,
+            "index": 9
+          }
+        ],
+        "gematria_ordinal_ratio": 10.792
+      },
+      "isopsephy": {
+        "total": 1516,
+        "reduced": 4,
+        "digital_root_chain": [
+          1516,
+          13,
+          4
+        ],
+        "letter_values": [
+          {
+            "char": "C",
+            "value": 300,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "value": 80,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 3
+          },
+          {
+            "char": "C",
+            "value": 300,
+            "index": 4
+          },
+          {
+            "char": "O",
+            "value": 70,
+            "index": 5
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 6
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 7
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 8
+          },
+          {
+            "char": "X",
+            "value": 60,
+            "index": 9
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "P",
+            "greek": "\u03c0",
+            "value": 80
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "X",
+            "greek": "\u03be",
+            "value": 60
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "identity:handle:knowurknot",
+    "text": "Knowurknot",
+    "computed_at": "2026-07-04T18:26:37.574157Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 45,
         "expression": 9,
         "master_preserved": null,
         "soul_urge": 6,
         "personality": 3,
-        "balance": 2,
-        "total": 45,
+        "soul_urge_total": 15,
+        "personality_total": 30,
+        "balance_number": 2,
         "hidden_passion": [
           2,
           5
@@ -498,11 +1091,11 @@
           "8": 0,
           "9": 1
         },
-        "vowel_consonant_ratio": 0.3
+        "vowel_ratio": 0.3
       },
       "chaldean": {
-        "name_number": 1,
         "compound_number": 46,
+        "name_number": 1,
         "soul_urge": 2,
         "personality": 8,
         "intensity_table": {
@@ -518,52 +1111,32 @@
         }
       },
       "ordinal": {
-        "standard": 162,
-        "standard_reduced": 9,
+        "ordinal_total": 162,
+        "ordinal_reduced": 9,
         "reverse": 108,
         "reverse_reduced": 9,
-        "reduced": 45,
-        "reduced_final": 9,
-        "vowel_total": 51,
-        "consonant_total": 111
+        "reduced_total": 45
       },
       "linguistic": {
         "letter_count": 10,
-        "token_count": 1,
-        "vowel_ratio": 0.3,
-        "shannon_entropy": 2.7219,
-        "entropy_ratio": 0.5791,
-        "syllable_estimate": 3,
         "unique_letters": 7,
-        "letter_repetition_ratio": 0.3,
-        "is_palindrome": false,
+        "shannon_entropy": 2.7219,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.5791,
+        "vowel_ratio": 0.3,
+        "syllable_estimate": 3,
         "plosive_count": 3,
         "fricative_count": 0,
         "nasal_count": 2,
-        "liquid_count": 1,
-        "consonant_cluster_count": 3,
         "bigrams_top5": [
-          {
-            "bigram": "KN",
-            "count": 2
-          },
-          {
-            "bigram": "NO",
-            "count": 2
-          },
-          {
-            "bigram": "OW",
-            "count": 1
-          },
-          {
-            "bigram": "WU",
-            "count": 1
-          },
-          {
-            "bigram": "UR",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='KN', count=2, frequency=0.2222222222222222)",
+          "BigramStats(bigram='NO', count=2, frequency=0.2222222222222222)",
+          "BigramStats(bigram='OW', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='WU', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='UR', count=1, frequency=0.1111111111111111)"
+        ],
+        "repetition_ratio": 0.3,
+        "is_palindrome": false
       },
       "binary_prime": {
         "binary_string": "1101011101",
@@ -575,23 +1148,406 @@
         "consonant_power": 363,
         "polarity_score": -196,
         "polarity_ratio": 0.4601
-      }
-    },
-    {
-      "identity": {
-        "text": "Captain Knowurknot",
-        "type": "persona",
-        "role": "public_myth"
       },
+      "gematria": {
+        "absolute_total": 775,
+        "absolute_reduced": 1,
+        "ordinal_total": 162,
+        "ordinal_reduced": 9,
+        "reduced_total": 46,
+        "letter_values": [
+          {
+            "char": "K",
+            "absolute": 20,
+            "ordinal": 11,
+            "reduced": 2,
+            "index": 0
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 1
+          },
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 2
+          },
+          {
+            "char": "W",
+            "absolute": 6,
+            "ordinal": 23,
+            "reduced": 6,
+            "index": 3
+          },
+          {
+            "char": "U",
+            "absolute": 300,
+            "ordinal": 21,
+            "reduced": 3,
+            "index": 4
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 5
+          },
+          {
+            "char": "K",
+            "absolute": 20,
+            "ordinal": 11,
+            "reduced": 2,
+            "index": 6
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 7
+          },
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 8
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 9
+          }
+        ],
+        "gematria_ordinal_ratio": 4.784
+      },
+      "isopsephy": {
+        "total": 1880,
+        "reduced": 8,
+        "digital_root_chain": [
+          1880,
+          17,
+          8
+        ],
+        "letter_values": [
+          {
+            "char": "K",
+            "value": 20,
+            "index": 0
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 1
+          },
+          {
+            "char": "O",
+            "value": 70,
+            "index": 2
+          },
+          {
+            "char": "W",
+            "value": 800,
+            "index": 3
+          },
+          {
+            "char": "U",
+            "value": 400,
+            "index": 4
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 5
+          },
+          {
+            "char": "K",
+            "value": 20,
+            "index": 6
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 7
+          },
+          {
+            "char": "O",
+            "value": 70,
+            "index": 8
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 9
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "K",
+            "greek": "\u03ba",
+            "value": 20
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "W",
+            "greek": "\u03c9",
+            "value": 800
+          },
+          {
+            "letter": "U",
+            "greek": "\u03c5",
+            "value": 400
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "K",
+            "greek": "\u03ba",
+            "value": 20
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:capt",
+    "text": "CAPT",
+    "computed_at": "2026-07-04T18:26:37.574234Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
+        "total": 13,
+        "expression": 4,
+        "master_preserved": null,
+        "soul_urge": 1,
+        "personality": 3,
+        "soul_urge_total": 1,
+        "personality_total": 12,
+        "balance_number": 3,
+        "hidden_passion": [
+          1,
+          2,
+          3,
+          7
+        ],
+        "karmic_lessons": [
+          4,
+          5,
+          6,
+          8,
+          9
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 1,
+          "8": 0,
+          "9": 0
+        },
+        "vowel_ratio": 0.25
+      },
+      "chaldean": {
+        "compound_number": 16,
+        "name_number": 7,
+        "soul_urge": 1,
+        "personality": 6,
+        "intensity_table": {
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 1,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 1,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 40,
+        "ordinal_reduced": 4,
+        "reverse": 68,
+        "reverse_reduced": 5,
+        "reduced_total": 13
+      },
+      "linguistic": {
+        "letter_count": 4,
+        "unique_letters": 4,
+        "shannon_entropy": 2.0,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.4255,
+        "vowel_ratio": 0.25,
+        "syllable_estimate": 1,
+        "plosive_count": 2,
+        "fricative_count": 0,
+        "nasal_count": 0,
+        "bigrams_top5": [
+          "BigramStats(bigram='CA', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='AP', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='PT', count=1, frequency=0.3333333333333333)"
+        ],
+        "repetition_ratio": 0.0,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "1011",
+        "binary_weight": 3,
+        "binary_entropy": 0.8113,
+        "prime_total": 131,
+        "prime_reduced": 5,
+        "vowel_power": 2,
+        "consonant_power": 129,
+        "polarity_score": -127,
+        "polarity_ratio": 0.0155
+      },
+      "gematria": {
+        "absolute_total": 390,
+        "absolute_reduced": 3,
+        "ordinal_total": 40,
+        "ordinal_reduced": 4,
+        "reduced_total": 21,
+        "letter_values": [
+          {
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "absolute": 80,
+            "ordinal": 16,
+            "reduced": 8,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 3
+          }
+        ],
+        "gematria_ordinal_ratio": 9.75
+      },
+      "isopsephy": {
+        "total": 681,
+        "reduced": 6,
+        "digital_root_chain": [
+          681,
+          15,
+          6
+        ],
+        "letter_values": [
+          {
+            "char": "C",
+            "value": 300,
+            "index": 0
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 1
+          },
+          {
+            "char": "P",
+            "value": 80,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 3
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "P",
+            "greek": "\u03c0",
+            "value": 80
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:frankencapt",
+    "text": "FrankenCAPT",
+    "computed_at": "2026-07-04T18:26:37.574353Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 46,
         "expression": 1,
         "master_preserved": null,
-        "soul_urge": 8,
-        "personality": 11,
-        "balance": 5,
-        "total": 73,
+        "soul_urge": 7,
+        "personality": 3,
+        "soul_urge_total": 7,
+        "personality_total": 39,
+        "balance_number": 6,
         "hidden_passion": [
-          2,
           5
         ],
         "karmic_lessons": [
@@ -600,107 +1556,300 @@
         ],
         "intensity_table": {
           "1": 2,
-          "2": 4,
-          "3": 2,
+          "2": 2,
+          "3": 1,
           "4": 0,
-          "5": 4,
-          "6": 2,
+          "5": 3,
+          "6": 1,
           "7": 1,
           "8": 0,
-          "9": 2
+          "9": 1
         },
-        "vowel_consonant_ratio": 0.35294117647058826
+        "vowel_ratio": 0.273
       },
       "chaldean": {
-        "name_number": 6,
-        "compound_number": 69,
-        "soul_urge": 5,
+        "compound_number": 44,
+        "name_number": 8,
+        "soul_urge": 7,
         "personality": 1,
         "intensity_table": {
-          "1": 3,
-          "2": 3,
+          "1": 2,
+          "2": 2,
           "3": 1,
-          "4": 2,
+          "4": 1,
           "5": 3,
-          "6": 2,
-          "7": 2,
-          "8": 1,
+          "6": 0,
+          "7": 0,
+          "8": 2,
           "9": 0
         }
       },
       "ordinal": {
-        "standard": 226,
-        "standard_reduced": 1,
-        "reverse": 233,
+        "ordinal_total": 109,
+        "ordinal_reduced": 1,
+        "reverse": 188,
         "reverse_reduced": 8,
-        "reduced": 73,
-        "reduced_final": 1,
-        "vowel_total": 62,
-        "consonant_total": 164
+        "reduced_total": 46
       },
       "linguistic": {
-        "letter_count": 17,
-        "token_count": 2,
-        "vowel_ratio": 0.35294117647058826,
-        "shannon_entropy": 3.3372,
-        "entropy_ratio": 0.71,
-        "syllable_estimate": 5,
-        "unique_letters": 11,
-        "letter_repetition_ratio": 0.3529,
-        "is_palindrome": false,
-        "plosive_count": 5,
-        "fricative_count": 0,
-        "nasal_count": 3,
-        "liquid_count": 1,
-        "consonant_cluster_count": 5,
+        "letter_count": 11,
+        "unique_letters": 9,
+        "shannon_entropy": 3.0958,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.6586,
+        "vowel_ratio": 0.2727272727272727,
+        "syllable_estimate": 3,
+        "plosive_count": 3,
+        "fricative_count": 1,
+        "nasal_count": 2,
         "bigrams_top5": [
-          {
-            "bigram": "KN",
-            "count": 2
-          },
-          {
-            "bigram": "NO",
-            "count": 2
-          },
-          {
-            "bigram": "CA",
-            "count": 1
-          },
-          {
-            "bigram": "AP",
-            "count": 1
-          },
-          {
-            "bigram": "PT",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='FR', count=1, frequency=0.1)",
+          "BigramStats(bigram='RA', count=1, frequency=0.1)",
+          "BigramStats(bigram='AN', count=1, frequency=0.1)",
+          "BigramStats(bigram='NK', count=1, frequency=0.1)",
+          "BigramStats(bigram='KE', count=1, frequency=0.1)"
+        ],
+        "repetition_ratio": 0.1818,
+        "is_palindrome": false
       },
       "binary_prime": {
-        "binary_string": "10110011101011101",
-        "binary_weight": 11,
-        "binary_entropy": 0.9367,
-        "prime_total": 729,
-        "prime_reduced": 9,
-        "vowel_power": 194,
-        "consonant_power": 535,
-        "polarity_score": -341,
-        "polarity_ratio": 0.3626
-      }
-    },
-    {
-      "identity": {
-        "text": "bioCAPT",
-        "type": "project",
-        "role": "embodiment"
+        "binary_string": "11011011011",
+        "binary_weight": 8,
+        "binary_entropy": 0.8454,
+        "prime_total": 335,
+        "prime_reduced": 2,
+        "vowel_power": 15,
+        "consonant_power": 320,
+        "polarity_score": -305,
+        "polarity_ratio": 0.0469
       },
+      "gematria": {
+        "absolute_total": 1091,
+        "absolute_reduced": 2,
+        "ordinal_total": 109,
+        "ordinal_reduced": 1,
+        "reduced_total": 47,
+        "letter_values": [
+          {
+            "char": "F",
+            "absolute": 80,
+            "ordinal": 6,
+            "reduced": 8,
+            "index": 0
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 1
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 3
+          },
+          {
+            "char": "K",
+            "absolute": 20,
+            "ordinal": 11,
+            "reduced": 2,
+            "index": 4
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 5
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 6
+          },
+          {
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 7
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 8
+          },
+          {
+            "char": "P",
+            "absolute": 80,
+            "ordinal": 16,
+            "reduced": 8,
+            "index": 9
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 10
+          }
+        ],
+        "gematria_ordinal_ratio": 10.0092
+      },
+      "isopsephy": {
+        "total": 913,
+        "reduced": 4,
+        "digital_root_chain": [
+          913,
+          13,
+          4
+        ],
+        "letter_values": [
+          {
+            "char": "F",
+            "value": 6,
+            "index": 0
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 1
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 3
+          },
+          {
+            "char": "K",
+            "value": 20,
+            "index": 4
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 5
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 6
+          },
+          {
+            "char": "C",
+            "value": 300,
+            "index": 7
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 8
+          },
+          {
+            "char": "P",
+            "value": 80,
+            "index": 9
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 10
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "F",
+            "greek": "\u03db",
+            "value": 6
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "K",
+            "greek": "\u03ba",
+            "value": 20
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "P",
+            "greek": "\u03c0",
+            "value": 80
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:biocapt",
+    "text": "bioCAPT",
+    "computed_at": "2026-07-04T18:26:37.574460Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
+        "total": 30,
         "expression": 3,
         "master_preserved": null,
         "soul_urge": 7,
         "personality": 5,
-        "balance": 2,
-        "total": 30,
+        "soul_urge_total": 16,
+        "personality_total": 14,
+        "balance_number": 2,
         "hidden_passion": [
           2
         ],
@@ -720,11 +1869,11 @@
           "8": 0,
           "9": 1
         },
-        "vowel_consonant_ratio": 0.42857142857142855
+        "vowel_ratio": 0.429
       },
       "chaldean": {
-        "name_number": 8,
         "compound_number": 26,
+        "name_number": 8,
         "soul_urge": 9,
         "personality": 8,
         "intensity_table": {
@@ -740,52 +1889,32 @@
         }
       },
       "ordinal": {
-        "standard": 66,
-        "standard_reduced": 3,
+        "ordinal_total": 66,
+        "ordinal_reduced": 3,
         "reverse": 123,
         "reverse_reduced": 6,
-        "reduced": 30,
-        "reduced_final": 3,
-        "vowel_total": 25,
-        "consonant_total": 41
+        "reduced_total": 30
       },
       "linguistic": {
         "letter_count": 7,
-        "token_count": 1,
-        "vowel_ratio": 0.42857142857142855,
-        "shannon_entropy": 2.8074,
-        "entropy_ratio": 0.5973,
-        "syllable_estimate": 2,
         "unique_letters": 7,
-        "letter_repetition_ratio": 0.0,
-        "is_palindrome": false,
+        "shannon_entropy": 2.8074,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.5973,
+        "vowel_ratio": 0.42857142857142855,
+        "syllable_estimate": 2,
         "plosive_count": 3,
         "fricative_count": 0,
         "nasal_count": 0,
-        "liquid_count": 0,
-        "consonant_cluster_count": 1,
         "bigrams_top5": [
-          {
-            "bigram": "BI",
-            "count": 1
-          },
-          {
-            "bigram": "IO",
-            "count": 1
-          },
-          {
-            "bigram": "OC",
-            "count": 1
-          },
-          {
-            "bigram": "CA",
-            "count": 1
-          },
-          {
-            "bigram": "AP",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='BI', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='IO', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='OC', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='CA', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='AP', count=1, frequency=0.16666666666666666)"
+        ],
+        "repetition_ratio": 0.0,
+        "is_palindrome": false
       },
       "binary_prime": {
         "binary_string": "1001011",
@@ -797,356 +1926,166 @@
         "consonant_power": 132,
         "polarity_score": -60,
         "polarity_ratio": 0.5455
-      }
-    },
-    {
-      "identity": {
-        "text": "FrankenCAPT",
-        "type": "project",
-        "role": "synthesis"
       },
-      "pythagorean": {
-        "expression": 1,
-        "master_preserved": null,
-        "soul_urge": 7,
-        "personality": 3,
-        "balance": 6,
-        "total": 46,
-        "hidden_passion": [
-          5
-        ],
-        "karmic_lessons": [
-          4,
-          8
-        ],
-        "intensity_table": {
-          "1": 2,
-          "2": 2,
-          "3": 1,
-          "4": 0,
-          "5": 3,
-          "6": 1,
-          "7": 1,
-          "8": 0,
-          "9": 1
-        },
-        "vowel_consonant_ratio": 0.2727272727272727
-      },
-      "chaldean": {
-        "name_number": 8,
-        "compound_number": 44,
-        "soul_urge": 7,
-        "personality": 1,
-        "intensity_table": {
-          "1": 2,
-          "2": 2,
-          "3": 1,
-          "4": 1,
-          "5": 3,
-          "6": 0,
-          "7": 0,
-          "8": 2,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 109,
-        "standard_reduced": 1,
-        "reverse": 188,
-        "reverse_reduced": 8,
-        "reduced": 46,
-        "reduced_final": 1,
-        "vowel_total": 7,
-        "consonant_total": 102
-      },
-      "linguistic": {
-        "letter_count": 11,
-        "token_count": 1,
-        "vowel_ratio": 0.2727272727272727,
-        "shannon_entropy": 3.0958,
-        "entropy_ratio": 0.6586,
-        "syllable_estimate": 3,
-        "unique_letters": 9,
-        "letter_repetition_ratio": 0.1818,
-        "is_palindrome": false,
-        "plosive_count": 3,
-        "fricative_count": 1,
-        "nasal_count": 2,
-        "liquid_count": 1,
-        "consonant_cluster_count": 4,
-        "bigrams_top5": [
+      "gematria": {
+        "absolute_total": 462,
+        "absolute_reduced": 3,
+        "ordinal_total": 66,
+        "ordinal_reduced": 3,
+        "reduced_total": 30,
+        "letter_values": [
           {
-            "bigram": "FR",
-            "count": 1
+            "char": "B",
+            "absolute": 2,
+            "ordinal": 2,
+            "reduced": 2,
+            "index": 0
           },
           {
-            "bigram": "RA",
-            "count": 1
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 1
           },
           {
-            "bigram": "AN",
-            "count": 1
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 2
           },
           {
-            "bigram": "NK",
-            "count": 1
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 3
           },
           {
-            "bigram": "KE",
-            "count": 1
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 4
+          },
+          {
+            "char": "P",
+            "absolute": 80,
+            "ordinal": 16,
+            "reduced": 8,
+            "index": 5
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 6
           }
-        ]
-      },
-      "binary_prime": {
-        "binary_string": "11011011011",
-        "binary_weight": 8,
-        "binary_entropy": 0.8454,
-        "prime_total": 335,
-        "prime_reduced": 2,
-        "vowel_power": 15,
-        "consonant_power": 320,
-        "polarity_score": -305,
-        "polarity_ratio": 0.0469
-      }
-    },
-    {
-      "identity": {
-        "text": "Jenn-ai",
-        "type": "agent",
-        "role": "executive"
-      },
-      "pythagorean": {
-        "expression": 8,
-        "master_preserved": null,
-        "soul_urge": 6,
-        "personality": 11,
-        "balance": 2,
-        "total": 26,
-        "hidden_passion": [
-          5
         ],
-        "karmic_lessons": [
-          2,
-          3,
-          4,
-          6,
-          7,
-          8
-        ],
-        "intensity_table": {
-          "1": 2,
-          "2": 0,
-          "3": 0,
-          "4": 0,
-          "5": 3,
-          "6": 0,
-          "7": 0,
-          "8": 0,
-          "9": 1
-        },
-        "vowel_consonant_ratio": 0.5
+        "gematria_ordinal_ratio": 7.0
       },
-      "chaldean": {
-        "name_number": 9,
-        "compound_number": 18,
-        "soul_urge": 7,
-        "personality": 2,
-        "intensity_table": {
-          "1": 3,
-          "2": 0,
-          "3": 0,
-          "4": 0,
-          "5": 3,
-          "6": 0,
-          "7": 0,
-          "8": 0,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 53,
-        "standard_reduced": 8,
-        "reverse": 109,
-        "reverse_reduced": 1,
-        "reduced": 26,
-        "reduced_final": 8,
-        "vowel_total": 15,
-        "consonant_total": 38
-      },
-      "linguistic": {
-        "letter_count": 6,
-        "token_count": 2,
-        "vowel_ratio": 0.5,
-        "shannon_entropy": 2.2516,
-        "entropy_ratio": 0.479,
-        "syllable_estimate": 2,
-        "unique_letters": 5,
-        "letter_repetition_ratio": 0.1667,
-        "is_palindrome": false,
-        "plosive_count": 0,
-        "fricative_count": 0,
-        "nasal_count": 2,
-        "liquid_count": 0,
-        "consonant_cluster_count": 1,
-        "bigrams_top5": [
-          {
-            "bigram": "JE",
-            "count": 1
-          },
-          {
-            "bigram": "EN",
-            "count": 1
-          },
-          {
-            "bigram": "NN",
-            "count": 1
-          },
-          {
-            "bigram": "NA",
-            "count": 1
-          },
-          {
-            "bigram": "AI",
-            "count": 1
-          }
-        ]
-      },
-      "binary_prime": {
-        "binary_string": "101100",
-        "binary_weight": 3,
-        "binary_entropy": 1.0,
-        "prime_total": 151,
-        "prime_reduced": 7,
-        "vowel_power": 36,
-        "consonant_power": 115,
-        "polarity_score": -79,
-        "polarity_ratio": 0.313
-      }
-    },
-    {
-      "identity": {
-        "text": "SynSync",
-        "type": "project",
-        "role": "resonance"
-      },
-      "pythagorean": {
-        "expression": 11,
-        "master_preserved": 11,
-        "soul_urge": 0,
-        "personality": 11,
-        "balance": 1,
-        "total": 29,
-        "hidden_passion": [
-          1,
-          5,
+      "isopsephy": {
+        "total": 763,
+        "reduced": 7,
+        "digital_root_chain": [
+          763,
+          16,
           7
         ],
-        "karmic_lessons": [
-          2,
-          4,
-          6,
-          8,
-          9
+        "letter_values": [
+          {
+            "char": "B",
+            "value": 2,
+            "index": 0
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 1
+          },
+          {
+            "char": "O",
+            "value": 70,
+            "index": 2
+          },
+          {
+            "char": "C",
+            "value": 300,
+            "index": 3
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 4
+          },
+          {
+            "char": "P",
+            "value": 80,
+            "index": 5
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 6
+          }
         ],
-        "intensity_table": {
-          "1": 2,
-          "2": 0,
-          "3": 1,
-          "4": 0,
-          "5": 2,
-          "6": 0,
-          "7": 2,
-          "8": 0,
-          "9": 0
-        },
-        "vowel_consonant_ratio": 0.0
-      },
-      "chaldean": {
-        "name_number": 3,
-        "compound_number": 21,
-        "soul_urge": 0,
-        "personality": 3,
-        "intensity_table": {
-          "1": 2,
-          "2": 0,
-          "3": 3,
-          "4": 0,
-          "5": 2,
-          "6": 0,
-          "7": 0,
-          "8": 0,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 119,
-        "standard_reduced": 2,
-        "reverse": 70,
-        "reverse_reduced": 7,
-        "reduced": 29,
-        "reduced_final": 2,
-        "vowel_total": 0,
-        "consonant_total": 119
-      },
-      "linguistic": {
-        "letter_count": 7,
-        "token_count": 1,
-        "vowel_ratio": 0.0,
-        "shannon_entropy": 1.9502,
-        "entropy_ratio": 0.4149,
-        "syllable_estimate": 2,
-        "unique_letters": 4,
-        "letter_repetition_ratio": 0.4286,
-        "is_palindrome": false,
-        "plosive_count": 0,
-        "fricative_count": 2,
-        "nasal_count": 2,
-        "liquid_count": 0,
-        "consonant_cluster_count": 6,
-        "bigrams_top5": [
+        "greek_correspondence": [
           {
-            "bigram": "SY",
-            "count": 2
+            "letter": "B",
+            "greek": "\u03b2",
+            "value": 2
           },
           {
-            "bigram": "YN",
-            "count": 2
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
           },
           {
-            "bigram": "NS",
-            "count": 1
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
           },
           {
-            "bigram": "NC",
-            "count": 1
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "P",
+            "greek": "\u03c0",
+            "value": 80
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
           }
         ]
-      },
-      "binary_prime": {
-        "binary_string": "1111111",
-        "binary_weight": 7,
-        "binary_entropy": 0.0,
-        "prime_total": 419,
-        "prime_reduced": 5,
-        "vowel_power": 0,
-        "consonant_power": 419,
-        "polarity_score": -419,
-        "polarity_ratio": 0.0
       }
-    },
-    {
-      "identity": {
-        "text": "Inversion Labs",
-        "type": "brand",
-        "role": "container"
-      },
+    }
+  },
+  {
+    "id": "project:inversion_labs",
+    "text": "Inversion Labs",
+    "computed_at": "2026-07-04T18:26:37.574598Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
+        "total": 60,
         "expression": 6,
         "master_preserved": null,
         "soul_urge": 3,
         "personality": 3,
-        "balance": 3,
-        "total": 60,
+        "soul_urge_total": 30,
+        "personality_total": 30,
+        "balance_number": 3,
         "hidden_passion": [
           1,
           5,
@@ -1167,11 +2106,11 @@
           "8": 0,
           "9": 3
         },
-        "vowel_consonant_ratio": 0.38461538461538464
+        "vowel_ratio": 0.385
       },
       "chaldean": {
-        "name_number": 8,
         "compound_number": 44,
+        "name_number": 8,
         "soul_urge": 6,
         "personality": 2,
         "intensity_table": {
@@ -1187,52 +2126,32 @@
         }
       },
       "ordinal": {
-        "standard": 159,
-        "standard_reduced": 6,
+        "ordinal_total": 159,
+        "ordinal_reduced": 6,
         "reverse": 192,
         "reverse_reduced": 3,
-        "reduced": 60,
-        "reduced_final": 6,
-        "vowel_total": 39,
-        "consonant_total": 120
+        "reduced_total": 60
       },
       "linguistic": {
         "letter_count": 13,
-        "token_count": 2,
-        "vowel_ratio": 0.38461538461538464,
-        "shannon_entropy": 3.2389,
-        "entropy_ratio": 0.6891,
-        "syllable_estimate": 4,
         "unique_letters": 10,
-        "letter_repetition_ratio": 0.2308,
-        "is_palindrome": false,
+        "shannon_entropy": 3.2389,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.6891,
+        "vowel_ratio": 0.38461538461538464,
+        "syllable_estimate": 4,
         "plosive_count": 1,
         "fricative_count": 3,
         "nasal_count": 2,
-        "liquid_count": 2,
-        "consonant_cluster_count": 4,
         "bigrams_top5": [
-          {
-            "bigram": "IN",
-            "count": 1
-          },
-          {
-            "bigram": "NV",
-            "count": 1
-          },
-          {
-            "bigram": "VE",
-            "count": 1
-          },
-          {
-            "bigram": "ER",
-            "count": 1
-          },
-          {
-            "bigram": "RS",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='IN', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='NV', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='VE', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='ER', count=1, frequency=0.08333333333333333)",
+          "BigramStats(bigram='RS', count=1, frequency=0.08333333333333333)"
+        ],
+        "repetition_ratio": 0.2308,
+        "is_palindrome": false
       },
       "binary_prime": {
         "binary_string": "0110110011011",
@@ -1244,574 +2163,1387 @@
         "consonant_power": 400,
         "polarity_score": -294,
         "polarity_ratio": 0.265
-      }
-    },
-    {
-      "identity": {
-        "text": "Knowledge Bubbles",
-        "type": "project",
-        "role": "mining"
       },
+      "gematria": {
+        "absolute_total": 839,
+        "absolute_reduced": 2,
+        "ordinal_total": 159,
+        "ordinal_reduced": 6,
+        "reduced_total": 47,
+        "letter_values": [
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 0
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 1
+          },
+          {
+            "char": "V",
+            "absolute": 6,
+            "ordinal": 22,
+            "reduced": 6,
+            "index": 2
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 3
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 4
+          },
+          {
+            "char": "S",
+            "absolute": 60,
+            "ordinal": 19,
+            "reduced": 6,
+            "index": 5
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 6
+          },
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 7
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 8
+          },
+          {
+            "char": "L",
+            "absolute": 30,
+            "ordinal": 12,
+            "reduced": 3,
+            "index": 9
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 10
+          },
+          {
+            "char": "B",
+            "absolute": 2,
+            "ordinal": 2,
+            "reduced": 2,
+            "index": 11
+          },
+          {
+            "char": "S",
+            "absolute": 60,
+            "ordinal": 19,
+            "reduced": 6,
+            "index": 12
+          }
+        ],
+        "gematria_ordinal_ratio": 5.2767
+      },
+      "isopsephy": {
+        "total": 1128,
+        "reduced": 3,
+        "digital_root_chain": [
+          1128,
+          12,
+          3
+        ],
+        "letter_values": [
+          {
+            "char": "I",
+            "value": 10,
+            "index": 0
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 1
+          },
+          {
+            "char": "V",
+            "value": 400,
+            "index": 2
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 3
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 4
+          },
+          {
+            "char": "S",
+            "value": 200,
+            "index": 5
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 6
+          },
+          {
+            "char": "O",
+            "value": 70,
+            "index": 7
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 8
+          },
+          {
+            "char": "L",
+            "value": 30,
+            "index": 9
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 10
+          },
+          {
+            "char": "B",
+            "value": 2,
+            "index": 11
+          },
+          {
+            "char": "S",
+            "value": 200,
+            "index": 12
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "V",
+            "greek": "\u03c5",
+            "value": 400
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "S",
+            "greek": "\u03c3",
+            "value": 200
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "L",
+            "greek": "\u03bb",
+            "value": 30
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "B",
+            "greek": "\u03b2",
+            "value": 2
+          },
+          {
+            "letter": "S",
+            "greek": "\u03c3",
+            "value": 200
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:jennai",
+    "text": "JennAI",
+    "computed_at": "2026-07-04T18:26:37.574686Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
-        "expression": 6,
+        "total": 26,
+        "expression": 8,
         "master_preserved": null,
         "soul_urge": 6,
-        "personality": 9,
-        "balance": 4,
-        "total": 60,
+        "personality": 11,
+        "soul_urge_total": 15,
+        "personality_total": 11,
+        "balance_number": 1,
         "hidden_passion": [
           5
         ],
         "karmic_lessons": [
+          2,
+          3,
+          4,
+          6,
+          7,
+          8
+        ],
+        "intensity_table": {
+          "1": 2,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 3,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 1
+        },
+        "vowel_ratio": 0.5
+      },
+      "chaldean": {
+        "compound_number": 18,
+        "name_number": 9,
+        "soul_urge": 7,
+        "personality": 2,
+        "intensity_table": {
+          "1": 3,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 3,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 53,
+        "ordinal_reduced": 8,
+        "reverse": 109,
+        "reverse_reduced": 1,
+        "reduced_total": 26
+      },
+      "linguistic": {
+        "letter_count": 6,
+        "unique_letters": 5,
+        "shannon_entropy": 2.2516,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.479,
+        "vowel_ratio": 0.5,
+        "syllable_estimate": 2,
+        "plosive_count": 0,
+        "fricative_count": 0,
+        "nasal_count": 2,
+        "bigrams_top5": [
+          "BigramStats(bigram='JE', count=1, frequency=0.2)",
+          "BigramStats(bigram='EN', count=1, frequency=0.2)",
+          "BigramStats(bigram='NN', count=1, frequency=0.2)",
+          "BigramStats(bigram='NA', count=1, frequency=0.2)",
+          "BigramStats(bigram='AI', count=1, frequency=0.2)"
+        ],
+        "repetition_ratio": 0.1667,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "101100",
+        "binary_weight": 3,
+        "binary_entropy": 1.0,
+        "prime_total": 151,
+        "prime_reduced": 7,
+        "vowel_power": 36,
+        "consonant_power": 115,
+        "polarity_score": -79,
+        "polarity_ratio": 0.313
+      },
+      "gematria": {
+        "absolute_total": 419,
+        "absolute_reduced": 5,
+        "ordinal_total": 53,
+        "ordinal_reduced": 8,
+        "reduced_total": 23,
+        "letter_values": [
+          {
+            "char": "J",
+            "absolute": 8,
+            "ordinal": 10,
+            "reduced": 8,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 3
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 4
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 5
+          }
+        ],
+        "gematria_ordinal_ratio": 7.9057
+      },
+      "isopsephy": {
+        "total": 126,
+        "reduced": 9,
+        "digital_root_chain": [
+          126,
+          9
+        ],
+        "letter_values": [
+          {
+            "char": "J",
+            "value": 10,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 3
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 4
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 5
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "J",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:synsync",
+    "text": "SynSync",
+    "computed_at": "2026-07-04T18:26:37.574781Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 29,
+        "expression": 11,
+        "master_preserved": 11,
+        "soul_urge": 0,
+        "personality": 11,
+        "soul_urge_total": 0,
+        "personality_total": 29,
+        "balance_number": 1,
+        "hidden_passion": [
+          1,
+          5,
+          7
+        ],
+        "karmic_lessons": [
+          2,
+          4,
+          6,
           8,
           9
         ],
         "intensity_table": {
-          "1": 1,
-          "2": 4,
-          "3": 3,
-          "4": 1,
-          "5": 5,
-          "6": 1,
-          "7": 1,
-          "8": 0,
-          "9": 0
-        },
-        "vowel_consonant_ratio": 0.3125
-      },
-      "chaldean": {
-        "name_number": 9,
-        "compound_number": 63,
-        "soul_urge": 1,
-        "personality": 8,
-        "intensity_table": {
-          "1": 0,
-          "2": 4,
-          "3": 4,
-          "4": 1,
-          "5": 4,
-          "6": 2,
-          "7": 1,
-          "8": 0,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 159,
-        "standard_reduced": 6,
-        "reverse": 273,
-        "reverse_reduced": 3,
-        "reduced": 60,
-        "reduced_final": 6,
-        "vowel_total": 51,
-        "consonant_total": 108
-      },
-      "linguistic": {
-        "letter_count": 16,
-        "token_count": 2,
-        "vowel_ratio": 0.3125,
-        "shannon_entropy": 3.2806,
-        "entropy_ratio": 0.6979,
-        "syllable_estimate": 5,
-        "unique_letters": 11,
-        "letter_repetition_ratio": 0.3125,
-        "is_palindrome": false,
-        "plosive_count": 6,
-        "fricative_count": 1,
-        "nasal_count": 1,
-        "liquid_count": 2,
-        "consonant_cluster_count": 5,
-        "bigrams_top5": [
-          {
-            "bigram": "LE",
-            "count": 2
-          },
-          {
-            "bigram": "KN",
-            "count": 1
-          },
-          {
-            "bigram": "NO",
-            "count": 1
-          },
-          {
-            "bigram": "OW",
-            "count": 1
-          },
-          {
-            "bigram": "WL",
-            "count": 1
-          }
-        ]
-      },
-      "binary_prime": {
-        "binary_string": "1101101101011101",
-        "binary_weight": 11,
-        "binary_entropy": 0.896,
-        "prime_total": 484,
-        "prime_reduced": 7,
-        "vowel_power": 153,
-        "consonant_power": 331,
-        "polarity_score": -178,
-        "polarity_ratio": 0.4622
-      }
-    },
-    {
-      "identity": {
-        "text": "Soul Fractal Engine",
-        "type": "project",
-        "role": "identity"
-      },
-      "pythagorean": {
-        "expression": 11,
-        "master_preserved": 11,
-        "soul_urge": 3,
-        "personality": 8,
-        "balance": 3,
-        "total": 74,
-        "hidden_passion": [
-          3,
-          5
-        ],
-        "karmic_lessons": [
-          4,
-          8
-        ],
-        "intensity_table": {
-          "1": 3,
-          "2": 1,
-          "3": 4,
-          "4": 0,
-          "5": 4,
-          "6": 2,
-          "7": 1,
-          "8": 0,
-          "9": 2
-        },
-        "vowel_consonant_ratio": 0.4117647058823529
-      },
-      "chaldean": {
-        "name_number": 2,
-        "compound_number": 65,
-        "soul_urge": 8,
-        "personality": 3,
-        "intensity_table": {
-          "1": 3,
-          "2": 1,
-          "3": 5,
-          "4": 1,
-          "5": 4,
-          "6": 1,
-          "7": 1,
-          "8": 1,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 182,
-        "standard_reduced": 2,
-        "reverse": 277,
-        "reverse_reduced": 7,
-        "reduced": 74,
-        "reduced_final": 2,
-        "vowel_total": 57,
-        "consonant_total": 125
-      },
-      "linguistic": {
-        "letter_count": 17,
-        "token_count": 3,
-        "vowel_ratio": 0.4117647058823529,
-        "shannon_entropy": 3.6169,
-        "entropy_ratio": 0.7695,
-        "syllable_estimate": 5,
-        "unique_letters": 13,
-        "letter_repetition_ratio": 0.2353,
-        "is_palindrome": false,
-        "plosive_count": 2,
-        "fricative_count": 2,
-        "nasal_count": 2,
-        "liquid_count": 3,
-        "consonant_cluster_count": 4,
-        "bigrams_top5": [
-          {
-            "bigram": "SO",
-            "count": 1
-          },
-          {
-            "bigram": "OU",
-            "count": 1
-          },
-          {
-            "bigram": "UL",
-            "count": 1
-          },
-          {
-            "bigram": "LF",
-            "count": 1
-          },
-          {
-            "bigram": "FR",
-            "count": 1
-          }
-        ]
-      },
-      "binary_prime": {
-        "binary_string": "10011101101011010",
-        "binary_weight": 10,
-        "binary_entropy": 0.9774,
-        "prime_total": 563,
-        "prime_reduced": 5,
-        "vowel_power": 169,
-        "consonant_power": 394,
-        "polarity_score": -225,
-        "polarity_ratio": 0.4289
-      }
-    },
-    {
-      "identity": {
-        "text": "Wyrd",
-        "type": "project",
-        "role": "fate"
-      },
-      "pythagorean": {
-        "expression": 7,
-        "master_preserved": null,
-        "soul_urge": 0,
-        "personality": 7,
-        "balance": 5,
-        "total": 25,
-        "hidden_passion": [
-          4,
-          5,
-          7,
-          9
-        ],
-        "karmic_lessons": [
-          1,
-          2,
-          3,
-          6,
-          8
-        ],
-        "intensity_table": {
-          "1": 0,
-          "2": 0,
-          "3": 0,
-          "4": 1,
-          "5": 1,
-          "6": 0,
-          "7": 1,
-          "8": 0,
-          "9": 1
-        },
-        "vowel_consonant_ratio": 0.0
-      },
-      "chaldean": {
-        "name_number": 4,
-        "compound_number": 13,
-        "soul_urge": 0,
-        "personality": 4,
-        "intensity_table": {
-          "1": 1,
-          "2": 1,
-          "3": 0,
-          "4": 1,
-          "5": 0,
-          "6": 1,
-          "7": 0,
-          "8": 0,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 70,
-        "standard_reduced": 7,
-        "reverse": 38,
-        "reverse_reduced": 2,
-        "reduced": 25,
-        "reduced_final": 7,
-        "vowel_total": 0,
-        "consonant_total": 70
-      },
-      "linguistic": {
-        "letter_count": 4,
-        "token_count": 1,
-        "vowel_ratio": 0.0,
-        "shannon_entropy": 2.0,
-        "entropy_ratio": 0.4255,
-        "syllable_estimate": 1,
-        "unique_letters": 4,
-        "letter_repetition_ratio": 0.0,
-        "is_palindrome": false,
-        "plosive_count": 1,
-        "fricative_count": 0,
-        "nasal_count": 0,
-        "liquid_count": 1,
-        "consonant_cluster_count": 3,
-        "bigrams_top5": [
-          {
-            "bigram": "WY",
-            "count": 1
-          },
-          {
-            "bigram": "YR",
-            "count": 1
-          },
-          {
-            "bigram": "RD",
-            "count": 1
-          }
-        ]
-      },
-      "binary_prime": {
-        "binary_string": "1111",
-        "binary_weight": 4,
-        "binary_entropy": 0.0,
-        "prime_total": 248,
-        "prime_reduced": 5,
-        "vowel_power": 0,
-        "consonant_power": 248,
-        "polarity_score": -248,
-        "polarity_ratio": 0.0
-      }
-    },
-    {
-      "identity": {
-        "text": "CAPT-RYS",
-        "type": "project",
-        "role": "research"
-      },
-      "pythagorean": {
-        "expression": 3,
-        "master_preserved": null,
-        "soul_urge": 1,
-        "personality": 11,
-        "balance": 3,
-        "total": 30,
-        "hidden_passion": [
-          1,
-          7
-        ],
-        "karmic_lessons": [
-          4,
-          5,
-          6,
-          8
-        ],
-        "intensity_table": {
           "1": 2,
-          "2": 1,
-          "3": 1,
-          "4": 0,
-          "5": 0,
-          "6": 0,
-          "7": 2,
-          "8": 0,
-          "9": 1
-        },
-        "vowel_consonant_ratio": 0.14285714285714285
-      },
-      "chaldean": {
-        "name_number": 4,
-        "compound_number": 22,
-        "soul_urge": 1,
-        "personality": 3,
-        "intensity_table": {
-          "1": 2,
-          "2": 1,
-          "3": 2,
-          "4": 1,
-          "5": 0,
-          "6": 0,
-          "7": 0,
-          "8": 1,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "standard": 102,
-        "standard_reduced": 3,
-        "reverse": 87,
-        "reverse_reduced": 6,
-        "reduced": 30,
-        "reduced_final": 3,
-        "vowel_total": 1,
-        "consonant_total": 101
-      },
-      "linguistic": {
-        "letter_count": 7,
-        "token_count": 2,
-        "vowel_ratio": 0.14285714285714285,
-        "shannon_entropy": 2.8074,
-        "entropy_ratio": 0.5973,
-        "syllable_estimate": 2,
-        "unique_letters": 7,
-        "letter_repetition_ratio": 0.0,
-        "is_palindrome": false,
-        "plosive_count": 2,
-        "fricative_count": 1,
-        "nasal_count": 0,
-        "liquid_count": 1,
-        "consonant_cluster_count": 4,
-        "bigrams_top5": [
-          {
-            "bigram": "CA",
-            "count": 1
-          },
-          {
-            "bigram": "AP",
-            "count": 1
-          },
-          {
-            "bigram": "PT",
-            "count": 1
-          },
-          {
-            "bigram": "TR",
-            "count": 1
-          },
-          {
-            "bigram": "RY",
-            "count": 1
-          }
-        ]
-      },
-      "binary_prime": {
-        "binary_string": "1011111",
-        "binary_weight": 6,
-        "binary_entropy": 0.5917,
-        "prime_total": 356,
-        "prime_reduced": 5,
-        "vowel_power": 2,
-        "consonant_power": 354,
-        "polarity_score": -352,
-        "polarity_ratio": 0.0056
-      }
-    },
-    {
-      "identity": {
-        "text": "SYNCHEF",
-        "type": "project",
-        "role": "curator"
-      },
-      "pythagorean": {
-        "expression": 8,
-        "master_preserved": null,
-        "soul_urge": 5,
-        "personality": 3,
-        "balance": 1,
-        "total": 35,
-        "hidden_passion": [
-          5
-        ],
-        "karmic_lessons": [
-          2,
-          4,
-          9
-        ],
-        "intensity_table": {
-          "1": 1,
           "2": 0,
           "3": 1,
           "4": 0,
           "5": 2,
-          "6": 1,
-          "7": 1,
-          "8": 1,
+          "6": 0,
+          "7": 2,
+          "8": 0,
           "9": 0
         },
-        "vowel_consonant_ratio": 0.14285714285714285
+        "vowel_ratio": 0.0
       },
       "chaldean": {
+        "compound_number": 21,
         "name_number": 3,
-        "compound_number": 30,
-        "soul_urge": 5,
-        "personality": 7,
+        "soul_urge": 0,
+        "personality": 3,
         "intensity_table": {
-          "1": 1,
+          "1": 2,
           "2": 0,
-          "3": 2,
+          "3": 3,
           "4": 0,
-          "5": 3,
+          "5": 2,
           "6": 0,
           "7": 0,
-          "8": 1,
+          "8": 0,
           "9": 0
         }
       },
       "ordinal": {
-        "standard": 80,
-        "standard_reduced": 8,
-        "reverse": 109,
-        "reverse_reduced": 1,
-        "reduced": 35,
-        "reduced_final": 8,
-        "vowel_total": 5,
-        "consonant_total": 75
+        "ordinal_total": 119,
+        "ordinal_reduced": 2,
+        "reverse": 70,
+        "reverse_reduced": 7,
+        "reduced_total": 29
       },
       "linguistic": {
         "letter_count": 7,
-        "token_count": 1,
-        "vowel_ratio": 0.14285714285714285,
-        "shannon_entropy": 2.8074,
-        "entropy_ratio": 0.5973,
+        "unique_letters": 4,
+        "shannon_entropy": 1.9502,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.4149,
+        "vowel_ratio": 0.0,
         "syllable_estimate": 2,
-        "unique_letters": 7,
-        "letter_repetition_ratio": 0.0,
-        "is_palindrome": false,
         "plosive_count": 0,
-        "fricative_count": 3,
-        "nasal_count": 1,
-        "liquid_count": 0,
-        "consonant_cluster_count": 4,
+        "fricative_count": 2,
+        "nasal_count": 2,
         "bigrams_top5": [
-          {
-            "bigram": "SY",
-            "count": 1
-          },
-          {
-            "bigram": "YN",
-            "count": 1
-          },
-          {
-            "bigram": "NC",
-            "count": 1
-          },
-          {
-            "bigram": "CH",
-            "count": 1
-          },
-          {
-            "bigram": "HE",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='SY', count=2, frequency=0.3333333333333333)",
+          "BigramStats(bigram='YN', count=2, frequency=0.3333333333333333)",
+          "BigramStats(bigram='NS', count=1, frequency=0.16666666666666666)",
+          "BigramStats(bigram='NC', count=1, frequency=0.16666666666666666)"
+        ],
+        "repetition_ratio": 0.4286,
+        "is_palindrome": false
       },
       "binary_prime": {
-        "binary_string": "1111101",
-        "binary_weight": 6,
-        "binary_entropy": 0.5917,
-        "prime_total": 255,
-        "prime_reduced": 3,
-        "vowel_power": 11,
-        "consonant_power": 244,
-        "polarity_score": -233,
-        "polarity_ratio": 0.0451
-      }
-    },
-    {
-      "identity": {
-        "text": "Jenn",
-        "type": "nickname",
-        "role": "partner"
+        "binary_string": "1111111",
+        "binary_weight": 7,
+        "binary_entropy": 0.0,
+        "prime_total": 419,
+        "prime_reduced": 5,
+        "vowel_power": 0,
+        "consonant_power": 419,
+        "polarity_score": -419,
+        "polarity_ratio": 0.0
       },
+      "gematria": {
+        "absolute_total": 540,
+        "absolute_reduced": 9,
+        "ordinal_total": 119,
+        "ordinal_reduced": 2,
+        "reduced_total": 27,
+        "letter_values": [
+          {
+            "char": "S",
+            "absolute": 60,
+            "ordinal": 19,
+            "reduced": 6,
+            "index": 0
+          },
+          {
+            "char": "Y",
+            "absolute": 10,
+            "ordinal": 25,
+            "reduced": 1,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 2
+          },
+          {
+            "char": "S",
+            "absolute": 60,
+            "ordinal": 19,
+            "reduced": 6,
+            "index": 3
+          },
+          {
+            "char": "Y",
+            "absolute": 10,
+            "ordinal": 25,
+            "reduced": 1,
+            "index": 4
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 5
+          },
+          {
+            "char": "C",
+            "absolute": 300,
+            "ordinal": 3,
+            "reduced": 3,
+            "index": 6
+          }
+        ],
+        "gematria_ordinal_ratio": 4.5378
+      },
+      "isopsephy": {
+        "total": 1600,
+        "reduced": 7,
+        "digital_root_chain": [
+          1600,
+          7
+        ],
+        "letter_values": [
+          {
+            "char": "S",
+            "value": 200,
+            "index": 0
+          },
+          {
+            "char": "Y",
+            "value": 400,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 2
+          },
+          {
+            "char": "S",
+            "value": 200,
+            "index": 3
+          },
+          {
+            "char": "Y",
+            "value": 400,
+            "index": 4
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 5
+          },
+          {
+            "char": "C",
+            "value": 300,
+            "index": 6
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "S",
+            "greek": "\u03c3",
+            "value": 200
+          },
+          {
+            "letter": "Y",
+            "greek": "\u03c5",
+            "value": 400
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "S",
+            "greek": "\u03c3",
+            "value": 200
+          },
+          {
+            "letter": "Y",
+            "greek": "\u03c5",
+            "value": 400
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "C",
+            "greek": "\u03c4",
+            "value": 300
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:sigil",
+    "text": "Sigil",
+    "computed_at": "2026-07-04T18:26:37.574861Z",
+    "dimensions": 56,
+    "encoders": {
       "pythagorean": {
+        "total": 29,
+        "expression": 11,
+        "master_preserved": 11,
+        "soul_urge": 9,
+        "personality": 11,
+        "soul_urge_total": 18,
+        "personality_total": 11,
+        "balance_number": 1,
+        "hidden_passion": [
+          9
+        ],
+        "karmic_lessons": [
+          2,
+          4,
+          5,
+          6,
+          8
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 0,
+          "3": 1,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 1,
+          "8": 0,
+          "9": 2
+        },
+        "vowel_ratio": 0.4
+      },
+      "chaldean": {
+        "compound_number": 11,
+        "name_number": 2,
+        "soul_urge": 2,
+        "personality": 9,
+        "intensity_table": {
+          "1": 2,
+          "2": 0,
+          "3": 3,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 56,
+        "ordinal_reduced": 2,
+        "reverse": 79,
+        "reverse_reduced": 7,
+        "reduced_total": 29
+      },
+      "linguistic": {
+        "letter_count": 5,
+        "unique_letters": 4,
+        "shannon_entropy": 1.9219,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.4089,
+        "vowel_ratio": 0.4,
+        "syllable_estimate": 2,
+        "plosive_count": 1,
+        "fricative_count": 1,
+        "nasal_count": 0,
+        "bigrams_top5": [
+          "BigramStats(bigram='SI', count=1, frequency=0.25)",
+          "BigramStats(bigram='IG', count=1, frequency=0.25)",
+          "BigramStats(bigram='GI', count=1, frequency=0.25)",
+          "BigramStats(bigram='IL', count=1, frequency=0.25)"
+        ],
+        "repetition_ratio": 0.2,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "10101",
+        "binary_weight": 3,
+        "binary_entropy": 0.971,
+        "prime_total": 167,
+        "prime_reduced": 5,
+        "vowel_power": 46,
+        "consonant_power": 121,
+        "polarity_score": -75,
+        "polarity_ratio": 0.3802
+      },
+      "gematria": {
+        "absolute_total": 113,
+        "absolute_reduced": 5,
+        "ordinal_total": 56,
+        "ordinal_reduced": 2,
+        "reduced_total": 14,
+        "letter_values": [
+          {
+            "char": "S",
+            "absolute": 60,
+            "ordinal": 19,
+            "reduced": 6,
+            "index": 0
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 1
+          },
+          {
+            "char": "G",
+            "absolute": 3,
+            "ordinal": 7,
+            "reduced": 3,
+            "index": 2
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 3
+          },
+          {
+            "char": "L",
+            "absolute": 30,
+            "ordinal": 12,
+            "reduced": 3,
+            "index": 4
+          }
+        ],
+        "gematria_ordinal_ratio": 2.0179
+      },
+      "isopsephy": {
+        "total": 253,
+        "reduced": 1,
+        "digital_root_chain": [
+          253,
+          10,
+          1
+        ],
+        "letter_values": [
+          {
+            "char": "S",
+            "value": 200,
+            "index": 0
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 1
+          },
+          {
+            "char": "G",
+            "value": 3,
+            "index": 2
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 3
+          },
+          {
+            "char": "L",
+            "value": 30,
+            "index": 4
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "S",
+            "greek": "\u03c3",
+            "value": 200
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "G",
+            "greek": "\u03b3",
+            "value": 3
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "L",
+            "greek": "\u03bb",
+            "value": 30
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:sentinel",
+    "text": "Sentinel",
+    "computed_at": "2026-07-04T18:26:37.574961Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 35,
+        "expression": 8,
+        "master_preserved": null,
+        "soul_urge": 1,
+        "personality": 7,
+        "soul_urge_total": 19,
+        "personality_total": 16,
+        "balance_number": 1,
+        "hidden_passion": [
+          5
+        ],
+        "karmic_lessons": [
+          4,
+          6,
+          7,
+          8
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 4,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 1
+        },
+        "vowel_ratio": 0.375
+      },
+      "chaldean": {
+        "compound_number": 31,
+        "name_number": 4,
+        "soul_urge": 2,
+        "personality": 2,
+        "intensity_table": {
+          "1": 1,
+          "2": 0,
+          "3": 2,
+          "4": 1,
+          "5": 4,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 98,
+        "ordinal_reduced": 8,
+        "reverse": 118,
+        "reverse_reduced": 1,
+        "reduced_total": 35
+      },
+      "linguistic": {
+        "letter_count": 8,
+        "unique_letters": 6,
+        "shannon_entropy": 2.5,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.5319,
+        "vowel_ratio": 0.375,
+        "syllable_estimate": 3,
+        "plosive_count": 1,
+        "fricative_count": 1,
+        "nasal_count": 2,
+        "bigrams_top5": [
+          "BigramStats(bigram='SE', count=1, frequency=0.14285714285714285)",
+          "BigramStats(bigram='EN', count=1, frequency=0.14285714285714285)",
+          "BigramStats(bigram='NT', count=1, frequency=0.14285714285714285)",
+          "BigramStats(bigram='TI', count=1, frequency=0.14285714285714285)",
+          "BigramStats(bigram='IN', count=1, frequency=0.14285714285714285)"
+        ],
+        "repetition_ratio": 0.25,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "10110101",
+        "binary_weight": 5,
+        "binary_entropy": 0.9544,
+        "prime_total": 306,
+        "prime_reduced": 9,
+        "vowel_power": 45,
+        "consonant_power": 261,
+        "polarity_score": -216,
+        "polarity_ratio": 0.1724
+      },
+      "gematria": {
+        "absolute_total": 809,
+        "absolute_reduced": 8,
+        "ordinal_total": 98,
+        "ordinal_reduced": 8,
+        "reduced_total": 35,
+        "letter_values": [
+          {
+            "char": "S",
+            "absolute": 60,
+            "ordinal": 19,
+            "reduced": 6,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 3
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 4
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 5
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 6
+          },
+          {
+            "char": "L",
+            "absolute": 30,
+            "ordinal": 12,
+            "reduced": 3,
+            "index": 7
+          }
+        ],
+        "gematria_ordinal_ratio": 8.2551
+      },
+      "isopsephy": {
+        "total": 650,
+        "reduced": 2,
+        "digital_root_chain": [
+          650,
+          11,
+          2
+        ],
+        "letter_values": [
+          {
+            "char": "S",
+            "value": 200,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 2
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 3
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 4
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 5
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 6
+          },
+          {
+            "char": "L",
+            "value": 30,
+            "index": 7
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "S",
+            "greek": "\u03c3",
+            "value": 200
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "L",
+            "greek": "\u03bb",
+            "value": 30
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "project:titan",
+    "text": "Titan",
+    "computed_at": "2026-07-04T18:26:37.575041Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 19,
+        "expression": 1,
+        "master_preserved": null,
+        "soul_urge": 1,
+        "personality": 9,
+        "soul_urge_total": 10,
+        "personality_total": 9,
+        "balance_number": 2,
+        "hidden_passion": [
+          2
+        ],
+        "karmic_lessons": [
+          3,
+          4,
+          6,
+          7,
+          8
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 2,
+          "3": 0,
+          "4": 0,
+          "5": 1,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 1
+        },
+        "vowel_ratio": 0.4
+      },
+      "chaldean": {
+        "compound_number": 15,
+        "name_number": 6,
+        "soul_urge": 2,
+        "personality": 4,
+        "intensity_table": {
+          "1": 2,
+          "2": 0,
+          "3": 0,
+          "4": 2,
+          "5": 1,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 64,
+        "ordinal_reduced": 1,
+        "reverse": 71,
+        "reverse_reduced": 8,
+        "reduced_total": 19
+      },
+      "linguistic": {
+        "letter_count": 5,
+        "unique_letters": 4,
+        "shannon_entropy": 1.9219,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.4089,
+        "vowel_ratio": 0.4,
+        "syllable_estimate": 2,
+        "plosive_count": 2,
+        "fricative_count": 0,
+        "nasal_count": 1,
+        "bigrams_top5": [
+          "BigramStats(bigram='TI', count=1, frequency=0.25)",
+          "BigramStats(bigram='IT', count=1, frequency=0.25)",
+          "BigramStats(bigram='TA', count=1, frequency=0.25)",
+          "BigramStats(bigram='AN', count=1, frequency=0.25)"
+        ],
+        "repetition_ratio": 0.2,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "10101",
+        "binary_weight": 3,
+        "binary_entropy": 0.971,
+        "prime_total": 210,
+        "prime_reduced": 3,
+        "vowel_power": 25,
+        "consonant_power": 185,
+        "polarity_score": -160,
+        "polarity_ratio": 0.1351
+      },
+      "gematria": {
+        "absolute_total": 79,
+        "absolute_reduced": 7,
+        "ordinal_total": 64,
+        "ordinal_reduced": 1,
+        "reduced_total": 25,
+        "letter_values": [
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 0
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 1
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 2
+          },
+          {
+            "char": "A",
+            "absolute": 1,
+            "ordinal": 1,
+            "reduced": 1,
+            "index": 3
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 4
+          }
+        ],
+        "gematria_ordinal_ratio": 1.2344
+      },
+      "isopsephy": {
+        "total": 661,
+        "reduced": 4,
+        "digital_root_chain": [
+          661,
+          13,
+          4
+        ],
+        "letter_values": [
+          {
+            "char": "T",
+            "value": 300,
+            "index": 0
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 1
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 2
+          },
+          {
+            "char": "A",
+            "value": 1,
+            "index": 3
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 4
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "A",
+            "greek": "\u03b1",
+            "value": 1
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "human:jenn",
+    "text": "Jenn",
+    "computed_at": "2026-07-04T18:26:37.575115Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 16,
         "expression": 7,
         "master_preserved": null,
         "soul_urge": 5,
         "personality": 11,
-        "balance": 1,
-        "total": 16,
+        "soul_urge_total": 5,
+        "personality_total": 11,
+        "balance_number": 1,
         "hidden_passion": [
           5
         ],
@@ -1835,11 +3567,11 @@
           "8": 0,
           "9": 0
         },
-        "vowel_consonant_ratio": 0.25
+        "vowel_ratio": 0.25
       },
       "chaldean": {
-        "name_number": 7,
         "compound_number": 16,
+        "name_number": 7,
         "soul_urge": 5,
         "personality": 2,
         "intensity_table": {
@@ -1855,44 +3587,30 @@
         }
       },
       "ordinal": {
-        "standard": 43,
-        "standard_reduced": 7,
+        "ordinal_total": 43,
+        "ordinal_reduced": 7,
         "reverse": 65,
         "reverse_reduced": 2,
-        "reduced": 16,
-        "reduced_final": 7,
-        "vowel_total": 5,
-        "consonant_total": 38
+        "reduced_total": 16
       },
       "linguistic": {
         "letter_count": 4,
-        "token_count": 1,
-        "vowel_ratio": 0.25,
-        "shannon_entropy": 1.5,
-        "entropy_ratio": 0.3191,
-        "syllable_estimate": 1,
         "unique_letters": 3,
-        "letter_repetition_ratio": 0.25,
-        "is_palindrome": false,
+        "shannon_entropy": 1.5,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.3191,
+        "vowel_ratio": 0.25,
+        "syllable_estimate": 1,
         "plosive_count": 0,
         "fricative_count": 0,
         "nasal_count": 2,
-        "liquid_count": 0,
-        "consonant_cluster_count": 1,
         "bigrams_top5": [
-          {
-            "bigram": "JE",
-            "count": 1
-          },
-          {
-            "bigram": "EN",
-            "count": 1
-          },
-          {
-            "bigram": "NN",
-            "count": 1
-          }
-        ]
+          "BigramStats(bigram='JE', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='EN', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='NN', count=1, frequency=0.3333333333333333)"
+        ],
+        "repetition_ratio": 0.25,
+        "is_palindrome": false
       },
       "binary_prime": {
         "binary_string": "1011",
@@ -1904,647 +3622,1010 @@
         "consonant_power": 115,
         "polarity_score": -104,
         "polarity_ratio": 0.0957
+      },
+      "gematria": {
+        "absolute_total": 408,
+        "absolute_reduced": 3,
+        "ordinal_total": 43,
+        "ordinal_reduced": 7,
+        "reduced_total": 21,
+        "letter_values": [
+          {
+            "char": "J",
+            "absolute": 8,
+            "ordinal": 10,
+            "reduced": 8,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 3
+          }
+        ],
+        "gematria_ordinal_ratio": 9.4884
+      },
+      "isopsephy": {
+        "total": 115,
+        "reduced": 7,
+        "digital_root_chain": [
+          115,
+          7
+        ],
+        "letter_values": [
+          {
+            "char": "J",
+            "value": 10,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 3
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "J",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          }
+        ]
       }
     }
-  ],
-  "cross_encoder_resonance": [
-    {
-      "pair": [
-        "Capt",
-        "CAPT"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": true,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0,
-      "match_ratio": 1.0,
-      "match_count": 6
-    },
-    {
-      "pair": [
-        "bioCAPT",
-        "CAPT-RYS"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0,
-      "match_ratio": 0.8333,
-      "match_count": 5
-    },
-    {
-      "pair": [
-        "Jenn-ai",
-        "SYNCHEF"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.5558,
-      "match_ratio": 0.8333,
-      "match_count": 5
-    },
-    {
-      "pair": [
-        "Wyrd",
-        "Jenn"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.5,
-      "match_ratio": 0.8333,
-      "match_count": 5
-    },
-    {
-      "pair": [
-        "Kirk Evan Brown",
-        "Captain"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.7173,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "Kirk Evan Brown",
-        "Captain Knowurknot"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0983,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "Kirk Evan Brown",
-        "FrankenCAPT"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.1431,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "Captain",
-        "Captain Knowurknot"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.8156,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "Captain",
-        "FrankenCAPT"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.5742,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "Captain Knowurknot",
-        "FrankenCAPT"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.2414,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "SynSync",
-        "Soul Fractal Engine"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 1.6667,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "Inversion Labs",
-        "Knowledge Bubbles"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": false,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0417,
-      "match_ratio": 0.6667,
-      "match_count": 4
-    },
-    {
-      "pair": [
-        "Capt",
-        "Jenn"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": true,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.5,
-      "match_ratio": 0.5,
-      "match_count": 3
-    },
-    {
-      "pair": [
-        "CAPT",
-        "Jenn"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": true,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.5,
-      "match_ratio": 0.5,
-      "match_count": 3
-    },
-    {
-      "pair": [
-        "SynSync",
-        "SYNCHEF"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": true,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.8572,
-      "match_ratio": 0.5,
-      "match_count": 3
-    },
-    {
-      "pair": [
-        "Kirk Evan Brown",
-        "Knowurknot"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": true,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": false,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.517,
-      "match_ratio": 0.3333,
-      "match_count": 2
-    },
-    {
-      "pair": [
-        "Kirk Evan Brown",
-        "Inversion Labs"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": false,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0,
-      "match_ratio": 0.3333,
-      "match_count": 2
-    },
-    {
-      "pair": [
-        "Capt",
-        "Wyrd"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": false,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0,
-      "match_ratio": 0.3333,
-      "match_count": 2
-    },
-    {
-      "pair": [
-        "CAPT",
-        "Wyrd"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": false,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0,
-      "match_ratio": 0.3333,
-      "match_count": 2
-    },
-    {
-      "pair": [
-        "Captain",
-        "bioCAPT"
-      ],
-      "pythagorean_match": false,
-      "chaldean_match": false,
-      "ordinal_match": false,
-      "reverse_match": false,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.2858,
-      "match_ratio": 0.3333,
-      "match_count": 2
+  },
+  {
+    "id": "partner:jenn",
+    "text": "Jenn",
+    "computed_at": "2026-07-04T18:26:37.575187Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 16,
+        "expression": 7,
+        "master_preserved": null,
+        "soul_urge": 5,
+        "personality": 11,
+        "soul_urge_total": 5,
+        "personality_total": 11,
+        "balance_number": 1,
+        "hidden_passion": [
+          5
+        ],
+        "karmic_lessons": [
+          2,
+          3,
+          4,
+          6,
+          7,
+          8,
+          9
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 3,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        },
+        "vowel_ratio": 0.25
+      },
+      "chaldean": {
+        "compound_number": 16,
+        "name_number": 7,
+        "soul_urge": 5,
+        "personality": 2,
+        "intensity_table": {
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 3,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 43,
+        "ordinal_reduced": 7,
+        "reverse": 65,
+        "reverse_reduced": 2,
+        "reduced_total": 16
+      },
+      "linguistic": {
+        "letter_count": 4,
+        "unique_letters": 3,
+        "shannon_entropy": 1.5,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.3191,
+        "vowel_ratio": 0.25,
+        "syllable_estimate": 1,
+        "plosive_count": 0,
+        "fricative_count": 0,
+        "nasal_count": 2,
+        "bigrams_top5": [
+          "BigramStats(bigram='JE', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='EN', count=1, frequency=0.3333333333333333)",
+          "BigramStats(bigram='NN', count=1, frequency=0.3333333333333333)"
+        ],
+        "repetition_ratio": 0.25,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "1011",
+        "binary_weight": 3,
+        "binary_entropy": 0.8113,
+        "prime_total": 126,
+        "prime_reduced": 9,
+        "vowel_power": 11,
+        "consonant_power": 115,
+        "polarity_score": -104,
+        "polarity_ratio": 0.0957
+      },
+      "gematria": {
+        "absolute_total": 408,
+        "absolute_reduced": 3,
+        "ordinal_total": 43,
+        "ordinal_reduced": 7,
+        "reduced_total": 21,
+        "letter_values": [
+          {
+            "char": "J",
+            "absolute": 8,
+            "ordinal": 10,
+            "reduced": 8,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 3
+          }
+        ],
+        "gematria_ordinal_ratio": 9.4884
+      },
+      "isopsephy": {
+        "total": 115,
+        "reduced": 7,
+        "digital_root_chain": [
+          115,
+          7
+        ],
+        "letter_values": [
+          {
+            "char": "J",
+            "value": 10,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 3
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "J",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          }
+        ]
+      }
     }
-  ],
-  "identity_vectors": [
-    {
-      "text": "Kirk Evan Brown",
-      "vector": [
-        1,
-        3,
-        7,
-        1,
-        5,
-        1,
-        8,
-        9,
-        5,
-        4,
-        10,
-        3,
-        -35
-      ]
-    },
-    {
-      "text": "Capt",
-      "vector": [
-        4,
-        1,
-        3,
-        7,
-        1,
-        4,
-        5,
-        3,
-        5,
-        1,
-        4,
-        2,
-        -13
-      ]
-    },
-    {
-      "text": "CAPT",
-      "vector": [
-        4,
-        1,
-        3,
-        7,
-        1,
-        4,
-        5,
-        3,
-        5,
-        1,
-        4,
-        2,
-        -13
-      ]
-    },
-    {
-      "text": "Captain",
-      "vector": [
-        1,
-        11,
-        8,
-        5,
-        3,
-        1,
-        8,
-        4,
-        1,
-        2,
-        6,
-        3,
-        -14
-      ]
-    },
-    {
-      "text": "Knowurknot",
-      "vector": [
-        9,
-        6,
-        3,
-        1,
-        2,
-        9,
-        9,
-        7,
-        8,
-        3,
-        7,
-        3,
-        -20
-      ]
-    },
-    {
-      "text": "Captain Knowurknot",
-      "vector": [
-        1,
-        8,
-        11,
-        6,
-        5,
-        1,
-        8,
-        11,
-        9,
-        5,
-        11,
-        3,
-        -34
-      ]
-    },
-    {
-      "text": "bioCAPT",
-      "vector": [
-        3,
-        7,
-        5,
-        8,
-        9,
-        3,
-        6,
-        4,
-        6,
-        2,
-        7,
-        3,
-        -6
-      ]
-    },
-    {
-      "text": "FrankenCAPT",
-      "vector": [
-        1,
-        7,
-        3,
-        8,
-        7,
-        1,
-        8,
-        8,
-        2,
-        3,
-        9,
-        3,
-        -30
-      ]
-    },
-    {
-      "text": "Jenn-ai",
-      "vector": [
-        8,
-        6,
-        11,
-        9,
-        7,
-        8,
-        1,
-        3,
-        7,
-        2,
-        5,
-        2,
-        -8
-      ]
-    },
-    {
-      "text": "SynSync",
-      "vector": [
-        11,
-        0,
-        11,
-        3,
-        0,
-        2,
-        7,
-        7,
-        5,
-        2,
-        4,
-        2,
-        -42
-      ]
-    },
-    {
-      "text": "Inversion Labs",
-      "vector": [
-        6,
-        3,
-        3,
-        8,
-        6,
-        6,
-        3,
-        8,
-        2,
-        4,
-        10,
-        3,
-        -29
-      ]
-    },
-    {
-      "text": "Knowledge Bubbles",
-      "vector": [
-        6,
-        6,
-        9,
-        9,
-        1,
-        6,
-        3,
-        11,
-        7,
-        5,
-        11,
-        3,
-        -18
-      ]
-    },
-    {
-      "text": "Soul Fractal Engine",
-      "vector": [
-        11,
-        3,
-        8,
-        2,
-        8,
-        2,
-        7,
-        10,
-        5,
-        5,
-        13,
-        4,
-        -22
-      ]
-    },
-    {
-      "text": "Wyrd",
-      "vector": [
-        7,
-        0,
-        7,
-        4,
-        0,
-        7,
-        2,
-        4,
-        5,
-        1,
-        4,
-        2,
-        -25
-      ]
-    },
-    {
-      "text": "CAPT-RYS",
-      "vector": [
-        3,
-        1,
-        11,
-        4,
-        1,
-        3,
-        6,
-        6,
-        5,
-        2,
-        7,
-        3,
-        -35
-      ]
-    },
-    {
-      "text": "SYNCHEF",
-      "vector": [
-        8,
-        5,
-        3,
-        3,
-        5,
-        8,
-        1,
-        6,
-        3,
-        2,
-        7,
-        3,
-        -23
-      ]
-    },
-    {
-      "text": "Jenn",
-      "vector": [
-        7,
-        5,
-        11,
-        7,
-        5,
-        7,
-        2,
-        3,
-        9,
-        1,
-        3,
-        2,
-        -10
-      ]
+  },
+  {
+    "id": "collaborator:ornith",
+    "text": "Ornith",
+    "computed_at": "2026-07-04T18:26:37.575276Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 39,
+        "expression": 3,
+        "master_preserved": null,
+        "soul_urge": 6,
+        "personality": 6,
+        "soul_urge_total": 15,
+        "personality_total": 24,
+        "balance_number": 6,
+        "hidden_passion": [
+          9
+        ],
+        "karmic_lessons": [
+          1,
+          3,
+          4,
+          7
+        ],
+        "intensity_table": {
+          "1": 0,
+          "2": 1,
+          "3": 0,
+          "4": 0,
+          "5": 1,
+          "6": 1,
+          "7": 0,
+          "8": 1,
+          "9": 2
+        },
+        "vowel_ratio": 0.333
+      },
+      "chaldean": {
+        "compound_number": 24,
+        "name_number": 6,
+        "soul_urge": 8,
+        "personality": 7,
+        "intensity_table": {
+          "1": 1,
+          "2": 1,
+          "3": 0,
+          "4": 1,
+          "5": 2,
+          "6": 0,
+          "7": 1,
+          "8": 0,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 84,
+        "ordinal_reduced": 3,
+        "reverse": 78,
+        "reverse_reduced": 6,
+        "reduced_total": 39
+      },
+      "linguistic": {
+        "letter_count": 6,
+        "unique_letters": 6,
+        "shannon_entropy": 2.585,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.5499,
+        "vowel_ratio": 0.3333333333333333,
+        "syllable_estimate": 2,
+        "plosive_count": 1,
+        "fricative_count": 1,
+        "nasal_count": 1,
+        "bigrams_top5": [
+          "BigramStats(bigram='OR', count=1, frequency=0.2)",
+          "BigramStats(bigram='RN', count=1, frequency=0.2)",
+          "BigramStats(bigram='NI', count=1, frequency=0.2)",
+          "BigramStats(bigram='IT', count=1, frequency=0.2)",
+          "BigramStats(bigram='TH', count=1, frequency=0.2)"
+        ],
+        "repetition_ratio": 0.0,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "011011",
+        "binary_weight": 4,
+        "binary_entropy": 0.9183,
+        "prime_total": 264,
+        "prime_reduced": 3,
+        "vowel_power": 70,
+        "consonant_power": 194,
+        "polarity_score": -124,
+        "polarity_ratio": 0.3608
+      },
+      "gematria": {
+        "absolute_total": 334,
+        "absolute_reduced": 1,
+        "ordinal_total": 84,
+        "ordinal_reduced": 3,
+        "reduced_total": 28,
+        "letter_values": [
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 0
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 2
+          },
+          {
+            "char": "I",
+            "absolute": 10,
+            "ordinal": 9,
+            "reduced": 1,
+            "index": 3
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 4
+          },
+          {
+            "char": "H",
+            "absolute": 5,
+            "ordinal": 8,
+            "reduced": 5,
+            "index": 5
+          }
+        ],
+        "gematria_ordinal_ratio": 3.9762
+      },
+      "isopsephy": {
+        "total": 538,
+        "reduced": 7,
+        "digital_root_chain": [
+          538,
+          16,
+          7
+        ],
+        "letter_values": [
+          {
+            "char": "O",
+            "value": 70,
+            "index": 0
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 1
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 2
+          },
+          {
+            "char": "I",
+            "value": 10,
+            "index": 3
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 4
+          },
+          {
+            "char": "H",
+            "value": 8,
+            "index": 5
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "I",
+            "greek": "\u03b9",
+            "value": 10
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "H",
+            "greek": "\u03b7",
+            "value": 8
+          }
+        ]
+      }
     }
-  ],
-  "summary": {
-    "total_identities": 17,
-    "encoder_count": 5,
-    "dimensions_per_identity": 50,
-    "highest_resonance_pair": {
-      "pair": [
-        "Capt",
-        "CAPT"
-      ],
-      "pythagorean_match": true,
-      "chaldean_match": true,
-      "ordinal_match": true,
-      "reverse_match": true,
-      "syllable_match": true,
-      "polarity_same_sign": true,
-      "entropy_difference": 0.0,
-      "match_ratio": 1.0,
-      "match_count": 6
-    },
-    "expression_distribution": {
-      "1": 4,
-      "4": 2,
-      "9": 1,
-      "3": 2,
-      "8": 2,
-      "11": 2,
-      "6": 2,
-      "7": 2
+  },
+  {
+    "id": "platform:hermes",
+    "text": "Hermes",
+    "computed_at": "2026-07-04T18:26:37.575363Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 32,
+        "expression": 5,
+        "master_preserved": null,
+        "soul_urge": 1,
+        "personality": 22,
+        "soul_urge_total": 10,
+        "personality_total": 22,
+        "balance_number": 8,
+        "hidden_passion": [
+          5
+        ],
+        "karmic_lessons": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "intensity_table": {
+          "1": 1,
+          "2": 0,
+          "3": 0,
+          "4": 1,
+          "5": 2,
+          "6": 0,
+          "7": 0,
+          "8": 1,
+          "9": 1
+        },
+        "vowel_ratio": 0.333
+      },
+      "chaldean": {
+        "compound_number": 24,
+        "name_number": 6,
+        "soul_urge": 1,
+        "personality": 5,
+        "intensity_table": {
+          "1": 0,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 3,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 68,
+        "ordinal_reduced": 5,
+        "reverse": 94,
+        "reverse_reduced": 4,
+        "reduced_total": 32
+      },
+      "linguistic": {
+        "letter_count": 6,
+        "unique_letters": 5,
+        "shannon_entropy": 2.2516,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.479,
+        "vowel_ratio": 0.3333333333333333,
+        "syllable_estimate": 2,
+        "plosive_count": 0,
+        "fricative_count": 2,
+        "nasal_count": 1,
+        "bigrams_top5": [
+          "BigramStats(bigram='HE', count=1, frequency=0.2)",
+          "BigramStats(bigram='ER', count=1, frequency=0.2)",
+          "BigramStats(bigram='RM', count=1, frequency=0.2)",
+          "BigramStats(bigram='ME', count=1, frequency=0.2)",
+          "BigramStats(bigram='ES', count=1, frequency=0.2)"
+        ],
+        "repetition_ratio": 0.1667,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "101101",
+        "binary_weight": 4,
+        "binary_entropy": 0.9183,
+        "prime_total": 210,
+        "prime_reduced": 3,
+        "vowel_power": 22,
+        "consonant_power": 188,
+        "polarity_score": -166,
+        "polarity_ratio": 0.117
+      },
+      "gematria": {
+        "absolute_total": 905,
+        "absolute_reduced": 5,
+        "ordinal_total": 68,
+        "ordinal_reduced": 5,
+        "reduced_total": 23,
+        "letter_values": [
+          {
+            "char": "H",
+            "absolute": 5,
+            "ordinal": 8,
+            "reduced": 5,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 1
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 2
+          },
+          {
+            "char": "M",
+            "absolute": 40,
+            "ordinal": 13,
+            "reduced": 4,
+            "index": 3
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 4
+          },
+          {
+            "char": "S",
+            "absolute": 60,
+            "ordinal": 19,
+            "reduced": 6,
+            "index": 5
+          }
+        ],
+        "gematria_ordinal_ratio": 13.3088
+      },
+      "isopsephy": {
+        "total": 358,
+        "reduced": 7,
+        "digital_root_chain": [
+          358,
+          16,
+          7
+        ],
+        "letter_values": [
+          {
+            "char": "H",
+            "value": 8,
+            "index": 0
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 1
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 2
+          },
+          {
+            "char": "M",
+            "value": 40,
+            "index": 3
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 4
+          },
+          {
+            "char": "S",
+            "value": 200,
+            "index": 5
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "H",
+            "greek": "\u03b7",
+            "value": 8
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "M",
+            "greek": "\u03bc",
+            "value": 40
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "S",
+            "greek": "\u03c3",
+            "value": 200
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "platform:openrouter",
+    "text": "OpenRouter",
+    "computed_at": "2026-07-04T18:26:37.575476Z",
+    "dimensions": 56,
+    "encoders": {
+      "pythagorean": {
+        "total": 57,
+        "expression": 3,
+        "master_preserved": null,
+        "soul_urge": 7,
+        "personality": 5,
+        "soul_urge_total": 25,
+        "personality_total": 32,
+        "balance_number": 6,
+        "hidden_passion": [
+          5
+        ],
+        "karmic_lessons": [
+          1,
+          4,
+          8
+        ],
+        "intensity_table": {
+          "1": 0,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 3,
+          "6": 2,
+          "7": 1,
+          "8": 0,
+          "9": 2
+        },
+        "vowel_ratio": 0.5
+      },
+      "chaldean": {
+        "compound_number": 51,
+        "name_number": 6,
+        "soul_urge": 3,
+        "personality": 3,
+        "intensity_table": {
+          "1": 0,
+          "2": 2,
+          "3": 0,
+          "4": 1,
+          "5": 3,
+          "6": 1,
+          "7": 2,
+          "8": 1,
+          "9": 0
+        }
+      },
+      "ordinal": {
+        "ordinal_total": 147,
+        "ordinal_reduced": 3,
+        "reverse": 123,
+        "reverse_reduced": 6,
+        "reduced_total": 57
+      },
+      "linguistic": {
+        "letter_count": 10,
+        "unique_letters": 7,
+        "shannon_entropy": 2.7219,
+        "max_possible_entropy": 4.7004,
+        "entropy_ratio": 0.5791,
+        "vowel_ratio": 0.5,
+        "syllable_estimate": 4,
+        "plosive_count": 2,
+        "fricative_count": 0,
+        "nasal_count": 1,
+        "bigrams_top5": [
+          "BigramStats(bigram='OP', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='PE', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='EN', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='NR', count=1, frequency=0.1111111111111111)",
+          "BigramStats(bigram='RO', count=1, frequency=0.1111111111111111)"
+        ],
+        "repetition_ratio": 0.3,
+        "is_palindrome": false
+      },
+      "binary_prime": {
+        "binary_string": "0101100101",
+        "binary_weight": 5,
+        "binary_entropy": 1.0,
+        "prime_total": 478,
+        "prime_reduced": 1,
+        "vowel_power": 189,
+        "consonant_power": 289,
+        "polarity_score": -100,
+        "polarity_ratio": 0.654
+      },
+      "gematria": {
+        "absolute_total": 1559,
+        "absolute_reduced": 2,
+        "ordinal_total": 147,
+        "ordinal_reduced": 3,
+        "reduced_total": 47,
+        "letter_values": [
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 0
+          },
+          {
+            "char": "P",
+            "absolute": 80,
+            "ordinal": 16,
+            "reduced": 8,
+            "index": 1
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "absolute": 50,
+            "ordinal": 14,
+            "reduced": 5,
+            "index": 3
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 4
+          },
+          {
+            "char": "O",
+            "absolute": 60,
+            "ordinal": 15,
+            "reduced": 6,
+            "index": 5
+          },
+          {
+            "char": "U",
+            "absolute": 300,
+            "ordinal": 21,
+            "reduced": 3,
+            "index": 6
+          },
+          {
+            "char": "T",
+            "absolute": 9,
+            "ordinal": 20,
+            "reduced": 9,
+            "index": 7
+          },
+          {
+            "char": "E",
+            "absolute": 300,
+            "ordinal": 5,
+            "reduced": 3,
+            "index": 8
+          },
+          {
+            "char": "R",
+            "absolute": 200,
+            "ordinal": 18,
+            "reduced": 2,
+            "index": 9
+          }
+        ],
+        "gematria_ordinal_ratio": 10.6054
+      },
+      "isopsephy": {
+        "total": 1180,
+        "reduced": 1,
+        "digital_root_chain": [
+          1180,
+          10,
+          1
+        ],
+        "letter_values": [
+          {
+            "char": "O",
+            "value": 70,
+            "index": 0
+          },
+          {
+            "char": "P",
+            "value": 80,
+            "index": 1
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 2
+          },
+          {
+            "char": "N",
+            "value": 50,
+            "index": 3
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 4
+          },
+          {
+            "char": "O",
+            "value": 70,
+            "index": 5
+          },
+          {
+            "char": "U",
+            "value": 400,
+            "index": 6
+          },
+          {
+            "char": "T",
+            "value": 300,
+            "index": 7
+          },
+          {
+            "char": "E",
+            "value": 5,
+            "index": 8
+          },
+          {
+            "char": "R",
+            "value": 100,
+            "index": 9
+          }
+        ],
+        "greek_correspondence": [
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "P",
+            "greek": "\u03c0",
+            "value": 80
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "N",
+            "greek": "\u03bd",
+            "value": 50
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          },
+          {
+            "letter": "O",
+            "greek": "\u03bf",
+            "value": 70
+          },
+          {
+            "letter": "U",
+            "greek": "\u03c5",
+            "value": 400
+          },
+          {
+            "letter": "T",
+            "greek": "\u03c4",
+            "value": 300
+          },
+          {
+            "letter": "E",
+            "greek": "\u03b5",
+            "value": 5
+          },
+          {
+            "letter": "R",
+            "greek": "\u03c1",
+            "value": 100
+          }
+        ]
+      }
     }
   }
-}
+]

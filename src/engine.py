@@ -1,289 +1,315 @@
 """
-Identity Engine — Master Orchestrator
-=====================================
+Identity Engine — Master Orchestrator (v0.3.0)
+==============================================
 
 Runs ALL encoders on all identity strings and produces
 a unified multi-dimensional signature for each identity.
 
 Encoders:
-1. Pythagorean numerology
-2. Chaldean numerology
+1. Pythagorean numerology (expression, soul urge, personality)
+2. Chaldean numerology (name number, compound number)
 3. Ordinal A1Z26 + reverse + reduced
-4. Linguistic analysis (entropy, bigrams, phonetics)
-5. Binary letter class + prime-index encoding
-6. Life path (birth date numerology)
-
-Output: unified JSON with all encoder results per identity.
+4. Linguistic analysis (entropy, syllables, phonetics)
+5. Binary/Prime encoding
+6. Hebrew Gematria (absolute + ordinal)
+7. Greek Isopsephy (digital root chain)
 """
 
-from __future__ import annotations
 import sys
 import os
 import json
 from datetime import datetime
-from typing import Any
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from encoders.pythagorean import pythagorean_signature, life_path_number
+from encoders.pythagorean import pythagorean_signature
 from encoders.chaldean import chaldean_signature
 from encoders.ordinal import ordinal_signature
 from encoders.linguistic import linguistic_signature
 from encoders.binary_prime import binary_prime_signature
+from encoders.gematria import gematria_signature
+from encoders.isopsephy import isopsephy_signature
+
+# Optional encoders (require birth data)
+HAS_Astrology = False
+HAS_HumanDesign = False
+HAS_Psychology = False
+
+try:
+    from encoders.astrology import compute_chart
+    HAS_Astrology = True
+except Exception:
+    pass
+
+try:
+    from encoders.human_design import compute_human_design
+    HAS_HumanDesign = True
+except Exception:
+    pass
+
+try:
+    from encoders.psychology import create_profile
+    HAS_Psychology = True
+except Exception:
+    pass
 
 
-# Identity seed data
+# ==================== IDENTITY STRINGS ====================
+
 IDENTITIES = [
-    {"text": "Kirk Evan Brown", "type": "birth_name", "role": "human"},
-    {"text": "Capt", "type": "nickname", "role": "alias"},
-    {"text": "CAPT", "type": "project", "role": "architecture"},
-    {"text": "Captain", "type": "persona", "role": "archetype"},
-    {"text": "Knowurknot", "type": "handle", "role": "paradox_key"},
-    {"text": "Captain Knowurknot", "type": "persona", "role": "public_myth"},
-    {"text": "bioCAPT", "type": "project", "role": "embodiment"},
-    {"text": "FrankenCAPT", "type": "project", "role": "synthesis"},
-    {"text": "Jenn-ai", "type": "agent", "role": "executive"},
-    {"text": "SynSync", "type": "project", "role": "resonance"},
-    {"text": "Inversion Labs", "type": "brand", "role": "container"},
-    {"text": "Knowledge Bubbles", "type": "project", "role": "mining"},
-    {"text": "Soul Fractal Engine", "type": "project", "role": "identity"},
-    {"text": "Wyrd", "type": "project", "role": "fate"},
-    {"text": "CAPT-RYS", "type": "project", "role": "research"},
-    {"text": "SYNCHEF", "type": "project", "role": "curator"},
-    {"text": "Jenn", "type": "nickname", "role": "partner"},
+    # Person
+    {
+        "id": "human:kirk_evan_brown",
+        "text": "Kirk Evan Brown",
+        "birth": {"year": 1982, "month": 2, "day": 4, "hour": 1, "minute": 42,
+                  "timezone_offset": -7, "location": "Evanston, Wyoming, USA",
+                  "lat": 41.2633, "lon": -110.9631},
+    },
+    # Aliases
+    {"id": "identity:alias:captain", "text": "Captain"},
+    {"id": "identity:alias:capt", "text": "CAPT"},
+    {"id": "identity:alias:capt_cortex", "text": "Capt Cortex"},
+    # Handles
+    {"id": "identity:handle:knowurknot", "text": "Knowurknot"},
+    # Projects
+    {"id": "project:capt", "text": "CAPT"},
+    {"id": "project:frankencapt", "text": "FrankenCAPT"},
+    {"id": "project:biocapt", "text": "bioCAPT"},
+    {"id": "project:inversion_labs", "text": "Inversion Labs"},
+    {"id": "project:jennai", "text": "JennAI"},
+    {"id": "project:synsync", "text": "SynSync"},
+    {"id": "project:sigil", "text": "Sigil"},
+    {"id": "project:sentinel", "text": "Sentinel"},
+    {"id": "project:titan", "text": "Titan"},
+    # Partners
+    {"id": "human:jenn", "text": "Jenn"},
+    {"id": "partner:jenn", "text": "Jenn"},
+    # Collaborators
+    {"id": "collaborator:ornith", "text": "Ornith"},
+    # Platform
+    {"id": "platform:hermes", "text": "Hermes"},
+    {"id": "platform:openrouter", "text": "OpenRouter"},
 ]
-
-# Birth metadata
-BIRTH = {"year": 1982, "month": 2, "day": 4, "time": "01:42", "place": "Evanston, WY, USA"}
 
 
 def compute_unified_signature(identity: dict) -> dict:
-    """Run all encoders on a single identity string."""
+    """Run all encoders and produce a unified multi-dimensional signature."""
     text = identity["text"]
+    birth = identity.get("birth")
 
-    # Pythagorean
+    # Core 7 encoders (always available)
     pyth = pythagorean_signature(text)
-
-    # Chaldean
     chald = chaldean_signature(text)
-
-    # Ordinal (all three variants)
-    ordi = ordinal_signature(text)
-
-    # Linguistic
+    ord_ = ordinal_signature(text)
     ling = linguistic_signature(text)
+    bin_prime = binary_prime_signature(text)
+    gema = gematria_signature(text)
+    iso = isopsephy_signature(text)
 
-    # Binary/Prime
-    bp = binary_prime_signature(text)
-
-    return {
-        "identity": identity,
-        "pythagorean": {
-            "expression": pyth.reduced,
-            "master_preserved": pyth.master_preserved,
-            "soul_urge": pyth.soul_urge,
-            "personality": pyth.personality,
-            "balance": pyth.balance_number,
-            "total": pyth.total,
-            "hidden_passion": pyth.hidden_passion,
-            "karmic_lessons": pyth.karmic_lessons,
-            "intensity_table": pyth.intensity_table,
-            "vowel_consonant_ratio": len(pyth.vowels) / len(pyth.letter_values) if pyth.letter_values else 0,
-        },
-        "chaldean": {
-            "name_number": chald.name_number,
-            "compound_number": chald.compound_number,
-            "soul_urge": chald.soul_urge,
-            "personality": chald.personality,
-            "intensity_table": chald.intensity_table,
-        },
-        "ordinal": {
-            "standard": ordi.ordinal_total,
-            "standard_reduced": ordi.ordinal_reduced,
-            "reverse": ordi.reverse_total,
-            "reverse_reduced": ordi.reverse_reduced,
-            "reduced": ordi.reduced_total,
-            "reduced_final": ordi.reduced_reduced,
-            "vowel_total": ordi.vowel_total,
-            "consonant_total": ordi.consonant_total,
-        },
-        "linguistic": {
-            "letter_count": ling.letter_count,
-            "token_count": ling.token_count,
-            "vowel_ratio": ling.vowel_ratio,
-            "shannon_entropy": ling.shannon_entropy,
-            "entropy_ratio": ling.entropy_ratio,
-            "syllable_estimate": ling.syllable_estimate,
-            "unique_letters": ling.unique_letters,
-            "letter_repetition_ratio": ling.letter_repetition_ratio,
-            "is_palindrome": ling.is_palindrome,
-            "plosive_count": ling.plosive_count,
-            "fricative_count": ling.fricative_count,
-            "nasal_count": ling.nasal_count,
-            "liquid_count": ling.liquid_count,
-            "consonant_cluster_count": ling.consonant_cluster_count,
-            "bigrams_top5": [{"bigram": b.bigram, "count": b.count} for b in ling.bigrams[:5]],
-        },
-        "binary_prime": {
-            "binary_string": bp.binary_string,
-            "binary_weight": bp.binary_weight,
-            "binary_entropy": bp.binary_entropy,
-            "prime_total": bp.prime_total,
-            "prime_reduced": bp.prime_reduced,
-            "vowel_power": bp.vowel_power,
-            "consonant_power": bp.consonant_power,
-            "polarity_score": bp.polarity_score,
-            "polarity_ratio": bp.polarity_ratio,
+    result = {
+        "id": identity["id"],
+        "text": text,
+        "computed_at": datetime.utcnow().isoformat() + "Z",
+        "dimensions": 0,
+        "encoders": {
+            "pythagorean": {
+                "total": pyth.total,
+                "expression": pyth.reduced,
+                "master_preserved": pyth.master_preserved,
+                "soul_urge": pyth.soul_urge,
+                "personality": pyth.personality,
+                "soul_urge_total": pyth.soul_urge_total,
+                "personality_total": pyth.personality_total,
+                "balance_number": pyth.balance_number,
+                "hidden_passion": pyth.hidden_passion,
+                "karmic_lessons": pyth.karmic_lessons,
+                "intensity_table": pyth.intensity_table,
+                "vowel_ratio": round(len(pyth.vowels) / len(pyth.letter_values), 3) if pyth.letter_values else 0,
+            },
+            "chaldean": {
+                "compound_number": chald.compound_number,
+                "name_number": chald.name_number,
+                "soul_urge": chald.soul_urge,
+                "personality": chald.personality,
+                "intensity_table": chald.intensity_table,
+            },
+            "ordinal": {
+                "ordinal_total": ord_.ordinal_total,
+                "ordinal_reduced": ord_.ordinal_reduced,
+                "reverse": ord_.reverse_total,
+                "reverse_reduced": ord_.reverse_reduced,
+                "reduced_total": ord_.reduced_total,
+            },
+            "linguistic": {
+                "letter_count": ling.letter_count,
+                "unique_letters": ling.unique_letters,
+                "shannon_entropy": ling.shannon_entropy,
+                "max_possible_entropy": ling.max_possible_entropy,
+                "entropy_ratio": ling.entropy_ratio,
+                "vowel_ratio": ling.vowel_ratio,
+                "syllable_estimate": ling.syllable_estimate,
+                "plosive_count": ling.plosive_count,
+                "fricative_count": ling.fricative_count,
+                "nasal_count": ling.nasal_count,
+                "bigrams_top5": ling.bigrams[:5] if hasattr(ling, 'bigrams') else [],
+                "repetition_ratio": ling.letter_repetition_ratio,
+                "is_palindrome": ling.is_palindrome,
+            },
+            "binary_prime": {
+                "binary_string": bin_prime.binary_string,
+                "binary_weight": bin_prime.binary_weight,
+                "binary_entropy": bin_prime.binary_entropy,
+                "prime_total": bin_prime.prime_total,
+                "prime_reduced": bin_prime.prime_reduced,
+                "vowel_power": bin_prime.vowel_power,
+                "consonant_power": bin_prime.consonant_power,
+                "polarity_score": bin_prime.polarity_score,
+                "polarity_ratio": bin_prime.polarity_ratio,
+            },
+            "gematria": {
+                "absolute_total": gema.absolute_total,
+                "absolute_reduced": gema.absolute_reduced,
+                "ordinal_total": gema.ordinal_total,
+                "ordinal_reduced": gema.ordinal_reduced,
+                "reduced_total": gema.reduced_total,
+                "letter_values": gema.letter_values,
+                "gematria_ordinal_ratio": gema.gematria_ordinal_ratio,
+            },
+            "isopsephy": {
+                "total": iso.total,
+                "reduced": iso.reduced,
+                "digital_root_chain": iso.digital_root_chain,
+                "letter_values": iso.letter_values,
+                "greek_correspondence": [
+                    {"letter": g["latin"], "greek": g["greek"], "value": g["value"]}
+                    for g in iso.greek_correspondence
+                ],
+            },
         },
     }
 
+    # Count dimensions
+    dim_count = 0
+    for enc in result["encoders"].values():
+        dim_count += len(enc)
+    result["dimensions"] = dim_count
 
-def compute_cross_encoder_resonance(sigs: list[dict]) -> list[dict]:
-    """Compare all pairs across all encoder dimensions."""
-    comparisons = []
+    # Optional: Astrology (requires birth data)
+    if birth and HAS_Astrology:
+        try:
+            chart = compute_chart(
+                birth["year"], birth["month"], birth["day"],
+                birth["hour"], birth["minute"],
+                birth["timezone_offset"], birth["location"],
+            )
+            result["encoders"]["astrology"] = {
+                "sun_sign": chart.sun_sign,
+                "moon_sign": chart.moon_sign,
+                "ascendant": chart.ascendant,
+                "descendant": chart.descendant,
+                "midheaven": chart.midheaven,
+                "chart_ruler": chart.chart_ruler,
+                "dominant_element": chart.dominant_element,
+                "dominant_quality": chart.dominant_quality,
+                "lunar_phase": chart.lunar_phase,
+                "is_waxing": chart.is_waxing,
+                "planets": [
+                    {"planet": p.planet, "sign": p.sign, "degree": round(p.sign_degree, 2),
+                     "retrograde": p.is_retrograde}
+                    for p in chart.planets
+                ],
+                "aspects": [
+                    {"planets": (a.planet1, a.planet2), "type": a.aspect_type,
+                     "exact": a.is_exact, "orb": round(a.orb, 2)}
+                    for a in chart.aspects[:15]
+                ],
+                "houses": chart.houses,
+                "confidence": chart.confidence,
+            }
+            dim_count += 20
+        except Exception as e:
+            result["encoders"]["astrology"] = {"error": str(e)}
 
-    for i in range(len(sigs)):
-        for j in range(i + 1, len(sigs)):
-            a, b = sigs[i], sigs[j]
+    # Optional: Human Design (requires birth data)
+    if birth and HAS_HumanDesign:
+        try:
+            hd = compute_human_design(
+                birth["year"], birth["month"], birth["day"],
+                birth["hour"], birth["minute"],
+                birth["timezone_offset"], birth["location"],
+            )
+            result["encoders"]["human_design"] = {
+                "type": hd.hd_type,
+                "strategy": hd.strategy,
+                "authority": hd.authority,
+                "profile": hd.profile_number,
+                "not_self_theme": hd.not_self_theme,
+                "signature": hd.signature,
+                "definition": hd.definition,
+                "personality_gates": [
+                    {"gate": g.gate, "line": g.line, "planet": g.planet,
+                     "color": g.color, "tone": g.tone}
+                    for g in hd.personality_gates
+                ],
+                "design_gates": [
+                    {"gate": g.gate, "line": g.line, "planet": g.planet}
+                    for g in hd.design_gates
+                ],
+                "channels": hd.channels,
+                "centers": hd.centers,
+                "gates": hd.gates,
+                "confidence": hd.confidence,
+            }
+            dim_count += 15
+        except Exception as e:
+            result["encoders"]["human_design"] = {"error": str(e)}
 
-            # Expression matches across systems
-            pyth_match = a["pythagorean"]["expression"] == b["pythagorean"]["expression"]
-            chald_match = a["chaldean"]["name_number"] == b["chaldean"]["name_number"]
-            ord_match = a["ordinal"]["standard_reduced"] == b["ordinal"]["standard_reduced"]
-            rev_match = a["ordinal"]["reverse_reduced"] == b["ordinal"]["reverse_reduced"]
-
-            # Linguistic similarity
-            entropy_diff = abs(a["linguistic"]["shannon_entropy"] - b["linguistic"]["shannon_entropy"])
-            syllable_match = a["linguistic"]["syllable_estimate"] == b["linguistic"]["syllable_estimate"]
-
-            # Binary/prime resonance
-            polarity_same_sign = (a["binary_prime"]["polarity_score"] > 0) == (b["binary_prime"]["polarity_score"] > 0)
-
-            # Count total matches
-            match_count = sum([pyth_match, chald_match, ord_match, rev_match, syllable_match, polarity_same_sign])
-            match_ratio = match_count / 6
-
-            comparisons.append({
-                "pair": [a["identity"]["text"], b["identity"]["text"]],
-                "pythagorean_match": pyth_match,
-                "chaldean_match": chald_match,
-                "ordinal_match": ord_match,
-                "reverse_match": rev_match,
-                "syllable_match": syllable_match,
-                "polarity_same_sign": polarity_same_sign,
-                "entropy_difference": round(entropy_diff, 4),
-                "match_ratio": round(match_ratio, 4),
-                "match_count": match_count,
-            })
-
-    # Sort by match ratio descending
-    comparisons.sort(key=lambda x: -x["match_ratio"])
-    return comparisons
-
-
-def compute_identity_vector(sig: dict) -> dict:
-    """Extract a numeric vector for each identity (for embedding/clustering)."""
-    return {
-        "text": sig["identity"]["text"],
-        "vector": [
-            sig["pythagorean"]["expression"],
-            sig["pythagorean"]["soul_urge"],
-            sig["pythagorean"]["personality"],
-            sig["chaldean"]["name_number"],
-            sig["chaldean"]["soul_urge"],
-            sig["ordinal"]["standard_reduced"],
-            sig["ordinal"]["reverse_reduced"],
-            sig["binary_prime"]["binary_weight"],
-            sig["binary_prime"]["prime_reduced"],
-            sig["linguistic"]["syllable_estimate"],
-            sig["linguistic"]["unique_letters"],
-            round(sig["linguistic"]["shannon_entropy"]),
-            round(sig["binary_prime"]["polarity_score"] / 10),  # normalize
-        ],
-    }
+    result["dimensions"] = dim_count
+    return result
 
 
-def generate_full_report() -> dict:
-    """Run the complete engine and produce all outputs."""
-    print("Running all encoders on 17 identities...")
+def run_engine():
+    """Run the complete engine and generate all outputs."""
+    print("Human Metadata Engine v0.3.0")
+    print("=" * 60)
+    print(f"Running {len(IDENTITIES)} identities through 7+ encoders...")
+    print()
 
     # Compute all signatures
     signatures = []
     for identity in IDENTITIES:
-        sig = compute_unified_signature(identity)
-        signatures.append(sig)
-        print(f"  ✓ {identity['text']}")
+        try:
+            sig = compute_unified_signature(identity)
+            signatures.append(sig)
+            dims = sig["dimensions"]
+            enc = len(sig["encoders"])
+            print(f"  ✓ {identity['id']:<40} {dims:>3} dimensions, {enc} encoders")
+        except Exception as e:
+            print(f"  ✗ {identity['id']:<40} ERROR: {e}")
 
-    # Birth date numerology
-    birth_lp = life_path_number(BIRTH["year"], BIRTH["month"], BIRTH["day"])
+    # Save signatures
+    os.makedirs("output", exist_ok=True)
+    with open("output/unified_signatures.json", "w") as f:
+        json.dump(signatures, f, indent=2, default=str)
+    print(f"\nSaved {len(signatures)} signatures to output/unified_signatures.json")
 
-    # Cross-encoder resonance
-    print("\nComputing cross-encoder resonance...")
-    resonance = compute_cross_encoder_resonance(signatures)
+    # Summary statistics
+    total_dims = sum(s["dimensions"] for s in signatures)
+    avg_dims = total_dims / len(signatures) if signatures else 0
+    print(f"\nTotal dimensions computed: {total_dims}")
+    print(f"Average per identity: {avg_dims:.0f}")
 
-    # Identity vectors
-    print("Computing identity vectors...")
-    vectors = [compute_identity_vector(sig) for sig in signatures]
-
-    # Build output
-    output = {
-        "engine_version": "0.2.0",
-        "generated_at": datetime.utcnow().isoformat() + "Z",
-        "subject": {
-            "id": "human:kirk_evan_brown",
-            "preferred_display": "Capt",
-            "birth": {
-                "date": f"{BIRTH['year']}-{BIRTH['month']:02d}-{BIRTH['day']:02d}",
-                "time": BIRTH["time"],
-                "place": BIRTH["place"],
-            },
-        },
-        "birth_numerology": {
-            "life_path_raw": birth_lp.life_path_raw,
-            "life_path_reduced": birth_lp.life_path_reduced,
-            "life_path_master": birth_lp.life_path_master,
-            "birthday": birth_lp.birthday_number,
-            "attitude": birth_lp.attitude_number,
-            "birth_year": birth_lp.birth_year_number,
-        },
-        "encoder_suite": {
-            "pythagorean": "Standard Pythagorean letter mapping (A=1..S=1, master 11/22/33)",
-            "chaldean": "Ancient Chaldean mapping (9 sacred, no master numbers)",
-            "ordinal": "A1Z26 standard + reverse + digital root reduced",
-            "linguistic": "Entropy, bigrams, phonetics, syllables, symmetry",
-            "binary_prime": "Vowel/consonant binary + prime-index encoding",
-        },
-        "signatures": signatures,
-        "cross_encoder_resonance": resonance[:20],  # top 20
-        "identity_vectors": vectors,
-        "summary": {
-            "total_identities": len(signatures),
-            "encoder_count": 5,
-            "dimensions_per_identity": 50,
-            "highest_resonance_pair": resonance[0] if resonance else None,
-            "expression_distribution": {},
-        },
-    }
-
-    # Expression distribution
-    expr_dist = {}
+    # Encoder coverage
+    encoder_counts = {}
     for sig in signatures:
-        e = sig["pythagorean"]["expression"]
-        expr_dist[e] = expr_dist.get(e, 0) + 1
-    output["summary"]["expression_distribution"] = expr_dist
+        for enc_name in sig["encoders"]:
+            encoder_counts[enc_name] = encoder_counts.get(enc_name, 0) + 1
+    print(f"\nEncoder coverage:")
+    for name, count in sorted(encoder_counts.items()):
+        print(f"  {name:<20} {count}/{len(signatures)} identities")
 
-    return output
+    return signatures
 
 
 if __name__ == "__main__":
-    output = generate_full_report()
-
-    # Save
-    out_path = os.path.join(os.path.dirname(__file__), "..", "output", "unified_signatures.json")
-    with open(out_path, "w") as f:
-        json.dump(output, f, indent=2, default=str)
-
-    print(f"\nSaved to: {out_path}")
-    print(f"Total signatures: {len(output['signatures'])}")
-    print(f"Dimensions per identity: ~{output['summary']['dimensions_per_identity']}")
-    print(f"Highest resonance: {output['summary']['highest_resonance_pair']['pair']}")
+    run_engine()
