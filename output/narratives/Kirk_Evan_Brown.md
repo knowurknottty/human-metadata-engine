@@ -1,10 +1,10 @@
-# John Michael Smith — Personality Profile
+# Kirk Evan Brown — Personality Profile
 
 ## Core Identity (Expression 1)
-John Michael Smith carries the energy of natural leadership and independence.
+Kirk Evan Brown carries the energy of natural leadership and independence.
 
-Internally, John Michael Smith is driven by a desire for creative self-expression (Soul Urge 3).
-To the world, John Michael Smith presents as mystery, wisdom, and quiet intensity (Personality 7).
+Internally, Kirk Evan Brown is driven by a desire for creative self-expression (Soul Urge 3).
+To the world, Kirk Evan Brown presents as mystery, wisdom, and quiet intensity (Personality 7).
 
 ## Name Linguistics
 The name has balanced phonetic structure (entropy 3.24), suggesting clarity and approachability.

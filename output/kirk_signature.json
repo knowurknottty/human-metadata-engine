@@ -1,0 +1,855 @@
+{
+  "id": "human:kirk_evan_brown",
+  "text": "Kirk Evan Brown",
+  "computed_at": "2026-07-04T20:15:14.042498Z",
+  "dimensions": 105,
+  "encoders": {
+    "pythagorean": {
+      "total": 64,
+      "expression": 1,
+      "master_preserved": null,
+      "soul_urge": 3,
+      "personality": 7,
+      "soul_urge_total": 21,
+      "personality_total": 43,
+      "balance_number": 9,
+      "hidden_passion": [
+        5
+      ],
+      "karmic_lessons": [
+        3,
+        7,
+        8
+      ],
+      "intensity_table": {
+        "1": 1,
+        "2": 3,
+        "3": 0,
+        "4": 1,
+        "5": 4,
+        "6": 1,
+        "7": 0,
+        "8": 0,
+        "9": 3
+      },
+      "vowel_ratio": 0.308
+    },
+    "chaldean": {
+      "compound_number": 46,
+      "name_number": 1,
+      "soul_urge": 5,
+      "personality": 5,
+      "intensity_table": {
+        "1": 2,
+        "2": 5,
+        "3": 0,
+        "4": 0,
+        "5": 3,
+        "6": 2,
+        "7": 1,
+        "8": 0,
+        "9": 0
+      }
+    },
+    "ordinal": {
+      "ordinal_total": 163,
+      "ordinal_reduced": 1,
+      "reverse": 188,
+      "reverse_reduced": 8,
+      "reduced_total": 64
+    },
+    "linguistic": {
+      "letter_count": 13,
+      "unique_letters": 10,
+      "shannon_entropy": 3.2389,
+      "max_possible_entropy": 4.7004,
+      "entropy_ratio": 0.6891,
+      "vowel_ratio": 0.3076923076923077,
+      "syllable_estimate": 4,
+      "plosive_count": 3,
+      "fricative_count": 1,
+      "nasal_count": 2,
+      "bigrams_top5": [
+        {
+          "bigram": "KI",
+          "count": 1,
+          "frequency": 0.08333333333333333
+        },
+        {
+          "bigram": "IR",
+          "count": 1,
+          "frequency": 0.08333333333333333
+        },
+        {
+          "bigram": "RK",
+          "count": 1,
+          "frequency": 0.08333333333333333
+        },
+        {
+          "bigram": "KE",
+          "count": 1,
+          "frequency": 0.08333333333333333
+        },
+        {
+          "bigram": "EV",
+          "count": 1,
+          "frequency": 0.08333333333333333
+        }
+      ],
+      "repetition_ratio": 0.2308,
+      "is_palindrome": false
+    },
+    "binary_prime": {
+      "binary_string": "1011010111011",
+      "binary_weight": 9,
+      "binary_entropy": 0.8905,
+      "prime_total": 518,
+      "prime_reduced": 5,
+      "vowel_power": 83,
+      "consonant_power": 435,
+      "polarity_score": -352,
+      "polarity_ratio": 0.1908
+    },
+    "gematria": {
+      "absolute_total": 925,
+      "absolute_reduced": 7,
+      "ordinal_total": 163,
+      "ordinal_reduced": 1,
+      "reduced_total": 43,
+      "letter_values": [
+        {
+          "char": "K",
+          "absolute": 20,
+          "ordinal": 11,
+          "reduced": 2,
+          "index": 0
+        },
+        {
+          "char": "I",
+          "absolute": 10,
+          "ordinal": 9,
+          "reduced": 1,
+          "index": 1
+        },
+        {
+          "char": "R",
+          "absolute": 200,
+          "ordinal": 18,
+          "reduced": 2,
+          "index": 2
+        },
+        {
+          "char": "K",
+          "absolute": 20,
+          "ordinal": 11,
+          "reduced": 2,
+          "index": 3
+        },
+        {
+          "char": "E",
+          "absolute": 300,
+          "ordinal": 5,
+          "reduced": 3,
+          "index": 4
+        },
+        {
+          "char": "V",
+          "absolute": 6,
+          "ordinal": 22,
+          "reduced": 6,
+          "index": 5
+        },
+        {
+          "char": "A",
+          "absolute": 1,
+          "ordinal": 1,
+          "reduced": 1,
+          "index": 6
+        },
+        {
+          "char": "N",
+          "absolute": 50,
+          "ordinal": 14,
+          "reduced": 5,
+          "index": 7
+        },
+        {
+          "char": "B",
+          "absolute": 2,
+          "ordinal": 2,
+          "reduced": 2,
+          "index": 8
+        },
+        {
+          "char": "R",
+          "absolute": 200,
+          "ordinal": 18,
+          "reduced": 2,
+          "index": 9
+        },
+        {
+          "char": "O",
+          "absolute": 60,
+          "ordinal": 15,
+          "reduced": 6,
+          "index": 10
+        },
+        {
+          "char": "W",
+          "absolute": 6,
+          "ordinal": 23,
+          "reduced": 6,
+          "index": 11
+        },
+        {
+          "char": "N",
+          "absolute": 50,
+          "ordinal": 14,
+          "reduced": 5,
+          "index": 12
+        }
+      ],
+      "gematria_ordinal_ratio": 5.6748
+    },
+    "isopsephy": {
+      "total": 1628,
+      "reduced": 8,
+      "digital_root_chain": [
+        1628,
+        17,
+        8
+      ],
+      "letter_values": [
+        {
+          "char": "K",
+          "value": 20,
+          "index": 0
+        },
+        {
+          "char": "I",
+          "value": 10,
+          "index": 1
+        },
+        {
+          "char": "R",
+          "value": 100,
+          "index": 2
+        },
+        {
+          "char": "K",
+          "value": 20,
+          "index": 3
+        },
+        {
+          "char": "E",
+          "value": 5,
+          "index": 4
+        },
+        {
+          "char": "V",
+          "value": 400,
+          "index": 5
+        },
+        {
+          "char": "A",
+          "value": 1,
+          "index": 6
+        },
+        {
+          "char": "N",
+          "value": 50,
+          "index": 7
+        },
+        {
+          "char": "B",
+          "value": 2,
+          "index": 8
+        },
+        {
+          "char": "R",
+          "value": 100,
+          "index": 9
+        },
+        {
+          "char": "O",
+          "value": 70,
+          "index": 10
+        },
+        {
+          "char": "W",
+          "value": 800,
+          "index": 11
+        },
+        {
+          "char": "N",
+          "value": 50,
+          "index": 12
+        }
+      ],
+      "greek_correspondence": [
+        {
+          "letter": "K",
+          "greek": "\u03ba",
+          "value": 20
+        },
+        {
+          "letter": "I",
+          "greek": "\u03b9",
+          "value": 10
+        },
+        {
+          "letter": "R",
+          "greek": "\u03c1",
+          "value": 100
+        },
+        {
+          "letter": "K",
+          "greek": "\u03ba",
+          "value": 20
+        },
+        {
+          "letter": "E",
+          "greek": "\u03b5",
+          "value": 5
+        },
+        {
+          "letter": "V",
+          "greek": "\u03c5",
+          "value": 400
+        },
+        {
+          "letter": "A",
+          "greek": "\u03b1",
+          "value": 1
+        },
+        {
+          "letter": "N",
+          "greek": "\u03bd",
+          "value": 50
+        },
+        {
+          "letter": "B",
+          "greek": "\u03b2",
+          "value": 2
+        },
+        {
+          "letter": "R",
+          "greek": "\u03c1",
+          "value": 100
+        },
+        {
+          "letter": "O",
+          "greek": "\u03bf",
+          "value": 70
+        },
+        {
+          "letter": "W",
+          "greek": "\u03c9",
+          "value": 800
+        },
+        {
+          "letter": "N",
+          "greek": "\u03bd",
+          "value": 50
+        }
+      ]
+    },
+    "astrology": {
+      "sun_sign": "Aquarius",
+      "moon_sign": "Gemini",
+      "ascendant": "Scorpio",
+      "midheaven": "Virgo",
+      "chart_ruler": "Pluto",
+      "dominant_element": "Air",
+      "dominant_modality": "Cardinal",
+      "element_counts": {
+        "Fire": 2,
+        "Earth": 1,
+        "Air": 6,
+        "Water": 1
+      },
+      "modality_counts": {
+        "Cardinal": 4,
+        "Fixed": 3,
+        "Mutable": 3
+      },
+      "yin_yang_balance": {
+        "Yang": 9,
+        "Yin": 1
+      },
+      "lunar_phase": "Waxing Gibbous",
+      "is_waxing": true,
+      "planets": [
+        {
+          "planet": "Sun",
+          "sign": "Aquarius",
+          "degree": 15.21,
+          "retrograde": false
+        },
+        {
+          "planet": "Moon",
+          "sign": "Gemini",
+          "degree": 21.78,
+          "retrograde": false
+        },
+        {
+          "planet": "Mercury",
+          "sign": "Aquarius",
+          "degree": 8.1,
+          "retrograde": true
+        },
+        {
+          "planet": "Venus",
+          "sign": "Capricorn",
+          "degree": 24.23,
+          "retrograde": true
+        },
+        {
+          "planet": "Mars",
+          "sign": "Libra",
+          "degree": 17.64,
+          "retrograde": false
+        },
+        {
+          "planet": "Jupiter",
+          "sign": "Scorpio",
+          "degree": 9.71,
+          "retrograde": false
+        },
+        {
+          "planet": "Saturn",
+          "sign": "Libra",
+          "degree": 22.23,
+          "retrograde": true
+        },
+        {
+          "planet": "Uranus",
+          "sign": "Sagittarius",
+          "degree": 4.13,
+          "retrograde": false
+        },
+        {
+          "planet": "Neptune",
+          "sign": "Sagittarius",
+          "degree": 26.28,
+          "retrograde": false
+        },
+        {
+          "planet": "Pluto",
+          "sign": "Libra",
+          "degree": 26.92,
+          "retrograde": true
+        }
+      ],
+      "aspects": [
+        {
+          "planets": [
+            "Sun",
+            "Moon"
+          ],
+          "type": "Trine",
+          "exact": false,
+          "orb": 6.57
+        },
+        {
+          "planets": [
+            "Sun",
+            "Mercury"
+          ],
+          "type": "Conjunction",
+          "exact": false,
+          "orb": 7.1
+        },
+        {
+          "planets": [
+            "Sun",
+            "Mars"
+          ],
+          "type": "Trine",
+          "exact": false,
+          "orb": 2.43
+        },
+        {
+          "planets": [
+            "Sun",
+            "Jupiter"
+          ],
+          "type": "Square",
+          "exact": false,
+          "orb": 5.49
+        },
+        {
+          "planets": [
+            "Sun",
+            "Saturn"
+          ],
+          "type": "Trine",
+          "exact": false,
+          "orb": 7.02
+        },
+        {
+          "planets": [
+            "Moon",
+            "Mars"
+          ],
+          "type": "Trine",
+          "exact": false,
+          "orb": 4.14
+        },
+        {
+          "planets": [
+            "Moon",
+            "Saturn"
+          ],
+          "type": "Trine",
+          "exact": true,
+          "orb": 0.45
+        },
+        {
+          "planets": [
+            "Moon",
+            "Neptune"
+          ],
+          "type": "Opposition",
+          "exact": false,
+          "orb": 4.49
+        },
+        {
+          "planets": [
+            "Moon",
+            "Pluto"
+          ],
+          "type": "Trine",
+          "exact": false,
+          "orb": 5.14
+        },
+        {
+          "planets": [
+            "Mercury",
+            "Jupiter"
+          ],
+          "type": "Square",
+          "exact": false,
+          "orb": 1.61
+        },
+        {
+          "planets": [
+            "Mercury",
+            "Uranus"
+          ],
+          "type": "Sextile",
+          "exact": false,
+          "orb": 3.98
+        },
+        {
+          "planets": [
+            "Venus",
+            "Mars"
+          ],
+          "type": "Square",
+          "exact": false,
+          "orb": 6.59
+        },
+        {
+          "planets": [
+            "Venus",
+            "Saturn"
+          ],
+          "type": "Square",
+          "exact": false,
+          "orb": 2.0
+        },
+        {
+          "planets": [
+            "Venus",
+            "Pluto"
+          ],
+          "type": "Square",
+          "exact": false,
+          "orb": 2.69
+        },
+        {
+          "planets": [
+            "Mars",
+            "Saturn"
+          ],
+          "type": "Conjunction",
+          "exact": false,
+          "orb": 4.59
+        }
+      ],
+      "confidence": 0.95
+    },
+    "human_design": {
+      "type": "Generator",
+      "strategy": "To Respond",
+      "authority": "Emotional",
+      "profile": [
+        3,
+        6
+      ],
+      "profile_description": "Martyr / Role Model",
+      "not_self_theme": "Frustration",
+      "signature": "Satisfaction",
+      "definition": "Triple Split",
+      "incarnation_cross": "Right Angle Cross of Gate 56",
+      "personality_gates": [
+        {
+          "gate": 56,
+          "line": 2,
+          "planet": "Sun",
+          "sign": "Aquarius"
+        },
+        {
+          "gate": 15,
+          "line": 3,
+          "planet": "Moon",
+          "sign": "Gemini"
+        },
+        {
+          "gate": 55,
+          "line": 1,
+          "planet": "Mercury",
+          "sign": "Aquarius"
+        },
+        {
+          "gate": 52,
+          "line": 4,
+          "planet": "Venus",
+          "sign": "Capricorn"
+        },
+        {
+          "gate": 35,
+          "line": 5,
+          "planet": "Mars",
+          "sign": "Libra"
+        },
+        {
+          "gate": 39,
+          "line": 4,
+          "planet": "Jupiter",
+          "sign": "Scorpio"
+        },
+        {
+          "gate": 36,
+          "line": 3,
+          "planet": "Saturn",
+          "sign": "Libra"
+        },
+        {
+          "gate": 43,
+          "line": 5,
+          "planet": "Uranus",
+          "sign": "Sagittarius"
+        },
+        {
+          "gate": 47,
+          "line": 5,
+          "planet": "Neptune",
+          "sign": "Sagittarius"
+        },
+        {
+          "gate": 37,
+          "line": 2,
+          "planet": "Pluto",
+          "sign": "Libra"
+        },
+        {
+          "gate": 20,
+          "line": 5,
+          "planet": "North Node",
+          "sign": "Cancer"
+        }
+      ],
+      "design_gates": [
+        {
+          "gate": 40,
+          "line": 4,
+          "planet": "Sun"
+        },
+        {
+          "gate": 63,
+          "line": 4,
+          "planet": "Moon"
+        },
+        {
+          "gate": 37,
+          "line": 4,
+          "planet": "Mercury"
+        },
+        {
+          "gate": 48,
+          "line": 6,
+          "planet": "Venus"
+        },
+        {
+          "gate": 29,
+          "line": 1,
+          "planet": "Mars"
+        },
+        {
+          "gate": 37,
+          "line": 2,
+          "planet": "Jupiter"
+        },
+        {
+          "gate": 35,
+          "line": 4,
+          "planet": "Saturn"
+        }
+      ],
+      "channels": [
+        {
+          "gates": [
+            35,
+            36
+          ],
+          "name": "Transitoriness"
+        },
+        {
+          "gates": [
+            37,
+            40
+          ],
+          "name": "Community"
+        },
+        {
+          "gates": [
+            39,
+            55
+          ],
+          "name": "Emoting"
+        }
+      ],
+      "centers": [
+        {
+          "name": "Head",
+          "defined": true
+        },
+        {
+          "name": "Ajna",
+          "defined": true
+        },
+        {
+          "name": "Throat",
+          "defined": true
+        },
+        {
+          "name": "G/Identity",
+          "defined": true
+        },
+        {
+          "name": "Heart/Will",
+          "defined": false
+        },
+        {
+          "name": "Sacral",
+          "defined": true
+        },
+        {
+          "name": "Solar Plexus",
+          "defined": true
+        },
+        {
+          "name": "Splenic",
+          "defined": true
+        },
+        {
+          "name": "Root",
+          "defined": true
+        }
+      ],
+      "gates": [
+        56,
+        15,
+        55,
+        52,
+        35,
+        39,
+        36,
+        43,
+        47,
+        37,
+        20,
+        40,
+        63,
+        37,
+        48,
+        29,
+        37,
+        35
+      ],
+      "confidence": 0.7
+    }
+  },
+  "resonance": {
+    "score": 65.0,
+    "components": {
+      "numerological_convergence": 0.5,
+      "linguistic_harmony": 0.79,
+      "polarity_balance": 0.7195,
+      "symbolic_depth": 0.6667
+    },
+    "weights": {
+      "numerological_convergence": 0.35,
+      "linguistic_harmony": 0.25,
+      "polarity_balance": 0.2,
+      "symbolic_depth": 0.2
+    }
+  },
+  "fingerprint": {
+    "hash": "6a45b3941523dd3c",
+    "full_hash": "6a45b3941523dd3cc1a066bc42b9d90ce1ce5e4070c60ca3e5d77c26914c3c6e",
+    "symmetry": 3,
+    "spokes": [
+      {
+        "encoder": "pythagorean",
+        "value": 0.5333,
+        "hue": 45
+      },
+      {
+        "encoder": "chaldean",
+        "value": 0.5111,
+        "hue": 30
+      },
+      {
+        "encoder": "ordinal",
+        "value": 0.5433,
+        "hue": 200
+      },
+      {
+        "encoder": "linguistic",
+        "value": 0.7712,
+        "hue": 220
+      },
+      {
+        "encoder": "binary_prime",
+        "value": 0.5756,
+        "hue": 160
+      },
+      {
+        "encoder": "gematria",
+        "value": 0.6167,
+        "hue": 280
+      },
+      {
+        "encoder": "isopsephy",
+        "value": 0.5427,
+        "hue": 260
+      }
+    ],
+    "ring_pattern": "1011010111011",
+    "seed": 1782952852
+  },
+  "snapshot": {
+    "available_layers": [
+      "astrology",
+      "human_design"
+    ],
+    "narrative": "Kirk Evan Brown \u2014 a composite read across 2 layers (astrology, human_design).\n\nCelestially, Kirk Evan Brown carries a Aquarius Sun (fixed air): systems-level originality that reforms structures from outside. The Gemini Moon colors the inner life with quick, connective curiosity that thrives on exchange of ideas, while a Scorpio Ascendant means others first meet intense, penetrating focus that transforms what it touches. The chart is weighted toward Air: identity runs on ideas, language, and connection. Born under a Waxing Gibbous moon, there is a native orientation toward building and increase.\n\nIn the Human Design system, Kirk Evan Brown operates as a Generator \u2014 a sustainable life-force builder. The working strategy is \"To Respond\" with Emotional authority: decisions land best when they respond to what shows up rather than initiating from the mind. The 3/6 profile shapes how learning and purpose interlock. Defined channels (Transitoriness, Community, Emoting) mark where this energy is consistent and reliable.",
+    "highlights": [
+      "Aquarius Sun / Gemini Moon / Scorpio Rising",
+      "Generator, Emotional authority"
+    ]
+  }
+}

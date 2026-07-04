@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="620" viewBox="0 0 800 620">
+<rect width="800" height="620" fill="#0a0a0a"/>
+<line x1="400" y1="95" x2="400" y2="110" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="370" y1="95" x2="370" y2="110" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="430" y1="95" x2="430" y2="110" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="380" y1="175" x2="380" y2="210" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="420" y1="175" x2="420" y2="210" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="400" y1="175" x2="400" y2="210" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="380" y1="270" x2="380" y2="310" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="420" y1="270" x2="420" y2="310" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="400" y1="270" x2="400" y2="310" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="350" y1="270" x2="310" y2="310" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="450" y1="270" x2="490" y2="310" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="460" y1="270" x2="500" y2="310" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="400" y1="270" x2="400" y2="450" stroke="#4fc3f7" stroke-width="3" opacity="0.8"/>
+<line x1="400" y1="270" x2="400" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="430" y1="370" x2="490" y2="390" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="380" y1="370" x2="380" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="420" y1="370" x2="420" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="400" y1="370" x2="400" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="360" y1="370" x2="290" y2="390" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="310" y1="370" x2="490" y2="390" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="510" y1="450" x2="420" y2="530" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="530" y1="450" x2="440" y2="530" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="500" y1="450" x2="400" y2="530" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="500" y1="450" x2="420" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="270" y1="450" x2="380" y2="530" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="290" y1="450" x2="400" y2="530" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="280" y1="450" x2="370" y2="530" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="290" y1="450" x2="380" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="310" y1="450" x2="390" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="270" y1="390" x2="280" y2="310" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="390" y1="530" x2="390" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<line x1="410" y1="530" x2="410" y2="450" stroke="#555555" stroke-width="1" opacity="0.3"/>
+<text x="392.0" y="360.0" fill="#000000" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">20</text>
+<text x="408.0" y="360.0" fill="#ff4444" font-size="8" font-family="monospace" text-anchor="middle" font-weight="bold">34</text>
+<polygon points="400,25.0 365.0,95.0 435.0,95.0" fill="#0a0a0a" stroke="#555555" stroke-width="1"/>
+<text x="400" y="63" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Head</text>
+<polygon points="365.0,105.0 435.0,105.0 400,175.0" fill="#0a0a0a" stroke="#555555" stroke-width="1"/>
+<text x="400" y="143" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Ajna</text>
+<rect x="370.0" y="210.0" width="60" height="60" fill="#4fc3f7" stroke="#81d4fa" stroke-width="2" rx="4"/>
+<text x="400" y="243" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Throat</text>
+<polygon points="400,305.0 435.0,340 400,375.0 365.0,340" fill="#0a0a0a" stroke="#555555" stroke-width="1"/>
+<text x="400" y="343" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">G</text>
+<polygon points="280,315.0 255.0,365.0 305.0,365.0" fill="#0a0a0a" stroke="#555555" stroke-width="1"/>
+<text x="280" y="343" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Heart/Will</text>
+<polygon points="490.0,390.0 550.0,420 490.0,450.0" fill="#4fc3f7" stroke="#81d4fa" stroke-width="2"/>
+<text x="520" y="423" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Solar Plexus</text>
+<rect x="370.0" y="450.0" width="60" height="60" fill="#0a0a0a" stroke="#555555" stroke-width="1" rx="4"/>
+<text x="400" y="483" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Sacral</text>
+<polygon points="290.0,390.0 230.0,420 290.0,450.0" fill="#0a0a0a" stroke="#555555" stroke-width="1"/>
+<text x="260" y="423" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Splenic</text>
+<rect x="370.0" y="530.0" width="60" height="60" fill="#4fc3f7" stroke="#81d4fa" stroke-width="2" rx="4"/>
+<text x="400" y="563" fill="#ffffff" font-size="9" font-family="monospace" text-anchor="middle" font-weight="bold">Root</text>
+<text x="387" y="338" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">1</text>
+<text x="408" y="147" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">4</text>
+<text x="523" y="432" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">9</text>
+<text x="384" y="231" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">12</text>
+<text x="393" y="552" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">19</text>
+<text x="400" y="245" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">20</text>
+<text x="384" y="561" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">52</text>
+<text x="397" y="238" fill="#000000" font-size="7" font-family="monospace" text-anchor="middle">31</text>
+<text x="394" y="473" fill="#ff4444" font-size="7" font-family="monospace" text-anchor="middle">34</text>
+<text x="536" y="417" fill="#ff4444" font-size="7" font-family="monospace" text-anchor="middle">36</text>
+<text x="392" y="249" fill="#ff4444" font-size="7" font-family="monospace" text-anchor="middle">12</text>
+<text x="534" y="433" fill="#ff4444" font-size="7" font-family="monospace" text-anchor="middle">14</text>
+<text x="270" y="415" fill="#ff4444" font-size="7" font-family="monospace" text-anchor="middle">50</text>
+<text x="266" y="347" fill="#ff4444" font-size="7" font-family="monospace" text-anchor="middle">26</text>
+<text x="400.0" y="25" fill="#ffffff" font-size="14" font-family="monospace" text-anchor="middle" font-weight="bold">Manifestor | 3.5 | Emotional Authority</text>
+<text x="400.0" y="610" fill="#666666" font-size="10" font-family="monospace" text-anchor="middle">Strategy: To Inform | Not-Self: Anger | Signature: Peace</text>
+</svg>
