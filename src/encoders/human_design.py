@@ -110,6 +110,7 @@ class HumanDesignChart:
     personality_gates: list[GatePosition]
     design_gates: list[GatePosition]
     all_gates: list[int]
+    channels: list[dict]
     centers: list[Center]
 
     # Incarnation Cross
@@ -125,6 +126,33 @@ class HumanDesignChart:
         d = asdict(self)
         d["profile_number"] = list(self.profile_number)
         return d
+
+
+# The 36 channels of the Human Design bodygraph: (gate_a, gate_b) -> name
+CHANNELS: dict[tuple[int, int], str] = {
+    (1, 8): "Inspiration", (2, 14): "The Beat", (3, 60): "Mutation",
+    (4, 63): "Logic", (5, 15): "Rhythm", (6, 59): "Intimacy",
+    (7, 31): "The Alpha", (9, 52): "Concentration", (10, 20): "Awakening",
+    (10, 34): "Exploration", (10, 57): "Perfected Form", (11, 56): "Curiosity",
+    (12, 22): "Openness", (13, 33): "The Prodigal", (16, 48): "The Wavelength",
+    (17, 62): "Acceptance", (18, 58): "Judgment", (19, 49): "Synthesis",
+    (20, 34): "Charisma", (20, 57): "The Brainwave", (21, 45): "The Money Line",
+    (23, 43): "Structuring", (24, 61): "Awareness", (25, 51): "Initiation",
+    (26, 44): "Surrender", (27, 50): "Preservation", (28, 38): "Struggle",
+    (29, 46): "Discovery", (30, 41): "Recognition", (32, 54): "Transformation",
+    (34, 57): "Power", (35, 36): "Transitoriness", (37, 40): "Community",
+    (39, 55): "Emoting", (42, 53): "Maturation", (47, 64): "Abstraction",
+}
+
+
+def defined_channels(gates: list[int]) -> list[dict]:
+    """Return the channels where both gates are activated."""
+    gate_set = set(gates)
+    result = []
+    for (a, b), name in CHANNELS.items():
+        if a in gate_set and b in gate_set:
+            result.append({"gates": [a, b], "name": name})
+    return result
 
 
 def longitude_to_gate(lon: float) -> tuple[int, int]:
@@ -320,6 +348,7 @@ def compute_human_design(
         personality_gates=personality_gates,
         design_gates=design_gates,
         all_gates=all_gate_numbers,
+        channels=defined_channels(all_gate_numbers),
         centers=centers,
         incarnation_cross=incarnation_cross,
         definition_type=definition_type,

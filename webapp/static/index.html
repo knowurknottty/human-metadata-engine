@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Identity Resonance — Nine-System Name Analysis</title>
+<meta name="description" content="Your name, decoded through nine symbolic systems. Numerology, linguistics, gematria, astrology, Human Design — one report.">
+<script src="/vendor/tailwind.js"></script>
+<link rel="stylesheet" href="/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#10057;</text></svg>">
+</head>
+<body class="bg-[#07070d] text-slate-200 antialiased min-h-screen selection:bg-amber-400/30">
+
+<!-- ======================= HEADER ======================= -->
+<header class="sticky top-0 z-40 backdrop-blur-xl bg-[#07070d]/80 border-b border-white/5">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+    <a href="#" class="flex items-center gap-2.5 group" onclick="app.reset(); return false;">
+      <span class="fp-mini" id="logo-glyph" aria-hidden="true"></span>
+      <span class="font-semibold tracking-wide text-slate-100">Identity <span class="text-amber-300">Resonance</span></span>
+    </a>
+    <div class="flex items-center gap-3 text-xs sm:text-sm">
+      <span class="hidden sm:inline text-slate-400">9 encoders · 2,275 dimensions computed</span>
+      <button onclick="app.scrollToForm()" class="px-3.5 py-1.5 rounded-full bg-amber-400/10 text-amber-300 border border-amber-400/30 hover:bg-amber-400/20 transition">Analyze a name</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 sm:px-6">
+
+<!-- ======================= HERO / LANDING ======================= -->
+<section id="landing" class="pt-14 sm:pt-20 pb-10 text-center">
+  <div class="mx-auto w-40 h-40 sm:w-52 sm:h-52 mb-8 float-slow" id="hero-glyph" aria-hidden="true"></div>
+  <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-slate-50 leading-tight">
+    Your name is a signal.<br class="hidden sm:block">
+    <span class="bg-gradient-to-r from-amber-300 via-fuchsia-300 to-emerald-300 bg-clip-text text-transparent">Nine systems decode it.</span>
+  </h1>
+  <p class="mt-5 max-w-2xl mx-auto text-slate-400 text-base sm:text-lg">
+    Pythagorean &amp; Chaldean numerology, ordinal ciphers, quantitative linguistics, binary/prime encoding,
+    Hebrew Gematria, Greek Isopsephy — plus tropical astrology and Human Design when you add your birth moment.
+    One composite score. One fingerprint. One deep report.
+  </p>
+  <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+    <button onclick="app.scrollToForm()" class="px-7 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-semibold shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40 hover:scale-[1.02] transition">Start free preview</button>
+    <span class="text-slate-500 text-sm">Dashboard preview is free · Full report <span class="text-amber-300 font-medium">$10</span></span>
+  </div>
+  <div id="gallery" class="mt-14 grid grid-cols-2 sm:grid-cols-5 gap-3 opacity-90"></div>
+  <p class="mt-3 text-xs text-slate-600">Fingerprints from the reference population — every name renders a unique glyph.</p>
+</section>
+
+<!-- ======================= INPUT FORM ======================= -->
+<section id="form-section" class="py-10">
+  <div class="glass rounded-2xl p-6 sm:p-10 max-w-3xl mx-auto">
+    <h2 class="text-2xl font-bold text-slate-50">Begin your analysis</h2>
+    <p class="text-slate-400 mt-1 text-sm">Only a name is required. Birth data unlocks astrology + Human Design; assessments unlock the psychology layer.</p>
+
+    <form id="analyze-form" class="mt-7 space-y-8" onsubmit="app.submit(event)">
+      <div>
+        <label class="block text-sm font-medium text-amber-300 mb-1.5" for="name">Full name <span class="text-rose-400">*</span></label>
+        <input id="name" name="name" required maxlength="120" placeholder="e.g. Ada Lovelace"
+          class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-lg text-slate-100 placeholder-slate-600 focus:border-amber-400/60 focus:ring-2 focus:ring-amber-400/20 outline-none transition">
+      </div>
+
+      <!-- Birth data -->
+      <fieldset class="border border-white/10 rounded-xl p-5">
+        <legend class="px-2 text-sm font-medium text-fuchsia-300 flex items-center gap-2">
+          <input type="checkbox" id="birth-enabled" class="accent-fuchsia-400" onchange="app.toggleSection('birth')"> Birth data
+          <span class="text-slate-500 font-normal">(unlocks Astrology + Human Design)</span>
+        </legend>
+        <div id="birth-fields" class="grid grid-cols-2 sm:grid-cols-4 gap-3 opacity-40 pointer-events-none transition">
+          <div><label class="lbl">Date</label><input type="date" id="b-date" class="inp"></div>
+          <div><label class="lbl">Time</label><input type="time" id="b-time" class="inp"></div>
+          <div><label class="lbl">UTC offset</label><input type="number" id="b-tz" step="0.25" min="-12" max="14" placeholder="-7" class="inp"></div>
+          <div><label class="lbl">Location</label><input type="text" id="b-loc" placeholder="City, Country" class="inp"></div>
+          <div><label class="lbl">Latitude <span class="text-slate-600">(opt)</span></label><input type="number" id="b-lat" step="0.0001" min="-90" max="90" placeholder="41.26" class="inp"></div>
+          <div><label class="lbl">Longitude <span class="text-slate-600">(opt)</span></label><input type="number" id="b-lon" step="0.0001" min="-180" max="180" placeholder="-110.96" class="inp"></div>
+          <p class="col-span-2 text-xs text-slate-500 self-end pb-1.5">Time unknown? Leave it — a noon chart is used with reduced confidence.</p>
+        </div>
+      </fieldset>
+
+      <!-- Psychology -->
+      <fieldset class="border border-white/10 rounded-xl p-5">
+        <legend class="px-2 text-sm font-medium text-rose-300 flex items-center gap-2">
+          <input type="checkbox" id="psych-enabled" class="accent-rose-400" onchange="app.toggleSection('psych')"> Psychology assessments
+          <span class="text-slate-500 font-normal">(self-reported, optional)</span>
+        </legend>
+        <div id="psych-fields" class="space-y-5 opacity-40 pointer-events-none transition">
+          <div class="grid sm:grid-cols-2 gap-x-8 gap-y-3" id="bigfive-sliders"></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            <div><label class="lbl">MBTI type</label><select id="p-mbti" class="inp"><option value="">—</option></select></div>
+            <div><label class="lbl">Enneagram</label><select id="p-enne" class="inp"><option value="">—</option></select></div>
+            <div><label class="lbl">Wing</label><select id="p-wing" class="inp"><option value="">—</option></select></div>
+            <div><label class="lbl">Attachment</label><select id="p-attach" class="inp">
+              <option value="">—</option><option value="secure">Secure</option><option value="anxious">Anxious</option>
+              <option value="avoidant">Avoidant</option><option value="fearful_avoidant">Fearful-avoidant</option>
+            </select></div>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="flex flex-col sm:flex-row items-center gap-4">
+        <button type="submit" id="submit-btn"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-bold text-lg shadow-lg shadow-amber-500/25 hover:scale-[1.02] transition">
+          Run the engine — free preview
+        </button>
+        <p class="text-xs text-slate-500">All computation is local to this server. Nothing is stored or shared.</p>
+      </div>
+      <p id="form-error" class="hidden text-rose-400 text-sm"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ======================= PROCESSING ======================= -->
+<section id="processing" class="hidden py-24 text-center">
+  <div class="mx-auto w-36 h-36 relative">
+    <div class="absolute inset-0 rounded-full border-2 border-amber-400/20 spin-slow"></div>
+    <div class="absolute inset-3 rounded-full border-2 border-fuchsia-400/20 spin-rev"></div>
+    <div class="absolute inset-6 rounded-full border-2 border-emerald-400/20 spin-slow"></div>
+    <div class="absolute inset-0 flex items-center justify-center text-3xl">&#10057;</div>
+  </div>
+  <p class="mt-8 text-lg text-slate-300 font-medium" id="processing-step">Normalizing identity string…</p>
+  <p class="mt-2 text-sm text-slate-500">Running 9 encoders · computing up to 105 dimensions</p>
+</section>
+
+<!-- ======================= DASHBOARD ======================= -->
+<section id="dashboard" class="hidden py-10 space-y-6"></section>
+
+</main>
+
+<!-- ======================= PAYWALL MODAL ======================= -->
+<div id="paywall" class="hidden fixed inset-0 z-50 items-center justify-center p-4">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="app.closePaywall()"></div>
+  <div class="relative glass-strong rounded-2xl max-w-md w-full p-7 shadow-2xl">
+    <button class="absolute top-4 right-4 text-slate-500 hover:text-slate-300" onclick="app.closePaywall()" aria-label="Close">&#10005;</button>
+    <div class="flex items-center gap-2 text-xs text-slate-400 mb-4">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.6 8.4 8 10 4.4-1.6 8-5 8-10V6l-8-4z" stroke="currentColor" stroke-width="2"/></svg>
+      Simulated Stripe checkout — demo mode, no real charge
+    </div>
+    <h3 class="text-xl font-bold text-slate-50">Unlock the full analysis</h3>
+    <ul class="mt-3 space-y-1.5 text-sm text-slate-300">
+      <li>&#10003; 3,000+ word ten-section written report</li>
+      <li>&#10003; Full numerological, symbolic &amp; celestial interpretation</li>
+      <li>&#10003; Downloadable report (Markdown / PDF via print)</li>
+      <li>&#10003; Cross-encoder synthesis &amp; practical guidance</li>
+    </ul>
+    <form class="mt-5 space-y-3" onsubmit="app.pay(event)">
+      <input id="cc-num" inputmode="numeric" placeholder="Card number — use 4242 4242 4242 4242" class="inp w-full" maxlength="19" required>
+      <div class="grid grid-cols-2 gap-3">
+        <input id="cc-exp" placeholder="MM / YY" class="inp" maxlength="7" required>
+        <input id="cc-cvc" placeholder="CVC" class="inp" maxlength="4" inputmode="numeric" required>
+      </div>
+      <button id="pay-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 font-bold text-white shadow-lg shadow-indigo-500/30 hover:scale-[1.01] transition">
+        $10 — Unlock Full Analysis
+      </button>
+      <p id="pay-error" class="hidden text-rose-400 text-xs"></p>
+      <p class="text-center text-[11px] text-slate-500">Test mode accepts 4242 4242 4242 4242 · any future expiry · any CVC</p>
+    </form>
+  </div>
+</div>
+
+<footer class="border-t border-white/5 mt-16 py-8 text-center text-xs text-slate-600 px-4">
+  <p>Symbolic systems (numerology, gematria, astrology, Human Design) are interpretive lenses, not empirical claims.</p>
+  <p class="mt-1">Deterministic computation — identical inputs always produce identical results. &copy; Inversion Labs.</p>
+</footer>
+
+<script src="/app.js"></script>
+</body>
+</html>
