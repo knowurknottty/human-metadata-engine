@@ -1,0 +1,1890 @@
+{
+  "n_identities": 29,
+  "ranking": [
+    {
+      "id": "figure:hypatia",
+      "text": "Hypatia of Alexandria",
+      "resonance": 72.3,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.8498,
+        "polarity_balance": 0.8118,
+        "symbolic_depth": 0.8667
+      },
+      "expression": 1,
+      "chaldean": 1,
+      "entropy_ratio": 0.7513
+    },
+    {
+      "id": "project:biocapt",
+      "text": "bioCAPT",
+      "resonance": 69.3,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.8156,
+        "polarity_balance": 0.9014,
+        "symbolic_depth": 0.6667
+      },
+      "expression": 3,
+      "chaldean": 8,
+      "entropy_ratio": 0.5973
+    },
+    {
+      "id": "figure:alan_turing",
+      "text": "Alan Turing",
+      "resonance": 69.3,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.8656,
+        "polarity_balance": 0.841,
+        "symbolic_depth": 0.6667
+      },
+      "expression": 9,
+      "chaldean": 4,
+      "entropy_ratio": 0.6216
+    },
+    {
+      "id": "project:sigil",
+      "text": "Sigil",
+      "resonance": 68.8,
+      "components": {
+        "numerological_convergence": 0.65,
+        "linguistic_harmony": 0.7405,
+        "polarity_balance": 0.845,
+        "symbolic_depth": 0.5333
+      },
+      "expression": 11,
+      "chaldean": 2,
+      "entropy_ratio": 0.4089
+    },
+    {
+      "id": "figure:carl_jung",
+      "text": "Carl Gustav Jung",
+      "resonance": 66.9,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.78,
+        "polarity_balance": 0.7604,
+        "symbolic_depth": 0.7333
+      },
+      "expression": 5,
+      "chaldean": 2,
+      "entropy_ratio": 0.7188
+    },
+    {
+      "id": "identity:alias:captain",
+      "text": "Captain",
+      "resonance": 65.8,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.7799,
+        "polarity_balance": 0.771,
+        "symbolic_depth": 0.6667
+      },
+      "expression": 1,
+      "chaldean": 5,
+      "entropy_ratio": 0.5365
+    },
+    {
+      "id": "human:kirk_evan_brown",
+      "text": "Kirk Evan Brown",
+      "resonance": 65.0,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.79,
+        "polarity_balance": 0.7195,
+        "symbolic_depth": 0.6667
+      },
+      "expression": 1,
+      "chaldean": 1,
+      "entropy_ratio": 0.6891
+    },
+    {
+      "id": "identity:alias:capt_cortex",
+      "text": "Capt Cortex",
+      "resonance": 64.8,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.7406,
+        "polarity_balance": 0.7037,
+        "symbolic_depth": 0.7333
+      },
+      "expression": 8,
+      "chaldean": 6,
+      "entropy_ratio": 0.6216
+    },
+    {
+      "id": "figure:nikola_tesla",
+      "text": "Nikola Tesla",
+      "resonance": 64.5,
+      "components": {
+        "numerological_convergence": 0.4,
+        "linguistic_harmony": 0.8192,
+        "polarity_balance": 0.8333,
+        "symbolic_depth": 0.6667
+      },
+      "expression": 11,
+      "chaldean": 8,
+      "entropy_ratio": 0.6586
+    },
+    {
+      "id": "project:sentinel",
+      "text": "Sentinel",
+      "resonance": 64.2,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.7816,
+        "polarity_balance": 0.7563,
+        "symbolic_depth": 0.6
+      },
+      "expression": 8,
+      "chaldean": 4,
+      "entropy_ratio": 0.5319
+    },
+    {
+      "id": "figure:marie_curie",
+      "text": "Marie Curie",
+      "resonance": 63.4,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.5906,
+        "polarity_balance": 0.9556,
+        "symbolic_depth": 0.6
+      },
+      "expression": 3,
+      "chaldean": 3,
+      "entropy_ratio": 0.5791
+    },
+    {
+      "id": "figure:leonardo_da_vinci",
+      "text": "Leonardo da Vinci",
+      "resonance": 63.4,
+      "components": {
+        "numerological_convergence": 0.4,
+        "linguistic_harmony": 0.8221,
+        "polarity_balance": 0.9106,
+        "symbolic_depth": 0.5333
+      },
+      "expression": 11,
+      "chaldean": 1,
+      "entropy_ratio": 0.6893
+    },
+    {
+      "id": "project:inversion_labs",
+      "text": "Inversion Labs",
+      "resonance": 61.5,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.8861,
+        "polarity_balance": 0.7985,
+        "symbolic_depth": 0.7333
+      },
+      "expression": 6,
+      "chaldean": 8,
+      "entropy_ratio": 0.6891
+    },
+    {
+      "id": "platform:hermes",
+      "text": "Hermes",
+      "resonance": 61.1,
+      "components": {
+        "numerological_convergence": 0.5,
+        "linguistic_harmony": 0.6984,
+        "polarity_balance": 0.7057,
+        "symbolic_depth": 0.6
+      },
+      "expression": 5,
+      "chaldean": 6,
+      "entropy_ratio": 0.479
+    },
+    {
+      "id": "figure:frida_kahlo",
+      "text": "Frida Kahlo",
+      "resonance": 60.3,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.8907,
+        "polarity_balance": 0.8632,
+        "symbolic_depth": 0.6
+      },
+      "expression": 4,
+      "chaldean": 7,
+      "entropy_ratio": 0.6642
+    },
+    {
+      "id": "figure:david_bowie",
+      "text": "David Bowie",
+      "resonance": 59.1,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.7406,
+        "polarity_balance": 0.9232,
+        "symbolic_depth": 0.6667
+      },
+      "expression": 4,
+      "chaldean": 1,
+      "entropy_ratio": 0.6216
+    },
+    {
+      "id": "platform:openrouter",
+      "text": "OpenRouter",
+      "resonance": 58.7,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.7156,
+        "polarity_balance": 0.9372,
+        "symbolic_depth": 0.6667
+      },
+      "expression": 3,
+      "chaldean": 6,
+      "entropy_ratio": 0.5791
+    },
+    {
+      "id": "figure:albert_einstein",
+      "text": "Albert Einstein",
+      "resonance": 57.7,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.8446,
+        "polarity_balance": 0.7915,
+        "symbolic_depth": 0.6
+      },
+      "expression": 9,
+      "chaldean": 1,
+      "entropy_ratio": 0.6466
+    },
+    {
+      "id": "figure:ada_lovelace",
+      "text": "Ada Lovelace",
+      "resonance": 57.4,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.6515,
+        "polarity_balance": 0.8833,
+        "symbolic_depth": 0.7333
+      },
+      "expression": 9,
+      "chaldean": 3,
+      "entropy_ratio": 0.5667
+    },
+    {
+      "id": "human:jenn",
+      "text": "Jenn",
+      "resonance": 56.5,
+      "components": {
+        "numerological_convergence": 0.75,
+        "linguistic_harmony": 0.5002,
+        "polarity_balance": 0.6203,
+        "symbolic_depth": 0.2667
+      },
+      "expression": 7,
+      "chaldean": 7,
+      "entropy_ratio": 0.3191
+    },
+    {
+      "id": "partner:jenn",
+      "text": "Jenn",
+      "resonance": 56.5,
+      "components": {
+        "numerological_convergence": 0.75,
+        "linguistic_harmony": 0.5002,
+        "polarity_balance": 0.6203,
+        "symbolic_depth": 0.2667
+      },
+      "expression": 7,
+      "chaldean": 7,
+      "entropy_ratio": 0.3191
+    },
+    {
+      "id": "collaborator:ornith",
+      "text": "Ornith",
+      "resonance": 55.3,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.7401,
+        "polarity_balance": 0.8019,
+        "symbolic_depth": 0.6
+      },
+      "expression": 3,
+      "chaldean": 6,
+      "entropy_ratio": 0.5499
+    },
+    {
+      "id": "identity:handle:knowurknot",
+      "text": "Knowurknot",
+      "resonance": 54.8,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.7156,
+        "polarity_balance": 0.806,
+        "symbolic_depth": 0.6
+      },
+      "expression": 9,
+      "chaldean": 1,
+      "entropy_ratio": 0.5791
+    },
+    {
+      "id": "project:frankencapt",
+      "text": "FrankenCAPT",
+      "resonance": 54.0,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.7283,
+        "polarity_balance": 0.6186,
+        "symbolic_depth": 0.7333
+      },
+      "expression": 1,
+      "chaldean": 8,
+      "entropy_ratio": 0.6586
+    },
+    {
+      "id": "project:titan",
+      "text": "Titan",
+      "resonance": 53.0,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.7405,
+        "polarity_balance": 0.7511,
+        "symbolic_depth": 0.5333
+      },
+      "expression": 1,
+      "chaldean": 6,
+      "entropy_ratio": 0.4089
+    },
+    {
+      "id": "project:jennai",
+      "text": "JennAI",
+      "resonance": 48.7,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.6568,
+        "polarity_balance": 0.843,
+        "symbolic_depth": 0.3333
+      },
+      "expression": 8,
+      "chaldean": 9,
+      "entropy_ratio": 0.479
+    },
+    {
+      "id": "identity:alias:capt",
+      "text": "CAPT",
+      "resonance": 45.0,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.5628,
+        "polarity_balance": 0.5771,
+        "symbolic_depth": 0.5333
+      },
+      "expression": 4,
+      "chaldean": 7,
+      "entropy_ratio": 0.4255
+    },
+    {
+      "id": "project:capt",
+      "text": "CAPT",
+      "resonance": 45.0,
+      "components": {
+        "numerological_convergence": 0.25,
+        "linguistic_harmony": 0.5628,
+        "polarity_balance": 0.5771,
+        "symbolic_depth": 0.5333
+      },
+      "expression": 4,
+      "chaldean": 7,
+      "entropy_ratio": 0.4255
+    },
+    {
+      "id": "project:synsync",
+      "text": "SynSync",
+      "resonance": 28.1,
+      "components": {
+        "numerological_convergence": 0.4,
+        "linguistic_harmony": 0.2441,
+        "polarity_balance": 0.0,
+        "symbolic_depth": 0.4
+      },
+      "expression": 11,
+      "chaldean": 3,
+      "entropy_ratio": 0.4149
+    }
+  ],
+  "similarity": {
+    "ids": [
+      "human:kirk_evan_brown",
+      "identity:alias:captain",
+      "identity:alias:capt",
+      "identity:alias:capt_cortex",
+      "identity:handle:knowurknot",
+      "project:capt",
+      "project:frankencapt",
+      "project:biocapt",
+      "project:inversion_labs",
+      "project:jennai",
+      "project:synsync",
+      "project:sigil",
+      "project:sentinel",
+      "project:titan",
+      "human:jenn",
+      "partner:jenn",
+      "collaborator:ornith",
+      "platform:hermes",
+      "platform:openrouter",
+      "figure:albert_einstein",
+      "figure:nikola_tesla",
+      "figure:marie_curie",
+      "figure:ada_lovelace",
+      "figure:alan_turing",
+      "figure:leonardo_da_vinci",
+      "figure:frida_kahlo",
+      "figure:david_bowie",
+      "figure:hypatia",
+      "figure:carl_jung"
+    ],
+    "matrix": {
+      "human:kirk_evan_brown": {
+        "human:kirk_evan_brown": 1.0,
+        "identity:alias:captain": 0.8612,
+        "identity:alias:capt": 0.8351,
+        "identity:alias:capt_cortex": 0.7976,
+        "identity:handle:knowurknot": 0.7701,
+        "project:capt": 0.8351,
+        "project:frankencapt": 0.7999,
+        "project:biocapt": 0.8699,
+        "project:inversion_labs": 0.7532,
+        "project:jennai": 0.7655,
+        "project:synsync": 0.7877,
+        "project:sigil": 0.8076,
+        "project:sentinel": 0.8147,
+        "project:titan": 0.9088,
+        "human:jenn": 0.7367,
+        "partner:jenn": 0.7367,
+        "collaborator:ornith": 0.871,
+        "platform:hermes": 0.8751,
+        "platform:openrouter": 0.7784,
+        "figure:albert_einstein": 0.8167,
+        "figure:nikola_tesla": 0.8961,
+        "figure:marie_curie": 0.9543,
+        "figure:ada_lovelace": 0.7964,
+        "figure:alan_turing": 0.8339,
+        "figure:leonardo_da_vinci": 0.9096,
+        "figure:frida_kahlo": 0.8811,
+        "figure:david_bowie": 0.8351,
+        "figure:hypatia": 0.8948,
+        "figure:carl_jung": 0.8228
+      },
+      "identity:alias:captain": {
+        "human:kirk_evan_brown": 0.8612,
+        "identity:alias:captain": 1.0,
+        "identity:alias:capt": 0.8522,
+        "identity:alias:capt_cortex": 0.7876,
+        "identity:handle:knowurknot": 0.6903,
+        "project:capt": 0.8522,
+        "project:frankencapt": 0.8807,
+        "project:biocapt": 0.8869,
+        "project:inversion_labs": 0.8555,
+        "project:jennai": 0.7291,
+        "project:synsync": 0.4971,
+        "project:sigil": 0.7538,
+        "project:sentinel": 0.7473,
+        "project:titan": 0.9325,
+        "human:jenn": 0.6843,
+        "partner:jenn": 0.6843,
+        "collaborator:ornith": 0.931,
+        "platform:hermes": 0.8675,
+        "platform:openrouter": 0.8989,
+        "figure:albert_einstein": 0.6587,
+        "figure:nikola_tesla": 0.9549,
+        "figure:marie_curie": 0.898,
+        "figure:ada_lovelace": 0.7812,
+        "figure:alan_turing": 0.7697,
+        "figure:leonardo_da_vinci": 0.7484,
+        "figure:frida_kahlo": 0.8076,
+        "figure:david_bowie": 0.7288,
+        "figure:hypatia": 0.803,
+        "figure:carl_jung": 0.7793
+      },
+      "identity:alias:capt": {
+        "human:kirk_evan_brown": 0.8351,
+        "identity:alias:captain": 0.8522,
+        "identity:alias:capt": 1.0,
+        "identity:alias:capt_cortex": 0.8867,
+        "identity:handle:knowurknot": 0.8485,
+        "project:capt": 1.0,
+        "project:frankencapt": 0.8636,
+        "project:biocapt": 0.9322,
+        "project:inversion_labs": 0.9246,
+        "project:jennai": 0.9283,
+        "project:synsync": 0.7304,
+        "project:sigil": 0.7588,
+        "project:sentinel": 0.8791,
+        "project:titan": 0.8661,
+        "human:jenn": 0.9215,
+        "partner:jenn": 0.9215,
+        "collaborator:ornith": 0.914,
+        "platform:hermes": 0.9763,
+        "platform:openrouter": 0.8119,
+        "figure:albert_einstein": 0.8412,
+        "figure:nikola_tesla": 0.9055,
+        "figure:marie_curie": 0.884,
+        "figure:ada_lovelace": 0.8446,
+        "figure:alan_turing": 0.8973,
+        "figure:leonardo_da_vinci": 0.8129,
+        "figure:frida_kahlo": 0.8946,
+        "figure:david_bowie": 0.814,
+        "figure:hypatia": 0.7273,
+        "figure:carl_jung": 0.8134
+      },
+      "identity:alias:capt_cortex": {
+        "human:kirk_evan_brown": 0.7976,
+        "identity:alias:captain": 0.7876,
+        "identity:alias:capt": 0.8867,
+        "identity:alias:capt_cortex": 1.0,
+        "identity:handle:knowurknot": 0.8301,
+        "project:capt": 0.8867,
+        "project:frankencapt": 0.7906,
+        "project:biocapt": 0.84,
+        "project:inversion_labs": 0.9315,
+        "project:jennai": 0.8888,
+        "project:synsync": 0.7117,
+        "project:sigil": 0.7709,
+        "project:sentinel": 0.9142,
+        "project:titan": 0.8365,
+        "human:jenn": 0.8362,
+        "partner:jenn": 0.8362,
+        "collaborator:ornith": 0.8419,
+        "platform:hermes": 0.9452,
+        "platform:openrouter": 0.8458,
+        "figure:albert_einstein": 0.8871,
+        "figure:nikola_tesla": 0.8668,
+        "figure:marie_curie": 0.8513,
+        "figure:ada_lovelace": 0.9281,
+        "figure:alan_turing": 0.9546,
+        "figure:leonardo_da_vinci": 0.7786,
+        "figure:frida_kahlo": 0.8527,
+        "figure:david_bowie": 0.8521,
+        "figure:hypatia": 0.7949,
+        "figure:carl_jung": 0.7998
+      },
+      "identity:handle:knowurknot": {
+        "human:kirk_evan_brown": 0.7701,
+        "identity:alias:captain": 0.6903,
+        "identity:alias:capt": 0.8485,
+        "identity:alias:capt_cortex": 0.8301,
+        "identity:handle:knowurknot": 1.0,
+        "project:capt": 0.8485,
+        "project:frankencapt": 0.7169,
+        "project:biocapt": 0.8499,
+        "project:inversion_labs": 0.8415,
+        "project:jennai": 0.9034,
+        "project:synsync": 0.6137,
+        "project:sigil": 0.7832,
+        "project:sentinel": 0.8561,
+        "project:titan": 0.6476,
+        "human:jenn": 0.9204,
+        "partner:jenn": 0.9204,
+        "collaborator:ornith": 0.8522,
+        "platform:hermes": 0.8563,
+        "platform:openrouter": 0.76,
+        "figure:albert_einstein": 0.9458,
+        "figure:nikola_tesla": 0.7486,
+        "figure:marie_curie": 0.8604,
+        "figure:ada_lovelace": 0.8483,
+        "figure:alan_turing": 0.9364,
+        "figure:leonardo_da_vinci": 0.7898,
+        "figure:frida_kahlo": 0.8626,
+        "figure:david_bowie": 0.8231,
+        "figure:hypatia": 0.7101,
+        "figure:carl_jung": 0.9064
+      },
+      "project:capt": {
+        "human:kirk_evan_brown": 0.8351,
+        "identity:alias:captain": 0.8522,
+        "identity:alias:capt": 1.0,
+        "identity:alias:capt_cortex": 0.8867,
+        "identity:handle:knowurknot": 0.8485,
+        "project:capt": 1.0,
+        "project:frankencapt": 0.8636,
+        "project:biocapt": 0.9322,
+        "project:inversion_labs": 0.9246,
+        "project:jennai": 0.9283,
+        "project:synsync": 0.7304,
+        "project:sigil": 0.7588,
+        "project:sentinel": 0.8791,
+        "project:titan": 0.8661,
+        "human:jenn": 0.9215,
+        "partner:jenn": 0.9215,
+        "collaborator:ornith": 0.914,
+        "platform:hermes": 0.9763,
+        "platform:openrouter": 0.8119,
+        "figure:albert_einstein": 0.8412,
+        "figure:nikola_tesla": 0.9055,
+        "figure:marie_curie": 0.884,
+        "figure:ada_lovelace": 0.8446,
+        "figure:alan_turing": 0.8973,
+        "figure:leonardo_da_vinci": 0.8129,
+        "figure:frida_kahlo": 0.8946,
+        "figure:david_bowie": 0.814,
+        "figure:hypatia": 0.7273,
+        "figure:carl_jung": 0.8134
+      },
+      "project:frankencapt": {
+        "human:kirk_evan_brown": 0.7999,
+        "identity:alias:captain": 0.8807,
+        "identity:alias:capt": 0.8636,
+        "identity:alias:capt_cortex": 0.7906,
+        "identity:handle:knowurknot": 0.7169,
+        "project:capt": 0.8636,
+        "project:frankencapt": 1.0,
+        "project:biocapt": 0.9455,
+        "project:inversion_labs": 0.8908,
+        "project:jennai": 0.8195,
+        "project:synsync": 0.557,
+        "project:sigil": 0.859,
+        "project:sentinel": 0.695,
+        "project:titan": 0.8256,
+        "human:jenn": 0.7759,
+        "partner:jenn": 0.7759,
+        "collaborator:ornith": 0.9387,
+        "platform:hermes": 0.8437,
+        "platform:openrouter": 0.9308,
+        "figure:albert_einstein": 0.7257,
+        "figure:nikola_tesla": 0.9421,
+        "figure:marie_curie": 0.8527,
+        "figure:ada_lovelace": 0.695,
+        "figure:alan_turing": 0.7874,
+        "figure:leonardo_da_vinci": 0.742,
+        "figure:frida_kahlo": 0.8913,
+        "figure:david_bowie": 0.7502,
+        "figure:hypatia": 0.8547,
+        "figure:carl_jung": 0.8163
+      },
+      "project:biocapt": {
+        "human:kirk_evan_brown": 0.8699,
+        "identity:alias:captain": 0.8869,
+        "identity:alias:capt": 0.9322,
+        "identity:alias:capt_cortex": 0.84,
+        "identity:handle:knowurknot": 0.8499,
+        "project:capt": 0.9322,
+        "project:frankencapt": 0.9455,
+        "project:biocapt": 1.0,
+        "project:inversion_labs": 0.9044,
+        "project:jennai": 0.9223,
+        "project:synsync": 0.662,
+        "project:sigil": 0.8806,
+        "project:sentinel": 0.8176,
+        "project:titan": 0.8665,
+        "human:jenn": 0.9,
+        "partner:jenn": 0.9,
+        "collaborator:ornith": 0.9793,
+        "platform:hermes": 0.9152,
+        "platform:openrouter": 0.9142,
+        "figure:albert_einstein": 0.8384,
+        "figure:nikola_tesla": 0.9491,
+        "figure:marie_curie": 0.9481,
+        "figure:ada_lovelace": 0.7928,
+        "figure:alan_turing": 0.8786,
+        "figure:leonardo_da_vinci": 0.8239,
+        "figure:frida_kahlo": 0.9683,
+        "figure:david_bowie": 0.8237,
+        "figure:hypatia": 0.828,
+        "figure:carl_jung": 0.8927
+      },
+      "project:inversion_labs": {
+        "human:kirk_evan_brown": 0.7532,
+        "identity:alias:captain": 0.8555,
+        "identity:alias:capt": 0.9246,
+        "identity:alias:capt_cortex": 0.9315,
+        "identity:handle:knowurknot": 0.8415,
+        "project:capt": 0.9246,
+        "project:frankencapt": 0.8908,
+        "project:biocapt": 0.9044,
+        "project:inversion_labs": 1.0,
+        "project:jennai": 0.902,
+        "project:synsync": 0.5673,
+        "project:sigil": 0.7903,
+        "project:sentinel": 0.8555,
+        "project:titan": 0.8087,
+        "human:jenn": 0.8586,
+        "partner:jenn": 0.8586,
+        "collaborator:ornith": 0.9071,
+        "platform:hermes": 0.9336,
+        "platform:openrouter": 0.9234,
+        "figure:albert_einstein": 0.8324,
+        "figure:nikola_tesla": 0.9148,
+        "figure:marie_curie": 0.8485,
+        "figure:ada_lovelace": 0.8803,
+        "figure:alan_turing": 0.9113,
+        "figure:leonardo_da_vinci": 0.7808,
+        "figure:frida_kahlo": 0.8692,
+        "figure:david_bowie": 0.8348,
+        "figure:hypatia": 0.7848,
+        "figure:carl_jung": 0.8384
+      },
+      "project:jennai": {
+        "human:kirk_evan_brown": 0.7655,
+        "identity:alias:captain": 0.7291,
+        "identity:alias:capt": 0.9283,
+        "identity:alias:capt_cortex": 0.8888,
+        "identity:handle:knowurknot": 0.9034,
+        "project:capt": 0.9283,
+        "project:frankencapt": 0.8195,
+        "project:biocapt": 0.9223,
+        "project:inversion_labs": 0.902,
+        "project:jennai": 1.0,
+        "project:synsync": 0.7088,
+        "project:sigil": 0.7852,
+        "project:sentinel": 0.8569,
+        "project:titan": 0.75,
+        "human:jenn": 0.9785,
+        "partner:jenn": 0.9785,
+        "collaborator:ornith": 0.8845,
+        "platform:hermes": 0.9268,
+        "platform:openrouter": 0.8023,
+        "figure:albert_einstein": 0.907,
+        "figure:nikola_tesla": 0.8434,
+        "figure:marie_curie": 0.8689,
+        "figure:ada_lovelace": 0.8073,
+        "figure:alan_turing": 0.94,
+        "figure:leonardo_da_vinci": 0.8088,
+        "figure:frida_kahlo": 0.9407,
+        "figure:david_bowie": 0.809,
+        "figure:hypatia": 0.7197,
+        "figure:carl_jung": 0.8276
+      },
+      "project:synsync": {
+        "human:kirk_evan_brown": 0.7877,
+        "identity:alias:captain": 0.4971,
+        "identity:alias:capt": 0.7304,
+        "identity:alias:capt_cortex": 0.7117,
+        "identity:handle:knowurknot": 0.6137,
+        "project:capt": 0.7304,
+        "project:frankencapt": 0.557,
+        "project:biocapt": 0.662,
+        "project:inversion_labs": 0.5673,
+        "project:jennai": 0.7088,
+        "project:synsync": 1.0,
+        "project:sigil": 0.5311,
+        "project:sentinel": 0.7254,
+        "project:titan": 0.6931,
+        "human:jenn": 0.6938,
+        "partner:jenn": 0.6938,
+        "collaborator:ornith": 0.5974,
+        "platform:hermes": 0.7538,
+        "platform:openrouter": 0.4452,
+        "figure:albert_einstein": 0.7276,
+        "figure:nikola_tesla": 0.6528,
+        "figure:marie_curie": 0.7078,
+        "figure:ada_lovelace": 0.6386,
+        "figure:alan_turing": 0.7194,
+        "figure:leonardo_da_vinci": 0.7353,
+        "figure:frida_kahlo": 0.7362,
+        "figure:david_bowie": 0.6517,
+        "figure:hypatia": 0.6148,
+        "figure:carl_jung": 0.571
+      },
+      "project:sigil": {
+        "human:kirk_evan_brown": 0.8076,
+        "identity:alias:captain": 0.7538,
+        "identity:alias:capt": 0.7588,
+        "identity:alias:capt_cortex": 0.7709,
+        "identity:handle:knowurknot": 0.7832,
+        "project:capt": 0.7588,
+        "project:frankencapt": 0.859,
+        "project:biocapt": 0.8806,
+        "project:inversion_labs": 0.7903,
+        "project:jennai": 0.7852,
+        "project:synsync": 0.5311,
+        "project:sigil": 1.0,
+        "project:sentinel": 0.7798,
+        "project:titan": 0.7649,
+        "human:jenn": 0.7689,
+        "partner:jenn": 0.7689,
+        "collaborator:ornith": 0.8402,
+        "platform:hermes": 0.7656,
+        "platform:openrouter": 0.8983,
+        "figure:albert_einstein": 0.8598,
+        "figure:nikola_tesla": 0.8107,
+        "figure:marie_curie": 0.866,
+        "figure:ada_lovelace": 0.7766,
+        "figure:alan_turing": 0.7879,
+        "figure:leonardo_da_vinci": 0.7805,
+        "figure:frida_kahlo": 0.8854,
+        "figure:david_bowie": 0.9072,
+        "figure:hypatia": 0.8982,
+        "figure:carl_jung": 0.9058
+      },
+      "project:sentinel": {
+        "human:kirk_evan_brown": 0.8147,
+        "identity:alias:captain": 0.7473,
+        "identity:alias:capt": 0.8791,
+        "identity:alias:capt_cortex": 0.9142,
+        "identity:handle:knowurknot": 0.8561,
+        "project:capt": 0.8791,
+        "project:frankencapt": 0.695,
+        "project:biocapt": 0.8176,
+        "project:inversion_labs": 0.8555,
+        "project:jennai": 0.8569,
+        "project:synsync": 0.7254,
+        "project:sigil": 0.7798,
+        "project:sentinel": 1.0,
+        "project:titan": 0.8363,
+        "human:jenn": 0.8696,
+        "partner:jenn": 0.8696,
+        "collaborator:ornith": 0.7834,
+        "platform:hermes": 0.8953,
+        "platform:openrouter": 0.7703,
+        "figure:albert_einstein": 0.9183,
+        "figure:nikola_tesla": 0.7979,
+        "figure:marie_curie": 0.849,
+        "figure:ada_lovelace": 0.9716,
+        "figure:alan_turing": 0.8835,
+        "figure:leonardo_da_vinci": 0.7924,
+        "figure:frida_kahlo": 0.8586,
+        "figure:david_bowie": 0.9016,
+        "figure:hypatia": 0.7202,
+        "figure:carl_jung": 0.878
+      },
+      "project:titan": {
+        "human:kirk_evan_brown": 0.9088,
+        "identity:alias:captain": 0.9325,
+        "identity:alias:capt": 0.8661,
+        "identity:alias:capt_cortex": 0.8365,
+        "identity:handle:knowurknot": 0.6476,
+        "project:capt": 0.8661,
+        "project:frankencapt": 0.8256,
+        "project:biocapt": 0.8665,
+        "project:inversion_labs": 0.8087,
+        "project:jennai": 0.75,
+        "project:synsync": 0.6931,
+        "project:sigil": 0.7649,
+        "project:sentinel": 0.8363,
+        "project:titan": 1.0,
+        "human:jenn": 0.7094,
+        "partner:jenn": 0.7094,
+        "collaborator:ornith": 0.8641,
+        "platform:hermes": 0.8925,
+        "platform:openrouter": 0.8328,
+        "figure:albert_einstein": 0.7101,
+        "figure:nikola_tesla": 0.9376,
+        "figure:marie_curie": 0.901,
+        "figure:ada_lovelace": 0.8268,
+        "figure:alan_turing": 0.7757,
+        "figure:leonardo_da_vinci": 0.786,
+        "figure:frida_kahlo": 0.8401,
+        "figure:david_bowie": 0.7868,
+        "figure:hypatia": 0.8086,
+        "figure:carl_jung": 0.7536
+      },
+      "human:jenn": {
+        "human:kirk_evan_brown": 0.7367,
+        "identity:alias:captain": 0.6843,
+        "identity:alias:capt": 0.9215,
+        "identity:alias:capt_cortex": 0.8362,
+        "identity:handle:knowurknot": 0.9204,
+        "project:capt": 0.9215,
+        "project:frankencapt": 0.7759,
+        "project:biocapt": 0.9,
+        "project:inversion_labs": 0.8586,
+        "project:jennai": 0.9785,
+        "project:synsync": 0.6938,
+        "project:sigil": 0.7689,
+        "project:sentinel": 0.8696,
+        "project:titan": 0.7094,
+        "human:jenn": 1.0,
+        "partner:jenn": 1.0,
+        "collaborator:ornith": 0.8535,
+        "platform:hermes": 0.8889,
+        "platform:openrouter": 0.7459,
+        "figure:albert_einstein": 0.9085,
+        "figure:nikola_tesla": 0.7852,
+        "figure:marie_curie": 0.8315,
+        "figure:ada_lovelace": 0.7978,
+        "figure:alan_turing": 0.8991,
+        "figure:leonardo_da_vinci": 0.7598,
+        "figure:frida_kahlo": 0.9224,
+        "figure:david_bowie": 0.7868,
+        "figure:hypatia": 0.6467,
+        "figure:carl_jung": 0.8549
+      },
+      "partner:jenn": {
+        "human:kirk_evan_brown": 0.7367,
+        "identity:alias:captain": 0.6843,
+        "identity:alias:capt": 0.9215,
+        "identity:alias:capt_cortex": 0.8362,
+        "identity:handle:knowurknot": 0.9204,
+        "project:capt": 0.9215,
+        "project:frankencapt": 0.7759,
+        "project:biocapt": 0.9,
+        "project:inversion_labs": 0.8586,
+        "project:jennai": 0.9785,
+        "project:synsync": 0.6938,
+        "project:sigil": 0.7689,
+        "project:sentinel": 0.8696,
+        "project:titan": 0.7094,
+        "human:jenn": 1.0,
+        "partner:jenn": 1.0,
+        "collaborator:ornith": 0.8535,
+        "platform:hermes": 0.8889,
+        "platform:openrouter": 0.7459,
+        "figure:albert_einstein": 0.9085,
+        "figure:nikola_tesla": 0.7852,
+        "figure:marie_curie": 0.8315,
+        "figure:ada_lovelace": 0.7978,
+        "figure:alan_turing": 0.8991,
+        "figure:leonardo_da_vinci": 0.7598,
+        "figure:frida_kahlo": 0.9224,
+        "figure:david_bowie": 0.7868,
+        "figure:hypatia": 0.6467,
+        "figure:carl_jung": 0.8549
+      },
+      "collaborator:ornith": {
+        "human:kirk_evan_brown": 0.871,
+        "identity:alias:captain": 0.931,
+        "identity:alias:capt": 0.914,
+        "identity:alias:capt_cortex": 0.8419,
+        "identity:handle:knowurknot": 0.8522,
+        "project:capt": 0.914,
+        "project:frankencapt": 0.9387,
+        "project:biocapt": 0.9793,
+        "project:inversion_labs": 0.9071,
+        "project:jennai": 0.8845,
+        "project:synsync": 0.5974,
+        "project:sigil": 0.8402,
+        "project:sentinel": 0.7834,
+        "project:titan": 0.8641,
+        "human:jenn": 0.8535,
+        "partner:jenn": 0.8535,
+        "collaborator:ornith": 1.0,
+        "platform:hermes": 0.9152,
+        "platform:openrouter": 0.9231,
+        "figure:albert_einstein": 0.8027,
+        "figure:nikola_tesla": 0.9581,
+        "figure:marie_curie": 0.9484,
+        "figure:ada_lovelace": 0.7896,
+        "figure:alan_turing": 0.888,
+        "figure:leonardo_da_vinci": 0.7935,
+        "figure:frida_kahlo": 0.925,
+        "figure:david_bowie": 0.7734,
+        "figure:hypatia": 0.8271,
+        "figure:carl_jung": 0.8744
+      },
+      "platform:hermes": {
+        "human:kirk_evan_brown": 0.8751,
+        "identity:alias:captain": 0.8675,
+        "identity:alias:capt": 0.9763,
+        "identity:alias:capt_cortex": 0.9452,
+        "identity:handle:knowurknot": 0.8563,
+        "project:capt": 0.9763,
+        "project:frankencapt": 0.8437,
+        "project:biocapt": 0.9152,
+        "project:inversion_labs": 0.9336,
+        "project:jennai": 0.9268,
+        "project:synsync": 0.7538,
+        "project:sigil": 0.7656,
+        "project:sentinel": 0.8953,
+        "project:titan": 0.8925,
+        "human:jenn": 0.8889,
+        "partner:jenn": 0.8889,
+        "collaborator:ornith": 0.9152,
+        "platform:hermes": 1.0,
+        "platform:openrouter": 0.8333,
+        "figure:albert_einstein": 0.8683,
+        "figure:nikola_tesla": 0.9248,
+        "figure:marie_curie": 0.9176,
+        "figure:ada_lovelace": 0.8853,
+        "figure:alan_turing": 0.95,
+        "figure:leonardo_da_vinci": 0.8577,
+        "figure:frida_kahlo": 0.8933,
+        "figure:david_bowie": 0.8433,
+        "figure:hypatia": 0.7925,
+        "figure:carl_jung": 0.8004
+      },
+      "platform:openrouter": {
+        "human:kirk_evan_brown": 0.7784,
+        "identity:alias:captain": 0.8989,
+        "identity:alias:capt": 0.8119,
+        "identity:alias:capt_cortex": 0.8458,
+        "identity:handle:knowurknot": 0.76,
+        "project:capt": 0.8119,
+        "project:frankencapt": 0.9308,
+        "project:biocapt": 0.9142,
+        "project:inversion_labs": 0.9234,
+        "project:jennai": 0.8023,
+        "project:synsync": 0.4452,
+        "project:sigil": 0.8983,
+        "project:sentinel": 0.7703,
+        "project:titan": 0.8328,
+        "human:jenn": 0.7459,
+        "partner:jenn": 0.7459,
+        "collaborator:ornith": 0.9231,
+        "platform:hermes": 0.8333,
+        "platform:openrouter": 1.0,
+        "figure:albert_einstein": 0.7684,
+        "figure:nikola_tesla": 0.9292,
+        "figure:marie_curie": 0.8788,
+        "figure:ada_lovelace": 0.8193,
+        "figure:alan_turing": 0.8245,
+        "figure:leonardo_da_vinci": 0.7456,
+        "figure:frida_kahlo": 0.8699,
+        "figure:david_bowie": 0.8282,
+        "figure:hypatia": 0.8758,
+        "figure:carl_jung": 0.8696
+      },
+      "figure:albert_einstein": {
+        "human:kirk_evan_brown": 0.8167,
+        "identity:alias:captain": 0.6587,
+        "identity:alias:capt": 0.8412,
+        "identity:alias:capt_cortex": 0.8871,
+        "identity:handle:knowurknot": 0.9458,
+        "project:capt": 0.8412,
+        "project:frankencapt": 0.7257,
+        "project:biocapt": 0.8384,
+        "project:inversion_labs": 0.8324,
+        "project:jennai": 0.907,
+        "project:synsync": 0.7276,
+        "project:sigil": 0.8598,
+        "project:sentinel": 0.9183,
+        "project:titan": 0.7101,
+        "human:jenn": 0.9085,
+        "partner:jenn": 0.9085,
+        "collaborator:ornith": 0.8027,
+        "platform:hermes": 0.8683,
+        "platform:openrouter": 0.7684,
+        "figure:albert_einstein": 1.0,
+        "figure:nikola_tesla": 0.7578,
+        "figure:marie_curie": 0.8659,
+        "figure:ada_lovelace": 0.8909,
+        "figure:alan_turing": 0.9401,
+        "figure:leonardo_da_vinci": 0.8463,
+        "figure:frida_kahlo": 0.8969,
+        "figure:david_bowie": 0.9203,
+        "figure:hypatia": 0.8012,
+        "figure:carl_jung": 0.9057
+      },
+      "figure:nikola_tesla": {
+        "human:kirk_evan_brown": 0.8961,
+        "identity:alias:captain": 0.9549,
+        "identity:alias:capt": 0.9055,
+        "identity:alias:capt_cortex": 0.8668,
+        "identity:handle:knowurknot": 0.7486,
+        "project:capt": 0.9055,
+        "project:frankencapt": 0.9421,
+        "project:biocapt": 0.9491,
+        "project:inversion_labs": 0.9148,
+        "project:jennai": 0.8434,
+        "project:synsync": 0.6528,
+        "project:sigil": 0.8107,
+        "project:sentinel": 0.7979,
+        "project:titan": 0.9376,
+        "human:jenn": 0.7852,
+        "partner:jenn": 0.7852,
+        "collaborator:ornith": 0.9581,
+        "platform:hermes": 0.9248,
+        "platform:openrouter": 0.9292,
+        "figure:albert_einstein": 0.7578,
+        "figure:nikola_tesla": 1.0,
+        "figure:marie_curie": 0.9351,
+        "figure:ada_lovelace": 0.8093,
+        "figure:alan_turing": 0.8557,
+        "figure:leonardo_da_vinci": 0.8331,
+        "figure:frida_kahlo": 0.911,
+        "figure:david_bowie": 0.7912,
+        "figure:hypatia": 0.8731,
+        "figure:carl_jung": 0.8173
+      },
+      "figure:marie_curie": {
+        "human:kirk_evan_brown": 0.9543,
+        "identity:alias:captain": 0.898,
+        "identity:alias:capt": 0.884,
+        "identity:alias:capt_cortex": 0.8513,
+        "identity:handle:knowurknot": 0.8604,
+        "project:capt": 0.884,
+        "project:frankencapt": 0.8527,
+        "project:biocapt": 0.9481,
+        "project:inversion_labs": 0.8485,
+        "project:jennai": 0.8689,
+        "project:synsync": 0.7078,
+        "project:sigil": 0.866,
+        "project:sentinel": 0.849,
+        "project:titan": 0.901,
+        "human:jenn": 0.8315,
+        "partner:jenn": 0.8315,
+        "collaborator:ornith": 0.9484,
+        "platform:hermes": 0.9176,
+        "platform:openrouter": 0.8788,
+        "figure:albert_einstein": 0.8659,
+        "figure:nikola_tesla": 0.9351,
+        "figure:marie_curie": 1.0,
+        "figure:ada_lovelace": 0.8484,
+        "figure:alan_turing": 0.9042,
+        "figure:leonardo_da_vinci": 0.8977,
+        "figure:frida_kahlo": 0.9373,
+        "figure:david_bowie": 0.8667,
+        "figure:hypatia": 0.883,
+        "figure:carl_jung": 0.8839
+      },
+      "figure:ada_lovelace": {
+        "human:kirk_evan_brown": 0.7964,
+        "identity:alias:captain": 0.7812,
+        "identity:alias:capt": 0.8446,
+        "identity:alias:capt_cortex": 0.9281,
+        "identity:handle:knowurknot": 0.8483,
+        "project:capt": 0.8446,
+        "project:frankencapt": 0.695,
+        "project:biocapt": 0.7928,
+        "project:inversion_labs": 0.8803,
+        "project:jennai": 0.8073,
+        "project:synsync": 0.6386,
+        "project:sigil": 0.7766,
+        "project:sentinel": 0.9716,
+        "project:titan": 0.8268,
+        "human:jenn": 0.7978,
+        "partner:jenn": 0.7978,
+        "collaborator:ornith": 0.7896,
+        "platform:hermes": 0.8853,
+        "platform:openrouter": 0.8193,
+        "figure:albert_einstein": 0.8909,
+        "figure:nikola_tesla": 0.8093,
+        "figure:marie_curie": 0.8484,
+        "figure:ada_lovelace": 1.0,
+        "figure:alan_turing": 0.8907,
+        "figure:leonardo_da_vinci": 0.7717,
+        "figure:frida_kahlo": 0.8054,
+        "figure:david_bowie": 0.8991,
+        "figure:hypatia": 0.7532,
+        "figure:carl_jung": 0.8668
+      },
+      "figure:alan_turing": {
+        "human:kirk_evan_brown": 0.8339,
+        "identity:alias:captain": 0.7697,
+        "identity:alias:capt": 0.8973,
+        "identity:alias:capt_cortex": 0.9546,
+        "identity:handle:knowurknot": 0.9364,
+        "project:capt": 0.8973,
+        "project:frankencapt": 0.7874,
+        "project:biocapt": 0.8786,
+        "project:inversion_labs": 0.9113,
+        "project:jennai": 0.94,
+        "project:synsync": 0.7194,
+        "project:sigil": 0.7879,
+        "project:sentinel": 0.8835,
+        "project:titan": 0.7757,
+        "human:jenn": 0.8991,
+        "partner:jenn": 0.8991,
+        "collaborator:ornith": 0.888,
+        "platform:hermes": 0.95,
+        "platform:openrouter": 0.8245,
+        "figure:albert_einstein": 0.9401,
+        "figure:nikola_tesla": 0.8557,
+        "figure:marie_curie": 0.9042,
+        "figure:ada_lovelace": 0.8907,
+        "figure:alan_turing": 1.0,
+        "figure:leonardo_da_vinci": 0.843,
+        "figure:frida_kahlo": 0.8931,
+        "figure:david_bowie": 0.8481,
+        "figure:hypatia": 0.8069,
+        "figure:carl_jung": 0.8416
+      },
+      "figure:leonardo_da_vinci": {
+        "human:kirk_evan_brown": 0.9096,
+        "identity:alias:captain": 0.7484,
+        "identity:alias:capt": 0.8129,
+        "identity:alias:capt_cortex": 0.7786,
+        "identity:handle:knowurknot": 0.7898,
+        "project:capt": 0.8129,
+        "project:frankencapt": 0.742,
+        "project:biocapt": 0.8239,
+        "project:inversion_labs": 0.7808,
+        "project:jennai": 0.8088,
+        "project:synsync": 0.7353,
+        "project:sigil": 0.7805,
+        "project:sentinel": 0.7924,
+        "project:titan": 0.786,
+        "human:jenn": 0.7598,
+        "partner:jenn": 0.7598,
+        "collaborator:ornith": 0.7935,
+        "platform:hermes": 0.8577,
+        "platform:openrouter": 0.7456,
+        "figure:albert_einstein": 0.8463,
+        "figure:nikola_tesla": 0.8331,
+        "figure:marie_curie": 0.8977,
+        "figure:ada_lovelace": 0.7717,
+        "figure:alan_turing": 0.843,
+        "figure:leonardo_da_vinci": 1.0,
+        "figure:frida_kahlo": 0.8638,
+        "figure:david_bowie": 0.8928,
+        "figure:hypatia": 0.8795,
+        "figure:carl_jung": 0.773
+      },
+      "figure:frida_kahlo": {
+        "human:kirk_evan_brown": 0.8811,
+        "identity:alias:captain": 0.8076,
+        "identity:alias:capt": 0.8946,
+        "identity:alias:capt_cortex": 0.8527,
+        "identity:handle:knowurknot": 0.8626,
+        "project:capt": 0.8946,
+        "project:frankencapt": 0.8913,
+        "project:biocapt": 0.9683,
+        "project:inversion_labs": 0.8692,
+        "project:jennai": 0.9407,
+        "project:synsync": 0.7362,
+        "project:sigil": 0.8854,
+        "project:sentinel": 0.8586,
+        "project:titan": 0.8401,
+        "human:jenn": 0.9224,
+        "partner:jenn": 0.9224,
+        "collaborator:ornith": 0.925,
+        "platform:hermes": 0.8933,
+        "platform:openrouter": 0.8699,
+        "figure:albert_einstein": 0.8969,
+        "figure:nikola_tesla": 0.911,
+        "figure:marie_curie": 0.9373,
+        "figure:ada_lovelace": 0.8054,
+        "figure:alan_turing": 0.8931,
+        "figure:leonardo_da_vinci": 0.8638,
+        "figure:frida_kahlo": 1.0,
+        "figure:david_bowie": 0.8536,
+        "figure:hypatia": 0.8438,
+        "figure:carl_jung": 0.9101
+      },
+      "figure:david_bowie": {
+        "human:kirk_evan_brown": 0.8351,
+        "identity:alias:captain": 0.7288,
+        "identity:alias:capt": 0.814,
+        "identity:alias:capt_cortex": 0.8521,
+        "identity:handle:knowurknot": 0.8231,
+        "project:capt": 0.814,
+        "project:frankencapt": 0.7502,
+        "project:biocapt": 0.8237,
+        "project:inversion_labs": 0.8348,
+        "project:jennai": 0.809,
+        "project:synsync": 0.6517,
+        "project:sigil": 0.9072,
+        "project:sentinel": 0.9016,
+        "project:titan": 0.7868,
+        "human:jenn": 0.7868,
+        "partner:jenn": 0.7868,
+        "collaborator:ornith": 0.7734,
+        "platform:hermes": 0.8433,
+        "platform:openrouter": 0.8282,
+        "figure:albert_einstein": 0.9203,
+        "figure:nikola_tesla": 0.7912,
+        "figure:marie_curie": 0.8667,
+        "figure:ada_lovelace": 0.8991,
+        "figure:alan_turing": 0.8481,
+        "figure:leonardo_da_vinci": 0.8928,
+        "figure:frida_kahlo": 0.8536,
+        "figure:david_bowie": 1.0,
+        "figure:hypatia": 0.8674,
+        "figure:carl_jung": 0.8742
+      },
+      "figure:hypatia": {
+        "human:kirk_evan_brown": 0.8948,
+        "identity:alias:captain": 0.803,
+        "identity:alias:capt": 0.7273,
+        "identity:alias:capt_cortex": 0.7949,
+        "identity:handle:knowurknot": 0.7101,
+        "project:capt": 0.7273,
+        "project:frankencapt": 0.8547,
+        "project:biocapt": 0.828,
+        "project:inversion_labs": 0.7848,
+        "project:jennai": 0.7197,
+        "project:synsync": 0.6148,
+        "project:sigil": 0.8982,
+        "project:sentinel": 0.7202,
+        "project:titan": 0.8086,
+        "human:jenn": 0.6467,
+        "partner:jenn": 0.6467,
+        "collaborator:ornith": 0.8271,
+        "platform:hermes": 0.7925,
+        "platform:openrouter": 0.8758,
+        "figure:albert_einstein": 0.8012,
+        "figure:nikola_tesla": 0.8731,
+        "figure:marie_curie": 0.883,
+        "figure:ada_lovelace": 0.7532,
+        "figure:alan_turing": 0.8069,
+        "figure:leonardo_da_vinci": 0.8795,
+        "figure:frida_kahlo": 0.8438,
+        "figure:david_bowie": 0.8674,
+        "figure:hypatia": 1.0,
+        "figure:carl_jung": 0.8064
+      },
+      "figure:carl_jung": {
+        "human:kirk_evan_brown": 0.8228,
+        "identity:alias:captain": 0.7793,
+        "identity:alias:capt": 0.8134,
+        "identity:alias:capt_cortex": 0.7998,
+        "identity:handle:knowurknot": 0.9064,
+        "project:capt": 0.8134,
+        "project:frankencapt": 0.8163,
+        "project:biocapt": 0.8927,
+        "project:inversion_labs": 0.8384,
+        "project:jennai": 0.8276,
+        "project:synsync": 0.571,
+        "project:sigil": 0.9058,
+        "project:sentinel": 0.878,
+        "project:titan": 0.7536,
+        "human:jenn": 0.8549,
+        "partner:jenn": 0.8549,
+        "collaborator:ornith": 0.8744,
+        "platform:hermes": 0.8004,
+        "platform:openrouter": 0.8696,
+        "figure:albert_einstein": 0.9057,
+        "figure:nikola_tesla": 0.8173,
+        "figure:marie_curie": 0.8839,
+        "figure:ada_lovelace": 0.8668,
+        "figure:alan_turing": 0.8416,
+        "figure:leonardo_da_vinci": 0.773,
+        "figure:frida_kahlo": 0.9101,
+        "figure:david_bowie": 0.8742,
+        "figure:hypatia": 0.8064,
+        "figure:carl_jung": 1.0
+      }
+    },
+    "nearest_neighbors": {
+      "human:kirk_evan_brown": [
+        {
+          "id": "figure:marie_curie",
+          "similarity": 0.9543
+        },
+        {
+          "id": "figure:leonardo_da_vinci",
+          "similarity": 0.9096
+        },
+        {
+          "id": "project:titan",
+          "similarity": 0.9088
+        }
+      ],
+      "identity:alias:captain": [
+        {
+          "id": "figure:nikola_tesla",
+          "similarity": 0.9549
+        },
+        {
+          "id": "project:titan",
+          "similarity": 0.9325
+        },
+        {
+          "id": "collaborator:ornith",
+          "similarity": 0.931
+        }
+      ],
+      "identity:alias:capt": [
+        {
+          "id": "project:capt",
+          "similarity": 1.0
+        },
+        {
+          "id": "platform:hermes",
+          "similarity": 0.9763
+        },
+        {
+          "id": "project:biocapt",
+          "similarity": 0.9322
+        }
+      ],
+      "identity:alias:capt_cortex": [
+        {
+          "id": "figure:alan_turing",
+          "similarity": 0.9546
+        },
+        {
+          "id": "platform:hermes",
+          "similarity": 0.9452
+        },
+        {
+          "id": "project:inversion_labs",
+          "similarity": 0.9315
+        }
+      ],
+      "identity:handle:knowurknot": [
+        {
+          "id": "figure:albert_einstein",
+          "similarity": 0.9458
+        },
+        {
+          "id": "figure:alan_turing",
+          "similarity": 0.9364
+        },
+        {
+          "id": "human:jenn",
+          "similarity": 0.9204
+        }
+      ],
+      "project:capt": [
+        {
+          "id": "identity:alias:capt",
+          "similarity": 1.0
+        },
+        {
+          "id": "platform:hermes",
+          "similarity": 0.9763
+        },
+        {
+          "id": "project:biocapt",
+          "similarity": 0.9322
+        }
+      ],
+      "project:frankencapt": [
+        {
+          "id": "project:biocapt",
+          "similarity": 0.9455
+        },
+        {
+          "id": "figure:nikola_tesla",
+          "similarity": 0.9421
+        },
+        {
+          "id": "collaborator:ornith",
+          "similarity": 0.9387
+        }
+      ],
+      "project:biocapt": [
+        {
+          "id": "collaborator:ornith",
+          "similarity": 0.9793
+        },
+        {
+          "id": "figure:frida_kahlo",
+          "similarity": 0.9683
+        },
+        {
+          "id": "figure:nikola_tesla",
+          "similarity": 0.9491
+        }
+      ],
+      "project:inversion_labs": [
+        {
+          "id": "platform:hermes",
+          "similarity": 0.9336
+        },
+        {
+          "id": "identity:alias:capt_cortex",
+          "similarity": 0.9315
+        },
+        {
+          "id": "identity:alias:capt",
+          "similarity": 0.9246
+        }
+      ],
+      "project:jennai": [
+        {
+          "id": "human:jenn",
+          "similarity": 0.9785
+        },
+        {
+          "id": "partner:jenn",
+          "similarity": 0.9785
+        },
+        {
+          "id": "figure:frida_kahlo",
+          "similarity": 0.9407
+        }
+      ],
+      "project:synsync": [
+        {
+          "id": "human:kirk_evan_brown",
+          "similarity": 0.7877
+        },
+        {
+          "id": "platform:hermes",
+          "similarity": 0.7538
+        },
+        {
+          "id": "figure:frida_kahlo",
+          "similarity": 0.7362
+        }
+      ],
+      "project:sigil": [
+        {
+          "id": "figure:david_bowie",
+          "similarity": 0.9072
+        },
+        {
+          "id": "figure:carl_jung",
+          "similarity": 0.9058
+        },
+        {
+          "id": "platform:openrouter",
+          "similarity": 0.8983
+        }
+      ],
+      "project:sentinel": [
+        {
+          "id": "figure:ada_lovelace",
+          "similarity": 0.9716
+        },
+        {
+          "id": "figure:albert_einstein",
+          "similarity": 0.9183
+        },
+        {
+          "id": "identity:alias:capt_cortex",
+          "similarity": 0.9142
+        }
+      ],
+      "project:titan": [
+        {
+          "id": "figure:nikola_tesla",
+          "similarity": 0.9376
+        },
+        {
+          "id": "identity:alias:captain",
+          "similarity": 0.9325
+        },
+        {
+          "id": "human:kirk_evan_brown",
+          "similarity": 0.9088
+        }
+      ],
+      "human:jenn": [
+        {
+          "id": "partner:jenn",
+          "similarity": 1.0
+        },
+        {
+          "id": "project:jennai",
+          "similarity": 0.9785
+        },
+        {
+          "id": "figure:frida_kahlo",
+          "similarity": 0.9224
+        }
+      ],
+      "partner:jenn": [
+        {
+          "id": "human:jenn",
+          "similarity": 1.0
+        },
+        {
+          "id": "project:jennai",
+          "similarity": 0.9785
+        },
+        {
+          "id": "figure:frida_kahlo",
+          "similarity": 0.9224
+        }
+      ],
+      "collaborator:ornith": [
+        {
+          "id": "project:biocapt",
+          "similarity": 0.9793
+        },
+        {
+          "id": "figure:nikola_tesla",
+          "similarity": 0.9581
+        },
+        {
+          "id": "figure:marie_curie",
+          "similarity": 0.9484
+        }
+      ],
+      "platform:hermes": [
+        {
+          "id": "identity:alias:capt",
+          "similarity": 0.9763
+        },
+        {
+          "id": "project:capt",
+          "similarity": 0.9763
+        },
+        {
+          "id": "figure:alan_turing",
+          "similarity": 0.95
+        }
+      ],
+      "platform:openrouter": [
+        {
+          "id": "project:frankencapt",
+          "similarity": 0.9308
+        },
+        {
+          "id": "figure:nikola_tesla",
+          "similarity": 0.9292
+        },
+        {
+          "id": "project:inversion_labs",
+          "similarity": 0.9234
+        }
+      ],
+      "figure:albert_einstein": [
+        {
+          "id": "identity:handle:knowurknot",
+          "similarity": 0.9458
+        },
+        {
+          "id": "figure:alan_turing",
+          "similarity": 0.9401
+        },
+        {
+          "id": "figure:david_bowie",
+          "similarity": 0.9203
+        }
+      ],
+      "figure:nikola_tesla": [
+        {
+          "id": "collaborator:ornith",
+          "similarity": 0.9581
+        },
+        {
+          "id": "identity:alias:captain",
+          "similarity": 0.9549
+        },
+        {
+          "id": "project:biocapt",
+          "similarity": 0.9491
+        }
+      ],
+      "figure:marie_curie": [
+        {
+          "id": "human:kirk_evan_brown",
+          "similarity": 0.9543
+        },
+        {
+          "id": "collaborator:ornith",
+          "similarity": 0.9484
+        },
+        {
+          "id": "project:biocapt",
+          "similarity": 0.9481
+        }
+      ],
+      "figure:ada_lovelace": [
+        {
+          "id": "project:sentinel",
+          "similarity": 0.9716
+        },
+        {
+          "id": "identity:alias:capt_cortex",
+          "similarity": 0.9281
+        },
+        {
+          "id": "figure:david_bowie",
+          "similarity": 0.8991
+        }
+      ],
+      "figure:alan_turing": [
+        {
+          "id": "identity:alias:capt_cortex",
+          "similarity": 0.9546
+        },
+        {
+          "id": "platform:hermes",
+          "similarity": 0.95
+        },
+        {
+          "id": "figure:albert_einstein",
+          "similarity": 0.9401
+        }
+      ],
+      "figure:leonardo_da_vinci": [
+        {
+          "id": "human:kirk_evan_brown",
+          "similarity": 0.9096
+        },
+        {
+          "id": "figure:marie_curie",
+          "similarity": 0.8977
+        },
+        {
+          "id": "figure:david_bowie",
+          "similarity": 0.8928
+        }
+      ],
+      "figure:frida_kahlo": [
+        {
+          "id": "project:biocapt",
+          "similarity": 0.9683
+        },
+        {
+          "id": "project:jennai",
+          "similarity": 0.9407
+        },
+        {
+          "id": "figure:marie_curie",
+          "similarity": 0.9373
+        }
+      ],
+      "figure:david_bowie": [
+        {
+          "id": "figure:albert_einstein",
+          "similarity": 0.9203
+        },
+        {
+          "id": "project:sigil",
+          "similarity": 0.9072
+        },
+        {
+          "id": "project:sentinel",
+          "similarity": 0.9016
+        }
+      ],
+      "figure:hypatia": [
+        {
+          "id": "project:sigil",
+          "similarity": 0.8982
+        },
+        {
+          "id": "human:kirk_evan_brown",
+          "similarity": 0.8948
+        },
+        {
+          "id": "figure:marie_curie",
+          "similarity": 0.883
+        }
+      ],
+      "figure:carl_jung": [
+        {
+          "id": "figure:frida_kahlo",
+          "similarity": 0.9101
+        },
+        {
+          "id": "identity:handle:knowurknot",
+          "similarity": 0.9064
+        },
+        {
+          "id": "project:sigil",
+          "similarity": 0.9058
+        }
+      ]
+    },
+    "feature_order": [
+      "pyth_expression",
+      "pyth_soul_urge",
+      "pyth_personality",
+      "chaldean_name",
+      "ordinal_reduced",
+      "gematria_reduced",
+      "isopsephy_reduced",
+      "prime_reduced",
+      "entropy_ratio",
+      "vowel_ratio",
+      "binary_entropy",
+      "polarity_norm",
+      "syllables",
+      "chain_depth"
+    ]
+  },
+  "correlations": {
+    "n_identities": 29,
+    "magnitude_encoders": [
+      "pythagorean",
+      "chaldean",
+      "ordinal",
+      "linguistic",
+      "binary_prime",
+      "gematria",
+      "isopsephy"
+    ],
+    "pearson": {
+      "pythagorean": {
+        "pythagorean": 1.0,
+        "chaldean": 0.9044,
+        "ordinal": 0.8638,
+        "linguistic": 0.8515,
+        "binary_prime": 0.8247,
+        "gematria": 0.6336,
+        "isopsephy": 0.5132
+      },
+      "chaldean": {
+        "pythagorean": 0.9044,
+        "chaldean": 1.0,
+        "ordinal": 0.8982,
+        "linguistic": 0.8652,
+        "binary_prime": 0.8697,
+        "gematria": 0.7069,
+        "isopsephy": 0.6471
+      },
+      "ordinal": {
+        "pythagorean": 0.8638,
+        "chaldean": 0.8982,
+        "ordinal": 1.0,
+        "linguistic": 0.7959,
+        "binary_prime": 0.9958,
+        "gematria": 0.6431,
+        "isopsephy": 0.7881
+      },
+      "linguistic": {
+        "pythagorean": 0.8515,
+        "chaldean": 0.8652,
+        "ordinal": 0.7959,
+        "linguistic": 1.0,
+        "binary_prime": 0.7593,
+        "gematria": 0.5511,
+        "isopsephy": 0.5701
+      },
+      "binary_prime": {
+        "pythagorean": 0.8247,
+        "chaldean": 0.8697,
+        "ordinal": 0.9958,
+        "linguistic": 0.7593,
+        "binary_prime": 1.0,
+        "gematria": 0.6307,
+        "isopsephy": 0.8197
+      },
+      "gematria": {
+        "pythagorean": 0.6336,
+        "chaldean": 0.7069,
+        "ordinal": 0.6431,
+        "linguistic": 0.5511,
+        "binary_prime": 0.6307,
+        "gematria": 1.0,
+        "isopsephy": 0.532
+      },
+      "isopsephy": {
+        "pythagorean": 0.5132,
+        "chaldean": 0.6471,
+        "ordinal": 0.7881,
+        "linguistic": 0.5701,
+        "binary_prime": 0.8197,
+        "gematria": 0.532,
+        "isopsephy": 1.0
+      }
+    },
+    "digit_encoders": [
+      "pythagorean",
+      "chaldean",
+      "ordinal",
+      "gematria",
+      "isopsephy"
+    ],
+    "digit_agreement": {
+      "pythagorean": {
+        "pythagorean": 1.0,
+        "chaldean": 0.2069,
+        "ordinal": 1.0,
+        "gematria": 0.1724,
+        "isopsephy": 0.1034
+      },
+      "chaldean": {
+        "pythagorean": 0.2069,
+        "chaldean": 1.0,
+        "ordinal": 0.2069,
+        "gematria": 0.069,
+        "isopsephy": 0.2069
+      },
+      "ordinal": {
+        "pythagorean": 1.0,
+        "chaldean": 0.2069,
+        "ordinal": 1.0,
+        "gematria": 0.1724,
+        "isopsephy": 0.1034
+      },
+      "gematria": {
+        "pythagorean": 0.1724,
+        "chaldean": 0.069,
+        "ordinal": 0.1724,
+        "gematria": 1.0,
+        "isopsephy": 0.0345
+      },
+      "isopsephy": {
+        "pythagorean": 0.1034,
+        "chaldean": 0.2069,
+        "ordinal": 0.1034,
+        "gematria": 0.0345,
+        "isopsephy": 1.0
+      }
+    }
+  }
+}

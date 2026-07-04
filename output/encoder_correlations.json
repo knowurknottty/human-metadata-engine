@@ -1,0 +1,121 @@
+{
+  "n_identities": 29,
+  "magnitude_encoders": [
+    "pythagorean",
+    "chaldean",
+    "ordinal",
+    "linguistic",
+    "binary_prime",
+    "gematria",
+    "isopsephy"
+  ],
+  "pearson": {
+    "pythagorean": {
+      "pythagorean": 1.0,
+      "chaldean": 0.9044,
+      "ordinal": 0.8638,
+      "linguistic": 0.8515,
+      "binary_prime": 0.8247,
+      "gematria": 0.6336,
+      "isopsephy": 0.5132
+    },
+    "chaldean": {
+      "pythagorean": 0.9044,
+      "chaldean": 1.0,
+      "ordinal": 0.8982,
+      "linguistic": 0.8652,
+      "binary_prime": 0.8697,
+      "gematria": 0.7069,
+      "isopsephy": 0.6471
+    },
+    "ordinal": {
+      "pythagorean": 0.8638,
+      "chaldean": 0.8982,
+      "ordinal": 1.0,
+      "linguistic": 0.7959,
+      "binary_prime": 0.9958,
+      "gematria": 0.6431,
+      "isopsephy": 0.7881
+    },
+    "linguistic": {
+      "pythagorean": 0.8515,
+      "chaldean": 0.8652,
+      "ordinal": 0.7959,
+      "linguistic": 1.0,
+      "binary_prime": 0.7593,
+      "gematria": 0.5511,
+      "isopsephy": 0.5701
+    },
+    "binary_prime": {
+      "pythagorean": 0.8247,
+      "chaldean": 0.8697,
+      "ordinal": 0.9958,
+      "linguistic": 0.7593,
+      "binary_prime": 1.0,
+      "gematria": 0.6307,
+      "isopsephy": 0.8197
+    },
+    "gematria": {
+      "pythagorean": 0.6336,
+      "chaldean": 0.7069,
+      "ordinal": 0.6431,
+      "linguistic": 0.5511,
+      "binary_prime": 0.6307,
+      "gematria": 1.0,
+      "isopsephy": 0.532
+    },
+    "isopsephy": {
+      "pythagorean": 0.5132,
+      "chaldean": 0.6471,
+      "ordinal": 0.7881,
+      "linguistic": 0.5701,
+      "binary_prime": 0.8197,
+      "gematria": 0.532,
+      "isopsephy": 1.0
+    }
+  },
+  "digit_encoders": [
+    "pythagorean",
+    "chaldean",
+    "ordinal",
+    "gematria",
+    "isopsephy"
+  ],
+  "digit_agreement": {
+    "pythagorean": {
+      "pythagorean": 1.0,
+      "chaldean": 0.2069,
+      "ordinal": 1.0,
+      "gematria": 0.1724,
+      "isopsephy": 0.1034
+    },
+    "chaldean": {
+      "pythagorean": 0.2069,
+      "chaldean": 1.0,
+      "ordinal": 0.2069,
+      "gematria": 0.069,
+      "isopsephy": 0.2069
+    },
+    "ordinal": {
+      "pythagorean": 1.0,
+      "chaldean": 0.2069,
+      "ordinal": 1.0,
+      "gematria": 0.1724,
+      "isopsephy": 0.1034
+    },
+    "gematria": {
+      "pythagorean": 0.1724,
+      "chaldean": 0.069,
+      "ordinal": 0.1724,
+      "gematria": 1.0,
+      "isopsephy": 0.0345
+    },
+    "isopsephy": {
+      "pythagorean": 0.1034,
+      "chaldean": 0.2069,
+      "ordinal": 0.1034,
+      "gematria": 0.0345,
+      "isopsephy": 1.0
+    }
+  }
+}

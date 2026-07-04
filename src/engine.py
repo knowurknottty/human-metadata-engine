@@ -1,5 +1,5 @@
 """
-Identity Engine — Master Orchestrator (v0.3.0)
+Identity Engine — Master Orchestrator (v0.4.0)
 ==============================================
 
 Runs ALL encoders on all identity strings and produces
@@ -13,6 +13,16 @@ Encoders:
 5. Binary/Prime encoding
 6. Hebrew Gematria (absolute + ordinal)
 7. Greek Isopsephy (digital root chain)
+8. Astrology (Swiss Ephemeris, requires birth data)
+9. Human Design (requires birth data)
+
+New in v0.4.0 (second-order analytics on top of the encoders):
+- Composite resonance score (0-100) per identity
+- Identity fingerprint (deterministic visual-hash spec)
+- Cross-encoder correlation matrix (Pearson + digit agreement)
+- Identity similarity matrix + batch comparative report
+- Personality snapshots (astrology + HD + psychology narrative)
+- Famous-figure reference identities with real birth data
 """
 
 import sys
@@ -29,6 +39,12 @@ from encoders.linguistic import linguistic_signature
 from encoders.binary_prime import binary_prime_signature
 from encoders.gematria import gematria_signature
 from encoders.isopsephy import isopsephy_signature
+
+from analytics import (
+    composite_resonance, identity_fingerprint,
+    cross_encoder_correlations, identity_similarity_matrix, batch_report,
+)
+from snapshot import personality_snapshot
 
 # Optional encoders (require birth data)
 HAS_Astrology = False
@@ -89,6 +105,54 @@ IDENTITIES = [
     # Platform
     {"id": "platform:hermes", "text": "Hermes"},
     {"id": "platform:openrouter", "text": "OpenRouter"},
+    # Reference figures (well-known names, demonstrating range; birth
+    # data from public record — times approximate where noted)
+    {
+        "id": "figure:albert_einstein",
+        "text": "Albert Einstein",
+        "birth": {"year": 1879, "month": 3, "day": 14, "hour": 11, "minute": 30,
+                  "timezone_offset": 0.67, "location": "Ulm, Germany",
+                  "lat": 48.4011, "lon": 9.9876},
+    },
+    {
+        "id": "figure:nikola_tesla",
+        "text": "Nikola Tesla",
+        "birth": {"year": 1856, "month": 7, "day": 10, "hour": 0, "minute": 0,
+                  "timezone_offset": 1, "location": "Smiljan, Croatia",
+                  "lat": 44.5794, "lon": 15.3089},
+    },
+    {
+        "id": "figure:marie_curie",
+        "text": "Marie Curie",
+        "birth": {"year": 1867, "month": 11, "day": 7, "hour": 12, "minute": 0,
+                  "timezone_offset": 1.4, "location": "Warsaw, Poland",
+                  "lat": 52.2297, "lon": 21.0122},
+    },
+    {
+        "id": "figure:ada_lovelace",
+        "text": "Ada Lovelace",
+        "birth": {"year": 1815, "month": 12, "day": 10, "hour": 12, "minute": 0,
+                  "timezone_offset": 0, "location": "London, England",
+                  "lat": 51.5074, "lon": -0.1278},
+    },
+    {
+        "id": "figure:alan_turing",
+        "text": "Alan Turing",
+        "birth": {"year": 1912, "month": 6, "day": 23, "hour": 2, "minute": 15,
+                  "timezone_offset": 0, "location": "London, England",
+                  "lat": 51.5237, "lon": -0.1585},
+    },
+    {
+        "id": "figure:leonardo_da_vinci",
+        "text": "Leonardo da Vinci",
+        "birth": {"year": 1452, "month": 4, "day": 15, "hour": 21, "minute": 40,
+                  "timezone_offset": 0.73, "location": "Vinci, Italy",
+                  "lat": 43.7842, "lon": 10.9236},
+    },
+    {"id": "figure:frida_kahlo", "text": "Frida Kahlo"},
+    {"id": "figure:david_bowie", "text": "David Bowie"},
+    {"id": "figure:hypatia", "text": "Hypatia of Alexandria"},
+    {"id": "figure:carl_jung", "text": "Carl Gustav Jung"},
 ]
 
 
@@ -201,16 +265,19 @@ def compute_unified_signature(identity: dict) -> dict:
                 birth["year"], birth["month"], birth["day"],
                 birth["hour"], birth["minute"],
                 birth["timezone_offset"], birth["location"],
+                lat=birth.get("lat"), lon=birth.get("lon"),
             )
             result["encoders"]["astrology"] = {
                 "sun_sign": chart.sun_sign,
                 "moon_sign": chart.moon_sign,
                 "ascendant": chart.ascendant,
-                "descendant": chart.descendant,
                 "midheaven": chart.midheaven,
                 "chart_ruler": chart.chart_ruler,
                 "dominant_element": chart.dominant_element,
-                "dominant_quality": chart.dominant_quality,
+                "dominant_modality": chart.dominant_modality,
+                "element_counts": chart.element_counts,
+                "modality_counts": chart.modality_counts,
+                "yin_yang_balance": chart.yin_yang_balance,
                 "lunar_phase": chart.lunar_phase,
                 "is_waxing": chart.is_waxing,
                 "planets": [
@@ -219,11 +286,10 @@ def compute_unified_signature(identity: dict) -> dict:
                     for p in chart.planets
                 ],
                 "aspects": [
-                    {"planets": (a.planet1, a.planet2), "type": a.aspect_type,
-                     "exact": a.is_exact, "orb": round(a.orb, 2)}
+                    {"planets": (a.planet1, a.planet2), "type": a.aspect_name,
+                     "exact": a.exact, "orb": round(a.orb, 2)}
                     for a in chart.aspects[:15]
                 ],
-                "houses": chart.houses,
                 "confidence": chart.confidence,
             }
             dim_count += 20
@@ -237,18 +303,20 @@ def compute_unified_signature(identity: dict) -> dict:
                 birth["year"], birth["month"], birth["day"],
                 birth["hour"], birth["minute"],
                 birth["timezone_offset"], birth["location"],
+                lat=birth.get("lat"), lon=birth.get("lon"),
             )
             result["encoders"]["human_design"] = {
                 "type": hd.hd_type,
                 "strategy": hd.strategy,
                 "authority": hd.authority,
-                "profile": hd.profile_number,
+                "profile": list(hd.profile_number),
+                "profile_description": hd.profile_description,
                 "not_self_theme": hd.not_self_theme,
                 "signature": hd.signature,
-                "definition": hd.definition,
+                "definition": hd.definition_type,
+                "incarnation_cross": hd.incarnation_cross,
                 "personality_gates": [
-                    {"gate": g.gate, "line": g.line, "planet": g.planet,
-                     "color": g.color, "tone": g.tone}
+                    {"gate": g.gate, "line": g.line, "planet": g.planet, "sign": g.sign}
                     for g in hd.personality_gates
                 ],
                 "design_gates": [
@@ -256,13 +324,28 @@ def compute_unified_signature(identity: dict) -> dict:
                     for g in hd.design_gates
                 ],
                 "channels": hd.channels,
-                "centers": hd.centers,
-                "gates": hd.gates,
+                "centers": [
+                    {"name": c.name, "defined": c.defined}
+                    for c in hd.centers
+                ],
+                "gates": hd.all_gates,
                 "confidence": hd.confidence,
             }
             dim_count += 15
         except Exception as e:
             result["encoders"]["human_design"] = {"error": str(e)}
+
+    # Second-order analytics (v0.4.0)
+    result["resonance"] = composite_resonance(result)
+    result["fingerprint"] = identity_fingerprint(result)
+    result["snapshot"] = personality_snapshot(
+        text,
+        astrology=result["encoders"].get("astrology"),
+        human_design=result["encoders"].get("human_design"),
+        psychology=identity.get("psychology"),
+    )
+    dim_count += len(result["resonance"]["components"]) + 1  # score + components
+    dim_count += len(result["fingerprint"]["spokes"]) + 2    # spokes + hash + symmetry
 
     result["dimensions"] = dim_count
     return result
@@ -270,9 +353,9 @@ def compute_unified_signature(identity: dict) -> dict:
 
 def run_engine():
     """Run the complete engine and generate all outputs."""
-    print("Human Metadata Engine v0.3.0")
+    print("Human Metadata Engine v0.4.0")
     print("=" * 60)
-    print(f"Running {len(IDENTITIES)} identities through 7+ encoders...")
+    print(f"Running {len(IDENTITIES)} identities through 9 encoders + analytics...")
     print()
 
     # Compute all signatures
@@ -307,6 +390,22 @@ def run_engine():
     print(f"\nEncoder coverage:")
     for name, count in sorted(encoder_counts.items()):
         print(f"  {name:<20} {count}/{len(signatures)} identities")
+
+    # ---- v0.4.0 analytics outputs ----
+    correlations = cross_encoder_correlations(signatures)
+    with open("output/encoder_correlations.json", "w") as f:
+        json.dump(correlations, f, indent=2)
+    print("\nSaved cross-encoder correlation matrix to output/encoder_correlations.json")
+
+    report_json, report_md = batch_report(signatures)
+    with open("output/comparative_report.json", "w") as f:
+        json.dump(report_json, f, indent=2)
+    with open("output/comparative_report.md", "w") as f:
+        f.write(report_md)
+    print("Saved batch comparative report to output/comparative_report.{json,md}")
+
+    top = report_json["ranking"][0]
+    print(f"\nHighest resonance: {top['text']} ({top['resonance']}/100)")
 
     return signatures
 
