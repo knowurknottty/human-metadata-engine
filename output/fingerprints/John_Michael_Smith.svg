@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+<rect width="300" height="300" fill="#0a0a0a"/>
+<circle cx="150.0" cy="150.0" r="23.076923076923077" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+<circle cx="150.0" cy="150.0" r="46.15384615384615" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.15000000000000002"/>
+<circle cx="150.0" cy="150.0" r="69.23076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.2"/>
+<circle cx="150.0" cy="150.0" r="92.3076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.25"/>
+<circle cx="150.0" cy="150.0" r="115.38461538461539" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.30000000000000004"/>
+<circle cx="150.0" cy="150.0" r="138.46153846153845" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.35"/>
+<path d="M150.0,150.0 Q235.9576039741936,132.57553104615081 237.70588235294116,150.0 Q235.9576039741936,167.42446895384919 150.0,150.0" fill="hsl(260, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q165.1105555716479,224.54271089110148 150.0,226.05882352941177 Q134.8894444283521,224.54271089110148 150.0,150.0" fill="hsl(276, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q20.45825879945471,176.25941095861785 17.823529411764696,150.00000000000003 Q20.45825879945471,123.7405890413822 150.0,150.0" fill="hsl(21, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q137.97466227128714,90.67714655302132 150.0,89.47058823529412 Q162.02533772871283,90.67714655302132 150.0,150.0" fill="hsl(113, 70%, 60%)" opacity="0.6"/>
+<circle cx="150.0" cy="150.0" r="3" fill="#ffffff" opacity="0.8"/>
+<text x="150.0" y="292" text-anchor="middle" fill="#666666" font-size="8" font-family="monospace">John Michael Smith</text>
+</svg>
