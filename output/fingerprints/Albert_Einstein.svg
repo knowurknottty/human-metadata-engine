@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+<rect width="300" height="300" fill="#0a0a0a"/>
+<circle cx="150.0" cy="150.0" r="23.076923076923077" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+<circle cx="150.0" cy="150.0" r="46.15384615384615" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.15000000000000002"/>
+<circle cx="150.0" cy="150.0" r="69.23076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.2"/>
+<circle cx="150.0" cy="150.0" r="92.3076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.25"/>
+<circle cx="150.0" cy="150.0" r="115.38461538461539" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.30000000000000004"/>
+<circle cx="150.0" cy="150.0" r="138.46153846153845" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.35"/>
+<path d="M150.0,150.0 Q196.8702428108782,140.49893141550677 197.8235294117647,150.0 Q196.8702428108782,159.50106858449323 150.0,150.0" fill="hsl(204, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q163.8484209995381,218.31640557305127 150.0,219.70588235294116 Q136.1515790004619,218.31640557305127 150.0,150.0" fill="hsl(21, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q22.18778805446867,175.90881802192067 19.588235294117652,150.00000000000003 Q22.18778805446867,124.09118197807936 150.0,150.0" fill="hsl(287, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q128.2281786311059,42.596233263633366 149.99999999999997,40.41176470588236 Q171.77182136889405,42.59623326363335 150.0,150.0" fill="hsl(129, 70%, 60%)" opacity="0.6"/>
+<circle cx="150.0" cy="150.0" r="3" fill="#ffffff" opacity="0.8"/>
+<text x="150.0" y="292" text-anchor="middle" fill="#666666" font-size="8" font-family="monospace">Albert Einstein</text>
+</svg>

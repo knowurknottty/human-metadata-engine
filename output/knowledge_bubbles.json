@@ -1,0 +1,55 @@
+[
+  {
+    "topic": "Master Number 11 (Illuminator)",
+    "insight": "10 identities carry master number 11: Captain(soul_urge), JennAI(personality), SynSync(expression), SynSync(personality), Sigil(expression). Illuminators are rare \u2014 approximately 1 in 11 names. This cluster shows elevated spiritual or creative potential.",
+    "confidence": 0.9,
+    "evidence": [
+      "Captain(soul_urge)",
+      "JennAI(personality)",
+      "SynSync(expression)",
+      "SynSync(personality)",
+      "Sigil(expression)"
+    ],
+    "category": "numerology"
+  },
+  {
+    "topic": "Master Number 22 (Master Builder)",
+    "insight": "2 identities carry master number 22: Hermes(personality), Nikola Tesla(soul_urge). Master Builders are rare \u2014 approximately 1 in 11 names. This cluster shows elevated spiritual or creative potential.",
+    "confidence": 0.9,
+    "evidence": [
+      "Hermes(personality)",
+      "Nikola Tesla(soul_urge)"
+    ],
+    "category": "numerology"
+  },
+  {
+    "topic": "Complex Names with High Expression",
+    "insight": "3 identities combine high phonetic complexity (entropy >3.0) with high expression numbers (>7): Albert Einstein, Nikola Tesla, Leonardo da Vinci. These names are both phonetically rich and numerologically powerful.",
+    "confidence": 0.75,
+    "evidence": [
+      "Albert Einstein: entropy=3.04, expr=9",
+      "Nikola Tesla: entropy=3.10, expr=11",
+      "Leonardo da Vinci: entropy=3.24, expr=11"
+    ],
+    "category": "correlation"
+  },
+  {
+    "topic": "Dominant Karmic Lesson: authority",
+    "insight": "The most common karmic lesson across identities is 8 (authority), appearing in 23/27 identities (85%). This suggests the dataset over-indexes on this growth area.",
+    "confidence": 0.7,
+    "evidence": [
+      "Lesson 8: 23/27 identities"
+    ],
+    "category": "karmic"
+  },
+  {
+    "topic": "Polarity Spectrum",
+    "insight": "The polarity spectrum spans from CAPT (most analytical/masculine, -6350% vowel) to Marie Curie (most creative/feminine, -17% vowel). The range of 6333% suggests significant diversity in the dataset.",
+    "confidence": 0.8,
+    "evidence": [
+      "CAPT: -6350%",
+      "Marie Curie: -17%"
+    ],
+    "category": "polarity"
+  }
+]

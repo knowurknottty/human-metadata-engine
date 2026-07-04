@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+<rect width="300" height="300" fill="#0a0a0a"/>
+<circle cx="150.0" cy="150.0" r="23.076923076923077" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+<circle cx="150.0" cy="150.0" r="46.15384615384615" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.15000000000000002"/>
+<circle cx="150.0" cy="150.0" r="69.23076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.2"/>
+<circle cx="150.0" cy="150.0" r="92.3076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.25"/>
+<circle cx="150.0" cy="150.0" r="115.38461538461539" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.30000000000000004"/>
+<circle cx="150.0" cy="150.0" r="138.46153846153845" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.35"/>
+<path d="M150.0,150.0 Q199.98339546990331,139.86786412945187 201.0,150.0 Q199.98339546990331,160.13213587054813 150.0,150.0" fill="hsl(308, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q117.62209287087114,246.53860508525082 99.08823529411767,238.18176317358018 Q82.58406911482363,226.30939263782432 150.0,150.0" fill="hsl(262, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q81.41568209774945,72.36808755909385 98.20588235294113,60.289956702094344 Q117.06095063293125,51.788282174970135 150.0,150.0" fill="hsl(113, 70%, 60%)" opacity="0.6"/>
+<circle cx="150.0" cy="150.0" r="3" fill="#ffffff" opacity="0.8"/>
+<text x="150.0" y="292" text-anchor="middle" fill="#666666" font-size="8" font-family="monospace">Frida Kahlo</text>
+</svg>

@@ -173,6 +173,62 @@ Each bubble contains:
 - **Avg Clustering Coefficient:** 0.414
 - **Connected Components:** 3
 
+## Invention Suite (20 Modules)
+
+The engine ships with 20 self-contained invention modules:
+
+### Core Encoders (9)
+1. **Pythagorean** — Expression, Soul Urge, Personality, Karmic Lessons
+2. **Chaldean** — Alternative numerology with occult letter values
+3. **Ordinal (A1Z26)** — Simple letter-to-number mapping
+4. **Linguistic** — Shannon entropy, bigrams, trigrams, syllable analysis
+5. **Binary/Prime** — Vowel/consonant polarity, prime number mapping
+6. **Gematria** — Hebrew alphabet numeric values
+7. **Isopsephy** — Greek alphabet numeric values
+8. **Astrology** — Birth chart computation (requires birth data)
+9. **Human Design** — Type, strategy, authority (requires birth data)
+
+### Analytics & Search (3)
+10. **Identity Search** — Cosine similarity search across all signatures
+11. **Signature Diff** — Dimension-by-dimension comparison of two identities
+12. **Clustering** — Unsupervised hierarchical grouping of identities
+
+### Generation (3)
+13. **Personality Narrative** — Human-readable profile from numeric data
+14. **SVG Fingerprint** — Deterministic visual identity fingerprint
+15. **Name Generator** — Find names with target numerological properties
+
+### Analysis (2)
+16. **Knowledge Bubble Miner** — Extract novel cross-encoder insights
+17. **Anomaly Detection** — Z-score outlier detection across dimensions
+
+### Infrastructure (3)
+18. **SQLite Persistence** — Historical tracking of signatures and drift
+19. **Export System** — CSV, JSONL, webhook, and markdown export
+20. **CLI Batch Tool** — Command-line interface for all operations
+
+### APIs (2)
+- **REST API** — `/encode`, `/compare`, `/search`, `/narrative`, `/fingerprint`
+- **Web Dashboard** — Interactive comparison and graph visualization
+
+```bash
+# Run all 20 inventions
+python3 -m src.run_all
+
+# CLI usage
+python3 -m src.cli add "Captain"
+python3 -m src.cli compare "Captain" "Jenn"
+python3 -m src.cli search "Captain"
+python3 -m src.cli narrative "Captain"
+python3 -m src.cli cluster
+python3 -m src.cli anomaly
+python3 -m src.cli export --format csv
+python3 -m src.cli stats
+
+# Start API server
+python3 -m src.api
+```
+
 ## Test Coverage
 
 ```

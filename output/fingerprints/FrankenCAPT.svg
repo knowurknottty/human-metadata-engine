@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+<rect width="300" height="300" fill="#0a0a0a"/>
+<circle cx="150.0" cy="150.0" r="23.076923076923077" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+<circle cx="150.0" cy="150.0" r="46.15384615384615" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.15000000000000002"/>
+<circle cx="150.0" cy="150.0" r="69.23076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.2"/>
+<circle cx="150.0" cy="150.0" r="92.3076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.25"/>
+<circle cx="150.0" cy="150.0" r="115.38461538461539" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.30000000000000004"/>
+<circle cx="150.0" cy="150.0" r="138.46153846153845" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.35"/>
+<path d="M150.0,150.0 Q278.1581177965341,124.02106339073994 280.7647058823529,150.0 Q278.1581177965341,175.97893660926007 150.0,150.0" fill="hsl(98, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q121.77454543162597,234.1575708108859 105.61764705882355,226.87249025357164 Q91.23013304117208,216.52274609501842 150.0,150.0" fill="hsl(61, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q111.09271233143198,105.96009055737352 120.61764705882351,99.10827185996153 Q131.31396347660325,94.28534576535785 150.0,150.0" fill="hsl(145, 70%, 60%)" opacity="0.6"/>
+<circle cx="150.0" cy="150.0" r="3" fill="#ffffff" opacity="0.8"/>
+<text x="150.0" y="292" text-anchor="middle" fill="#666666" font-size="8" font-family="monospace">FrankenCAPT</text>
+</svg>

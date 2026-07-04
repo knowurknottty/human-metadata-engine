@@ -1,8 +1,8 @@
-[
-  {
+{
+  "Kirk Evan Brown": {
     "id": "human:kirk_evan_brown",
     "text": "Kirk Evan Brown",
-    "computed_at": "2026-07-04T18:46:04.402104Z",
+    "computed_at": "2026-07-04T20:03:04.472156Z",
     "dimensions": 105,
     "encoders": {
       "pythagorean": {
@@ -71,11 +71,31 @@
         "fricative_count": 1,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='KI', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='IR', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='RK', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='KE', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='EV', count=1, frequency=0.08333333333333333)"
+          {
+            "bigram": "KI",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "IR",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "RK",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "KE",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "EV",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          }
         ],
         "repetition_ratio": 0.2308,
         "is_palindrome": false
@@ -834,10 +854,10 @@
       ]
     }
   },
-  {
+  "Captain": {
     "id": "identity:alias:captain",
     "text": "Captain",
-    "computed_at": "2026-07-04T18:46:04.403969Z",
+    "computed_at": "2026-07-04T20:03:04.473456Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -906,11 +926,31 @@
         "fricative_count": 0,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='CA', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='AP', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='PT', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='TA', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='AI', count=1, frequency=0.16666666666666666)"
+          {
+            "bigram": "CA",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "AP",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "PT",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "TA",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "AI",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          }
         ],
         "repetition_ratio": 0.1429,
         "is_palindrome": false
@@ -1134,10 +1174,10 @@
       "highlights": []
     }
   },
-  {
-    "id": "identity:alias:capt",
+  "CAPT": {
+    "id": "project:capt",
     "text": "CAPT",
-    "computed_at": "2026-07-04T18:46:04.404283Z",
+    "computed_at": "2026-07-04T20:03:04.473910Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -1211,9 +1251,21 @@
         "fricative_count": 0,
         "nasal_count": 0,
         "bigrams_top5": [
-          "BigramStats(bigram='CA', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='AP', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='PT', count=1, frequency=0.3333333333333333)"
+          {
+            "bigram": "CA",
+            "count": 1,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "bigram": "AP",
+            "count": 1,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "bigram": "PT",
+            "count": 1,
+            "frequency": 0.3333333333333333
+          }
         ],
         "repetition_ratio": 0.0,
         "is_palindrome": false
@@ -1386,10 +1438,10 @@
       "highlights": []
     }
   },
-  {
+  "Capt Cortex": {
     "id": "identity:alias:capt_cortex",
     "text": "Capt Cortex",
-    "computed_at": "2026-07-04T18:46:04.404596Z",
+    "computed_at": "2026-07-04T20:03:04.473687Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -1459,11 +1511,31 @@
         "fricative_count": 0,
         "nasal_count": 0,
         "bigrams_top5": [
-          "BigramStats(bigram='CA', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='AP', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='PT', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='TC', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='CO', count=1, frequency=0.1111111111111111)"
+          {
+            "bigram": "CA",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "AP",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "PT",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "TC",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "CO",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          }
         ],
         "repetition_ratio": 0.2,
         "is_palindrome": false
@@ -1738,10 +1810,10 @@
       "highlights": []
     }
   },
-  {
+  "Knowurknot": {
     "id": "identity:handle:knowurknot",
     "text": "Knowurknot",
-    "computed_at": "2026-07-04T18:46:04.404948Z",
+    "computed_at": "2026-07-04T20:03:04.473817Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -1812,11 +1884,31 @@
         "fricative_count": 0,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='KN', count=2, frequency=0.2222222222222222)",
-          "BigramStats(bigram='NO', count=2, frequency=0.2222222222222222)",
-          "BigramStats(bigram='OW', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='WU', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='UR', count=1, frequency=0.1111111111111111)"
+          {
+            "bigram": "KN",
+            "count": 2,
+            "frequency": 0.2222222222222222
+          },
+          {
+            "bigram": "NO",
+            "count": 2,
+            "frequency": 0.2222222222222222
+          },
+          {
+            "bigram": "OW",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "WU",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "UR",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          }
         ],
         "repetition_ratio": 0.3,
         "is_palindrome": false
@@ -2091,262 +2183,10 @@
       "highlights": []
     }
   },
-  {
-    "id": "project:capt",
-    "text": "CAPT",
-    "computed_at": "2026-07-04T18:46:04.405193Z",
-    "dimensions": 70,
-    "encoders": {
-      "pythagorean": {
-        "total": 13,
-        "expression": 4,
-        "master_preserved": null,
-        "soul_urge": 1,
-        "personality": 3,
-        "soul_urge_total": 1,
-        "personality_total": 12,
-        "balance_number": 3,
-        "hidden_passion": [
-          1,
-          2,
-          3,
-          7
-        ],
-        "karmic_lessons": [
-          4,
-          5,
-          6,
-          8,
-          9
-        ],
-        "intensity_table": {
-          "1": 1,
-          "2": 1,
-          "3": 1,
-          "4": 0,
-          "5": 0,
-          "6": 0,
-          "7": 1,
-          "8": 0,
-          "9": 0
-        },
-        "vowel_ratio": 0.25
-      },
-      "chaldean": {
-        "compound_number": 16,
-        "name_number": 7,
-        "soul_urge": 1,
-        "personality": 6,
-        "intensity_table": {
-          "1": 1,
-          "2": 0,
-          "3": 1,
-          "4": 1,
-          "5": 0,
-          "6": 0,
-          "7": 0,
-          "8": 1,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "ordinal_total": 40,
-        "ordinal_reduced": 4,
-        "reverse": 68,
-        "reverse_reduced": 5,
-        "reduced_total": 13
-      },
-      "linguistic": {
-        "letter_count": 4,
-        "unique_letters": 4,
-        "shannon_entropy": 2.0,
-        "max_possible_entropy": 4.7004,
-        "entropy_ratio": 0.4255,
-        "vowel_ratio": 0.25,
-        "syllable_estimate": 1,
-        "plosive_count": 2,
-        "fricative_count": 0,
-        "nasal_count": 0,
-        "bigrams_top5": [
-          "BigramStats(bigram='CA', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='AP', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='PT', count=1, frequency=0.3333333333333333)"
-        ],
-        "repetition_ratio": 0.0,
-        "is_palindrome": false
-      },
-      "binary_prime": {
-        "binary_string": "1011",
-        "binary_weight": 3,
-        "binary_entropy": 0.8113,
-        "prime_total": 131,
-        "prime_reduced": 5,
-        "vowel_power": 2,
-        "consonant_power": 129,
-        "polarity_score": -127,
-        "polarity_ratio": 0.0155
-      },
-      "gematria": {
-        "absolute_total": 390,
-        "absolute_reduced": 3,
-        "ordinal_total": 40,
-        "ordinal_reduced": 4,
-        "reduced_total": 21,
-        "letter_values": [
-          {
-            "char": "C",
-            "absolute": 300,
-            "ordinal": 3,
-            "reduced": 3,
-            "index": 0
-          },
-          {
-            "char": "A",
-            "absolute": 1,
-            "ordinal": 1,
-            "reduced": 1,
-            "index": 1
-          },
-          {
-            "char": "P",
-            "absolute": 80,
-            "ordinal": 16,
-            "reduced": 8,
-            "index": 2
-          },
-          {
-            "char": "T",
-            "absolute": 9,
-            "ordinal": 20,
-            "reduced": 9,
-            "index": 3
-          }
-        ],
-        "gematria_ordinal_ratio": 9.75
-      },
-      "isopsephy": {
-        "total": 681,
-        "reduced": 6,
-        "digital_root_chain": [
-          681,
-          15,
-          6
-        ],
-        "letter_values": [
-          {
-            "char": "C",
-            "value": 300,
-            "index": 0
-          },
-          {
-            "char": "A",
-            "value": 1,
-            "index": 1
-          },
-          {
-            "char": "P",
-            "value": 80,
-            "index": 2
-          },
-          {
-            "char": "T",
-            "value": 300,
-            "index": 3
-          }
-        ],
-        "greek_correspondence": [
-          {
-            "letter": "C",
-            "greek": "\u03c4",
-            "value": 300
-          },
-          {
-            "letter": "A",
-            "greek": "\u03b1",
-            "value": 1
-          },
-          {
-            "letter": "P",
-            "greek": "\u03c0",
-            "value": 80
-          },
-          {
-            "letter": "T",
-            "greek": "\u03c4",
-            "value": 300
-          }
-        ]
-      }
-    },
-    "resonance": {
-      "score": 45.0,
-      "components": {
-        "numerological_convergence": 0.25,
-        "linguistic_harmony": 0.5628,
-        "polarity_balance": 0.5771,
-        "symbolic_depth": 0.5333
-      },
-      "weights": {
-        "numerological_convergence": 0.35,
-        "linguistic_harmony": 0.25,
-        "polarity_balance": 0.2,
-        "symbolic_depth": 0.2
-      }
-    },
-    "fingerprint": {
-      "hash": "cbcd3805dd9ab65f",
-      "full_hash": "cbcd3805dd9ab65f2cd3ce9061f1dacd1fe5a6171640ca2291445c5f11ed64aa",
-      "symmetry": 4,
-      "spokes": [
-        {
-          "encoder": "pythagorean",
-          "value": 0.1083,
-          "hue": 45
-        },
-        {
-          "encoder": "chaldean",
-          "value": 0.1778,
-          "hue": 30
-        },
-        {
-          "encoder": "ordinal",
-          "value": 0.1333,
-          "hue": 200
-        },
-        {
-          "encoder": "linguistic",
-          "value": 0.4762,
-          "hue": 220
-        },
-        {
-          "encoder": "binary_prime",
-          "value": 0.1456,
-          "hue": 160
-        },
-        {
-          "encoder": "gematria",
-          "value": 0.26,
-          "hue": 280
-        },
-        {
-          "encoder": "isopsephy",
-          "value": 0.227,
-          "hue": 260
-        }
-      ],
-      "ring_pattern": "1011",
-      "seed": 3419224069
-    },
-    "snapshot": {
-      "available_layers": [],
-      "narrative": "No birth data or psychological assessments were supplied for CAPT, so the snapshot rests on name-derived encoders alone. Add a birth date/time/place to unlock the celestial and Human Design layers, or supply assessments for the psychology layer.",
-      "highlights": []
-    }
-  },
-  {
+  "FrankenCAPT": {
     "id": "project:frankencapt",
     "text": "FrankenCAPT",
-    "computed_at": "2026-07-04T18:46:04.405491Z",
+    "computed_at": "2026-07-04T20:03:04.474042Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -2414,11 +2254,31 @@
         "fricative_count": 1,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='FR', count=1, frequency=0.1)",
-          "BigramStats(bigram='RA', count=1, frequency=0.1)",
-          "BigramStats(bigram='AN', count=1, frequency=0.1)",
-          "BigramStats(bigram='NK', count=1, frequency=0.1)",
-          "BigramStats(bigram='KE', count=1, frequency=0.1)"
+          {
+            "bigram": "FR",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "RA",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "AN",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "NK",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "KE",
+            "count": 1,
+            "frequency": 0.1
+          }
         ],
         "repetition_ratio": 0.1818,
         "is_palindrome": false
@@ -2710,10 +2570,10 @@
       "highlights": []
     }
   },
-  {
+  "bioCAPT": {
     "id": "project:biocapt",
     "text": "bioCAPT",
-    "computed_at": "2026-07-04T18:46:04.405816Z",
+    "computed_at": "2026-07-04T20:03:04.474151Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -2782,11 +2642,31 @@
         "fricative_count": 0,
         "nasal_count": 0,
         "bigrams_top5": [
-          "BigramStats(bigram='BI', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='IO', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='OC', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='CA', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='AP', count=1, frequency=0.16666666666666666)"
+          {
+            "bigram": "BI",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "IO",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "OC",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "CA",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "AP",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          }
         ],
         "repetition_ratio": 0.0,
         "is_palindrome": false
@@ -3010,10 +2890,10 @@
       "highlights": []
     }
   },
-  {
+  "Inversion Labs": {
     "id": "project:inversion_labs",
     "text": "Inversion Labs",
-    "computed_at": "2026-07-04T18:46:04.406180Z",
+    "computed_at": "2026-07-04T20:03:04.474300Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -3083,11 +2963,31 @@
         "fricative_count": 3,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='IN', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='NV', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='VE', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='ER', count=1, frequency=0.08333333333333333)",
-          "BigramStats(bigram='RS', count=1, frequency=0.08333333333333333)"
+          {
+            "bigram": "IN",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "NV",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "VE",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "ER",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          },
+          {
+            "bigram": "RS",
+            "count": 1,
+            "frequency": 0.08333333333333333
+          }
         ],
         "repetition_ratio": 0.2308,
         "is_palindrome": false
@@ -3413,10 +3313,10 @@
       "highlights": []
     }
   },
-  {
+  "JennAI": {
     "id": "project:jennai",
     "text": "JennAI",
-    "computed_at": "2026-07-04T18:46:04.406550Z",
+    "computed_at": "2026-07-04T20:03:04.474421Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -3488,11 +3388,31 @@
         "fricative_count": 0,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='JE', count=1, frequency=0.2)",
-          "BigramStats(bigram='EN', count=1, frequency=0.2)",
-          "BigramStats(bigram='NN', count=1, frequency=0.2)",
-          "BigramStats(bigram='NA', count=1, frequency=0.2)",
-          "BigramStats(bigram='AI', count=1, frequency=0.2)"
+          {
+            "bigram": "JE",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "EN",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "NN",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "NA",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "AI",
+            "count": 1,
+            "frequency": 0.2
+          }
         ],
         "repetition_ratio": 0.1667,
         "is_palindrome": false
@@ -3698,10 +3618,10 @@
       "highlights": []
     }
   },
-  {
+  "SynSync": {
     "id": "project:synsync",
     "text": "SynSync",
-    "computed_at": "2026-07-04T18:46:04.406938Z",
+    "computed_at": "2026-07-04T20:03:04.474543Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -3774,10 +3694,26 @@
         "fricative_count": 2,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='SY', count=2, frequency=0.3333333333333333)",
-          "BigramStats(bigram='YN', count=2, frequency=0.3333333333333333)",
-          "BigramStats(bigram='NS', count=1, frequency=0.16666666666666666)",
-          "BigramStats(bigram='NC', count=1, frequency=0.16666666666666666)"
+          {
+            "bigram": "SY",
+            "count": 2,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "bigram": "YN",
+            "count": 2,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "bigram": "NS",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          },
+          {
+            "bigram": "NC",
+            "count": 1,
+            "frequency": 0.16666666666666666
+          }
         ],
         "repetition_ratio": 0.4286,
         "is_palindrome": false
@@ -4000,10 +3936,10 @@
       "highlights": []
     }
   },
-  {
+  "Sigil": {
     "id": "project:sigil",
     "text": "Sigil",
-    "computed_at": "2026-07-04T18:46:04.407227Z",
+    "computed_at": "2026-07-04T20:03:04.474668Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -4074,10 +4010,26 @@
         "fricative_count": 1,
         "nasal_count": 0,
         "bigrams_top5": [
-          "BigramStats(bigram='SI', count=1, frequency=0.25)",
-          "BigramStats(bigram='IG', count=1, frequency=0.25)",
-          "BigramStats(bigram='GI', count=1, frequency=0.25)",
-          "BigramStats(bigram='IL', count=1, frequency=0.25)"
+          {
+            "bigram": "SI",
+            "count": 1,
+            "frequency": 0.25
+          },
+          {
+            "bigram": "IG",
+            "count": 1,
+            "frequency": 0.25
+          },
+          {
+            "bigram": "GI",
+            "count": 1,
+            "frequency": 0.25
+          },
+          {
+            "bigram": "IL",
+            "count": 1,
+            "frequency": 0.25
+          }
         ],
         "repetition_ratio": 0.2,
         "is_palindrome": false
@@ -4267,10 +4219,10 @@
       "highlights": []
     }
   },
-  {
+  "Sentinel": {
     "id": "project:sentinel",
     "text": "Sentinel",
-    "computed_at": "2026-07-04T18:46:04.407501Z",
+    "computed_at": "2026-07-04T20:03:04.474792Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -4340,11 +4292,31 @@
         "fricative_count": 1,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='SE', count=1, frequency=0.14285714285714285)",
-          "BigramStats(bigram='EN', count=1, frequency=0.14285714285714285)",
-          "BigramStats(bigram='NT', count=1, frequency=0.14285714285714285)",
-          "BigramStats(bigram='TI', count=1, frequency=0.14285714285714285)",
-          "BigramStats(bigram='IN', count=1, frequency=0.14285714285714285)"
+          {
+            "bigram": "SE",
+            "count": 1,
+            "frequency": 0.14285714285714285
+          },
+          {
+            "bigram": "EN",
+            "count": 1,
+            "frequency": 0.14285714285714285
+          },
+          {
+            "bigram": "NT",
+            "count": 1,
+            "frequency": 0.14285714285714285
+          },
+          {
+            "bigram": "TI",
+            "count": 1,
+            "frequency": 0.14285714285714285
+          },
+          {
+            "bigram": "IN",
+            "count": 1,
+            "frequency": 0.14285714285714285
+          }
         ],
         "repetition_ratio": 0.25,
         "is_palindrome": false
@@ -4585,10 +4557,10 @@
       "highlights": []
     }
   },
-  {
+  "Titan": {
     "id": "project:titan",
     "text": "Titan",
-    "computed_at": "2026-07-04T18:46:04.407797Z",
+    "computed_at": "2026-07-04T20:03:04.474896Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -4659,10 +4631,26 @@
         "fricative_count": 0,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='TI', count=1, frequency=0.25)",
-          "BigramStats(bigram='IT', count=1, frequency=0.25)",
-          "BigramStats(bigram='TA', count=1, frequency=0.25)",
-          "BigramStats(bigram='AN', count=1, frequency=0.25)"
+          {
+            "bigram": "TI",
+            "count": 1,
+            "frequency": 0.25
+          },
+          {
+            "bigram": "IT",
+            "count": 1,
+            "frequency": 0.25
+          },
+          {
+            "bigram": "TA",
+            "count": 1,
+            "frequency": 0.25
+          },
+          {
+            "bigram": "AN",
+            "count": 1,
+            "frequency": 0.25
+          }
         ],
         "repetition_ratio": 0.2,
         "is_palindrome": false
@@ -4852,260 +4840,10 @@
       "highlights": []
     }
   },
-  {
-    "id": "human:jenn",
-    "text": "Jenn",
-    "computed_at": "2026-07-04T18:46:04.408037Z",
-    "dimensions": 70,
-    "encoders": {
-      "pythagorean": {
-        "total": 16,
-        "expression": 7,
-        "master_preserved": null,
-        "soul_urge": 5,
-        "personality": 11,
-        "soul_urge_total": 5,
-        "personality_total": 11,
-        "balance_number": 1,
-        "hidden_passion": [
-          5
-        ],
-        "karmic_lessons": [
-          2,
-          3,
-          4,
-          6,
-          7,
-          8,
-          9
-        ],
-        "intensity_table": {
-          "1": 1,
-          "2": 0,
-          "3": 0,
-          "4": 0,
-          "5": 3,
-          "6": 0,
-          "7": 0,
-          "8": 0,
-          "9": 0
-        },
-        "vowel_ratio": 0.25
-      },
-      "chaldean": {
-        "compound_number": 16,
-        "name_number": 7,
-        "soul_urge": 5,
-        "personality": 2,
-        "intensity_table": {
-          "1": 1,
-          "2": 0,
-          "3": 0,
-          "4": 0,
-          "5": 3,
-          "6": 0,
-          "7": 0,
-          "8": 0,
-          "9": 0
-        }
-      },
-      "ordinal": {
-        "ordinal_total": 43,
-        "ordinal_reduced": 7,
-        "reverse": 65,
-        "reverse_reduced": 2,
-        "reduced_total": 16
-      },
-      "linguistic": {
-        "letter_count": 4,
-        "unique_letters": 3,
-        "shannon_entropy": 1.5,
-        "max_possible_entropy": 4.7004,
-        "entropy_ratio": 0.3191,
-        "vowel_ratio": 0.25,
-        "syllable_estimate": 1,
-        "plosive_count": 0,
-        "fricative_count": 0,
-        "nasal_count": 2,
-        "bigrams_top5": [
-          "BigramStats(bigram='JE', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='EN', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='NN', count=1, frequency=0.3333333333333333)"
-        ],
-        "repetition_ratio": 0.25,
-        "is_palindrome": false
-      },
-      "binary_prime": {
-        "binary_string": "1011",
-        "binary_weight": 3,
-        "binary_entropy": 0.8113,
-        "prime_total": 126,
-        "prime_reduced": 9,
-        "vowel_power": 11,
-        "consonant_power": 115,
-        "polarity_score": -104,
-        "polarity_ratio": 0.0957
-      },
-      "gematria": {
-        "absolute_total": 408,
-        "absolute_reduced": 3,
-        "ordinal_total": 43,
-        "ordinal_reduced": 7,
-        "reduced_total": 21,
-        "letter_values": [
-          {
-            "char": "J",
-            "absolute": 8,
-            "ordinal": 10,
-            "reduced": 8,
-            "index": 0
-          },
-          {
-            "char": "E",
-            "absolute": 300,
-            "ordinal": 5,
-            "reduced": 3,
-            "index": 1
-          },
-          {
-            "char": "N",
-            "absolute": 50,
-            "ordinal": 14,
-            "reduced": 5,
-            "index": 2
-          },
-          {
-            "char": "N",
-            "absolute": 50,
-            "ordinal": 14,
-            "reduced": 5,
-            "index": 3
-          }
-        ],
-        "gematria_ordinal_ratio": 9.4884
-      },
-      "isopsephy": {
-        "total": 115,
-        "reduced": 7,
-        "digital_root_chain": [
-          115,
-          7
-        ],
-        "letter_values": [
-          {
-            "char": "J",
-            "value": 10,
-            "index": 0
-          },
-          {
-            "char": "E",
-            "value": 5,
-            "index": 1
-          },
-          {
-            "char": "N",
-            "value": 50,
-            "index": 2
-          },
-          {
-            "char": "N",
-            "value": 50,
-            "index": 3
-          }
-        ],
-        "greek_correspondence": [
-          {
-            "letter": "J",
-            "greek": "\u03b9",
-            "value": 10
-          },
-          {
-            "letter": "E",
-            "greek": "\u03b5",
-            "value": 5
-          },
-          {
-            "letter": "N",
-            "greek": "\u03bd",
-            "value": 50
-          },
-          {
-            "letter": "N",
-            "greek": "\u03bd",
-            "value": 50
-          }
-        ]
-      }
-    },
-    "resonance": {
-      "score": 56.5,
-      "components": {
-        "numerological_convergence": 0.75,
-        "linguistic_harmony": 0.5002,
-        "polarity_balance": 0.6203,
-        "symbolic_depth": 0.2667
-      },
-      "weights": {
-        "numerological_convergence": 0.35,
-        "linguistic_harmony": 0.25,
-        "polarity_balance": 0.2,
-        "symbolic_depth": 0.2
-      }
-    },
-    "fingerprint": {
-      "hash": "f39ca4042b01120c",
-      "full_hash": "f39ca4042b01120c9a39d73c896a2452d15085353c88bc52b72ce3066790bf6c",
-      "symmetry": 7,
-      "spokes": [
-        {
-          "encoder": "pythagorean",
-          "value": 0.1333,
-          "hue": 45
-        },
-        {
-          "encoder": "chaldean",
-          "value": 0.1778,
-          "hue": 30
-        },
-        {
-          "encoder": "ordinal",
-          "value": 0.1433,
-          "hue": 200
-        },
-        {
-          "encoder": "linguistic",
-          "value": 0.3571,
-          "hue": 220
-        },
-        {
-          "encoder": "binary_prime",
-          "value": 0.14,
-          "hue": 160
-        },
-        {
-          "encoder": "gematria",
-          "value": 0.272,
-          "hue": 280
-        },
-        {
-          "encoder": "isopsephy",
-          "value": 0.0383,
-          "hue": 260
-        }
-      ],
-      "ring_pattern": "1011",
-      "seed": 4087129092
-    },
-    "snapshot": {
-      "available_layers": [],
-      "narrative": "No birth data or psychological assessments were supplied for Jenn, so the snapshot rests on name-derived encoders alone. Add a birth date/time/place to unlock the celestial and Human Design layers, or supply assessments for the psychology layer.",
-      "highlights": []
-    }
-  },
-  {
+  "Jenn": {
     "id": "partner:jenn",
     "text": "Jenn",
-    "computed_at": "2026-07-04T18:46:04.408258Z",
+    "computed_at": "2026-07-04T20:03:04.475080Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -5178,9 +4916,21 @@
         "fricative_count": 0,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='JE', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='EN', count=1, frequency=0.3333333333333333)",
-          "BigramStats(bigram='NN', count=1, frequency=0.3333333333333333)"
+          {
+            "bigram": "JE",
+            "count": 1,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "bigram": "EN",
+            "count": 1,
+            "frequency": 0.3333333333333333
+          },
+          {
+            "bigram": "NN",
+            "count": 1,
+            "frequency": 0.3333333333333333
+          }
         ],
         "repetition_ratio": 0.25,
         "is_palindrome": false
@@ -5352,10 +5102,10 @@
       "highlights": []
     }
   },
-  {
+  "Ornith": {
     "id": "collaborator:ornith",
     "text": "Ornith",
-    "computed_at": "2026-07-04T18:46:04.408499Z",
+    "computed_at": "2026-07-04T20:03:04.475183Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -5425,11 +5175,31 @@
         "fricative_count": 1,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='OR', count=1, frequency=0.2)",
-          "BigramStats(bigram='RN', count=1, frequency=0.2)",
-          "BigramStats(bigram='NI', count=1, frequency=0.2)",
-          "BigramStats(bigram='IT', count=1, frequency=0.2)",
-          "BigramStats(bigram='TH', count=1, frequency=0.2)"
+          {
+            "bigram": "OR",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "RN",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "NI",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "IT",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "TH",
+            "count": 1,
+            "frequency": 0.2
+          }
         ],
         "repetition_ratio": 0.0,
         "is_palindrome": false
@@ -5636,10 +5406,10 @@
       "highlights": []
     }
   },
-  {
+  "Hermes": {
     "id": "platform:hermes",
     "text": "Hermes",
-    "computed_at": "2026-07-04T18:46:04.408795Z",
+    "computed_at": "2026-07-04T20:03:04.475289Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -5709,11 +5479,31 @@
         "fricative_count": 2,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='HE', count=1, frequency=0.2)",
-          "BigramStats(bigram='ER', count=1, frequency=0.2)",
-          "BigramStats(bigram='RM', count=1, frequency=0.2)",
-          "BigramStats(bigram='ME', count=1, frequency=0.2)",
-          "BigramStats(bigram='ES', count=1, frequency=0.2)"
+          {
+            "bigram": "HE",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "ER",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "RM",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "ME",
+            "count": 1,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "ES",
+            "count": 1,
+            "frequency": 0.2
+          }
         ],
         "repetition_ratio": 0.1667,
         "is_palindrome": false
@@ -5920,10 +5710,10 @@
       "highlights": []
     }
   },
-  {
+  "OpenRouter": {
     "id": "platform:openrouter",
     "text": "OpenRouter",
-    "computed_at": "2026-07-04T18:46:04.409101Z",
+    "computed_at": "2026-07-04T20:03:04.475421Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -5992,11 +5782,31 @@
         "fricative_count": 0,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='OP', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='PE', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='EN', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='NR', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='RO', count=1, frequency=0.1111111111111111)"
+          {
+            "bigram": "OP",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "PE",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "EN",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "NR",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "RO",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          }
         ],
         "repetition_ratio": 0.3,
         "is_palindrome": false
@@ -6271,10 +6081,10 @@
       "highlights": []
     }
   },
-  {
+  "Albert Einstein": {
     "id": "figure:albert_einstein",
     "text": "Albert Einstein",
-    "computed_at": "2026-07-04T18:46:04.409416Z",
+    "computed_at": "2026-07-04T20:03:04.475567Z",
     "dimensions": 105,
     "encoders": {
       "pythagorean": {
@@ -6344,11 +6154,31 @@
         "fricative_count": 1,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='TE', count=2, frequency=0.15384615384615385)",
-          "BigramStats(bigram='EI', count=2, frequency=0.15384615384615385)",
-          "BigramStats(bigram='IN', count=2, frequency=0.15384615384615385)",
-          "BigramStats(bigram='AL', count=1, frequency=0.07692307692307693)",
-          "BigramStats(bigram='LB', count=1, frequency=0.07692307692307693)"
+          {
+            "bigram": "TE",
+            "count": 2,
+            "frequency": 0.15384615384615385
+          },
+          {
+            "bigram": "EI",
+            "count": 2,
+            "frequency": 0.15384615384615385
+          },
+          {
+            "bigram": "IN",
+            "count": 2,
+            "frequency": 0.15384615384615385
+          },
+          {
+            "bigram": "AL",
+            "count": 1,
+            "frequency": 0.07692307692307693
+          },
+          {
+            "bigram": "LB",
+            "count": 1,
+            "frequency": 0.07692307692307693
+          }
         ],
         "repetition_ratio": 0.3571,
         "is_palindrome": false
@@ -7081,10 +6911,10 @@
       ]
     }
   },
-  {
+  "Nikola Tesla": {
     "id": "figure:nikola_tesla",
     "text": "Nikola Tesla",
-    "computed_at": "2026-07-04T18:46:04.412124Z",
+    "computed_at": "2026-07-04T20:03:04.476348Z",
     "dimensions": 105,
     "encoders": {
       "pythagorean": {
@@ -7153,11 +6983,31 @@
         "fricative_count": 1,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='LA', count=2, frequency=0.2)",
-          "BigramStats(bigram='NI', count=1, frequency=0.1)",
-          "BigramStats(bigram='IK', count=1, frequency=0.1)",
-          "BigramStats(bigram='KO', count=1, frequency=0.1)",
-          "BigramStats(bigram='OL', count=1, frequency=0.1)"
+          {
+            "bigram": "LA",
+            "count": 2,
+            "frequency": 0.2
+          },
+          {
+            "bigram": "NI",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "IK",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "KO",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "OL",
+            "count": 1,
+            "frequency": 0.1
+          }
         ],
         "repetition_ratio": 0.1818,
         "is_palindrome": false
@@ -7889,10 +7739,10 @@
       ]
     }
   },
-  {
+  "Marie Curie": {
     "id": "figure:marie_curie",
     "text": "Marie Curie",
-    "computed_at": "2026-07-04T18:46:04.414613Z",
+    "computed_at": "2026-07-04T20:03:04.477135Z",
     "dimensions": 105,
     "encoders": {
       "pythagorean": {
@@ -7962,11 +7812,31 @@
         "fricative_count": 0,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='RI', count=2, frequency=0.2222222222222222)",
-          "BigramStats(bigram='IE', count=2, frequency=0.2222222222222222)",
-          "BigramStats(bigram='MA', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='AR', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='EC', count=1, frequency=0.1111111111111111)"
+          {
+            "bigram": "RI",
+            "count": 2,
+            "frequency": 0.2222222222222222
+          },
+          {
+            "bigram": "IE",
+            "count": 2,
+            "frequency": 0.2222222222222222
+          },
+          {
+            "bigram": "MA",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "AR",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "EC",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          }
         ],
         "repetition_ratio": 0.3,
         "is_palindrome": false
@@ -8667,10 +8537,10 @@
       ]
     }
   },
-  {
+  "Ada Lovelace": {
     "id": "figure:ada_lovelace",
     "text": "Ada Lovelace",
-    "computed_at": "2026-07-04T18:46:04.417245Z",
+    "computed_at": "2026-07-04T20:03:04.477895Z",
     "dimensions": 105,
     "encoders": {
       "pythagorean": {
@@ -8741,11 +8611,31 @@
         "fricative_count": 1,
         "nasal_count": 0,
         "bigrams_top5": [
-          "BigramStats(bigram='AD', count=1, frequency=0.1)",
-          "BigramStats(bigram='DA', count=1, frequency=0.1)",
-          "BigramStats(bigram='AL', count=1, frequency=0.1)",
-          "BigramStats(bigram='LO', count=1, frequency=0.1)",
-          "BigramStats(bigram='OV', count=1, frequency=0.1)"
+          {
+            "bigram": "AD",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "DA",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "AL",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "LO",
+            "count": 1,
+            "frequency": 0.1
+          },
+          {
+            "bigram": "OV",
+            "count": 1,
+            "frequency": 0.1
+          }
         ],
         "repetition_ratio": 0.3636,
         "is_palindrome": false
@@ -9439,10 +9329,10 @@
       ]
     }
   },
-  {
+  "Alan Turing": {
     "id": "figure:alan_turing",
     "text": "Alan Turing",
-    "computed_at": "2026-07-04T18:46:04.419831Z",
+    "computed_at": "2026-07-04T20:03:04.478640Z",
     "dimensions": 105,
     "encoders": {
       "pythagorean": {
@@ -9514,11 +9404,31 @@
         "fricative_count": 0,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='AL', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='LA', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='AN', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='NT', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='TU', count=1, frequency=0.1111111111111111)"
+          {
+            "bigram": "AL",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "LA",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "AN",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "NT",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "TU",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          }
         ],
         "repetition_ratio": 0.2,
         "is_palindrome": false
@@ -10167,10 +10077,10 @@
       ]
     }
   },
-  {
+  "Leonardo da Vinci": {
     "id": "figure:leonardo_da_vinci",
     "text": "Leonardo da Vinci",
-    "computed_at": "2026-07-04T18:46:04.422348Z",
+    "computed_at": "2026-07-04T20:03:04.479464Z",
     "dimensions": 105,
     "encoders": {
       "pythagorean": {
@@ -10241,11 +10151,31 @@
         "fricative_count": 1,
         "nasal_count": 2,
         "bigrams_top5": [
-          "BigramStats(bigram='LE', count=1, frequency=0.07142857142857142)",
-          "BigramStats(bigram='EO', count=1, frequency=0.07142857142857142)",
-          "BigramStats(bigram='ON', count=1, frequency=0.07142857142857142)",
-          "BigramStats(bigram='NA', count=1, frequency=0.07142857142857142)",
-          "BigramStats(bigram='AR', count=1, frequency=0.07142857142857142)"
+          {
+            "bigram": "LE",
+            "count": 1,
+            "frequency": 0.07142857142857142
+          },
+          {
+            "bigram": "EO",
+            "count": 1,
+            "frequency": 0.07142857142857142
+          },
+          {
+            "bigram": "ON",
+            "count": 1,
+            "frequency": 0.07142857142857142
+          },
+          {
+            "bigram": "NA",
+            "count": 1,
+            "frequency": 0.07142857142857142
+          },
+          {
+            "bigram": "AR",
+            "count": 1,
+            "frequency": 0.07142857142857142
+          }
         ],
         "repetition_ratio": 0.3333,
         "is_palindrome": false
@@ -11023,10 +10953,10 @@
       ]
     }
   },
-  {
+  "Frida Kahlo": {
     "id": "figure:frida_kahlo",
     "text": "Frida Kahlo",
-    "computed_at": "2026-07-04T18:46:04.425015Z",
+    "computed_at": "2026-07-04T20:03:04.480212Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -11096,11 +11026,31 @@
         "fricative_count": 2,
         "nasal_count": 0,
         "bigrams_top5": [
-          "BigramStats(bigram='FR', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='RI', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='ID', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='DA', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='AK', count=1, frequency=0.1111111111111111)"
+          {
+            "bigram": "FR",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "RI",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "ID",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "DA",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "AK",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          }
         ],
         "repetition_ratio": 0.1,
         "is_palindrome": false
@@ -11374,10 +11324,10 @@
       "highlights": []
     }
   },
-  {
+  "David Bowie": {
     "id": "figure:david_bowie",
     "text": "David Bowie",
-    "computed_at": "2026-07-04T18:46:04.425325Z",
+    "computed_at": "2026-07-04T20:03:04.480341Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -11446,11 +11396,31 @@
         "fricative_count": 1,
         "nasal_count": 0,
         "bigrams_top5": [
-          "BigramStats(bigram='DA', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='AV', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='VI', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='ID', count=1, frequency=0.1111111111111111)",
-          "BigramStats(bigram='DB', count=1, frequency=0.1111111111111111)"
+          {
+            "bigram": "DA",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "AV",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "VI",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "ID",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "DB",
+            "count": 1,
+            "frequency": 0.1111111111111111
+          }
         ],
         "repetition_ratio": 0.2,
         "is_palindrome": false
@@ -11725,10 +11695,10 @@
       "highlights": []
     }
   },
-  {
+  "Hypatia of Alexandria": {
     "id": "figure:hypatia",
     "text": "Hypatia of Alexandria",
-    "computed_at": "2026-07-04T18:46:04.425704Z",
+    "computed_at": "2026-07-04T20:03:04.480513Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -11793,11 +11763,31 @@
         "fricative_count": 2,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='IA', count=2, frequency=0.1111111111111111)",
-          "BigramStats(bigram='HY', count=1, frequency=0.05555555555555555)",
-          "BigramStats(bigram='YP', count=1, frequency=0.05555555555555555)",
-          "BigramStats(bigram='PA', count=1, frequency=0.05555555555555555)",
-          "BigramStats(bigram='AT', count=1, frequency=0.05555555555555555)"
+          {
+            "bigram": "IA",
+            "count": 2,
+            "frequency": 0.1111111111111111
+          },
+          {
+            "bigram": "HY",
+            "count": 1,
+            "frequency": 0.05555555555555555
+          },
+          {
+            "bigram": "YP",
+            "count": 1,
+            "frequency": 0.05555555555555555
+          },
+          {
+            "bigram": "PA",
+            "count": 1,
+            "frequency": 0.05555555555555555
+          },
+          {
+            "bigram": "AT",
+            "count": 1,
+            "frequency": 0.05555555555555555
+          }
         ],
         "repetition_ratio": 0.2632,
         "is_palindrome": false
@@ -12225,10 +12215,10 @@
       "highlights": []
     }
   },
-  {
+  "Carl Gustav Jung": {
     "id": "figure:carl_jung",
     "text": "Carl Gustav Jung",
-    "computed_at": "2026-07-04T18:46:04.426056Z",
+    "computed_at": "2026-07-04T20:03:04.480669Z",
     "dimensions": 70,
     "encoders": {
       "pythagorean": {
@@ -12297,11 +12287,31 @@
         "fricative_count": 2,
         "nasal_count": 1,
         "bigrams_top5": [
-          "BigramStats(bigram='CA', count=1, frequency=0.07692307692307693)",
-          "BigramStats(bigram='AR', count=1, frequency=0.07692307692307693)",
-          "BigramStats(bigram='RL', count=1, frequency=0.07692307692307693)",
-          "BigramStats(bigram='LG', count=1, frequency=0.07692307692307693)",
-          "BigramStats(bigram='GU', count=1, frequency=0.07692307692307693)"
+          {
+            "bigram": "CA",
+            "count": 1,
+            "frequency": 0.07692307692307693
+          },
+          {
+            "bigram": "AR",
+            "count": 1,
+            "frequency": 0.07692307692307693
+          },
+          {
+            "bigram": "RL",
+            "count": 1,
+            "frequency": 0.07692307692307693
+          },
+          {
+            "bigram": "LG",
+            "count": 1,
+            "frequency": 0.07692307692307693
+          },
+          {
+            "bigram": "GU",
+            "count": 1,
+            "frequency": 0.07692307692307693
+          }
         ],
         "repetition_ratio": 0.2143,
         "is_palindrome": false
@@ -12644,4 +12654,4 @@
       "highlights": []
     }
   }
-]
+}

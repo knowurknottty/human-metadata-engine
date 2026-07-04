@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+<rect width="300" height="300" fill="#0a0a0a"/>
+<circle cx="150.0" cy="150.0" r="23.076923076923077" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+<circle cx="150.0" cy="150.0" r="46.15384615384615" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.15000000000000002"/>
+<circle cx="150.0" cy="150.0" r="69.23076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.2"/>
+<circle cx="150.0" cy="150.0" r="92.3076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.25"/>
+<circle cx="150.0" cy="150.0" r="115.38461538461539" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.30000000000000004"/>
+<circle cx="150.0" cy="150.0" r="138.46153846153845" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.35"/>
+<path d="M150.0,150.0 Q219.70002897706243,135.87110465110416 221.11764705882354,150.0 Q219.70002897706243,164.12889534889584 150.0,150.0" fill="hsl(144, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q134.23190311389044,197.01446798779114 125.20588235294119,192.944671493546 Q117.1683248202174,187.16280646660076 150.0,150.0" fill="hsl(135, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q83.75245613189769,75.0131271652576 99.97058823529407,63.34651695074531 Q118.18323510881093,55.13450765452822 150.0,150.0" fill="hsl(326, 70%, 60%)" opacity="0.6"/>
+<circle cx="150.0" cy="150.0" r="3" fill="#ffffff" opacity="0.8"/>
+<text x="150.0" y="292" text-anchor="middle" fill="#666666" font-size="8" font-family="monospace">SynSync</text>
+</svg>

@@ -1,0 +1,26 @@
+{
+  "Captain": {
+    "identity": "Captain",
+    "stages": [
+      {
+        "name": "Captain",
+        "resonance": 0,
+        "delta": 0
+      },
+      {
+        "name": "KnowUrKnot",
+        "resonance": 0,
+        "delta": 0
+      },
+      {
+        "name": "The Captain",
+        "resonance": 0,
+        "delta": 0
+      }
+    ],
+    "total_drift": 1.0,
+    "direction": "stable \u2014 resonance is consistent across variants",
+    "stability": 100,
+    "analysis": "This identity is remarkably stable across name variants. The core encoding pattern persists regardless of how the name is expressed."
+  }
+}

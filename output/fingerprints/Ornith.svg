@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300">
+<rect width="300" height="300" fill="#0a0a0a"/>
+<circle cx="150.0" cy="150.0" r="23.076923076923077" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+<circle cx="150.0" cy="150.0" r="46.15384615384615" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.15000000000000002"/>
+<circle cx="150.0" cy="150.0" r="69.23076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.2"/>
+<circle cx="150.0" cy="150.0" r="92.3076923076923" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.25"/>
+<circle cx="150.0" cy="150.0" r="115.38461538461539" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.30000000000000004"/>
+<circle cx="150.0" cy="150.0" r="138.46153846153845" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.35"/>
+<path d="M150.0,150.0 Q202.05883057592007,139.44715260541528 203.11764705882354,150.0 Q202.05883057592007,160.55284739458472 150.0,150.0" fill="hsl(45, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q115.26529547152381,253.56567859232283 95.38235294117649,244.60053969574722 Q77.67684364311235,231.86397581076818 150.0,150.0" fill="hsl(244, 70%, 60%)" opacity="0.6"/>
+<path d="M150.0,150.0 Q74.40535999530478,64.4329687406026 92.9117647058823,51.120275956141484 Q113.6940972052922,41.74960573629588 150.0,150.0" fill="hsl(49, 70%, 60%)" opacity="0.6"/>
+<circle cx="150.0" cy="150.0" r="3" fill="#ffffff" opacity="0.8"/>
+<text x="150.0" y="292" text-anchor="middle" fill="#666666" font-size="8" font-family="monospace">Ornith</text>
+</svg>

@@ -1,0 +1,699 @@
+{
+  "Kirk Evan Brown": {
+    "big_five": {
+      "openness": 35,
+      "conscientiousness": 51,
+      "extraversion": 52,
+      "agreeableness": 32,
+      "neuroticism": 81
+    },
+    "mbti_guess": "ESTJ",
+    "career_affinity": [
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Captain": {
+    "big_five": {
+      "openness": 20,
+      "conscientiousness": 58,
+      "extraversion": 66,
+      "agreeableness": 100,
+      "neuroticism": 100
+    },
+    "mbti_guess": "ESFJ",
+    "career_affinity": [
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "CAPT": {
+    "big_five": {
+      "openness": 25,
+      "conscientiousness": 87,
+      "extraversion": 27,
+      "agreeableness": 14,
+      "neuroticism": 84
+    },
+    "mbti_guess": "ISTJ",
+    "career_affinity": [
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Capt Cortex": {
+    "big_five": {
+      "openness": 63,
+      "conscientiousness": 62,
+      "extraversion": 41,
+      "agreeableness": 32,
+      "neuroticism": 90
+    },
+    "mbti_guess": "INTJ",
+    "career_affinity": [
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Knowurknot": {
+    "big_five": {
+      "openness": 64,
+      "conscientiousness": 56,
+      "extraversion": 31,
+      "agreeableness": 56,
+      "neuroticism": 84
+    },
+    "mbti_guess": "INFJ",
+    "career_affinity": [
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "FrankenCAPT": {
+    "big_five": {
+      "openness": 32,
+      "conscientiousness": 52,
+      "extraversion": 29,
+      "agreeableness": 63,
+      "neuroticism": 93
+    },
+    "mbti_guess": "ISFJ",
+    "career_affinity": [
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "bioCAPT": {
+    "big_five": {
+      "openness": 36,
+      "conscientiousness": 71,
+      "extraversion": 51,
+      "agreeableness": 69,
+      "neuroticism": 87
+    },
+    "mbti_guess": "ESFJ",
+    "career_affinity": [
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Inversion Labs": {
+    "big_five": {
+      "openness": 60,
+      "conscientiousness": 75,
+      "extraversion": 38,
+      "agreeableness": 35,
+      "neuroticism": 84
+    },
+    "mbti_guess": "INTJ",
+    "career_affinity": [
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "JennAI": {
+    "big_five": {
+      "openness": 50,
+      "conscientiousness": 68,
+      "extraversion": 87,
+      "agreeableness": 64,
+      "neuroticism": 81
+    },
+    "mbti_guess": "ESFJ",
+    "career_affinity": [
+      {
+        "career": "Leadership / Executive",
+        "affinity": 0.8
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "SynSync": {
+    "big_five": {
+      "openness": 59,
+      "conscientiousness": 47,
+      "extraversion": 47,
+      "agreeableness": 0,
+      "neuroticism": 100
+    },
+    "mbti_guess": "INTP",
+    "career_affinity": [
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.25,
+    "method": "ensemble_heuristic",
+    "feature_count": 5
+  },
+  "Sigil": {
+    "big_five": {
+      "openness": 58,
+      "conscientiousness": 48,
+      "extraversion": 79,
+      "agreeableness": 84,
+      "neuroticism": 81
+    },
+    "mbti_guess": "ENFP",
+    "career_affinity": [
+      {
+        "career": "Leadership / Executive",
+        "affinity": 0.8
+      },
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Sentinel": {
+    "big_five": {
+      "openness": 55,
+      "conscientiousness": 66,
+      "extraversion": 57,
+      "agreeableness": 19,
+      "neuroticism": 96
+    },
+    "mbti_guess": "ESTJ",
+    "career_affinity": [
+      {
+        "career": "Leadership / Executive",
+        "affinity": 0.8
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Titan": {
+    "big_five": {
+      "openness": 8,
+      "conscientiousness": 64,
+      "extraversion": 69,
+      "agreeableness": 20,
+      "neuroticism": 75
+    },
+    "mbti_guess": "ESTJ",
+    "career_affinity": [
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Jenn": {
+    "big_five": {
+      "openness": 30,
+      "conscientiousness": 84,
+      "extraversion": 67,
+      "agreeableness": 46,
+      "neuroticism": 81
+    },
+    "mbti_guess": "ESTJ",
+    "career_affinity": [
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Ornith": {
+    "big_five": {
+      "openness": 32,
+      "conscientiousness": 73,
+      "extraversion": 49,
+      "agreeableness": 57,
+      "neuroticism": 84
+    },
+    "mbti_guess": "ISFJ",
+    "career_affinity": [
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Hermes": {
+    "big_five": {
+      "openness": 35,
+      "conscientiousness": 92,
+      "extraversion": 100,
+      "agreeableness": 17,
+      "neuroticism": 87
+    },
+    "mbti_guess": "ESTJ",
+    "career_affinity": [
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "OpenRouter": {
+    "big_five": {
+      "openness": 34,
+      "conscientiousness": 72,
+      "extraversion": 57,
+      "agreeableness": 72,
+      "neuroticism": 87
+    },
+    "mbti_guess": "ESFJ",
+    "career_affinity": [
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Albert Einstein": {
+    "big_five": {
+      "openness": 71,
+      "conscientiousness": 53,
+      "extraversion": 81,
+      "agreeableness": 69,
+      "neuroticism": 81
+    },
+    "mbti_guess": "ENFJ",
+    "career_affinity": [
+      {
+        "career": "Leadership / Executive",
+        "affinity": 0.8
+      },
+      {
+        "career": "Creative / Arts",
+        "affinity": 0.75
+      },
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Nikola Tesla": {
+    "big_five": {
+      "openness": 82,
+      "conscientiousness": 36,
+      "extraversion": 63,
+      "agreeableness": 100,
+      "neuroticism": 100
+    },
+    "mbti_guess": "ENFP",
+    "career_affinity": [
+      {
+        "career": "Leadership / Executive",
+        "affinity": 0.8
+      },
+      {
+        "career": "Creative / Arts",
+        "affinity": 0.75
+      },
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Marie Curie": {
+    "big_five": {
+      "openness": 34,
+      "conscientiousness": 72,
+      "extraversion": 75,
+      "agreeableness": 60,
+      "neuroticism": 81
+    },
+    "mbti_guess": "ESFJ",
+    "career_affinity": [
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Ada Lovelace": {
+    "big_five": {
+      "openness": 63,
+      "conscientiousness": 56,
+      "extraversion": 76,
+      "agreeableness": 26,
+      "neuroticism": 99
+    },
+    "mbti_guess": "ENTJ",
+    "career_affinity": [
+      {
+        "career": "Leadership / Executive",
+        "affinity": 0.8
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Alan Turing": {
+    "big_five": {
+      "openness": 68,
+      "conscientiousness": 54,
+      "extraversion": 44,
+      "agreeableness": 52,
+      "neuroticism": 87
+    },
+    "mbti_guess": "INFJ",
+    "career_affinity": [
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Leonardo da Vinci": {
+    "big_five": {
+      "openness": 85,
+      "conscientiousness": 35,
+      "extraversion": 34,
+      "agreeableness": 23,
+      "neuroticism": 100
+    },
+    "mbti_guess": "INTP",
+    "career_affinity": [
+      {
+        "career": "Creative / Arts",
+        "affinity": 0.75
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Frida Kahlo": {
+    "big_five": {
+      "openness": 47,
+      "conscientiousness": 76,
+      "extraversion": 49,
+      "agreeableness": 76,
+      "neuroticism": 87
+    },
+    "mbti_guess": "ISFJ",
+    "career_affinity": [
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "David Bowie": {
+    "big_five": {
+      "openness": 43,
+      "conscientiousness": 78,
+      "extraversion": 37,
+      "agreeableness": 40,
+      "neuroticism": 78
+    },
+    "mbti_guess": "ISTJ",
+    "career_affinity": [
+      {
+        "career": "Engineering / Technical",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Hypatia of Alexandria": {
+    "big_five": {
+      "openness": 41,
+      "conscientiousness": 48,
+      "extraversion": 45,
+      "agreeableness": 71,
+      "neuroticism": 93
+    },
+    "mbti_guess": "ISFP",
+    "career_affinity": [
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  },
+  "Carl Gustav Jung": {
+    "big_five": {
+      "openness": 58,
+      "conscientiousness": 81,
+      "extraversion": 45,
+      "agreeableness": 71,
+      "neuroticism": 84
+    },
+    "mbti_guess": "INFJ",
+    "career_affinity": [
+      {
+        "career": "Counseling / Therapy",
+        "affinity": 0.7
+      },
+      {
+        "career": "Communication / Writing",
+        "affinity": 0.65
+      },
+      {
+        "career": "Analysis / Quality Assurance",
+        "affinity": 0.6
+      }
+    ],
+    "confidence": 0.35,
+    "method": "ensemble_heuristic",
+    "feature_count": 7
+  }
+}
