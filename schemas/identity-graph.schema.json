@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HumanMetadataGraph",
+  "description": "Graph representation of identity relationships",
+  "type": "object",
+  "required": ["human_metadata_graph_version", "subject", "nodes", "edges"],
+  "properties": {
+    "human_metadata_graph_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "subject": {
+      "type": "object",
+      "required": ["id", "preferred_display", "privacy_level"],
+      "properties": {
+        "id": { "type": "string" },
+        "preferred_display": { "type": "string" },
+        "privacy_level": {
+          "type": "string",
+          "enum": ["public", "private", "restricted"]
+        },
+        "consent_scope": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "type", "is_user_confirmed"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": [
+              "HUMAN",
+              "BIRTH_NAME",
+              "LEGAL_NAME",
+              "PREFERRED_NAME",
+              "NICKNAME",
+              "HANDLE",
+              "PUBLIC_PERSONA",
+              "PROJECT",
+              "AGENT",
+              "SYSTEM",
+              "BRAND",
+              "ARCHETYPE",
+              "SYMBOLIC_IDENTITY",
+              "TEMPORAL_PHASE",
+              "DOCUMENTED_CLAIM",
+              "PROOF_EVENT"
+            ]
+          },
+          "original_text": { "type": "string" },
+          "normalized_text": { "type": "string" },
+          "created_from": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "provenance": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" },
+          "is_user_confirmed": { "type": "boolean" },
+          "is_symbolic": { "type": "boolean" },
+          "is_measured": { "type": "boolean" },
+          "is_inferred": { "type": "boolean" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source", "target", "edge_type", "confidence", "interpretation_level"],
+        "properties": {
+          "source": { "type": "string" },
+          "target": { "type": "string" },
+          "edge_type": {
+            "type": "string",
+            "enum": [
+              "HAS_BIRTH_NAME",
+              "USES_ALIAS",
+              "EMBODIES_ARCHETYPE",
+              "BUILDS_PROJECT",
+              "CREATED_BY",
+              "DERIVED_FROM",
+              "SYMBOLICALLY_RESONATES_WITH",
+              "LINGUISTICALLY_RESEMBLES",
+              "NUMEROLOGICALLY_RESONATES_WITH",
+              "TEMPORALLY_ASSOCIATED_WITH",
+              "SEMANTICALLY_ASSOCIATED_WITH",
+              "PUBLICLY_REFERENCES",
+              "EVOLVED_INTO",
+              "CONTRASTS_WITH",
+              "COMPOSES",
+              "CONTAINS",
+              "MIRRORS",
+              "INVERTS",
+              "AMPLIFIES",
+              "ASSOCIATED_WITH",
+              "AMALGAMATES"
+            ]
+          },
+          "claim": { "type": "string" },
+          "evidence": { "type": "string" },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "interpretation_level": {
+            "type": "string",
+            "enum": [
+              "factual",
+              "user_claimed",
+              "symbolic",
+              "inferred",
+              "speculative",
+              "metaphorical"
+            ]
+          }
+        }
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

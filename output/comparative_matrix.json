@@ -1,0 +1,182 @@
+{
+  "version": "0.1.0",
+  "generated_at": "2026-07-04T12:00:00Z",
+  "comparisons": [
+    {
+      "pair": [
+        "Kirk Evan Brown",
+        "SynSync"
+      ],
+      "expression_a": 1,
+      "expression_b": 11,
+      "expression_match": false,
+      "soul_a": 3,
+      "soul_b": 0,
+      "soul_match": false,
+      "personality_a": 7,
+      "personality_b": 11,
+      "personality_match": false,
+      "shared_active_numbers": 2,
+      "interpretation": "Shared 11/2 master number resonance"
+    },
+    {
+      "pair": [
+        "Kirk Evan Brown",
+        "Jenn-ai"
+      ],
+      "expression_a": 1,
+      "expression_b": 8,
+      "expression_match": false,
+      "soul_a": 3,
+      "soul_b": 6,
+      "soul_match": false,
+      "personality_a": 7,
+      "personality_b": 11,
+      "personality_match": false,
+      "shared_active_numbers": 3,
+      "interpretation": "Life Path 8 matches Jenn-ai expression 8"
+    },
+    {
+      "pair": [
+        "Kirk Evan Brown",
+        "CAPT"
+      ],
+      "expression_a": 1,
+      "expression_b": 4,
+      "expression_match": false,
+      "soul_a": 3,
+      "soul_b": 1,
+      "soul_match": false,
+      "personality_a": 7,
+      "personality_b": 3,
+      "personality_match": false,
+      "shared_active_numbers": 2,
+      "interpretation": "Personality 7 contains CAPT's P=7"
+    },
+    {
+      "pair": [
+        "Knowurknot",
+        "Inversion Labs"
+      ],
+      "expression_a": 9,
+      "expression_b": 6,
+      "expression_match": false,
+      "soul_a": 6,
+      "soul_b": 3,
+      "soul_match": false,
+      "personality_a": 3,
+      "personality_b": 3,
+      "personality_match": true,
+      "shared_active_numbers": 5,
+      "interpretation": "Soul 6 matches expression 6"
+    },
+    {
+      "pair": [
+        "Captain",
+        "FrankenCAPT"
+      ],
+      "expression_a": 1,
+      "expression_b": 1,
+      "expression_match": true,
+      "soul_a": 11,
+      "soul_b": 7,
+      "soul_match": false,
+      "personality_a": 8,
+      "personality_b": 3,
+      "personality_match": false,
+      "shared_active_numbers": 6,
+      "interpretation": "Both resolve to 1"
+    },
+    {
+      "pair": [
+        "bioCAPT",
+        "Kirk Evan Brown"
+      ],
+      "expression_a": 3,
+      "expression_b": 1,
+      "expression_match": false,
+      "soul_a": 7,
+      "soul_b": 3,
+      "soul_match": false,
+      "personality_a": 5,
+      "personality_b": 7,
+      "personality_match": false,
+      "shared_active_numbers": 4,
+      "interpretation": "Expression 3 matches soul urge 3"
+    },
+    {
+      "pair": [
+        "Captain",
+        "Knowurknot"
+      ],
+      "expression_a": 1,
+      "expression_b": 9,
+      "expression_match": false,
+      "soul_a": 11,
+      "soul_b": 6,
+      "soul_match": false,
+      "personality_a": 8,
+      "personality_b": 3,
+      "personality_match": false,
+      "shared_active_numbers": 4,
+      "interpretation": "Command + paradox resolution"
+    },
+    {
+      "pair": [
+        "Captain Knowurknot",
+        "CAPT"
+      ],
+      "expression_a": 1,
+      "expression_b": 4,
+      "expression_match": false,
+      "soul_a": 8,
+      "soul_b": 1,
+      "soul_match": false,
+      "personality_a": 11,
+      "personality_b": 3,
+      "personality_match": false,
+      "shared_active_numbers": 4,
+      "interpretation": "Public persona vs architecture"
+    },
+    {
+      "pair": [
+        "Soul Fractal Engine",
+        "bioCAPT"
+      ],
+      "expression_a": 11,
+      "expression_b": 3,
+      "expression_match": false,
+      "soul_a": 3,
+      "soul_b": 7,
+      "soul_match": false,
+      "personality_a": 8,
+      "personality_b": 5,
+      "personality_match": false,
+      "shared_active_numbers": 6,
+      "interpretation": "Soul architecture extends biosignal layer"
+    },
+    {
+      "pair": [
+        "SynSync",
+        "bioCAPT"
+      ],
+      "expression_a": 11,
+      "expression_b": 3,
+      "expression_match": false,
+      "soul_a": 0,
+      "soul_b": 7,
+      "soul_match": false,
+      "personality_a": 11,
+      "personality_b": 5,
+      "personality_match": false,
+      "shared_active_numbers": 3,
+      "interpretation": "Both have master 11 in personality"
+    }
+  ],
+  "summary": {
+    "total_pairs_compared": 10,
+    "expression_matches": 1,
+    "soul_matches": 0,
+    "personality_matches": 1
+  }
+}
