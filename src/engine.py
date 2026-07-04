@@ -98,8 +98,13 @@ IDENTITIES = [
     {"id": "project:sentinel", "text": "Sentinel"},
     {"id": "project:titan", "text": "Titan"},
     # Partners
-    {"id": "human:jenn", "text": "Jenn"},
-    {"id": "partner:jenn", "text": "Jenn"},
+    {
+        "id": "human:jennifer_larson",
+        "text": "Jennifer Jean Larson",
+        "birth": {"year": 1985, "month": 12, "day": 31, "hour": 4, "minute": 5,
+                  "timezone_offset": -5, "location": "Tampa, Florida, USA",
+                  "lat": 27.9506, "lon": -82.4572},
+    },
     # Collaborators
     {"id": "collaborator:ornith", "text": "Ornith"},
     # Platform
