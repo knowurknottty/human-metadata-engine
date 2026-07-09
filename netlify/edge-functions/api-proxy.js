@@ -1,13 +1,34 @@
-export default async (request) => {
-  const origin = Netlify.env.get("HME_API_ORIGIN");
+const allowedOrigin = (request) => {
+  const origin = request.headers.get("origin");
+  if (!origin) return "*";
+  try {
+    const host = new URL(origin).hostname;
+    if (host === "knowurknottty.github.io" || host.endsWith(".netlify.app")) return origin;
+  } catch (_) {}
+  return "null";
+};
 
+const corsHeaders = (request) => ({
+  "Access-Control-Allow-Origin": allowedOrigin(request),
+  "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Max-Age": "86400",
+  "Vary": "Origin",
+});
+
+export default async (request) => {
+  if (request.method === "OPTIONS") {
+    return new Response(null, { status: 204, headers: corsHeaders(request) });
+  }
+
+  const origin = Netlify.env.get("HME_API_ORIGIN");
   if (!origin) {
     return Response.json(
       {
         error: "The analysis API is not configured.",
-        detail: "Set the Netlify environment variable HME_API_ORIGIN to the HTTPS origin running webapp/server.py.",
+        detail: "Set HME_API_ORIGIN to the HTTPS origin running webapp/server.py.",
       },
-      { status: 503, headers: { "Cache-Control": "no-store" } },
+      { status: 503, headers: { "Cache-Control": "no-store", ...corsHeaders(request) } },
     );
   }
 
@@ -15,6 +36,7 @@ export default async (request) => {
   const target = new URL(incoming.pathname + incoming.search, origin.replace(/\/$/, "") + "/");
   const headers = new Headers(request.headers);
   headers.delete("host");
+  headers.delete("origin");
   headers.set("x-forwarded-host", incoming.host);
   headers.set("x-forwarded-proto", incoming.protocol.replace(":", ""));
 
@@ -28,8 +50,9 @@ export default async (request) => {
 
     const responseHeaders = new Headers(upstream.headers);
     responseHeaders.set("Cache-Control", "no-store");
-    responseHeaders.set("Access-Control-Allow-Origin", incoming.origin);
-    responseHeaders.set("Vary", "Origin");
+    for (const [key, value] of Object.entries(corsHeaders(request))) {
+      responseHeaders.set(key, value);
+    }
 
     return new Response(upstream.body, {
       status: upstream.status,
@@ -42,7 +65,7 @@ export default async (request) => {
         error: "The analysis service is unavailable.",
         detail: error instanceof Error ? error.message : String(error),
       },
-      { status: 502, headers: { "Cache-Control": "no-store" } },
+      { status: 502, headers: { "Cache-Control": "no-store", ...corsHeaders(request) } },
     );
   }
 };
