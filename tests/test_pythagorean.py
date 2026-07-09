@@ -67,25 +67,26 @@ def test_case_insensitive():
 
 
 def test_testuser42():
-    """testuser42: K=2,N=5,O=6,W=5,U=3,R=9,K=2,N=5,O=6,T=2 → total=45, reduced=9"""
+    """testuser42: T=2,E=5,S=1,T=2,U=3,S=1,E=5,R=9,4 ignored,2 ignored → total=28, reduced=1"""
     sig = pythagorean_signature("testuser42")
-    assert sig.total == 45, f"Expected 45, got {sig.total}"
-    assert sig.reduced == 9, f"Expected 9, got {sig.reduced}"
+    assert sig.total == 28, f"Expected 28, got {sig.total}"
+    assert sig.reduced == 1, f"Expected 1, got {sig.reduced}"
     print("✓ test_testuser42 passed")
 
 
 def test_john_michael_smith():
-    """John Michael Smith: total=64, master_preserved=None (spec had arithmetic error)"""
+    """John Michael Smith: J=1,O=6,H=8,M=4,I=9,C=3,H=8,A=1,E=5,L=3,S=1,M=4,I=9,T=2,H=8 → total=77, reduced=5"""
     sig = pythagorean_signature("John Michael Smith")
-    assert sig.total == 64, f"Expected 64, got {sig.total}"
+    assert sig.total == 77, f"Expected 77, got {sig.total}"
+    assert sig.reduced == 5, f"Expected 5, got {sig.reduced}"
     assert sig.master_preserved is None, f"Expected no master, got {sig.master_preserved}"
     print("✓ test_john_michael_smith passed")
 
 
 def test_life_path():
-    """Life path from 1985-06-15: total=33, reduced=6"""
+    """Life path from 1985-06-15: 1+9+8+5+0+6+1+5=35, reduced=8"""
     lp = life_path_number(1985, 6, 15)
-    assert lp.life_path_raw == 26, f"Expected 26, got {lp.life_path_raw}"
+    assert lp.life_path_raw == 35, f"Expected 35, got {lp.life_path_raw}"
     assert lp.life_path_reduced == 8, f"Expected 8, got {lp.life_path_reduced}"
     print("✓ test_life_path passed")
 
@@ -142,9 +143,9 @@ def test_personality():
 
 
 def test_balance_number():
-    """John Michael Smith balance: K=2, E=5, B=2 → 9"""
+    """John Michael Smith balance: S=1,M=4,I=9,T=2,H=8 → first letters J=1,M=4,S=1 → 6"""
     sig = pythagorean_signature("John Michael Smith")
-    assert sig.balance_number == 9, f"Expected balance 9, got {sig.balance_number}"
+    assert sig.balance_number == 6, f"Expected balance 6, got {sig.balance_number}"
     print("✓ test_balance_number passed")
 
 
@@ -171,9 +172,9 @@ def test_multi_token():
     """Multi-token names should split correctly."""
     sig = pythagorean_signature("John Michael Smith")
     assert len(sig.tokens) == 3, f"Expected 3 tokens, got {len(sig.tokens)}"
-    assert sig.tokens[0] == "KIRK"
-    assert sig.tokens[1] == "EVAN"
-    assert sig.tokens[2] == "BROWN"
+    assert sig.tokens[0] == "JOHN"
+    assert sig.tokens[1] == "MICHAEL"
+    assert sig.tokens[2] == "SMITH"
     print("✓ test_multi_token passed")
 
 
