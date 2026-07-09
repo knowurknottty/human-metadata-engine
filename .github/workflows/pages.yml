@@ -1,0 +1,87 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build static Pages artifact
+        env:
+          HME_API_ORIGIN: ${{ vars.HME_API_ORIGIN }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          cp -R webapp/static/. dist/
+
+          # Project Pages is hosted below /human-metadata-engine/, so root-absolute
+          # asset URLs must become document-relative.
+          sed -i 's|src="/vendor/|src="./vendor/|g; s|href="/styles.css"|href="./styles.css"|g; s|src="/app.js"|src="./app.js"|g' dist/index.html
+
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          origin = os.environ.get("HME_API_ORIGIN", "").rstrip("/")
+          if not origin:
+              raise SystemExit(
+                  "Repository variable HME_API_ORIGIN is required. "
+                  "Set it to the Netlify site origin, for example https://example.netlify.app"
+              )
+
+          path = Path("dist/index.html")
+          html = path.read_text(encoding="utf-8")
+          bridge = f'''<script>
+          (() => {{
+            const apiOrigin = {json.dumps(origin)};
+            const nativeFetch = window.fetch.bind(window);
+            window.fetch = (input, init) => {{
+              if (typeof input === "string" && input.startsWith("/api/")) {{
+                return nativeFetch(apiOrigin + input, init);
+              }}
+              if (input instanceof Request) {{
+                const url = new URL(input.url);
+                if (url.origin === location.origin && url.pathname.startsWith("/api/")) {{
+                  return nativeFetch(new Request(apiOrigin + url.pathname + url.search, input), init);
+                }}
+              }}
+              return nativeFetch(input, init);
+            }};
+          }})();
+          </script>'''
+          html = html.replace('<script src="./app.js"></script>', bridge + '\n<script src="./app.js"></script>')
+          path.write_text(html, encoding="utf-8")
+          PY
+
+          touch dist/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
