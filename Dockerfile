@@ -8,8 +8,11 @@ WORKDIR /app
 
 COPY . /app
 
-RUN pip install --no-cache-dir pyswisseph \
-    && useradd --create-home --uid 10001 appuser \
+# pyswisseph is optional — astrology falls back to stubs without it.
+# Installing build deps (gcc) adds ~200MB to the image for one optional feature.
+# RUN pip install --no-cache-dir pyswisseph
+
+RUN useradd --create-home --uid 10001 appuser \
     && chown -R appuser:appuser /app
 
 USER appuser
