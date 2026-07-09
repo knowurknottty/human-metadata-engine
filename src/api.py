@@ -1,3 +1,4 @@
+import logging
 """
 Identity Comparison API
 ========================
@@ -172,8 +173,8 @@ class APIHandler(BaseHTTPRequestHandler):
                 "name_a": name_a,
                 "name_b": name_b,
                 "similarity": round(similarity, 6),
-                "fingerprint_a": identity_fingerprint(sig_a),
-                "fingerprint_b": identity_fingerprint(sig_b),
+                "fingerprint_a": identity_fingerlogging.info(sig_a),
+                "fingerprint_b": identity_fingerlogging.info(sig_b),
             })
 
         elif path == "/search":
@@ -240,8 +241,8 @@ def _flat_vector(sig: dict) -> dict:
 
 def run(port=8090):
     server = HTTPServer(("0.0.0.0", port), APIHandler)
-    print(f"Identity API running on http://localhost:{port}")
-    print(f"Endpoints: /encode, /compare, /search, /narrative, /fingerprint, /identities, /health")
+    logging.info(f"Identity API running on http://localhost:{port}")
+    logging.info(f"Endpoints: /encode, /compare, /search, /narrative, /fingerprint, /identities, /health")
     server.serve_forever()
 
 
