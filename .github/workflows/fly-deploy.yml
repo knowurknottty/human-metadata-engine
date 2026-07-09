@@ -1,0 +1,48 @@
+name: Deploy Fly.io API
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "src/**"
+      - "webapp/**"
+      - "Dockerfile"
+      - "fly.toml"
+      - ".github/workflows/fly-deploy.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: fly-production
+  cancel-in-progress: true
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install optional ephemeris dependency
+        run: pip install pyswisseph
+
+      - name: Run test suite
+        run: |
+          python3 tests/test_pythagorean.py
+          python3 tests/test_extended.py
+          python3 tests/test_final.py
+          python3 tests/test_analytics.py
+
+      - name: Set up Flyctl
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy API
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
