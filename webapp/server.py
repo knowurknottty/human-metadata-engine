@@ -1,24 +1,8 @@
 #!/usr/bin/env python3
-"""
-Identity Resonance — Web App Server
-===================================
-
-Zero-dependency (stdlib-only) HTTP server that fronts the Human
-Metadata Engine. pyswisseph is optional: with it, astrology and Human
-Design are exact; without it, the engine degrades gracefully to its
-deterministic stub charts.
-
-    python3 webapp/server.py            # http://localhost:8000
-    PORT=3000 python3 webapp/server.py
-
-Endpoints:
-    GET  /                 the single-page app
-    GET  /api/defaults     reference population (precomputed summaries)
-    POST /api/analyze      {name, birth?, psychology?} -> full analysis
-    GET  /api/health       liveness probe
-"""
+"""Identity Resonance web server: API, validation, and static assets."""
 
 import json
+import math
 import os
 import sys
 import traceback
@@ -29,19 +13,10 @@ REPO = os.path.dirname(ROOT)
 sys.path.insert(0, os.path.join(REPO, "src"))
 
 from engine import compute_unified_signature, IDENTITIES  # noqa: E402
-from analytics import feature_vector, cosine_similarity, \
-    cross_encoder_correlations  # noqa: E402
+from analytics import feature_vector, cosine_similarity, cross_encoder_correlations  # noqa: E402
 from report import generate_report  # noqa: E402
 
 STATIC = os.path.join(ROOT, "static")
-
-
-def _jsonable(o):
-    """Fallback serializer for dataclasses and other engine objects."""
-    if hasattr(o, "__dict__"):
-        return o.__dict__
-    return str(o)
-
 MIME = {
     ".html": "text/html; charset=utf-8",
     ".js": "application/javascript; charset=utf-8",
@@ -51,153 +26,182 @@ MIME = {
     ".png": "image/png",
     ".ico": "image/x-icon",
 }
-
-# ---------------------------------------------------------------------
-# Reference population: computed once at startup (fast — pure Python)
-# ---------------------------------------------------------------------
-
 _DEFAULTS = None
+_DEFAULT_ERRORS = []
+
+
+def _safe_json(value):
+    """Recursively produce strict JSON values; browsers reject NaN/Infinity."""
+    if value is None or isinstance(value, (str, bool, int)):
+        return value
+    if isinstance(value, float):
+        return value if math.isfinite(value) else None
+    if isinstance(value, dict):
+        return {str(k): _safe_json(v) for k, v in value.items()}
+    if isinstance(value, (list, tuple, set)):
+        return [_safe_json(v) for v in value]
+    if hasattr(value, "__dict__"):
+        return _safe_json(vars(value))
+    return str(value)
+
+
+def _validated_birth(raw):
+    if not raw or not raw.get("year"):
+        return None
+    birth = {
+        "year": int(raw["year"]),
+        "month": int(raw.get("month", 1)),
+        "day": int(raw.get("day", 1)),
+        "hour": int(raw.get("hour", 12)),
+        "minute": int(raw.get("minute", 0)),
+        "timezone_offset": float(raw.get("timezone_offset", 0)),
+        "location": str(raw.get("location", ""))[:120],
+    }
+    if not 1 <= birth["month"] <= 12:
+        raise ValueError("Birth month must be between 1 and 12.")
+    if not 1 <= birth["day"] <= 31:
+        raise ValueError("Birth day must be between 1 and 31.")
+    if not 0 <= birth["hour"] <= 23:
+        raise ValueError("Birth hour must be between 0 and 23.")
+    if not 0 <= birth["minute"] <= 59:
+        raise ValueError("Birth minute must be between 0 and 59.")
+    if not -14 <= birth["timezone_offset"] <= 14:
+        raise ValueError("UTC offset must be between -14 and +14.")
+    if raw.get("lat") not in (None, "") and raw.get("lon") not in (None, ""):
+        birth["lat"] = float(raw["lat"])
+        birth["lon"] = float(raw["lon"])
+        if not -90 <= birth["lat"] <= 90 or not -180 <= birth["lon"] <= 180:
+            raise ValueError("Latitude or longitude is outside its valid range.")
+    return birth
+
+
+def _normalized_reference(identity):
+    """Repair legacy sentinel hours (101/102) as unknown/noon, never silently drop."""
+    item = dict(identity)
+    if item.get("birth"):
+        birth = dict(item["birth"])
+        if int(birth.get("hour", 12)) > 23:
+            birth["hour"] = 12
+            birth["minute"] = 0
+            birth["time_accuracy"] = "unknown"
+        item["birth"] = birth
+    return item
 
 
 def get_defaults():
-    global _DEFAULTS
+    global _DEFAULTS, _DEFAULT_ERRORS
     if _DEFAULTS is None:
-        sigs = []
+        _DEFAULTS, _DEFAULT_ERRORS = [], []
         for ident in IDENTITIES:
             try:
-                sigs.append(compute_unified_signature(ident))
-            except Exception:
-                pass
-        _DEFAULTS = sigs
+                _DEFAULTS.append(compute_unified_signature(_normalized_reference(ident)))
+            except Exception as exc:
+                _DEFAULT_ERRORS.append({"id": ident.get("id"), "error": str(exc)})
     return _DEFAULTS
 
 
 def default_summaries():
-    out = []
-    for s in get_defaults():
-        out.append({
-            "id": s["id"],
-            "text": s["text"],
-            "resonance": s["resonance"]["score"],
-            "fingerprint": s["fingerprint"],
-            "expression": s["encoders"]["pythagorean"]["expression"],
-            "chaldean": s["encoders"]["chaldean"]["name_number"],
-        })
-    return out
+    return [{
+        "id": s["id"], "text": s["text"],
+        "resonance": s["resonance"]["score"],
+        "fingerprint": s["fingerprint"],
+        "expression": s["encoders"]["pythagorean"]["expression"],
+        "chaldean": s["encoders"]["chaldean"]["name_number"],
+    } for s in get_defaults()]
 
 
-def analyze(payload: dict) -> dict:
+def analyze(payload):
+    if not isinstance(payload, dict):
+        raise ValueError("Request body must be a JSON object.")
     name = (payload.get("name") or "").strip()
     if not name or not any(ch.isalpha() for ch in name):
         raise ValueError("A name containing letters is required.")
     if len(name) > 120:
         raise ValueError("Name is too long (max 120 characters).")
 
-    identity = {"id": "user:" + "".join(c for c in name.lower() if c.isalnum())[:40],
-                "text": name}
-
-    birth = payload.get("birth") or None
-    if birth and birth.get("year"):
-        identity["birth"] = {
-            "year": int(birth["year"]),
-            "month": int(birth.get("month", 1)),
-            "day": int(birth.get("day", 1)),
-            "hour": int(birth.get("hour", 12)),
-            "minute": int(birth.get("minute", 0)),
-            "timezone_offset": float(birth.get("timezone_offset", 0)),
-            "location": str(birth.get("location", ""))[:120],
-        }
-        if birth.get("lat") not in (None, "") and birth.get("lon") not in (None, ""):
-            identity["birth"]["lat"] = float(birth["lat"])
-            identity["birth"]["lon"] = float(birth["lon"])
-
+    identity = {
+        "id": "user:" + "".join(c for c in name.lower() if c.isalnum())[:40],
+        "text": name,
+    }
+    birth = _validated_birth(payload.get("birth"))
+    if birth:
+        identity["birth"] = birth
     psychology = payload.get("psychology") or None
     if psychology:
         identity["psychology"] = psychology
 
     sig = compute_unified_signature(identity)
-
-    # Comparisons against the reference population
     defaults = get_defaults()
     uv = feature_vector(sig)
-    comps = []
-    for d in defaults:
-        comps.append({
-            "id": d["id"],
-            "text": d["text"],
-            "resonance": d["resonance"]["score"],
-            "similarity": round(cosine_similarity(uv, feature_vector(d)), 4),
-        })
+    comps = [{
+        "id": d["id"], "text": d["text"],
+        "resonance": d["resonance"]["score"],
+        "similarity": round(cosine_similarity(uv, feature_vector(d)), 4),
+    } for d in defaults]
     comps.sort(key=lambda c: -c["similarity"])
-
-    # Correlation view over user + population (digit agreement heatmap)
     corr = cross_encoder_correlations(defaults + [sig])
-
     report = generate_report(sig, psychology=psychology, comparisons=comps)
-
-    return {
-        "signature": sig,
-        "comparisons": comps[:10],
-        "correlations": corr,
-        "report": report,
-    }
+    return {"signature": sig, "comparisons": comps[:10], "correlations": corr, "report": report}
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "IdentityResonance/1.0"
+    server_version = "IdentityResonance/1.1"
 
     def log_message(self, fmt, *args):
         sys.stderr.write("[web] %s\n" % (fmt % args))
 
-    def _send(self, code: int, body: bytes, ctype: str):
+    def _send(self, code, body, ctype):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store" if ctype.startswith("application/json") else "max-age=300")
+        self.send_header("X-Content-Type-Options", "nosniff")
         self.end_headers()
         self.wfile.write(body)
 
-    def _json(self, code: int, obj):
-        self._send(code, json.dumps(obj, default=_jsonable).encode(),
-                   "application/json; charset=utf-8")
+    def _json(self, code, obj):
+        body = json.dumps(_safe_json(obj), ensure_ascii=False, allow_nan=False, separators=(",", ":")).encode("utf-8")
+        self._send(code, body, "application/json; charset=utf-8")
 
     def do_GET(self):
-        path = self.path.split("?")[0]
+        path = self.path.split("?", 1)[0]
         if path == "/api/health":
-            return self._json(200, {"ok": True})
+            get_defaults()
+            return self._json(200, {"ok": True, "reference_count": len(_DEFAULTS), "reference_errors": _DEFAULT_ERRORS})
         if path == "/api/defaults":
             return self._json(200, {"identities": default_summaries()})
         if path == "/":
             path = "/index.html"
-        # Static files — refuse traversal
         fs_path = os.path.realpath(os.path.join(STATIC, path.lstrip("/")))
-        if not fs_path.startswith(os.path.realpath(STATIC)) or not os.path.isfile(fs_path):
-            return self._send(404, b"Not found", "text/plain")
-        ext = os.path.splitext(fs_path)[1]
-        with open(fs_path, "rb") as f:
-            self._send(200, f.read(), MIME.get(ext, "application/octet-stream"))
+        static_root = os.path.realpath(STATIC) + os.sep
+        if not fs_path.startswith(static_root) or not os.path.isfile(fs_path):
+            return self._send(404, b"Not found", "text/plain; charset=utf-8")
+        with open(fs_path, "rb") as handle:
+            self._send(200, handle.read(), MIME.get(os.path.splitext(fs_path)[1], "application/octet-stream"))
 
     def do_POST(self):
-        if self.path.split("?")[0] != "/api/analyze":
-            return self._send(404, b"Not found", "text/plain")
+        if self.path.split("?", 1)[0] != "/api/analyze":
+            return self._send(404, b"Not found", "text/plain; charset=utf-8")
         try:
             length = int(self.headers.get("Content-Length", 0))
+            if length <= 0:
+                raise ValueError("Request body is empty.")
             if length > 64 * 1024:
                 return self._json(413, {"error": "Payload too large."})
-            payload = json.loads(self.rfile.read(length) or b"{}")
-            result = analyze(payload)
-            return self._json(200, result)
-        except ValueError as e:
-            return self._json(400, {"error": str(e)})
-        except Exception:
+            payload = json.loads(self.rfile.read(length))
+            return self._json(200, analyze(payload))
+        except (ValueError, json.JSONDecodeError) as exc:
+            return self._json(400, {"error": str(exc)})
+        except Exception as exc:
             traceback.print_exc()
-            return self._json(500, {"error": "Analysis failed — check server logs."})
+            return self._json(500, {"error": "Analysis failed.", "detail": str(exc) if os.environ.get("DEBUG") == "1" else None})
 
 
 def main():
     port = int(os.environ.get("PORT", 8000))
     print(f"Warming reference population ({len(IDENTITIES)} identities)...")
     get_defaults()
+    print(f"Loaded {len(_DEFAULTS)} references; {len(_DEFAULT_ERRORS)} failed.")
     print(f"Identity Resonance running on http://0.0.0.0:{port}")
     ThreadingHTTPServer(("0.0.0.0", port), Handler).serve_forever()
 
