@@ -173,8 +173,8 @@ class APIHandler(BaseHTTPRequestHandler):
                 "name_a": name_a,
                 "name_b": name_b,
                 "similarity": round(similarity, 6),
-                "fingerprint_a": identity_fingerlogging.info(sig_a),
-                "fingerprint_b": identity_fingerlogging.info(sig_b),
+                "fingerprint_a": identity_fingerprint(sig_a),
+                "fingerprint_b": identity_fingerprint(sig_b),
             })
 
         elif path == "/search":

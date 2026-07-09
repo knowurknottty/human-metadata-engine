@@ -343,7 +343,7 @@ def compute_unified_signature(identity: dict) -> dict:
 
     # Second-order analytics (v0.4.0)
     result["resonance"] = composite_resonance(result)
-    result["fingerprint"] = identity_fingerlogging.info(result)
+    result["fingerprint"] = identity_fingerprint(result)
     result["snapshot"] = personality_snapshot(
         text,
         astrology=result["encoders"].get("astrology"),
