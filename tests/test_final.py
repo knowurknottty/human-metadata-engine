@@ -70,21 +70,21 @@ def test_isopsephy_greek_correspondence():
 def test_astrology_sun_sign():
     from encoders.astrology import compute_chart
     chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
-    assert chart.sun_sign == "Aquarius"
+    assert chart.sun_sign == "Gemini"
     print("✓ test_astrology_sun_sign passed")
 
 
 def test_astrology_moon_sign():
     from encoders.astrology import compute_chart
     chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
-    assert chart.moon_sign == "Gemini"
+    assert chart.moon_sign == "Taurus"
     print("✓ test_astrology_moon_sign passed")
 
 
 def test_astrology_ascendant():
     from encoders.astrology import compute_chart
     chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
-    assert chart.ascendant == "Scorpio"
+    assert chart.ascendant == "Taurus"
     print("✓ test_astrology_ascendant passed")
 
 
@@ -119,7 +119,7 @@ def test_astrology_noon_default():
 def test_astrology_chart_ruler():
     from encoders.astrology import compute_chart
     chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
-    assert chart.chart_ruler == "Pluto"  # Scorpio ascendant → Pluto
+    assert chart.chart_ruler == "Venus"  # Taurus ascendant → Venus
     print("✓ test_astrology_chart_ruler passed")
 
 
