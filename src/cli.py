@@ -1,3 +1,4 @@
+import logging
 """
 CLI Batch Tool
 ===============
@@ -129,11 +130,11 @@ def cmd_add(args):
     res = sig.get("resonance", {})
     score = res.get("score", 0) if isinstance(res, dict) else 0
 
-    print(f"Added: {args.name}")
-    print(f"  Resonance: {score:.1f}/100")
-    print(f"  Stored in DB ({stats['signatures']} total)")
-    print(f"  Narrative: output/narratives/{safe}.md")
-    print(f"  Fingerprint: output/fingerprints/{safe}.svg")
+    logging.info(f"Added: {args.name}")
+    logging.info(f"  Resonance: {score:.1f}/100")
+    logging.info(f"  Stored in DB ({stats['signatures']} total)")
+    logging.info(f"  Narrative: output/narratives/{safe}.md")
+    logging.info(f"  Fingerprint: output/fingerprints/{safe}.svg")
 
 
 def cmd_compare(args):
@@ -144,7 +145,7 @@ def cmd_compare(args):
     sig_b = compute_unified_signature({"name": args.name_b, "text": args.name_b, "id": args.name_b})
 
     result = diff_signatures(sig_a, sig_b, args.name_a, args.name_b)
-    print(diff_summary(result))
+    logging.info(diff_summary(result))
 
 
 def cmd_search(args):
@@ -153,9 +154,9 @@ def cmd_search(args):
     search = IdentitySearch.from_signatures("output/unified_signatures.json")
     results = search.find_similar(args.query, top_n=args.top)
 
-    print(f"Top {args.top} similar to '{args.query}':")
+    logging.info(f"Top {args.top} similar to '{args.query}':")
     for r in results:
-        print(f"  #{r.rank} {r.identity} (similarity: {r.score:.4f})")
+        logging.info(f"  #{r.rank} {r.identity} (similarity: {r.score:.4f})")
 
 
 def cmd_narrative(args):
@@ -163,29 +164,29 @@ def cmd_narrative(args):
     from narrative import generate_narrative
 
     sig = compute_unified_signature({"name": args.name, "text": args.name, "id": args.name})
-    print(generate_narrative(sig, args.name))
+    logging.info(generate_narrative(sig, args.name))
 
 
 def cmd_cluster():
     from clustering import cluster_identities
     result = cluster_identities("output/unified_signatures.json")
 
-    print(f"Clusters: {result['n_clusters']}")
+    logging.info(f"Clusters: {result['n_clusters']}")
     for cid, cluster in result["clusters"].items():
-        print(f"\n  Cluster {cid} ({cluster['size']} members, avg resonance {cluster['avg_resonance']}):")
+        logging.info(f"\n  Cluster {cid} ({cluster['size']} members, avg resonance {cluster['avg_resonance']}):")
         for m in cluster["members"]:
-            print(f"    - {m}")
+            logging.info(f"    - {m}")
 
 
 def cmd_anomaly():
     from anomaly import detect_anomalies
     result = detect_anomalies("output/unified_signatures.json")
 
-    print(f"Anomalies: {result['anomalous_count']}/{result['total_identities']}")
+    logging.info(f"Anomalies: {result['anomalous_count']}/{result['total_identities']}")
     for name, data in result["anomalies"].items():
-        print(f"\n  {name} (max z={data['max_z_score']}, {data['anomaly_count']} features):")
+        logging.info(f"\n  {name} (max z={data['max_z_score']}, {data['anomaly_count']} features):")
         for feat, info in list(data["features"].items())[:3]:
-            print(f"    {feat}: {info['value']} (mean={info['mean']}, z={info['z_score']})")
+            logging.info(f"    {feat}: {info['value']} (mean={info['mean']}, z={info['z_score']})")
 
 
 def cmd_export(args):
@@ -204,7 +205,7 @@ def cmd_export(args):
         out = args.output or "output/identities_report.md"
         export_markdown_report(sig_path, out)
 
-    print(f"Exported to {out}")
+    logging.info(f"Exported to {out}")
 
 
 def cmd_stats():
@@ -215,13 +216,13 @@ def cmd_stats():
     names = db.get_all_names()
     db.close()
 
-    print("Database Stats:")
+    logging.info("Database Stats:")
     for k, v in stats.items():
-        print(f"  {k}: {v}")
+        logging.info(f"  {k}: {v}")
     if names:
-        print(f"\nStored identities:")
+        logging.info(f"\nStored identities:")
         for n in names:
-            print(f"  - {n}")
+            logging.info(f"  - {n}")
 
 
 if __name__ == "__main__":
