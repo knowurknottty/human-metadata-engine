@@ -1,3 +1,4 @@
+import logging
 """
 Identity Engine — Master Orchestrator (v0.4.0)
 ==============================================
@@ -388,46 +389,46 @@ def run_engine():
             signatures.append(sig)
             dims = sig["dimensions"]
             enc = len(sig["encoders"])
-            print(f"  ✓ {identity['id']:<40} {dims:>3} dimensions, {enc} encoders")
+            logging.info(f"  ✓ {identity['id']:<40} {dims:>3} dimensions, {enc} encoders")
         except Exception as e:
-            print(f"  ✗ {identity['id']:<40} ERROR: {e}")
+            logging.info(f"  ✗ {identity['id']:<40} ERROR: {e}")
 
     # Save signatures
     os.makedirs("output", exist_ok=True)
     with open("output/unified_signatures.json", "w") as f:
         json.dump(signatures, f, indent=2, default=str)
-    print(f"\nSaved {len(signatures)} signatures to output/unified_signatures.json")
+    logging.info(f"\nSaved {len(signatures)} signatures to output/unified_signatures.json")
 
     # Summary statistics
     total_dims = sum(s["dimensions"] for s in signatures)
     avg_dims = total_dims / len(signatures) if signatures else 0
-    print(f"\nTotal dimensions computed: {total_dims}")
-    print(f"Average per identity: {avg_dims:.0f}")
+    logging.info(f"\nTotal dimensions computed: {total_dims}")
+    logging.info(f"Average per identity: {avg_dims:.0f}")
 
     # Encoder coverage
     encoder_counts = {}
     for sig in signatures:
         for enc_name in sig["encoders"]:
             encoder_counts[enc_name] = encoder_counts.get(enc_name, 0) + 1
-    print(f"\nEncoder coverage:")
+    logging.info(f"\nEncoder coverage:")
     for name, count in sorted(encoder_counts.items()):
-        print(f"  {name:<20} {count}/{len(signatures)} identities")
+        logging.info(f"  {name:<20} {count}/{len(signatures)} identities")
 
     # ---- v0.4.0 analytics outputs ----
     correlations = cross_encoder_correlations(signatures)
     with open("output/encoder_correlations.json", "w") as f:
         json.dump(correlations, f, indent=2)
-    print("\nSaved cross-encoder correlation matrix to output/encoder_correlations.json")
+    logging.info("\nSaved cross-encoder correlation matrix to output/encoder_correlations.json")
 
     report_json, report_md = batch_report(signatures)
     with open("output/comparative_report.json", "w") as f:
         json.dump(report_json, f, indent=2)
     with open("output/comparative_report.md", "w") as f:
         f.write(report_md)
-    print("Saved batch comparative report to output/comparative_report.{json,md}")
+    logging.info("Saved batch comparative report to output/comparative_report.{json,md}")
 
     top = report_json["ranking"][0]
-    print(f"\nHighest resonance: {top['text']} ({top['resonance']}/100)")
+    logging.info(f"\nHighest resonance: {top['text']} ({top['resonance']}/100)")
 
     return signatures
 
