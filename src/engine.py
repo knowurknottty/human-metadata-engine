@@ -29,7 +29,7 @@ New in v0.4.0 (second-order analytics on top of the encoders):
 import sys
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -40,6 +40,7 @@ from encoders.linguistic import linguistic_signature
 from encoders.binary_prime import binary_prime_signature
 from encoders.gematria import gematria_signature
 from encoders.isopsephy import isopsephy_signature
+from encoders.pipeline import encode_symbolic_systems
 
 from analytics import (
     composite_resonance, identity_fingerprint,
@@ -179,7 +180,7 @@ def compute_unified_signature(identity: dict) -> dict:
     result = {
         "id": identity["id"],
         "text": text,
-        "computed_at": datetime.utcnow().isoformat() + "Z",
+        "computed_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "dimensions": 0,
         "encoders": {
             "pythagorean": {
@@ -221,7 +222,10 @@ def compute_unified_signature(identity: dict) -> dict:
                 "plosive_count": ling.plosive_count,
                 "fricative_count": ling.fricative_count,
                 "nasal_count": ling.nasal_count,
-                "bigrams_top5": ling.bigrams[:5] if hasattr(ling, 'bigrams') else [],
+                "bigrams_top5": [
+                    {"bigram": item.bigram, "count": item.count, "frequency": item.frequency}
+                    for item in ling.bigrams[:5]
+                ] if hasattr(ling, 'bigrams') else [],
                 "repetition_ratio": ling.letter_repetition_ratio,
                 "is_palindrome": ling.is_palindrome,
             },
@@ -258,10 +262,22 @@ def compute_unified_signature(identity: dict) -> dict:
         },
     }
 
+    # Expanded roadmap systems share a versioned envelope.  Keeping their
+    # provenance beside the computed values makes the selected convention and
+    # any input limitations visible to API and export consumers.
+    result["encoders"].update(encode_symbolic_systems(
+        text,
+        birth=birth,
+        as_of_year=identity.get("as_of_year"),
+    ))
+
     # Count dimensions
     dim_count = 0
     for enc in result["encoders"].values():
-        dim_count += len(enc)
+        if isinstance(enc, dict) and isinstance(enc.get("data"), dict):
+            dim_count += len(enc["data"])
+        else:
+            dim_count += len(enc)
     result["dimensions"] = dim_count
 
     # Optional: Astrology (requires birth data)
@@ -297,6 +313,7 @@ def compute_unified_signature(identity: dict) -> dict:
                     for a in chart.aspects[:15]
                 ],
                 "confidence": chart.confidence,
+                "calculation_engine": chart.calculation_engine,
             }
             dim_count += 20
         except Exception as e:
@@ -359,10 +376,10 @@ def compute_unified_signature(identity: dict) -> dict:
 
 def run_engine():
     """Run the complete engine and generate all outputs."""
-    logging.info("Human Metadata Engine v0.4.0")
-    logging.info("=" * 60)
-    logging.info(f"Running {len(IDENTITIES)} identities through 9 encoders + analytics...")
-    logging.info()
+    print("Human Metadata Engine v0.4.0")
+    print("=" * 60)
+    print(f"Running {len(IDENTITIES)} identities through core encoders + 25 provenance-aware extensions + analytics...")
+    print()
 
     # Compute all signatures
     signatures = []

@@ -21,6 +21,7 @@ Sections:
 """
 
 from __future__ import annotations
+import json
 
 try:
     from analytics import composite_resonance, identity_fingerprint, \
@@ -190,6 +191,10 @@ def _wc(text: str) -> int:
 
 def _sec1_executive(name, sig, resonance, findings):
     score = resonance["score"]
+    extensions = [
+        encoder for encoder in sig.get("encoders", {}).values()
+        if isinstance(encoder, dict) and encoder.get("system") and encoder.get("provenance")
+    ]
     if score >= 75:
         band = ("exceptionally high", "the independent symbolic systems converge on this name far more often than chance would suggest")
     elif score >= 60:
@@ -201,9 +206,11 @@ def _sec1_executive(name, sig, resonance, findings):
     top3 = "\n".join(f"{i}. {f}" for i, f in enumerate(findings[:3], 1))
     return f"""## 1. Executive Summary
 
-This report is a full-spectrum symbolic and structural analysis of the identity **"{name}"**, computed across nine independent encoding systems: Pythagorean numerology, Chaldean numerology, ordinal ciphers, quantitative linguistics, binary/prime encoding, Hebrew Gematria, Greek Isopsephy, and — where birth data permits — tropical astrology and Human Design. It is written for the person who carries this name, and for anyone who wants a structured, reproducible portrait of how this specific arrangement of letters (and, if provided, this specific birth moment) behaves under nine very different analytical lenses.
+This report is a full-spectrum symbolic and structural analysis of the identity **"{name}"**, computed across the core numerological, linguistic, Hebrew, Greek, astrological, and Human Design encoders. It is written for the person who carries this name, and for anyone who wants a structured, reproducible portrait of how this specific arrangement of letters (and, if provided, this specific birth moment) behaves under several analytical lenses.
 
 **Composite Resonance Score: {score}/100.** This is a {band[0]} reading: {band[1]}. The score synthesizes four measurable components — numerological convergence ({resonance['components']['numerological_convergence']:.2f}), linguistic harmony ({resonance['components']['linguistic_harmony']:.2f}), polarity balance ({resonance['components']['polarity_balance']:.2f}), and symbolic depth ({resonance['components']['symbolic_depth']:.2f}) — into one comparable number.
+
+This run also includes **{len(extensions)} provenance-aware symbolic extensions**. Each names its own source convention and input limits in the API/dashboard. Those extensions are deliberately **excluded from the composite resonance score**: a symbolic correspondence must never be presented as a measured signal.
 
 **Top findings:**
 
@@ -329,6 +336,7 @@ def _sec4_symbolic(name, sig):
         cross = (f"The two ancient systems diverge: the Hebrew weighing yields {g_red} ({gt}) while the Greek yields {i_red} ({it}). "
                  f"Divergence between the Semitic and Hellenic lenses marks a *bilingual* identity — one that presents different faces to "
                  f"tradition and to philosophy, and can act as a translator between value-systems that do not natively understand each other.")
+    extension_registry = _full_extension_registry(sig)
     return f"""## 4. Symbolic Systems
 
 ### Hebrew Gematria
@@ -342,7 +350,45 @@ The Greek weighing gives a total of **{i['total']}**, and its digital-root casca
 ### Cross-Symbolic Synthesis
 
 {cross}
+{extension_registry}
 """
+
+
+def _full_extension_registry(sig: dict) -> str:
+    """Render every extension envelope without truncating provenance or data."""
+    extensions = [
+        (name, envelope)
+        for name, envelope in sig.get("encoders", {}).items()
+        if isinstance(envelope, dict) and envelope.get("system") and envelope.get("provenance")
+    ]
+    if not extensions:
+        return ""
+    entries = [
+        "\n### Provenance-Aware Extension Registry\n",
+        "Every registered extension is reproduced below in full. These symbolic results are excluded from the composite resonance score and fingerprint.\n",
+    ]
+    for name, envelope in extensions:
+        provenance = envelope["provenance"]
+        data = json.dumps(envelope.get("data", {}), ensure_ascii=False, indent=2, sort_keys=True, default=str)
+        source_ids = ", ".join(provenance.get("source_ids", []))
+        entries.append(f"""#### {name}
+
+- Phase: `{envelope.get('phase')}`
+- Status: `{envelope.get('status')}`
+- Interpretation level: `{envelope.get('interpretation_level')}`
+- Convention: `{provenance.get('convention')}`
+- Manifest: `{provenance.get('manifest_version')}`
+- Source IDs: `{source_ids}`
+- Input mode: `{provenance.get('input_mode')}`
+- Transliteration profile: `{provenance.get('transliteration_profile')}`
+
+**Complete computed data**
+
+```json
+{data}
+```
+""")
+    return "\n".join(entries)
 
 
 def _sec5_celestial(name, sig):
@@ -519,13 +565,13 @@ def _sec8_synthesis(name, sig, resonance, fingerprint):
                f"behaves differently — a reminder that identity is measured, not possessed." if div_systems and mode_n >= 2 else "")
     return f"""## 8. Cross-Encoder Synthesis
 
-The deepest question this engine can ask is: *where do nine unrelated systems agree?*
+The deepest question this engine can ask is: *where do the independently specified core systems agree?*
 
 {conv_txt}{div_txt}
 
 The composite resonance score of **{resonance['score']}/100** quantifies exactly this: convergence weighted at 35%, linguistic harmony at 25%, structural polarity balance at 20%, and symbolic depth at 20%. Component values — convergence {resonance['components']['numerological_convergence']:.2f}, harmony {resonance['components']['linguistic_harmony']:.2f}, balance {resonance['components']['polarity_balance']:.2f}, depth {resonance['components']['symbolic_depth']:.2f} — show precisely which channels carry this identity's signal.
 
-**The identity fingerprint** distills all of it into a single reproducible glyph: hash `{fingerprint['hash']}`, rendered as a {fingerprint['symmetry']}-fold rotationally symmetric figure (symmetry order = the expression number) whose nine spokes are the nine encoders — each spoke's length its normalized magnitude, each hue its system's color — ringed by the name's own vowel/consonant binary pattern `{fingerprint['ring_pattern']}`. No two names produce the same figure unless they are numerologically identical; the fingerprint is the visual proof-of-analysis, a barcode of the whole report.
+**The identity fingerprint** distills the core measurement set into a single reproducible glyph: hash `{fingerprint['hash']}`, rendered as a {fingerprint['symmetry']}-fold rotationally symmetric figure (symmetry order = the expression number) whose {len(fingerprint['spokes'])} spokes are the fixed analytics inputs — each spoke's length its normalized magnitude, each hue its system's color — ringed by the name's own vowel/consonant binary pattern `{fingerprint['ring_pattern']}`. Provenance-aware extensions remain inspectable separately and do not alter this glyph.
 """
 
 
@@ -557,9 +603,11 @@ def _sec10_methodology():
 
 **How the encoders work.** Pythagorean numerology maps A–Z to 1–9 cyclically and reads totals over the whole name, its vowels, and its consonants. Chaldean numerology uses the older Babylonian sound-value table (no letter maps to 9) and preserves the unreduced compound number. The ordinal ciphers are raw alphabet arithmetic (A1Z26, its reverse, and per-letter digital roots). The linguistic encoder computes Shannon entropy, syllable estimates, phoneme-class counts, and vowel/consonant statistics — measurable properties only. The binary/prime encoder writes the name as a vowel/consonant bit-string and weighs letters by primes (A=2 … Z=101). Gematria and Isopsephy transliterate into the Hebrew and Greek number-alphabets and reduce. Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. Human Design combines birth and 88-days-prior ephemeris positions into gates, channels, type, and profile. The psychology layer is entirely user-supplied assessment data.
 
-**What this analysis IS:** a reproducible, deterministic computation over a name (and optional birth data) through nine formal symbolic systems, plus honest measurements of the name as a signal. Run it twice, get the identical result. It is a structured mirror — useful for reflection, naming decisions, brand work, and pattern exploration.
+**What this analysis IS:** a reproducible, deterministic computation over a name (and optional birth data) through core formal symbolic systems plus provenance-aware extensions, alongside honest measurements of the name as a signal. Run it twice with the same inputs and convention versions, get the identical result. It is a structured mirror — useful for reflection, naming decisions, brand work, and pattern exploration.
 
 **What this analysis IS NOT:** empirical psychology, prediction, or medical/financial/legal guidance. The symbolic systems (numerology, gematria, astrology, Human Design) are interpretive traditions, not validated instruments; their claims should be held as *lenses*, not facts. Only the linguistic measurements and any self-reported psychology carry empirical weight, and self-report has well-known limits.
+
+**Extension boundaries.** The expansion layer contains 25 provenance-aware symbolic extensions, spanning historic number systems, writing traditions, comparative correspondences, and structural Unicode analysis. Every one names the versioned convention used, preserves the input script, and records whether it used a native mapping, the built-in transliteration profile, or only a structural representation. It is intentionally kept outside the composite resonance score and fingerprint: adding more traditions must not create the appearance of more empirical evidence. Some systems expose only a partial calculation because the necessary primary inputs are absent. For example, full Bazi and Jyotish calculations require a precise birth time, timezone, location, and appropriate ephemeris; character stroke counts require a sourced dictionary; and cuneiform, Egyptian, and Indus inputs are not assigned invented readings. In those cases, the result says what it did compute and what it could not compute. The provenance catalog is a review trail for conventions, not a claim that any one convention is uniquely authoritative.
 
 **Limitations.** Transliteration into Hebrew and Greek involves convention choices; birth-time uncertainty degrades astrological precision (confidence is reported); the Human Design implementation is a simplified model of the full bodygraph; and all interpretive text is generated from fixed scholarly-tradition templates. Appropriate use: curiosity, self-reflection, and creative decision support — never gatekeeping, hiring, or judgments about other people.
 

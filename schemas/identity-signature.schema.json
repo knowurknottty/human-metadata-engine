@@ -3,6 +3,30 @@
   "title": "IdentitySignature",
   "description": "Computed identity signature for any name or string",
   "type": "object",
+  "$defs": {
+    "symbolic_encoder_envelope": {
+      "type": "object",
+      "required": ["system", "phase", "status", "interpretation_level", "provenance", "data"],
+      "properties": {
+        "system": { "type": "string" },
+        "phase": { "type": "string", "enum": ["phase_1", "phase_2", "phase_3", "phase_4", "structural"] },
+        "status": { "type": "string", "enum": ["computed", "input_insufficient", "unavailable"] },
+        "interpretation_level": { "type": "string", "enum": ["computed", "symbolic"] },
+        "provenance": {
+          "type": "object",
+          "required": ["manifest_version", "convention", "source_ids", "input_mode"],
+          "properties": {
+            "manifest_version": { "type": "string" },
+            "convention": { "type": "string" },
+            "source_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+            "input_mode": { "type": "string" },
+            "transliteration_profile": { "type": "string" }
+          }
+        },
+        "data": { "type": "object" }
+      }
+    }
+  },
   "required": [
     "original_text",
     "normalized_text",
@@ -101,6 +125,38 @@
         "consonant_count": { "type": "integer" },
         "vowel_ratio": { "type": "number" }
       }
+    },
+    "encoders": {
+      "type": "object",
+      "description": "Legacy encoder payloads plus provenance-aware roadmap envelopes.",
+      "properties": {
+        "kabbalah_tree_of_life": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "sacred_geometry": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "alchemical_transformation": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "sumerian_sexagesimal": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "hermetic_principles": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "tarot": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "babylonian_planetary": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "hermes_thoth_nabu": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "solomonic": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "arabic_abjad": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "chinese": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "egyptian": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "vedic_jyotish": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "mayan_tzolkin": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "cuneiform_magic": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "elder_futhark": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "ogham": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "egyptian_maat": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "mandaean_duodecimal": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "tartaria_architecture": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "indus_valley": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "unicode_codepoint": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "apollonius": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "temporal_numerology": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "esoteric_bridge": { "$ref": "#/$defs/symbolic_encoder_envelope" }
+      },
+      "additionalProperties": { "type": "object" }
     },
     "interpretation": {
       "type": "object",

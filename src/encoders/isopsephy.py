@@ -49,6 +49,16 @@ ISOPSEPHY_MAP: dict[str, int] = {
     "J": 10,   # ι (iota, closest)
 }
 
+# Direct Greek input.  Final sigma shares sigma's value; obsolete numeral
+# characters are present where Unicode supplies them.
+GREEK_ISOPSEPHY_MAP: dict[str, int] = {
+    "Α": 1, "Β": 2, "Γ": 3, "Δ": 4, "Ε": 5, "Ϛ": 6, "Ϝ": 6,
+    "Ζ": 7, "Η": 8, "Θ": 9, "Ι": 10, "Κ": 20, "Λ": 30, "Μ": 40,
+    "Ν": 50, "Ξ": 60, "Ο": 70, "Π": 80, "Ϟ": 90, "Ρ": 100,
+    "Σ": 200, "ς": 200, "Τ": 300, "Υ": 400, "Φ": 500, "Χ": 600,
+    "Ψ": 700, "Ω": 800, "Ϡ": 900,
+}
+
 # Greek letter names for reference
 GREEK_LETTERS = {
     1: ("α", "alpha"), 2: ("β", "beta"), 3: ("γ", "gamma"),
@@ -90,7 +100,16 @@ class IsopsephySignature:
 
 
 def normalize(text: str) -> str:
-    return "".join(ch for ch in text.upper() if ch.isalpha())
+    """Keep Greek native; transliterate other supported scripts to Latin."""
+    try:
+        from .pipeline import prepare_encoding_input
+    except ImportError:  # pragma: no cover - direct module execution
+        from pipeline import prepare_encoding_input
+
+    prepared = prepare_encoding_input(text)
+    direct = [ch for ch in prepared["normalized_text"].upper() if ch in GREEK_ISOPSEPHY_MAP]
+    latin = [ch for ch in prepared["latin_transliteration"] if "A" <= ch <= "Z"]
+    return "".join(direct if direct else latin)
 
 
 def digital_root(n: int) -> int:
@@ -113,7 +132,7 @@ def isopsephy_signature(text: str) -> IsopsephySignature:
     total = 0
 
     for i, ch in enumerate(normalized):
-        val = ISOPSEPHY_MAP.get(ch, 0)
+        val = GREEK_ISOPSEPHY_MAP.get(ch, ISOPSEPHY_MAP.get(ch, 0))
         total += val
 
         letter_values.append({

@@ -173,8 +173,14 @@ def phonetic_class(ch: str) -> str:
 
 def linguistic_signature(text: str) -> LinguisticSignature:
     """Compute full linguistic signature."""
-    normalized = "".join(ch for ch in text.upper() if ch.isalpha())
-    tokens = [t for t in re.split(r"[\s\-_]+", text.upper()) if t]
+    try:
+        from .pipeline import prepare_encoding_input
+    except ImportError:  # pragma: no cover - direct module execution
+        from pipeline import prepare_encoding_input
+
+    latin_text = prepare_encoding_input(text)["latin_transliteration"]
+    normalized = "".join(ch for ch in latin_text if "A" <= ch <= "Z")
+    tokens = [t for t in re.split(r"[\s\-_]+", latin_text) if t]
 
     # Letter classification
     vowels = [ch for ch in normalized if ch in STRICT_VOWELS]

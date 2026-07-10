@@ -79,6 +79,7 @@ CITY_COORDS = {
     "los angeles, ca": (34.0522, -118.2437),
     "chicago, il": (41.8781, -87.6298),
     "san francisco, ca": (37.7749, -122.4194),
+    "portland, oregon, usa": (45.5152, -122.6765),
     "london, uk": (51.5074, -0.1278),
 }
 
@@ -112,6 +113,7 @@ class AstrologicalChart:
     longitude: float
     time_precision: str
     confidence: float
+    calculation_engine: str
 
     # Planetary positions
     planets: list[PlanetPosition]
@@ -342,6 +344,7 @@ def compute_chart(
         longitude=lon,
         time_precision=time_precision,
         confidence=confidence,
+        calculation_engine="Swiss Ephemeris (Moshier)",
         planets=planet_positions,
         sun_sign=sun_sign,
         moon_sign=moon_sign,
@@ -375,6 +378,7 @@ def _stub_chart(year, month, day, hour, minute, location, lat, lon, time_precisi
         longitude=lon,
         time_precision=f"{time_precision}_stub",
         confidence=confidence * 0.5,
+        calculation_engine="deterministic stub (pyswisseph unavailable)",
         planets=[PlanetPosition("Sun", 0, sun_sign, 0, None, False)],
         sun_sign=sun_sign,
         moon_sign="Unknown",

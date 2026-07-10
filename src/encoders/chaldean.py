@@ -77,9 +77,15 @@ class ChaldeanSignature:
 
 def normalize_chaldean(text: str) -> tuple[str, list[str], list[str]]:
     """Normalize text for Chaldean calculation."""
+    try:
+        from .pipeline import prepare_encoding_input
+    except ImportError:  # pragma: no cover - direct module execution
+        from pipeline import prepare_encoding_input
+
+    latin_text = prepare_encoding_input(text)["latin_transliteration"]
     ignored = [ch for ch in text if not ch.isalpha() and not ch.isspace() and ch not in "-_"]
-    tokens = [t for t in re.split(r"[\s\-_]+", text.upper()) if t]
-    normalized = "".join(ch for ch in text.upper() if ch.isalpha())
+    tokens = [t for t in re.split(r"[\s\-_]+", latin_text) if t]
+    normalized = "".join(ch for ch in latin_text if "A" <= ch <= "Z")
     return normalized, tokens, ignored
 
 

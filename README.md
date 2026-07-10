@@ -2,27 +2,25 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.4.0** — Complete encoder suite (9 symbolic systems), cross-encoder analytics (composite resonance score, identity fingerprints, correlation matrices), graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app** ($10-product storefront over the engine).
+**v0.5.0** — Core encoder suite plus 25 provenance-aware symbolic extensions across four phases, cross-encoder analytics (composite resonance score, identity fingerprints, correlation matrices), graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app** ($10-product storefront over the engine).
 
 ## Quick Start — Web App
 
 ```bash
-./deploy.sh                 # installs optional deps, runs 118 tests, serves :8000
+./deploy.sh                 # installs Swiss Ephemeris, runs 138 tests, serves :8000
 # or directly:
-python3 webapp/server.py    # zero dependencies required
+python3 -m pip install -r requirements.txt && python3 webapp/server.py
 ```
 
 Open http://localhost:8000 — enter a name (birth data unlocks astrology + Human Design; sliders/pickers unlock the psychology layer), get the free dashboard preview, and the simulated $10 Stripe checkout unlocks the full 3,000+ word ten-section report (downloadable as Markdown, printable to PDF).
 
-**Deploying anywhere:** the app is a single Python process with no required third-party packages (`pyswisseph` optional, for exact ephemeris). Any host that runs `python3 webapp/server.py` and honors `$PORT` works — Fly.io, Railway, Render, a VPS, or a container:
+**Deploying anywhere:** the app is a single Python process with one mandatory native dependency: the pinned `pyswisseph` Swiss Ephemeris extension for exact natal calculations. Use the repository Dockerfile or run `python3 -m pip install -r requirements.txt` before starting `python3 webapp/server.py`.
 
-```dockerfile
-FROM python:3.12-slim
-COPY . /app
-WORKDIR /app
-RUN pip install pyswisseph
-ENV PORT=8000
-CMD ["python3", "webapp/server.py"]
+```bash
+# The repository Dockerfile builds pyswisseph in a GCC-enabled builder stage
+# and copies only the resulting wheel into the Python 3.12 runtime image.
+docker build -t identity-resonance .
+docker run --rm -p 8000:8080 identity-resonance
 ```
 
 ## Architecture
@@ -48,6 +46,9 @@ human-metadata-engine/
 │   │   ├── astrology.py             # Tropical astrology (Swiss Ephemeris)
 │   │   ├── human_design.py          # Human Design / Gene Keys (64 gates)
 │   │   └── psychology.py            # Big Five, MBTI, Enneagram (user-supplied)
+│   │   ├── pipeline.py               # 25-system provenance-aware expansion pipeline
+│   │   ├── kabbalah.py               # Tree of Life source module
+│   │   └── apollonius.py             # Apollonius source module, unified by pipeline
 │   ├── graph/
 │   │   ├── analysis.py              # Centrality, communities, resonance
 │   │   └── algorithms.py            # PageRank, spectral clustering, HITS
@@ -55,10 +56,10 @@ human-metadata-engine/
 ├── tests/
 │   ├── test_pythagorean.py          # 17 tests
 │   ├── test_extended.py             # 24 tests
-│   ├── test_final.py                # 31 tests
+│   ├── test_final.py                # 34 tests
 │   └── test_analytics.py            # 46 tests (v0.4.0 analytics)
 ├── output/
-│   ├── unified_signatures.json      # 29 identities × 9 encoders + analytics
+│   ├── unified_signatures.json      # generated signatures + analytics
 │   ├── encoder_correlations.json    # Pearson + digit-agreement matrices
 │   ├── comparative_report.{json,md} # Batch ranking + similarity report
 │   ├── identity_graph.json          # 19 nodes, 25 edges
@@ -68,7 +69,7 @@ human-metadata-engine/
     └── identity-graph.schema.json
 ```
 
-## Encoder Suite (9 Systems)
+## Core Encoder Suite
 
 | Encoder | Type | Dimensions | Description |
 |---------|------|------------|-------------|
@@ -119,7 +120,21 @@ Second-order analysis computed on top of the unified signatures:
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
 | **Long-Form Reports** | 10-section, 3,000+ word written analysis per identity (`src/report.py`) |
 
-Reference population: 29 identities including Einstein, Tesla, Curie, Lovelace, Turing, and da Vinci with real birth data — **2,275 dimensions** computed per engine run.
+Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
+
+## Provenance-Aware Symbolic Extensions (25 Systems)
+
+The expansion is available through `compute_unified_signature(...)["encoders"]` and is grouped into the four roadmap phases plus structural integrations:
+
+- **Phase 1:** Kabbalistic Tree of Life, Sacred Geometry, Alchemical Transformation, Sumerian Sexagesimal, Hermetic Principles.
+- **Phase 2:** Tarot, Babylonian Planetary Numbers, Hermes–Thoth–Nabu Lineage, Solomonic Indexing, Arabic Abjad.
+- **Phase 3:** Chinese I Ching/Wu Xing/year-pillar context, Egyptian uniliteral/decans, Vedic Jyotish requirements, Mayan Tzolkin, Cuneiform structural analysis.
+- **Phase 4:** Elder Futhark, Ogham, Egyptian Ma'at, Mandaean Duodecimal, architectural-proportion analysis, Indus structural analysis, Unicode codepoints.
+- **Structural:** unified Apollonius, temporal numerology, and the explicit Tarot–Kabbalah–Astrology–Numerology bridge.
+
+Every extension returns `system`, `phase`, `status`, `interpretation_level`, `provenance`, and `data`. Direct-script input is preserved, while Latin-only systems use the named `builtin-v1` transliteration profile. See [the provenance catalog](docs/symbolic-systems-provenance.md) for each convention, source ID, and limitation.
+
+The extension results are intentionally excluded from the existing composite resonance formula and fingerprint spokes. They are symbolic or computed lenses, not empirical findings.
 
 ## Graph Algorithms
 
@@ -234,16 +249,18 @@ python3 -m src.api
 ```
 test_pythagorean.py:  17 tests (Pythagorean numerology)
 test_extended.py:     24 tests (Chaldean, Ordinal, Linguistic, Binary/Prime)
-test_final.py:        31 tests (Gematria, Isopsephy, Astrology, HD, Psychology, Graph)
+test_final.py:        34 tests (Gematria, Isopsephy, exact astrology, HD, Psychology, Graph)
 test_analytics.py:    46 tests (Resonance, fingerprints, correlations, reports)
+test_symbolic_*.py:   16 tests (roadmap, Unicode, provenance, detail surface)
+test_ephemeris_packaging.py: 1 test (Docker/deploy/CI contract)
 ─────────────────────────────────────────────────────────────────
-Total:               118 tests, 100% passing
+Total:               138 tests, 100% passing
 ```
 
 ## Dependencies
 
-- Python 3.9+ (engine, analytics, and web app are stdlib-only)
-- `pyswisseph` *(optional)* — Swiss Ephemeris for exact astrology/Human Design; without it the engine falls back to deterministic stub charts
+- Python 3.9+
+- `pyswisseph==2.10.3.2` *(mandatory)* — Swiss Ephemeris for exact astrology and Human Design; see [third-party notice](THIRD_PARTY_NOTICES.md)
 
 ## Usage
 
