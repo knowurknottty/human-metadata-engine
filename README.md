@@ -7,22 +7,20 @@ A provenance-aware identity metadata architecture that encodes humans, aliases, 
 ## Quick Start — Web App
 
 ```bash
-./deploy.sh                 # installs optional deps, runs 118 tests, serves :8000
+./deploy.sh                 # installs Swiss Ephemeris, runs 138 tests, serves :8000
 # or directly:
-python3 webapp/server.py    # zero dependencies required
+python3 -m pip install -r requirements.txt && python3 webapp/server.py
 ```
 
 Open http://localhost:8000 — enter a name (birth data unlocks astrology + Human Design; sliders/pickers unlock the psychology layer), get the free dashboard preview, and the simulated $10 Stripe checkout unlocks the full 3,000+ word ten-section report (downloadable as Markdown, printable to PDF).
 
-**Deploying anywhere:** the app is a single Python process with no required third-party packages (`pyswisseph` optional, for exact ephemeris). Any host that runs `python3 webapp/server.py` and honors `$PORT` works — Fly.io, Railway, Render, a VPS, or a container:
+**Deploying anywhere:** the app is a single Python process with one mandatory native dependency: the pinned `pyswisseph` Swiss Ephemeris extension for exact natal calculations. Use the repository Dockerfile or run `python3 -m pip install -r requirements.txt` before starting `python3 webapp/server.py`.
 
-```dockerfile
-FROM python:3.12-slim
-COPY . /app
-WORKDIR /app
-RUN pip install pyswisseph
-ENV PORT=8000
-CMD ["python3", "webapp/server.py"]
+```bash
+# The repository Dockerfile builds pyswisseph in a GCC-enabled builder stage
+# and copies only the resulting wheel into the Python 3.12 runtime image.
+docker build -t identity-resonance .
+docker run --rm -p 8000:8080 identity-resonance
 ```
 
 ## Architecture
@@ -58,7 +56,7 @@ human-metadata-engine/
 ├── tests/
 │   ├── test_pythagorean.py          # 17 tests
 │   ├── test_extended.py             # 24 tests
-│   ├── test_final.py                # 31 tests
+│   ├── test_final.py                # 34 tests
 │   └── test_analytics.py            # 46 tests (v0.4.0 analytics)
 ├── output/
 │   ├── unified_signatures.json      # generated signatures + analytics
@@ -251,16 +249,18 @@ python3 -m src.api
 ```
 test_pythagorean.py:  17 tests (Pythagorean numerology)
 test_extended.py:     24 tests (Chaldean, Ordinal, Linguistic, Binary/Prime)
-test_final.py:        31 tests (Gematria, Isopsephy, Astrology, HD, Psychology, Graph)
+test_final.py:        34 tests (Gematria, Isopsephy, exact astrology, HD, Psychology, Graph)
 test_analytics.py:    46 tests (Resonance, fingerprints, correlations, reports)
+test_symbolic_*.py:   16 tests (roadmap, Unicode, provenance, detail surface)
+test_ephemeris_packaging.py: 1 test (Docker/deploy/CI contract)
 ─────────────────────────────────────────────────────────────────
-Total:               118 tests, 100% passing
+Total:               138 tests, 100% passing
 ```
 
 ## Dependencies
 
-- Python 3.9+ (engine, analytics, and web app are stdlib-only)
-- `pyswisseph` *(optional)* — Swiss Ephemeris for exact astrology/Human Design; without it the engine falls back to deterministic stub charts
+- Python 3.9+
+- `pyswisseph==2.10.3.2` *(mandatory)* — Swiss Ephemeris for exact astrology and Human Design; see [third-party notice](THIRD_PARTY_NOTICES.md)
 
 ## Usage
 

@@ -312,6 +312,7 @@ def compute_unified_signature(identity: dict) -> dict:
                     for a in chart.aspects[:15]
                 ],
                 "confidence": chart.confidence,
+                "calculation_engine": chart.calculation_engine,
             }
             dim_count += 20
         except Exception as e:

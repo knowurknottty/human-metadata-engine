@@ -12,10 +12,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 
 def _exact_chart_or_skip(test_name):
-    """Exact ephemeris assertions require the optional pyswisseph package."""
+    """Ad hoc source-only runs may omit the deployment-mandatory extension."""
     from encoders.astrology import SWE_AVAILABLE, compute_chart
     if not SWE_AVAILABLE:
-        print(f"✓ {test_name} skipped (pyswisseph unavailable; stub covered separately)")
+        print(f"✓ {test_name} skipped (pyswisseph unavailable in this ad hoc interpreter; stub covered separately)")
         return None
     return compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
 
@@ -84,6 +84,12 @@ def test_astrology_sun_sign():
     print("✓ test_astrology_sun_sign passed")
 
 
+def test_astrology_portland_coordinates():
+    from encoders.astrology import get_coordinates
+    assert get_coordinates("Portland, Oregon, USA") == (45.5152, -122.6765)
+    print("✓ test_astrology_portland_coordinates passed")
+
+
 def test_astrology_moon_sign():
     chart = _exact_chart_or_skip("test_astrology_moon_sign")
     if chart is None:
@@ -96,7 +102,7 @@ def test_astrology_ascendant():
     chart = _exact_chart_or_skip("test_astrology_ascendant")
     if chart is None:
         return
-    assert chart.ascendant == "Taurus"
+    assert chart.ascendant == "Aries"
     print("✓ test_astrology_ascendant passed")
 
 
@@ -127,7 +133,7 @@ def test_astrology_confidence():
 def test_astrology_noon_default():
     from encoders.astrology import SWE_AVAILABLE, compute_chart
     if not SWE_AVAILABLE:
-        print("✓ test_astrology_noon_default skipped (pyswisseph unavailable; stub covered separately)")
+        print("✓ test_astrology_noon_default skipped (pyswisseph unavailable in this ad hoc interpreter; stub covered separately)")
         return
     chart = compute_chart(1985, 6, 15, 12, 0, -7, "Portland, Oregon, USA")
     assert chart.confidence == 0.4  # Noon default
@@ -138,7 +144,7 @@ def test_astrology_chart_ruler():
     chart = _exact_chart_or_skip("test_astrology_chart_ruler")
     if chart is None:
         return
-    assert chart.chart_ruler == "Venus"  # Taurus ascendant → Venus
+    assert chart.chart_ruler == "Mars"  # Aries ascendant → Mars
     print("✓ test_astrology_chart_ruler passed")
 
 
@@ -161,6 +167,14 @@ def test_astrology_stub_fallback():
     assert len(chart.planets) == 1 and chart.planets[0].planet == "Sun"
     assert chart.moon_sign == "Unknown"
     print("✓ test_astrology_stub_fallback passed")
+
+
+def test_astrology_engine_metadata():
+    chart = _exact_chart_or_skip("test_astrology_engine_metadata")
+    if chart is None:
+        return
+    assert chart.calculation_engine == "Swiss Ephemeris (Moshier)"
+    print("✓ test_astrology_engine_metadata passed")
 
 
 # ===================== HUMAN DESIGN TESTS =====================
@@ -375,6 +389,7 @@ def run_all():
         test_isopsephy_greek_correspondence,
         # Astrology
         test_astrology_sun_sign,
+        test_astrology_portland_coordinates,
         test_astrology_moon_sign,
         test_astrology_ascendant,
         test_astrology_planets,
@@ -384,6 +399,7 @@ def run_all():
         test_astrology_chart_ruler,
         test_astrology_lunar_phase,
         test_astrology_stub_fallback,
+        test_astrology_engine_metadata,
         # Human Design
         test_human_design_type,
         test_human_design_strategy,

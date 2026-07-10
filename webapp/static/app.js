@@ -407,7 +407,7 @@ function renderDashboard(result) {
       </div>
       <div class="mt-3 space-y-1">${(astro.aspects || []).slice(0, 5).map(a =>
         `<div class="text-[11px] text-slate-400 flex justify-between"><span>${esc(a.planets[0])} <span class="text-fuchsia-300">${esc(a.type)}</span> ${esc(a.planets[1])}</span><span class="stat-num">${a.orb}°${a.exact ? " ✦" : ""}</span></div>`).join("")}</div>
-      <p class="text-[10px] text-slate-500 mt-2">Swiss Ephemeris, tropical zodiac · confidence ${astro.confidence}</p>`, "md:col-span-2"));
+      <p class="text-[10px] text-slate-500 mt-2">${esc(astro.calculation_engine || "Astrology engine")}, tropical zodiac · confidence ${astro.confidence}</p>`, "md:col-span-2"));
   }
 
   // Human Design

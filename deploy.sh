@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Identity Resonance — one-command deploy.
 #
-#   ./deploy.sh            # install optional deps, run tests, start on :8000
+#   ./deploy.sh            # install mandatory ephemeris, run tests, start on :8000
 #   PORT=3000 ./deploy.sh  # custom port
 #   ./deploy.sh --no-test  # skip the test suite
 set -euo pipefail
@@ -9,15 +9,9 @@ cd "$(dirname "$0")"
 
 echo "== Identity Resonance deploy =="
 
-# Optional dependency: exact astrology/Human Design. The app degrades
-# gracefully to deterministic stub charts without it.
-if python3 -c "import swisseph" 2>/dev/null; then
-  echo "pyswisseph: already installed (exact ephemeris)"
-elif pip3 install pyswisseph 2>/dev/null; then
-  echo "pyswisseph: installed (exact ephemeris)"
-else
-  echo "pyswisseph: unavailable — continuing with stub charts (reduced accuracy)"
-fi
+# Mandatory production ephemeris: pin the extension before tests or serving.
+python3 -m pip install --no-cache-dir -r requirements.txt
+python3 -c "import swisseph; print('pyswisseph: exact ephemeris available')"
 
 if [[ "${1:-}" != "--no-test" ]]; then
   echo "== Running test suite =="
@@ -25,7 +19,13 @@ if [[ "${1:-}" != "--no-test" ]]; then
   python3 tests/test_extended.py   >/dev/null
   python3 tests/test_final.py      >/dev/null
   python3 tests/test_analytics.py  >/dev/null
-  echo "All 118 tests passed."
+  python3 tests/test_symbolic_roadmap.py >/dev/null
+  python3 tests/test_unicode_pipeline_integration.py >/dev/null
+  python3 tests/test_integrated_prototypes.py >/dev/null
+  python3 tests/test_symbolic_contract.py >/dev/null
+  python3 tests/test_web_symbolic_surface.py >/dev/null
+  python3 tests/test_ephemeris_packaging.py >/dev/null
+  echo "All test suites passed."
 fi
 
 echo "== Starting server on port ${PORT:-8000} =="
