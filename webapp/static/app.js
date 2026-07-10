@@ -40,6 +40,7 @@ const B5 = [
 const ZODIAC = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
 const ZODIAC_GLYPH = {Aries:"♈",Taurus:"♉",Gemini:"♊",Cancer:"♋",Leo:"♌",Virgo:"♍",Libra:"♎",Scorpio:"♏",Sagittarius:"♐",Capricorn:"♑",Aquarius:"♒",Pisces:"♓"};
 const PLANET_GLYPH = {Sun:"☉",Moon:"☽",Mercury:"☿",Venus:"♀",Mars:"♂",Jupiter:"♃",Saturn:"♄",Uranus:"♅",Neptune:"♆",Pluto:"♇"};
+const BONUS_CODE = "evan";
 
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -753,6 +754,27 @@ const app = {
     $("paywall").classList.remove("flex");
   },
 
+  unlockReport() {
+    this.closePaywall();
+    STATE.paid = true;
+    renderReport();
+    $("report-card").scrollIntoView({behavior: "smooth"});
+  },
+
+  redeemBonus(ev) {
+    ev.preventDefault();
+    const code = $("bonus-code").value.trim().toLowerCase();
+    const err = $("bonus-error");
+    if (code !== BONUS_CODE) {
+      err.textContent = "That bonus code is not valid.";
+      err.classList.remove("hidden");
+      return;
+    }
+    err.classList.add("hidden");
+    $("bonus-code").value = "";
+    this.unlockReport();
+  },
+
   pay(ev) {
     ev.preventDefault();
     const num = $("cc-num").value.replace(/\s/g, "");
@@ -769,12 +791,9 @@ const app = {
     setTimeout(() => {
       btn.textContent = "✓ Payment confirmed";
       setTimeout(() => {
-        this.closePaywall();
         btn.disabled = false;
         btn.textContent = "$10 — Unlock Full Analysis";
-        STATE.paid = true;
-        renderReport();
-        $("report-card").scrollIntoView({behavior: "smooth"});
+        this.unlockReport();
       }, 700);
     }, 1400);
   },

@@ -154,6 +154,17 @@
       <p id="pay-error" class="hidden text-rose-400 text-xs"></p>
       <p class="text-center text-[11px] text-slate-500">Test mode accepts 4242 4242 4242 4242 · any future expiry · any CVC</p>
     </form>
+    <div class="my-5 flex items-center gap-3 text-xs text-slate-600" aria-hidden="true">
+      <span class="h-px flex-1 bg-white/10"></span><span>or</span><span class="h-px flex-1 bg-white/10"></span>
+    </div>
+    <form class="space-y-2" onsubmit="app.redeemBonus(event)">
+      <label class="block text-xs font-medium text-slate-300" for="bonus-code">Bonus code</label>
+      <div class="flex gap-2">
+        <input id="bonus-code" autocomplete="off" placeholder="Enter your code" class="inp min-w-0 flex-1" maxlength="64">
+        <button class="rounded-xl border border-amber-400/40 px-4 text-sm font-semibold text-amber-200 hover:bg-amber-400/10 transition">Redeem</button>
+      </div>
+      <p id="bonus-error" class="hidden text-rose-400 text-xs" role="alert"></p>
+    </form>
   </div>
 </div>
 
@@ -162,6 +173,6 @@
   <p class="mt-1">Deterministic computation — identical inputs always produce identical results. &copy; Inversion Labs.</p>
 </footer>
 
-<script src="/app.js"></script>
+<script src="/app.js?v=bonus-1"></script>
 </body>
 </html>

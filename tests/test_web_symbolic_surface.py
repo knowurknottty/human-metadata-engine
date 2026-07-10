@@ -42,6 +42,17 @@ class WebSymbolicSurfaceTests(unittest.TestCase):
         self.assertIn("25 provenance-aware symbolic extensions", source)
         self.assertIn("interpretive lenses, not empirical claims", source)
 
+    def test_paywall_supports_the_evan_bonus_code(self):
+        with open(os.path.join(ROOT, "webapp", "static", "index.html"), encoding="utf-8") as handle:
+            markup = handle.read()
+        with open(os.path.join(ROOT, "webapp", "static", "app.js"), encoding="utf-8") as handle:
+            source = handle.read()
+        self.assertIn('id="bonus-code"', markup)
+        self.assertIn("app.redeemBonus(event)", markup)
+        self.assertIn('const BONUS_CODE = "evan"', source)
+        self.assertIn("redeemBonus(ev)", source)
+        self.assertIn("this.unlockReport()", source)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
