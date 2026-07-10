@@ -56,13 +56,29 @@ GEMATRIA_MAP: dict[str, int] = {
     "I": 10,   # Yod (alternate)
 }
 
+# Direct Hebrew support uses Mispar Hechrachi (absolute value). Final forms use
+# their ordinary values; the extended final-letter system is a distinct
+# convention and is intentionally not blended into this encoder.
+HEBREW_GEMATRIA_MAP: dict[str, int] = {
+    "א": 1, "ב": 2, "ג": 3, "ד": 4, "ה": 5, "ו": 6, "ז": 7,
+    "ח": 8, "ט": 9, "י": 10, "כ": 20, "ך": 20, "ל": 30, "מ": 40,
+    "ם": 40, "נ": 50, "ן": 50, "ס": 60, "ע": 70, "פ": 80, "ף": 80,
+    "צ": 90, "ץ": 90, "ק": 100, "ר": 200, "ש": 300, "ת": 400,
+}
+HEBREW_ORDINAL_MAP: dict[str, int] = {
+    char: index for index, char in enumerate(
+        "אבגדהוזחטיכלמנסעפצקרשת", start=1
+    )
+}
+HEBREW_ORDINAL_MAP.update({"ך": 11, "ם": 13, "ן": 14, "ף": 17, "ץ": 18})
+
 # Ordinal Gematria (A=1, B=2, ..., Z=26) - same as standard ordinal
 ORDINAL_GEMATRIA = {chr(i + ord("A")): i + 1 for i in range(26)}
 
 # Jewish Reduced (reduce each letter to single digit before summing)
 def jewish_reduced_value(letter: str) -> int:
     """Reduce gematria value to single digit."""
-    val = GEMATRIA_MAP.get(letter.upper(), 0)
+    val = HEBREW_GEMATRIA_MAP.get(letter, GEMATRIA_MAP.get(letter.upper(), 0))
     while val > 9:
         val = sum(int(d) for d in str(val))
     return val
@@ -101,7 +117,16 @@ class GematriaSignature:
 
 
 def normalize(text: str) -> str:
-    return "".join(ch for ch in text.upper() if ch.isalpha())
+    """Keep Hebrew native; transliterate other supported scripts to Latin."""
+    try:
+        from .pipeline import prepare_encoding_input
+    except ImportError:  # pragma: no cover - direct module execution
+        from pipeline import prepare_encoding_input
+
+    prepared = prepare_encoding_input(text)
+    direct = [ch for ch in prepared["normalized_text"] if ch in HEBREW_GEMATRIA_MAP]
+    latin = [ch for ch in prepared["latin_transliteration"] if "A" <= ch <= "Z"]
+    return "".join(direct if direct else latin)
 
 
 def reduce_single(n: int) -> int:
@@ -121,8 +146,8 @@ def gematria_signature(text: str) -> GematriaSignature:
     red_total = 0
 
     for i, ch in enumerate(normalized):
-        abs_val = GEMATRIA_MAP.get(ch, 0)
-        ord_val = ORDINAL_GEMATRIA.get(ch, 0)
+        abs_val = HEBREW_GEMATRIA_MAP.get(ch, GEMATRIA_MAP.get(ch, 0))
+        ord_val = HEBREW_ORDINAL_MAP.get(ch, ORDINAL_GEMATRIA.get(ch, 0))
         red_val = jewish_reduced_value(ch)
 
         letter_values.append({

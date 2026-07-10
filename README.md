@@ -2,7 +2,7 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.4.0** — Complete encoder suite (9 symbolic systems), cross-encoder analytics (composite resonance score, identity fingerprints, correlation matrices), graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app** ($10-product storefront over the engine).
+**v0.5.0** — Core encoder suite plus 25 provenance-aware symbolic extensions across four phases, cross-encoder analytics (composite resonance score, identity fingerprints, correlation matrices), graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app** ($10-product storefront over the engine).
 
 ## Quick Start — Web App
 
@@ -48,6 +48,9 @@ human-metadata-engine/
 │   │   ├── astrology.py             # Tropical astrology (Swiss Ephemeris)
 │   │   ├── human_design.py          # Human Design / Gene Keys (64 gates)
 │   │   └── psychology.py            # Big Five, MBTI, Enneagram (user-supplied)
+│   │   ├── pipeline.py               # 25-system provenance-aware expansion pipeline
+│   │   ├── kabbalah.py               # Tree of Life source module
+│   │   └── apollonius.py             # Apollonius source module, unified by pipeline
 │   ├── graph/
 │   │   ├── analysis.py              # Centrality, communities, resonance
 │   │   └── algorithms.py            # PageRank, spectral clustering, HITS
@@ -58,7 +61,7 @@ human-metadata-engine/
 │   ├── test_final.py                # 31 tests
 │   └── test_analytics.py            # 46 tests (v0.4.0 analytics)
 ├── output/
-│   ├── unified_signatures.json      # 29 identities × 9 encoders + analytics
+│   ├── unified_signatures.json      # generated signatures + analytics
 │   ├── encoder_correlations.json    # Pearson + digit-agreement matrices
 │   ├── comparative_report.{json,md} # Batch ranking + similarity report
 │   ├── identity_graph.json          # 19 nodes, 25 edges
@@ -68,7 +71,7 @@ human-metadata-engine/
     └── identity-graph.schema.json
 ```
 
-## Encoder Suite (9 Systems)
+## Core Encoder Suite
 
 | Encoder | Type | Dimensions | Description |
 |---------|------|------------|-------------|
@@ -119,7 +122,21 @@ Second-order analysis computed on top of the unified signatures:
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
 | **Long-Form Reports** | 10-section, 3,000+ word written analysis per identity (`src/report.py`) |
 
-Reference population: 29 identities including Einstein, Tesla, Curie, Lovelace, Turing, and da Vinci with real birth data — **2,275 dimensions** computed per engine run.
+Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
+
+## Provenance-Aware Symbolic Extensions (25 Systems)
+
+The expansion is available through `compute_unified_signature(...)["encoders"]` and is grouped into the four roadmap phases plus structural integrations:
+
+- **Phase 1:** Kabbalistic Tree of Life, Sacred Geometry, Alchemical Transformation, Sumerian Sexagesimal, Hermetic Principles.
+- **Phase 2:** Tarot, Babylonian Planetary Numbers, Hermes–Thoth–Nabu Lineage, Solomonic Indexing, Arabic Abjad.
+- **Phase 3:** Chinese I Ching/Wu Xing/year-pillar context, Egyptian uniliteral/decans, Vedic Jyotish requirements, Mayan Tzolkin, Cuneiform structural analysis.
+- **Phase 4:** Elder Futhark, Ogham, Egyptian Ma'at, Mandaean Duodecimal, architectural-proportion analysis, Indus structural analysis, Unicode codepoints.
+- **Structural:** unified Apollonius, temporal numerology, and the explicit Tarot–Kabbalah–Astrology–Numerology bridge.
+
+Every extension returns `system`, `phase`, `status`, `interpretation_level`, `provenance`, and `data`. Direct-script input is preserved, while Latin-only systems use the named `builtin-v1` transliteration profile. See [the provenance catalog](docs/symbolic-systems-provenance.md) for each convention, source ID, and limitation.
+
+The extension results are intentionally excluded from the existing composite resonance formula and fingerprint spokes. They are symbolic or computed lenses, not empirical findings.
 
 ## Graph Algorithms
 

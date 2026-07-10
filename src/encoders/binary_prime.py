@@ -56,7 +56,14 @@ class BinaryPrimeSignature:
 
 
 def normalize(text: str) -> str:
-    return "".join(ch for ch in text.upper() if ch.isalpha())
+    try:
+        from .pipeline import prepare_encoding_input
+    except ImportError:  # pragma: no cover - direct module execution
+        from pipeline import prepare_encoding_input
+    return "".join(
+        ch for ch in prepare_encoding_input(text)["latin_transliteration"]
+        if "A" <= ch <= "Z"
+    )
 
 
 def digital_root(n: int) -> int:

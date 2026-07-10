@@ -367,6 +367,30 @@ function renderDashboard(result) {
     </div>
     <p class="text-xs text-slate-400 mt-2">The digital-root cascade — each arrow is one act of distillation toward the name's terminal essence.</p>`));
 
+  // Keep extension conventions visible and separate from the resonance score.
+  const extensions = Object.values(e).filter(extension =>
+    extension && extension.system && extension.data && extension.provenance
+  );
+  if (extensions.length) {
+    const extensionRows = extensions.map(extension => {
+      const convention = extension.provenance.convention || "named convention";
+      const sourceIds = (extension.provenance.source_ids || []).join(", ");
+      const completeData = esc(JSON.stringify(extension.data, null, 2));
+      return `<details class="rounded-lg bg-white/5 px-3 py-2">
+        <summary class="cursor-pointer text-xs text-slate-200 flex justify-between gap-2">
+          <span>${esc(extension.system.replaceAll("_", " "))}</span>
+          <span class="text-[10px] text-slate-500">${esc(extension.phase)} · ${esc(extension.interpretation_level)}</span>
+        </summary>
+        <p class="mt-1 text-[10px] text-slate-500">Convention: ${esc(convention)}</p>
+        <p class="mt-1 text-[10px] text-slate-500">Sources: ${esc(sourceIds)}</p>
+        <pre class="mt-2 whitespace-pre-wrap break-words text-[11px] leading-relaxed text-slate-300">${completeData}</pre>
+      </details>`;
+    }).join("");
+    cards.push(card("Expanded Symbolic Systems", "#a78bfa", `
+      <p class="text-xs text-slate-400 mb-3">${extensions.length} provenance-aware symbolic extensions. Each reports its selected convention and epistemic level; none changes the composite resonance score.</p>
+      <div class="space-y-1.5">${extensionRows}</div>`, "md:col-span-2"));
+  }
+
   // Astrology
   const astro = e.astrology;
   if (astro && !astro.error && astro.sun_sign) {
@@ -515,7 +539,7 @@ const PROCESSING_STEPS = [
   "Shannon entropy & phonetic profile…", "Prime-index & binary polarity…",
   "Hebrew Gematria transliteration…", "Greek Isopsephy cascade…",
   "Swiss Ephemeris planetary positions…", "Human Design gates & channels…",
-  "Composite resonance & fingerprint…", "Writing your report…",
+  "25 provenance-aware symbolic extensions…", "Composite resonance & fingerprint…", "Writing your report…",
 ];
 
 const app = {
