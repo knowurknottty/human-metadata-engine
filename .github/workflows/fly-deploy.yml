@@ -45,6 +45,12 @@ jobs:
           python3 tests/test_accuracy_hardening.py
       - name: Run constellation and evidence tests
         run: python3 tests/test_constellation_evidence.py
+      - name: Run True Human Design tests
+        run: |
+          python3 tests/test_true_human_design_core.py
+          python3 tests/test_true_human_design_engine.py
+          python3 tests/test_true_human_design_mutations.py
+          python3 tests/test_true_human_design_cli.py
 
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master
