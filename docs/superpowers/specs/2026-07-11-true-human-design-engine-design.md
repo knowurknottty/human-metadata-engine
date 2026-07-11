@@ -10,6 +10,8 @@ Build a first-principles Human Design calculation engine whose rules are transpa
 
 The engine must not treat consensus, institutional authority, commercial calculators, or inherited doctrine as automatic truth. Each rule begins as a hypothesis with provenance. It remains active only while it survives explicit attempts to disprove it.
 
+In the product name **True Human Design**, “true” means truth-seeking by transparent calculation, adversarial validation, and correction when disproven. It does not mean infallible, final, or exempt from challenge.
+
 The product goal is not merely to reproduce existing Human Design software. It is to separate:
 
 1. astronomical calculation,
@@ -80,6 +82,8 @@ Contradictions are retained, not erased. When two rules disagree, the engine mus
 
 External calculators may supply comparison vectors, but they may not define truth. A result that cannot be traced to inspectable arithmetic remains comparison evidence only.
 
+Two calculators count as independent evidence only when their code paths, source tables, or underlying services are demonstrably independent. Multiple interfaces backed by the same library, API, copied table, or upstream calculator count as one lineage of evidence.
+
 ## 3. Scope
 
 ### 3.1 Version 1 calculation scope
@@ -132,7 +136,13 @@ Responsibilities:
 - expose ephemeris flags and errors;
 - solve the Design instant when the Design Sun is approximately 88 degrees of solar arc behind the Personality Sun.
 
-The Design instant must be found by numerical root solving, not by subtracting a fixed number of days.
+The active compatibility hypothesis defines the Design instant as the earlier root nearest roughly 88 solar days before birth for which:
+
+```text
+(Personality Sun longitude − Design Sun longitude) mod 360° = 88.0°
+```
+
+The arc target, direction, search window, and numerical tolerance are versioned rule parameters. The timestamp must be found by numerical root solving, not by subtracting a fixed number of days.
 
 Output contract per body:
 
@@ -217,15 +227,15 @@ All topology decisions must include a trace explaining which gates and channels 
 
 Type is derived from bodygraph topology, never from activation count.
 
-The resolver evaluates, in an explicit order:
+The initial compatibility resolver evaluates, in this explicit order:
 
 1. no defined centers → Reflector;
-2. defined Sacral plus motor-to-Throat path → Manifesting Generator;
-3. defined Sacral without motor-to-Throat path → Generator;
-4. undefined Sacral plus motor-to-Throat path → Manifestor;
+2. defined Sacral plus a defined path from any motor center to the Throat → Manifesting Generator;
+3. defined Sacral without such a motor-to-Throat path → Generator;
+4. undefined Sacral plus a defined path from a motor center to the Throat → Manifestor;
 5. otherwise → Projector.
 
-This ordering is itself a versioned rule subject to the prove-me-wrong protocol.
+The active motor-center set is versioned with the rule. This ordering is itself a hypothesis subject to the prove-me-wrong protocol.
 
 ### 4.6 Authority resolver
 
@@ -301,6 +311,7 @@ Every nontrivial rule is represented as data.
   "status": "under_test",
   "provenance": [],
   "algorithm_version": "1.0.0",
+  "parameters": {},
   "falsification_conditions": [],
   "test_vectors": [],
   "counterexamples": [],
@@ -351,7 +362,7 @@ Golden vectors must include:
 - examples with duplicate gate activations;
 - examples that force disagreement among external calculators.
 
-External calculators are recorded by name, version/date, and exact output. Agreement raises confidence; disagreement triggers investigation rather than majority voting.
+External calculators are recorded by name, version/date, exact output, implementation lineage when known, and any inaccessible assumptions. Agreement may raise confidence only after dependency between calculators has been assessed. Disagreement triggers investigation rather than majority voting.
 
 ### 6.4 Mutation and adversarial testing
 
@@ -477,7 +488,7 @@ A release called **True Human Design** requires all of the following:
 5. deterministic Type, Authority, Definition, and Profile traces;
 6. passing invariant and boundary suites;
 7. mutation suite catches every known legacy failure mode;
-8. a documented comparison set against multiple external calculators;
+8. a documented comparison set against multiple implementation lineages;
 9. every disagreement classified and unresolved disagreements surfaced;
 10. no output represented as empirical psychology;
 11. complete calculation ledger;
