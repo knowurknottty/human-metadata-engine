@@ -1,3 +1,9 @@
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+
 from constellation import ConstellationValidationError, connection_summary, validate_constellation
 from etymology import analyze_name_etymology
 from evidence_v3 import chance_corrected_pair_agreement, weighted_claim_support
@@ -75,3 +81,21 @@ def test_minor_psychology_is_rejected():
         assert "minor" in str(exc)
     else:
         raise AssertionError("minor psychology must be rejected")
+
+
+def main():
+    tests = [
+        test_aghyarian_etymology_is_lineage_not_personality,
+        test_aghiarian_resolves_as_spelling_variant,
+        test_single_duplicate_is_only_weak_excess_over_chance,
+        test_observed_contradiction_vetoes_symbolic_positive_claim,
+        test_tiered_constellation_accepts_creations_and_name_only_people,
+        test_minor_psychology_is_rejected,
+    ]
+    for test in tests:
+        test()
+    print(f"PASS: {len(tests)} constellation/evidence tests")
+
+
+if __name__ == "__main__":
+    main()
