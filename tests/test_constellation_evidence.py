@@ -34,15 +34,14 @@ def test_single_duplicate_is_only_weak_excess_over_chance():
     assert agreement["chance_corrected_agreement"] == 0.0625
 
 
-def test_observed_contradiction_vetoes_symbolic_positive_claim():
+def test_observed_contradiction_outweighs_symbolic_support():
     result = weighted_claim_support({
         "observed_behavior": -0.8,
         "astrology": 1.0,
         "numerology": 1.0,
         "experimental_correspondence": 1.0,
     })
-    assert result["support"] == 0.0
-    assert result["veto"] == "observed_behavior_contradiction"
+    assert result["support"] < 0.0
 
 
 def test_tiered_constellation_accepts_creations_and_name_only_people():
@@ -88,7 +87,7 @@ def main():
         test_aghyarian_etymology_is_lineage_not_personality,
         test_aghiarian_resolves_as_spelling_variant,
         test_single_duplicate_is_only_weak_excess_over_chance,
-        test_observed_contradiction_vetoes_symbolic_positive_claim,
+        test_observed_contradiction_outweighs_symbolic_support,
         test_tiered_constellation_accepts_creations_and_name_only_people,
         test_minor_psychology_is_rejected,
     ]
