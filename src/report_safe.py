@@ -33,6 +33,10 @@ def _harden_language(markdown: str) -> str:
         "several configured symbolic outputs coincide",
     )
     text = text.replace(
+        "five independent digit systems",
+        "five configured digit outputs",
+    )
+    text = text.replace(
         "The reduced total",
         "The mathematically related reduced total",
     )
@@ -57,6 +61,10 @@ def _harden_language(markdown: str) -> str:
     text = text.replace(
         "despite using unrelated letter-value tables.",
         "under their configured mappings; mathematically dependent mappings must not be counted as separate confirmation.",
+    )
+    text = text.replace(
+        "quantifies exactly this: convergence weighted at 35%",
+        "summarizes a related four-family interpretive index: convergence weighted at 35%",
     )
     text = text.replace(
         "The convergent themes of this analysis point to reliable capacities — the qualities multiple systems agree on are the ones to build strategy around rather than treat as accidents.",
