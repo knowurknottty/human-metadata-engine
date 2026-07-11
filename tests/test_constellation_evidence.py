@@ -75,6 +75,32 @@ def test_dashboard_does_not_relabel_available_weights_as_total_truth():
     assert "Consensus is a source category, not a truth status." in dashboard["rules"]
 
 
+def test_symbolic_encoder_envelope_counts_as_experimental_correspondence():
+    dashboard = evidence_dashboard({
+        "encoders": {
+            "esoteric_bridge": {
+                "system": "esoteric_bridge",
+                "phase": "structural",
+                "status": "computed",
+                "interpretation_level": "symbolic",
+                "provenance": {
+                    "manifest_version": "symbolic-systems-v1",
+                    "convention": "explicit-number-correspondence-v1",
+                    "source_ids": ["SRC-TAROT-KABBALAH-CORRESPONDENCE"],
+                    "input_mode": "latin_transliteration",
+                },
+                "data": {"value": 1},
+            }
+        }
+    })
+    layer = next(
+        item for item in dashboard["layers"]
+        if item["id"] == "experimental_correspondence"
+    )
+    assert layer["available"] is True
+    assert dashboard["coverage"] == 0.02
+
+
 def test_tiered_constellation_accepts_creations_and_name_only_people():
     graph = validate_constellation({
         "nodes": [
@@ -113,6 +139,27 @@ def test_minor_psychology_is_rejected():
         raise AssertionError("minor psychology must be rejected")
 
 
+def test_sensitive_person_fields_cannot_hide_inside_metadata():
+    try:
+        validate_constellation({
+            "nodes": [{
+                "id": "child",
+                "type": "person",
+                "name": "Private Child",
+                "is_minor": True,
+                "metadata": {
+                    "psychology": {"openness": 0.9},
+                    "birth": {"year": 2010, "month": 1, "day": 1},
+                },
+            }],
+            "edges": [],
+        })
+    except ConstellationValidationError as exc:
+        assert "reserved sensitive" in str(exc)
+    else:
+        raise AssertionError("sensitive person fields must not bypass structured privacy rules")
+
+
 def main():
     tests = [
         test_aghyarian_etymology_is_lineage_not_personality,
@@ -121,8 +168,10 @@ def main():
         test_symbolic_only_support_respects_absolute_twelve_percent_cap,
         test_observed_contradiction_outweighs_symbolic_support,
         test_dashboard_does_not_relabel_available_weights_as_total_truth,
+        test_symbolic_encoder_envelope_counts_as_experimental_correspondence,
         test_tiered_constellation_accepts_creations_and_name_only_people,
         test_minor_psychology_is_rejected,
+        test_sensitive_person_fields_cannot_hide_inside_metadata,
     ]
     for test in tests:
         test()
