@@ -45,7 +45,7 @@ const BONUS_CODE = "evan";
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-let STATE = { result: null, paid: false, psychology: null };
+let STATE = { result: null, paid: false, psychology: null, customSigil: null };
 
 // ------------------------------------------------------------------
 // Fingerprint glyph renderer (from the deterministic server spec)
@@ -670,7 +670,7 @@ const app = {
   },
 
   reset() {
-    STATE = {result: null, paid: false, psychology: null};
+    STATE = {result: null, paid: false, psychology: null, customSigil: null};
     $("dashboard").classList.add("hidden");
     $("landing").classList.remove("hidden");
     $("form-section").classList.remove("hidden");
@@ -811,6 +811,54 @@ const app = {
     a.download = `identity_resonance_${name}.md`;
     a.click();
     URL.revokeObjectURL(a.href);
+  },
+
+  async generateSigil(ev) {
+    ev.preventDefault();
+    const input = $("custom-sigil-text");
+    const error = $("sigil-error");
+    const output = $("sigil-output");
+    error.classList.add("hidden");
+    output.classList.add("hidden");
+    try {
+      const response = await fetch("/api/sigil", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({text: input.value}),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Sigil generation failed");
+      STATE.customSigil = data;
+      output.innerHTML = `
+        <div class="sigil-output-art">${data.svg}</div>
+        <div><h3>${esc(data.name)}</h3>
+          <p class="sigil-output-meta">${esc(data.disclaimer)}<br>Render spec: <code>${esc(data.render_spec)}</code><br>Hash: <code>${esc(data.hash)}</code></p>
+          <div class="sigil-output-actions"><button type="button" onclick="app.downloadCustomSigil()">Download SVG</button><button type="button" onclick="app.copyCustomSigilHash()">Copy hash</button></div>
+        </div>`;
+      output.classList.remove("hidden");
+    } catch (err) {
+      error.textContent = err.message;
+      error.classList.remove("hidden");
+    }
+  },
+
+  downloadCustomSigil() {
+    if (!STATE.customSigil) return;
+    const blob = new Blob([STATE.customSigil.svg], {type: "image/svg+xml"});
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `sigil_${STATE.customSigil.hash.slice(0, 16)}.svg`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  },
+
+  async copyCustomSigilHash() {
+    if (!STATE.customSigil) return;
+    try {
+      await navigator.clipboard.writeText(STATE.customSigil.hash);
+    } catch (_) {
+      // Clipboard permissions are optional; the hash remains visible for manual copy.
+    }
   },
 };
 window.app = app;

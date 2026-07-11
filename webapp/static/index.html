@@ -51,6 +51,21 @@
   </div>
   <div id="gallery" class="reference-strip mt-14 grid grid-cols-2 sm:grid-cols-5 gap-3 opacity-90"></div>
   <p class="mt-3 text-xs text-slate-600">Reference fingerprints. Each glyph is generated from the displayed name.</p>
+
+  <section class="sigil-lab glass rounded-2xl p-5 sm:p-7 max-w-3xl mx-auto mt-12 text-left" aria-labelledby="sigil-title">
+    <div class="sigil-lab-heading">
+      <div><p class="atlas-kicker">Custom artifact</p><h2 id="sigil-title">Draw a personal sigil</h2></div>
+      <span class="sigil-lab-index">SIGIL / 01</span>
+    </div>
+    <p class="text-sm text-slate-400 mt-2 max-w-xl">Enter a name, phrase, or project mark. The engine returns a reproducible SVG built from the public fingerprint projection.</p>
+    <form class="sigil-form mt-5" onsubmit="app.generateSigil(event)">
+      <label class="sr-only" for="custom-sigil-text">Text for custom sigil</label>
+      <input id="custom-sigil-text" class="inp" maxlength="120" placeholder="e.g. North Star / CAPT / your studio name" required>
+      <button class="button-secondary rounded-xl px-5 py-3 font-semibold" type="submit">Generate sigil</button>
+    </form>
+    <p id="sigil-error" class="hidden text-rose-300 text-sm mt-3" role="alert"></p>
+    <div id="sigil-output" class="sigil-output hidden" aria-live="polite"></div>
+  </section>
 </section>
 
 <!-- ======================= INPUT FORM ======================= -->

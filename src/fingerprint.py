@@ -17,6 +17,7 @@ New:
 
 import hashlib
 import hmac
+import html
 import json
 import math
 import os
@@ -26,6 +27,7 @@ import os
 # ---------------------------------------------------------------------------
 
 _PUBLIC_EXCLUDED = frozenset({
+    "computed_at",
     "birth", "lat", "lon", "location", "coordinates",
     "health", "neuro", "neurodata",
     "contacts", "relationships", "relationship",
@@ -135,6 +137,7 @@ def render_sigil_svg(manifest: dict, size: int = 300,
     """Layered SVG sigil. All geometry from manifest digest bytes only."""
     raw  = bytes.fromhex(manifest["digest"])
     name = identity_name or "unknown"
+    display_name = html.escape(str(name), quote=True)
     cx = cy = size / 2
     R  = size * 0.46
 
@@ -242,7 +245,7 @@ def render_sigil_svg(manifest: dict, size: int = 300,
     p.append(
         f'  <text x="{cx:.2f}" y="{size - 10}" text-anchor="middle" '
         f'fill="#444444" font-size="7" font-family="monospace">'
-        f'{name} | {manifest["render_spec"]} | {manifest["digest"][:8]}</text>'
+        f'{display_name} | {manifest["render_spec"]} | {manifest["digest"][:8]}</text>'
     )
     p.append("  </g>")
     p.append("</svg>")

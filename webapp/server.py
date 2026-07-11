@@ -20,6 +20,7 @@ sys.path.insert(0, os.path.join(REPO, "src"))
 from engine import compute_unified_signature  # noqa: E402
 from analytics import (  # noqa: E402
     FEATURE_AGREEMENT_METRIC,
+    cosine_similarity,
     cross_encoder_correlations,
     feature_agreement,
     feature_vector,
@@ -39,6 +40,7 @@ from constellation import (  # noqa: E402
 )
 from etymology import analyze_name_etymology  # noqa: E402
 from evidence_v3 import evidence_dashboard  # noqa: E402
+from sigil import generate_custom_sigil  # noqa: E402
 from snapshot import personality_snapshot  # noqa: E402
 
 STATIC = os.path.join(ROOT, "static")
@@ -448,7 +450,10 @@ class Handler(BaseHTTPRequestHandler):
             self._send(200, handle.read(), MIME.get(os.path.splitext(fs_path)[1], "application/octet-stream"))
 
     def do_POST(self):
-        if self.path.split("?", 1)[0] != "/api/analyze":
+        path = self.path.split("?", 1)[0]
+        if path == "/api/sigil":
+            return self._post_sigil()
+        if path != "/api/analyze":
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
         client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
         if not _allow_analysis(client_ip):
@@ -479,6 +484,28 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(500, {"error": "Analysis failed.", "detail": str(exc) if os.environ.get("DEBUG") == "1" else None})
         finally:
             _ANALYSIS_SLOTS.release()
+
+    def _post_sigil(self):
+        """Render one bounded public sigil without exposing the full signature."""
+        client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
+        if not _allow_analysis(client_ip):
+            return self._json(
+                429,
+                {"error": "Too many sigil requests. Please try again shortly."},
+                {"Retry-After": str(RATE_LIMIT_WINDOW_SECONDS)},
+            )
+        try:
+            length = int(self.headers.get("Content-Length", 0))
+            if length <= 0:
+                raise ValueError("Request body is empty.")
+            if length > 8 * 1024:
+                return self._json(413, {"error": "Payload too large."})
+            payload = json.loads(self.rfile.read(length))
+            if not isinstance(payload, dict):
+                raise ValueError("Request body must be a JSON object.")
+            return self._json(200, generate_custom_sigil(payload.get("text"), size=payload.get("size", 360)))
+        except (ValueError, json.JSONDecodeError) as exc:
+            return self._json(400, {"error": str(exc)})
 
 
 def main():

@@ -45,6 +45,10 @@ jobs:
           python3 tests/test_accuracy_hardening.py
       - name: Run constellation and evidence tests
         run: python3 tests/test_constellation_evidence.py
+      - name: Run custom sigil tests
+        run: |
+          python3 tests/test_custom_sigil.py
+          python3 tests/test_sigil_api.py
       - name: Run True Human Design tests
         run: |
           python3 tests/test_true_human_design_core.py
