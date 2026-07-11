@@ -540,7 +540,7 @@ function renderDashboard(result) {
       </div>
       <div class="mt-3"><div class="text-[10px] text-slate-500 mb-1.5">64-gate activation map</div>
         <div class="grid grid-cols-16 gap-0.5" style="grid-template-columns:repeat(16,minmax(0,1fr))">${Array.from({length: 64}, (_, i) =>
-          `<div class="aspect-square rounded-[3px] flex items-center justify-center text-[7px] ${gateSet.has(i+1) ? "bg-emerald-400/70 text-emerald-950 font-bold" : "bg-white/5 text-slate-600"}">${i+1}</div>`).join("")}</div></div>
+          `<div class="aspect-square rounded-[3px] flex items-center justify-center text-[7px] ${gateSet.has(i+1) ? "bg-emerald-400/70 text-emerald-950 font-bold" : "bg-white/5 text-[#9aa8aa]"}">${i+1}</div>`).join("")}</div></div>
       ${(hd.channels || []).length ? `<div class="mt-3 flex flex-wrap gap-1.5">${hd.channels.map(ch =>
         `<span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-400/10 text-emerald-300 border border-emerald-400/30">${esc(ch.name)} ${ch.gates[0]}–${ch.gates[1]}</span>`).join("")}</div>` : ""}`, "md:col-span-2"));
   }
@@ -569,7 +569,7 @@ function renderDashboard(result) {
   // --- Cross-encoder + narrative row ---
   html += `<div class="grid lg:grid-cols-2 gap-6 mt-6 fade-up-2">
     <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-semibold text-violet-300 tracking-wide">Cross-Encoder Agreement Heatmap</h3>
+      <h3 class="text-sm font-semibold text-amber-300 tracking-wide">Cross-Encoder Agreement Heatmap</h3>
       <div class="mt-4">${heatmapHTML(result.correlations)}</div>
     </div>
     <div class="glass rounded-2xl p-6">
@@ -607,8 +607,8 @@ function renderDashboard(result) {
     <div class="relative mt-5">
       <div id="report-print-area"><div class="report-body" id="report-body"></div></div>
       <div id="report-overlay" class="absolute inset-0 hidden items-end justify-center bg-gradient-to-b from-transparent via-[#07070d]/60 to-[#07070d] pb-10">
-        <button onclick="app.openPaywall()" class="px-8 py-4 rounded-2xl bg-gradient-to-r from-indigo-500 to-violet-500 text-white font-bold text-lg shadow-2xl shadow-indigo-500/40 hover:scale-[1.03] transition">
-          $10 — Unlock Full Analysis
+        <button onclick="app.openPaywall()" class="px-8 py-4 rounded-2xl bg-[#886a3f] text-white font-bold text-lg shadow-2xl shadow-black/40 hover:scale-[1.03] transition">
+          $10 | Unlock Full Analysis
         </button>
       </div>
     </div>
