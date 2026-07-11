@@ -55,6 +55,7 @@ jobs:
           python3 tests/test_web_symbolic_surface.py
           python3 tests/test_ephemeris_packaging.py
           python3 tests/test_accuracy_hardening.py
+          python3 tests/test_constellation_evidence.py
 
       - name: Set up Flyctl
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
