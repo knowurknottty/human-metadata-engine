@@ -16,6 +16,7 @@ from analytics_v2 import numerological_convergence  # noqa: E402
 from birth_validation import BirthValidationError, canonical_birth_record, validate_birth  # noqa: E402
 from engine import compute_unified_signature  # noqa: E402
 from report_safe import generate_report  # noqa: E402
+from server import _disable_unvalidated_human_design  # noqa: E402
 
 
 class BirthValidationTests(unittest.TestCase):
@@ -116,6 +117,23 @@ class ConvergenceTests(unittest.TestCase):
         self.assertNotIn("Human Design encoders", markdown)
         self.assertNotIn("Human Design combines birth", markdown)
         self.assertNotIn("Human Design implementation is a simplified model", markdown)
+
+    def test_invalidated_human_design_dimensions_are_removed_from_public_count(self):
+        signature = {
+            "text": "Test Identity",
+            "dimensions": 40,
+            "encoders": {
+                "human_design": {
+                    "type": "Generator",
+                    "strategy": "Respond",
+                    "authority": "Emotional",
+                }
+            },
+        }
+        _disable_unvalidated_human_design(signature, {"text": "Test Identity"})
+        self.assertEqual(signature["dimensions"], 25)
+        self.assertEqual(signature["invalidated_dimensions"]["human_design"], 15)
+        self.assertFalse(signature["encoders"]["human_design"]["available"])
 
 
 if __name__ == "__main__":
