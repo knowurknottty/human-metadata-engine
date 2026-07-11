@@ -2,18 +2,18 @@
 
 The legacy report remains available for compatibility. This wrapper corrects
 claims that overstate independence or empirical meaning without altering the
-underlying symbolic calculations.
+underlying symbolic calculations. Invalidated Human Design output is removed
+from both the data surface and the generated narrative.
 """
 
 from __future__ import annotations
 
 import re
-
 from report import generate_report as generate_legacy_report
 
 
 EVIDENCE_NOTICE = """> **How to read this report**
-> Name arithmetic and linguistic counts are computed. Psychology is self-reported. Numerology, astrology, Human Design, and cross-tradition correspondences are symbolic reflection systems rather than validated personality measurements. The resonance value is an interpretive engine index, not a percentage of accuracy.
+> Name arithmetic and linguistic counts are computed. Psychology is self-reported. Numerology, astrology, and cross-tradition correspondences are symbolic reflection systems rather than validated personality measurements. The resonance value is an interpretive engine index, not a percentage of accuracy. Human Design is withheld whenever its calculator has not passed validation.
 
 """
 
@@ -90,21 +90,64 @@ def _harden_language(markdown: str) -> str:
         "Everything below is deterministic: run the engine again on the same inputs and you will get the same result, character for character.",
         "Everything below is deterministic for the same normalized inputs and convention versions. Reproducibility does not establish empirical validity.",
     )
+
+    # Human Design failed validation and must not survive in legacy report copy.
+    text = text.replace(
+        "numerological, linguistic, Hebrew, Greek, astrological, and Human Design encoders",
+        "numerological, linguistic, Hebrew, Greek, and astrological encoders",
+    )
+    text = text.replace(
+        "Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. Human Design combines birth and 88-days-prior ephemeris positions into gates, channels, type, and profile. The psychology layer",
+        "Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. Human Design output is withheld because the legacy calculator failed validation. The psychology layer",
+    )
+    text = text.replace(
+        "The symbolic systems (numerology, gematria, astrology, Human Design) are interpretive traditions",
+        "The available symbolic systems (numerology, gematria, and astrology) are interpretive traditions",
+    )
+    text = text.replace(
+        "the Human Design implementation is a simplified model of the full bodygraph; ",
+        "Human Design is withheld because the legacy implementation failed validation; ",
+    )
     return text
+
+
+def _human_design_status(sig: dict) -> str:
+    human_design = sig.get("encoders", {}).get("human_design")
+    if not isinstance(human_design, dict):
+        return ""
+    if human_design.get("status") != "disabled_failed_validation":
+        return ""
+
+    reason = human_design.get(
+        "reason",
+        "The legacy Human Design calculator failed validation.",
+    )
+    reported = human_design.get("user_reported_type")
+    reported_text = (
+        f" User-reported type: **{reported}** (self-report only; not calculator-verified)."
+        if reported
+        else ""
+    )
+    return (
+        "> **Human Design status:** unavailable — "
+        f"{reason}{reported_text}\n\n"
+    )
 
 
 def generate_report(sig: dict, psychology: dict | None = None, comparisons: list[dict] | None = None) -> dict:
     report = generate_legacy_report(sig, psychology=psychology, comparisons=comparisons)
     markdown = _harden_language(report["markdown"])
     first_break = markdown.find("\n\n")
+    status = _human_design_status(sig)
+    insert = EVIDENCE_NOTICE + status
     if first_break >= 0:
-        markdown = markdown[: first_break + 2] + EVIDENCE_NOTICE + markdown[first_break + 2 :]
+        markdown = markdown[: first_break + 2] + insert + markdown[first_break + 2 :]
     else:
-        markdown = EVIDENCE_NOTICE + markdown
+        markdown = insert + markdown
     result = dict(report)
     result["markdown"] = markdown
     result["word_count"] = len(markdown.split())
-    result["evidence_model"] = "computed-self_report-symbolic-experimental-v1"
+    result["evidence_model"] = "computed-self_report-symbolic-experimental-v2"
     return result
 
 
