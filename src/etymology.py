@@ -79,9 +79,9 @@ KNOWN_COMPONENTS: dict[str, dict[str, Any]] = {
         "morphology": [
             {
                 "form": "agha",
-                "role": "root",
+                "role": "title or byname root",
                 "origin": "Turkic / Ottoman honorific",
-                "glosses": ["master", "lord", "respected or influential man"],
+                "glosses": ["master", "lord", "chief", "respected or influential man"],
             },
             {
                 "form": "-ian",
@@ -89,7 +89,9 @@ KNOWN_COMPONENTS: dict[str, dict[str, Any]] = {
                 "glosses": ["issued from", "family of", "descendant of"],
             },
         ],
-        "literal_glosses": ["family or descendants of Agha"],
+        "literal_glosses": [
+            "family line associated with an ancestor who bore Agha as a title or byname"
+        ],
         "confidence": "moderate-high",
         "source_ids": [
             "armeniapedia_surname_dictionary_a",
@@ -97,11 +99,14 @@ KNOWN_COMPONENTS: dict[str, dict[str, Any]] = {
             "agha_title",
         ],
         "scope": (
-            "surname morphology only; it does not prove that a particular ancestor "
-            "held land, office, nobility, or the Ottoman title"
+            "surname morphology only; Agha is treated as a reusable honorific or "
+            "byname, not one recoverable personal name, and the morphology does not "
+            "prove that a particular ancestor held land, office, nobility, or a "
+            "specific Ottoman rank"
         ),
         "cautions": [
             "Aghyarian and Aghiarian are treated as spelling variants.",
+            "Agha was a reusable title or honorific, not necessarily a personal name.",
             "Similar-looking surnames are not automatically the same lineage.",
             "Native Armenian spelling and ancestral locality remain unresolved.",
         ],
