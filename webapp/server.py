@@ -75,8 +75,9 @@ RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", 
 RATE_LIMIT_REQUESTS = int(os.environ.get("HME_RATE_LIMIT_REQUESTS", "20"))
 RATE_LIMIT_MAX_TRACKED_IPS = int(os.environ.get("HME_RATE_LIMIT_MAX_TRACKED_IPS", "10000"))
 MAX_CONCURRENT_ANALYSES = int(os.environ.get("HME_MAX_CONCURRENT_ANALYSES", "4"))
+MAX_CONNECTIONS = int(os.environ.get("HME_MAX_CONNECTIONS", "64"))
 TRUST_PROXY_HEADERS = os.environ.get("HME_TRUST_PROXY_HEADERS", "").lower() in {"1", "true", "yes"}
-if min(RATE_LIMIT_WINDOW_SECONDS, RATE_LIMIT_REQUESTS, RATE_LIMIT_MAX_TRACKED_IPS, MAX_CONCURRENT_ANALYSES) < 1:
+if min(RATE_LIMIT_WINDOW_SECONDS, RATE_LIMIT_REQUESTS, RATE_LIMIT_MAX_TRACKED_IPS, MAX_CONCURRENT_ANALYSES, MAX_CONNECTIONS) < 1:
     raise RuntimeError("HME rate-limit and concurrency settings must be positive integers.")
 _RATE_LIMIT_LOCK = Lock()
 _RECENT_ANALYSES: dict[str, deque[float]] = {}
@@ -633,6 +634,33 @@ class Handler(BaseHTTPRequestHandler):
             _ANALYSIS_SLOTS.release()
 
 
+class BoundedThreadingHTTPServer(ThreadingHTTPServer):
+    """Threaded server with a hard connection ceiling and daemon workers."""
+
+    daemon_threads = True
+    request_queue_size = 64
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.connection_slots = BoundedSemaphore(MAX_CONNECTIONS)
+
+    def process_request(self, request, client_address):
+        if not self.connection_slots.acquire(blocking=False):
+            request.close()
+            return
+        try:
+            super().process_request(request, client_address)
+        except Exception:
+            self.connection_slots.release()
+            raise
+
+    def process_request_thread(self, request, client_address):
+        try:
+            super().process_request_thread(request, client_address)
+        finally:
+            self.connection_slots.release()
+
+
 def main():
     port = int(os.environ.get("PORT", 8000))
     bind_host = os.environ.get("HME_BIND_HOST", "127.0.0.1")
@@ -640,7 +668,7 @@ def main():
     get_defaults()
     print(f"Loaded {len(_DEFAULTS)} references; {len(_DEFAULT_ERRORS)} failed.")
     print(f"Identity Resonance running on http://{bind_host}:{port}")
-    server = ThreadingHTTPServer((bind_host, port), Handler)
+    server = BoundedThreadingHTTPServer((bind_host, port), Handler)
     server.daemon_threads = True
     try:
         server.serve_forever()
