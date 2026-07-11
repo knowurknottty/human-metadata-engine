@@ -48,6 +48,8 @@ def validate_birth(
         return None
     if not isinstance(raw, dict):
         raise BirthValidationError("Birth data must be a JSON object.")
+    if require_coordinates and raw.get("timezone_offset") in (None, ""):
+        raise BirthValidationError("Birth data requires timezone_offset.")
 
     year = _required_int(raw, "year")
     month = _required_int(raw, "month")
@@ -90,7 +92,10 @@ def validate_birth(
         "minute": minute,
         "timezone_offset": timezone_offset,
         "location": str(raw.get("location", ""))[:120],
-        "time_accuracy": "provided" if raw.get("time_accuracy") == "provided" else "unknown",
+        # Legacy callers omitted this field while supplying an actual time;
+        # preserve that contract and require an explicit ``unknown`` marker
+        # for date-only analysis.
+        "time_accuracy": "unknown" if raw.get("time_accuracy") == "unknown" else "provided",
     }
 
     lat = raw.get("lat")
