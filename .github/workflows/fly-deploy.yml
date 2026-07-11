@@ -24,7 +24,7 @@ jobs:
       - name: Install mandatory ephemeris dependency
         run: pip install -r requirements.txt
 
-      - name: Run test suite
+      - name: Run core test suite
         run: |
           python3 tests/test_pythagorean.py
           python3 tests/test_extended.py
@@ -43,6 +43,8 @@ jobs:
           python3 tests/test_build_revision.py
           python3 tests/test_sigil.py
           python3 tests/test_accuracy_hardening.py
+      - name: Run constellation and evidence tests
+        run: python3 tests/test_constellation_evidence.py
 
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master

@@ -2,21 +2,20 @@
 
 The legacy analytics module counts Pythagorean and A1Z26 ordinal roots as
 independent votes even though Pythagorean values are ordinal values reduced
-modulo nine. This module preserves the existing component contract while
-counting one vote per independent mapping family.
+modulo nine. This module keeps one result per mapping family and corrects
+remaining pair agreement for the 1/9 coincidence expected under a simple null.
 """
 
 from __future__ import annotations
 
 from analytics import (
     RESONANCE_WEIGHTS,
-    _clip01,
-    _get,
     identity_fingerprint,
     linguistic_harmony,
     polarity_balance,
     symbolic_depth,
 )
+from evidence_v3 import chance_corrected_pair_agreement, independent_numerology_digits
 
 
 INDEPENDENT_DIGIT_FAMILIES = {
@@ -31,33 +30,21 @@ DEPENDENT_OUTPUTS = {
 }
 
 
-def _fold_digit(value: int) -> int:
-    digit = value
-    while digit > 9:
-        digit = sum(int(char) for char in str(digit))
-    return digit
-
-
 def numerological_convergence(sig: dict) -> float:
-    """Concentration across independent mapping families only."""
-    digits: list[int] = []
-    for encoder, field in INDEPENDENT_DIGIT_FAMILIES.values():
-        value = _get(sig, encoder, field)
-        if isinstance(value, int) and value > 0:
-            digits.append(_fold_digit(value))
-    if len(digits) < 2:
-        return 0.0
-    counts: dict[int, int] = {}
-    for digit in digits:
-        counts[digit] = counts.get(digit, 0) + 1
-    maximum = max(counts.values())
-    return _clip01((maximum - 1) / (len(digits) - 1))
+    """Return pair agreement above a simple one-in-nine coincidence baseline."""
+    detail = chance_corrected_pair_agreement(independent_numerology_digits(sig))
+    return float(detail["chance_corrected_agreement"])
 
 
 def composite_resonance(sig: dict) -> dict:
-    """Return the legacy-shaped score with corrected convergence semantics."""
+    """Return the legacy-shaped symbolic index with chance-corrected agreement."""
+    agreement_detail = chance_corrected_pair_agreement(
+        independent_numerology_digits(sig)
+    )
     components = {
-        "numerological_convergence": round(numerological_convergence(sig), 4),
+        "numerological_convergence": round(
+            float(agreement_detail["chance_corrected_agreement"]), 4
+        ),
         "linguistic_harmony": round(linguistic_harmony(sig), 4),
         "polarity_balance": round(polarity_balance(sig), 4),
         "symbolic_depth": round(symbolic_depth(sig), 4),
@@ -68,9 +55,10 @@ def composite_resonance(sig: dict) -> dict:
         "components": components,
         "weights": dict(RESONANCE_WEIGHTS),
         "score_type": "interpretive_index",
-        "method_version": "resonance-v2-independent-families",
+        "method_version": "resonance-v3-chance-corrected",
         "independent_families": list(INDEPENDENT_DIGIT_FAMILIES),
         "dependent_outputs_excluded": dict(DEPENDENT_OUTPUTS),
+        "numerology_agreement_detail": agreement_detail,
         "disclaimer": "This is a deterministic symbolic index, not an accuracy, probability, or psychological validity score.",
     }
 

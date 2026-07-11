@@ -32,6 +32,14 @@ from birth_validation import (  # noqa: E402
     canonical_birth_record,
     validate_birth,
 )
+from constellation import (  # noqa: E402
+    ConstellationValidationError,
+    connection_summary,
+    validate_constellation,
+)
+from etymology import analyze_name_etymology  # noqa: E402
+from evidence_v3 import evidence_dashboard  # noqa: E402
+from snapshot import personality_snapshot  # noqa: E402
 
 STATIC = os.path.join(ROOT, "static")
 MIME = {
@@ -137,9 +145,49 @@ def _normalized_reference(identity):
     return item
 
 
+def _disable_unvalidated_human_design(signature, identity):
+    """Remove unsupported Human Design conclusions from public output."""
+    encoders = signature.setdefault("encoders", {})
+    previous = encoders.get("human_design")
+
+    removed_dimensions = 0
+    if (
+        isinstance(previous, dict)
+        and previous
+        and not previous.get("error")
+        and previous.get("type")
+    ):
+        removed_dimensions = 15
+        signature["dimensions"] = max(
+            0,
+            int(signature.get("dimensions", 0)) - removed_dimensions,
+        )
+
+    signature.setdefault("invalidated_dimensions", {})["human_design"] = removed_dimensions
+    encoders["human_design"] = {
+        "available": False,
+        "status": "disabled_failed_validation",
+        "reason": (
+            "The legacy calculator does not derive gates, centers, type, authority, "
+            "profile, or design time using validated Human Design mechanics."
+        ),
+        "previous_result_removed": bool(previous),
+        "removed_dimension_count": removed_dimensions,
+        "user_reported_type": identity.get("user_reported_human_design_type"),
+        "epistemic_class": "symbolic-unavailable",
+    }
+    signature["snapshot"] = personality_snapshot(
+        identity["text"],
+        astrology=encoders.get("astrology"),
+        human_design=None,
+        psychology=identity.get("psychology"),
+    )
+
+
 def _compute_signature(identity):
     """Compute a signature and apply the corrected public scoring contract."""
     signature = compute_unified_signature(identity)
+    _disable_unvalidated_human_design(signature, identity)
     signature["resonance"] = accuracy_composite_resonance(signature)
     return signature
 
@@ -166,6 +214,118 @@ def default_summaries():
     } for s in get_defaults()]
 
 
+def _validated_lineage_surnames(raw):
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise ValueError("lineage_surnames must be an array.")
+    if len(raw) > 12:
+        raise ValueError("lineage_surnames supports at most 12 entries.")
+    result = []
+    for index, value in enumerate(raw):
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"lineage_surnames[{index}] must be a non-empty string.")
+        if len(value.strip()) > 120:
+            raise ValueError(f"lineage_surnames[{index}] is too long.")
+        result.append(value.strip())
+    return result
+
+
+def _validated_observations(raw):
+    if raw is None:
+        return []
+    if not isinstance(raw, list):
+        raise ValueError("observations must be an array.")
+    if len(raw) > 100:
+        raise ValueError("observations supports at most 100 entries.")
+    observations = []
+    for index, item in enumerate(raw):
+        if not isinstance(item, dict):
+            raise ValueError(f"observations[{index}] must be an object.")
+        text = item.get("text")
+        if not isinstance(text, str) or not text.strip():
+            raise ValueError(f"observations[{index}].text must be a non-empty string.")
+        observations.append({
+            "text": text.strip(),
+            "source": item.get("source", "user_supplied"),
+            "confidence": item.get("confidence", "unrated"),
+            "occurred_at": item.get("occurred_at"),
+        })
+    return observations
+
+
+def _constellation_analysis(graph, analysis_year):
+    if graph is None:
+        return None
+
+    node_results = []
+    signatures = {}
+    for node in graph["nodes"]:
+        identity = {
+            "id": f"constellation:{node['id']}",
+            "text": node["name"],
+            "as_of_year": analysis_year,
+        }
+        if node["type"] == "person":
+            if node["profile_level"] in {"birth", "self_report"} and node.get("birth"):
+                identity["birth"] = _validated_birth(node["birth"])
+            if node["profile_level"] == "self_report" and node.get("psychology"):
+                identity["psychology"] = node["psychology"]
+
+        signature = _compute_signature(identity)
+        signatures[node["id"]] = signature
+        node_etymology = analyze_name_etymology(
+            node["name"],
+            lineage_surnames=_validated_lineage_surnames(
+                node.get("metadata", {}).get("lineage_surnames")
+            ),
+        )
+        node_results.append({
+            "id": node["id"],
+            "type": node["type"],
+            "name": node["name"],
+            "profile_level": node["profile_level"],
+            "fingerprint": signature["fingerprint"],
+            "expression": signature["encoders"]["pythagorean"]["expression"],
+            "chaldean": signature["encoders"]["chaldean"]["name_number"],
+            "resonance": signature["resonance"],
+            "etymology": node_etymology,
+            "evidence": evidence_dashboard(
+                signature,
+                psychology=identity.get("psychology"),
+                observations=None,
+                etymology=node_etymology,
+            ),
+        })
+
+    connections = []
+    node_ids = list(signatures)
+    for left_index, left_id in enumerate(node_ids):
+        for right_id in node_ids[left_index + 1:]:
+            left = signatures[left_id]
+            right = signatures[right_id]
+            similarity = round(
+                cosine_similarity(feature_vector(left), feature_vector(right)), 4
+            )
+            left_letters = {char for char in left["text"].upper() if "A" <= char <= "Z"}
+            right_letters = {char for char in right["text"].upper() if "A" <= char <= "Z"}
+            connections.append({
+                "source": left_id,
+                "target": right_id,
+                "computed_similarity": similarity,
+                "shared_letters": sorted(left_letters & right_letters),
+                "scope": "computed name-feature similarity; not relationship strength",
+            })
+    connections.sort(key=lambda item: -item["computed_similarity"])
+
+    return {
+        "graph": graph,
+        "summary": connection_summary(graph),
+        "nodes": node_results,
+        "computed_connections": connections[:100],
+    }
+
+
 def analyze(payload):
     if not isinstance(payload, dict):
         raise ValueError("Request body must be a JSON object.")
@@ -188,12 +348,37 @@ def analyze(payload):
     if psychology:
         identity["psychology"] = psychology
 
+    reported_hd_type = payload.get("user_reported_human_design_type")
+    if reported_hd_type:
+        if reported_hd_type not in {
+            "Manifestor", "Generator", "Manifesting Generator", "Projector", "Reflector"
+        }:
+            raise ValueError("Unknown user_reported_human_design_type.")
+        identity["user_reported_human_design_type"] = reported_hd_type
+
+    lineage_surnames = _validated_lineage_surnames(payload.get("lineage_surnames"))
+    observations = _validated_observations(payload.get("observations"))
+    constellation = validate_constellation(payload.get("constellation"))
+
     sig = _compute_signature(identity)
     sig["normalized_input"] = {
         "name": name,
         "birth": canonical_birth_record(birth),
         "analysis_year": analysis_year,
+        "lineage_surnames": lineage_surnames,
     }
+
+    etymology = analyze_name_etymology(
+        name,
+        lineage_surnames=lineage_surnames,
+    )
+    evidence = evidence_dashboard(
+        sig,
+        psychology=psychology,
+        observations=observations,
+        etymology=etymology,
+    )
+    constellation_result = _constellation_analysis(constellation, analysis_year)
 
     defaults = get_defaults()
     uv = feature_vector(sig)
@@ -212,11 +397,15 @@ def analyze(payload):
         "correlations": corr,
         "report": report,
         "normalized_input": sig["normalized_input"],
+        "etymology": etymology,
+        "evidence": evidence,
+        "observations": observations,
+        "constellation": constellation_result,
     }
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "IdentityResonance"
+    server_version = "IdentityResonance/1.3"
     sys_version = ""
 
     def log_message(self, fmt, *args):
@@ -277,7 +466,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(413, {"error": "Payload too large."})
             payload = json.loads(self.rfile.read(length))
             return self._json(200, analyze(payload))
-        except (BirthValidationError, ValueError, json.JSONDecodeError) as exc:
+        except (
+            BirthValidationError,
+            ConstellationValidationError,
+            ValueError,
+            json.JSONDecodeError,
+        ) as exc:
             return self._json(400, {"error": str(exc)})
         except Exception as exc:
             traceback.print_exc()
