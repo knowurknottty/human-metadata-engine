@@ -1,7 +1,8 @@
 """Evidence-weighted interpretation controls.
 
 The dashboard distinguishes evidence coverage from symbolic resonance.
-Weights encode maximum influence on a personalized claim, not truth values.
+Weights encode absolute maximum influence on a personalized claim, not truth
+values. Missing evidence is never renormalized into artificial certainty.
 """
 
 from __future__ import annotations
@@ -55,6 +56,12 @@ EVIDENCE_META: dict[str, dict[str, str]] = {
         "label": "Experimental correspondences",
         "description": "Unvalidated cross-system mappings; never decisive.",
     },
+}
+
+SYMBOLIC_LAYERS = {
+    "astrology",
+    "numerology",
+    "experimental_correspondence",
 }
 
 
@@ -122,17 +129,28 @@ def evidence_dashboard(
     observations: list[dict[str, Any]] | None = None,
     etymology: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Describe available evidence and influence limits without fabricating a score."""
+    """Describe evidence coverage and fixed influence limits.
+
+    The dashboard deliberately does not redistribute the weight of missing layers.
+    A symbolic layer with six percent maximum influence remains six percent even
+    when stronger evidence is absent.
+    """
     encoders = signature.get("encoders", {})
     available = {
         "observed_behavior": bool(observations),
         "self_report": bool(psychology),
         "measurable_name_structure": bool(encoders.get("linguistic")),
         "etymology": bool(etymology and etymology.get("components")),
-        "astrology": bool(encoders.get("astrology") and not encoders["astrology"].get("error")),
+        "astrology": bool(
+            encoders.get("astrology")
+            and not encoders["astrology"].get("error")
+            and encoders["astrology"].get("available", True)
+        ),
         "numerology": bool(encoders.get("pythagorean")),
         "experimental_correspondence": any(
-            isinstance(value, dict) and value.get("provenance")
+            isinstance(value, dict)
+            and value.get("provenance")
+            and value.get("epistemic_level") in {"experimental", "symbolic-experimental"}
             for value in encoders.values()
         ),
     }
@@ -140,12 +158,6 @@ def evidence_dashboard(
     available_weight = sum(
         EVIDENCE_WEIGHTS[key] for key, present in available.items() if present
     )
-    normalized = {
-        key: round(EVIDENCE_WEIGHTS[key] / available_weight, 4)
-        if present and available_weight
-        else 0.0
-        for key, present in available.items()
-    }
 
     layers = []
     for key in EVIDENCE_WEIGHTS:
@@ -154,54 +166,60 @@ def evidence_dashboard(
             **EVIDENCE_META[key],
             "available": available[key],
             "maximum_influence": EVIDENCE_WEIGHTS[key],
-            "normalized_available_weight": normalized[key],
+            "available_influence": EVIDENCE_WEIGHTS[key] if available[key] else 0.0,
         })
 
     numerology = chance_corrected_pair_agreement(
         independent_numerology_digits(signature)
     )
     return {
-        "method_version": "evidence-v3",
+        "method_version": "evidence-v3-absolute-weights",
         "layers": layers,
         "coverage": round(available_weight, 4),
+        "normalization": "absolute_weights",
         "numerology_agreement": numerology,
         "rules": [
             "Direct behavioral contradiction outranks symbolic agreement.",
             "Etymology describes word history, not the bearer.",
             "Symbolic and experimental layers cannot exceed 12% combined influence.",
-            "Missing high-weight evidence is shown as missing, not imputed.",
+            "Missing high-weight evidence is shown as missing, not imputed or redistributed.",
+            "Consensus is a source category, not a truth status.",
+            "Primary evidence, translation history, institutional claims, and interpretation remain separate layers.",
         ],
     }
 
 
 def weighted_claim_support(evidence: dict[str, float | None]) -> dict[str, Any]:
-    """Combine claim-specific support values in [-1, 1].
+    """Combine claim-specific support values in [-1, 1] using absolute weights.
 
-    A negative observed-behavior score vetoes a positive conclusion assembled
-    only from symbolic layers.
+    Missing layers contribute zero rather than causing present layers to be
+    renormalized. This preserves every layer's configured maximum influence.
+    A strong observed contradiction also marks attempted symbolic override.
     """
     used: dict[str, float] = {}
-    numerator = 0.0
-    denominator = 0.0
+    score = 0.0
+    coverage = 0.0
     for key, weight in EVIDENCE_WEIGHTS.items():
         value = evidence.get(key)
         if value is None:
             continue
         clipped = max(-1.0, min(1.0, float(value)))
         used[key] = clipped
-        numerator += weight * clipped
-        denominator += weight
+        score += weight * clipped
+        coverage += weight
 
-    score = numerator / denominator if denominator else 0.0
     veto = None
     observed = used.get("observed_behavior")
-    if observed is not None and observed <= -0.5 and score > 0:
-        score = 0.0
+    positive_symbolic = any(used.get(key, 0.0) > 0 for key in SYMBOLIC_LAYERS)
+    if observed is not None and observed <= -0.5 and positive_symbolic:
         veto = "observed_behavior_contradiction"
+        if score > 0:
+            score = 0.0
 
     return {
         "support": round(score, 4),
-        "coverage": round(denominator, 4),
+        "coverage": round(coverage, 4),
+        "normalization": "absolute_weights",
         "evidence": used,
         "veto": veto,
     }
@@ -209,6 +227,7 @@ def weighted_claim_support(evidence: dict[str, float | None]) -> dict[str, Any]:
 
 __all__ = [
     "EVIDENCE_WEIGHTS",
+    "SYMBOLIC_LAYERS",
     "chance_corrected_pair_agreement",
     "evidence_dashboard",
     "independent_numerology_digits",
