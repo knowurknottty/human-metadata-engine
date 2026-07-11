@@ -44,30 +44,64 @@ jobs:
       - name: Install mandatory ephemeris dependency
         run: pip install -r requirements.txt
 
-      - name: Run existing test suite
-        run: |
-          python3 tests/test_pythagorean.py
-          python3 tests/test_extended.py
-          python3 tests/test_final.py
-          python3 tests/test_analytics.py
-          python3 tests/test_symbolic_roadmap.py
-          python3 tests/test_unicode_pipeline_integration.py
-          python3 tests/test_integrated_prototypes.py
-          python3 tests/test_symbolic_contract.py
-          python3 tests/test_web_symbolic_surface.py
-          python3 tests/test_ephemeris_packaging.py
-          python3 tests/test_accuracy_hardening.py
+      - name: Test Pythagorean
+        if: always()
+        run: python3 tests/test_pythagorean.py
+
+      - name: Test extended encoders
+        if: always()
+        run: python3 tests/test_extended.py
+
+      - name: Test final integration
+        if: always()
+        run: python3 tests/test_final.py
+
+      - name: Test analytics
+        if: always()
+        run: python3 tests/test_analytics.py
+
+      - name: Test symbolic roadmap
+        if: always()
+        run: python3 tests/test_symbolic_roadmap.py
+
+      - name: Test Unicode pipeline
+        if: always()
+        run: python3 tests/test_unicode_pipeline_integration.py
+
+      - name: Test integrated prototypes
+        if: always()
+        run: python3 tests/test_integrated_prototypes.py
+
+      - name: Test symbolic contract
+        if: always()
+        run: python3 tests/test_symbolic_contract.py
+
+      - name: Test web symbolic surface
+        if: always()
+        run: python3 tests/test_web_symbolic_surface.py
+
+      - name: Test ephemeris packaging
+        if: always()
+        run: python3 tests/test_ephemeris_packaging.py
+
+      - name: Test accuracy hardening
+        if: always()
+        run: python3 tests/test_accuracy_hardening.py
 
       - name: Run True Human Design core tests
+        if: always()
         run: python3 tests/test_true_human_design_core.py
 
       - name: Run True Human Design engine tests
+        if: always()
         run: python3 tests/test_true_human_design_engine.py
 
       - name: Run True Human Design mutation guards
+        if: always()
         run: python3 tests/test_true_human_design_mutations.py
 
       - name: Run True Human Design CLI tests
+        if: always()
         run: python3 tests/test_true_human_design_cli.py
 
       - name: Set up Flyctl
