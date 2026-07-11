@@ -6,7 +6,11 @@ sys.path.insert(0, str(ROOT / "src"))
 
 from constellation import ConstellationValidationError, connection_summary, validate_constellation
 from etymology import analyze_name_etymology
-from evidence_v3 import chance_corrected_pair_agreement, weighted_claim_support
+from evidence_v3 import (
+    chance_corrected_pair_agreement,
+    evidence_dashboard,
+    weighted_claim_support,
+)
 
 
 def test_aghyarian_etymology_is_lineage_not_personality():
@@ -34,6 +38,17 @@ def test_single_duplicate_is_only_weak_excess_over_chance():
     assert agreement["chance_corrected_agreement"] == 0.0625
 
 
+def test_symbolic_only_support_respects_absolute_twelve_percent_cap():
+    result = weighted_claim_support({
+        "astrology": 1.0,
+        "numerology": 1.0,
+        "experimental_correspondence": 1.0,
+    })
+    assert result["support"] == 0.12
+    assert result["coverage"] == 0.12
+    assert result["normalization"] == "absolute_weights"
+
+
 def test_observed_contradiction_outweighs_symbolic_support():
     result = weighted_claim_support({
         "observed_behavior": -0.8,
@@ -41,7 +56,23 @@ def test_observed_contradiction_outweighs_symbolic_support():
         "numerology": 1.0,
         "experimental_correspondence": 1.0,
     })
-    assert result["support"] < 0.0
+    assert result["support"] == -0.16
+    assert result["veto"] == "observed_behavior_contradiction"
+
+
+def test_dashboard_does_not_relabel_available_weights_as_total_truth():
+    dashboard = evidence_dashboard({
+        "encoders": {
+            "pythagorean": {"expression": 1},
+            "astrology": {"sun_sign": "Aquarius"},
+        }
+    })
+    layers = {layer["id"]: layer for layer in dashboard["layers"]}
+    assert dashboard["coverage"] == 0.1
+    assert layers["astrology"]["maximum_influence"] == 0.06
+    assert layers["numerology"]["maximum_influence"] == 0.04
+    assert "normalized_available_weight" not in layers["astrology"]
+    assert "Consensus is a source category, not a truth status." in dashboard["rules"]
 
 
 def test_tiered_constellation_accepts_creations_and_name_only_people():
@@ -87,7 +118,9 @@ def main():
         test_aghyarian_etymology_is_lineage_not_personality,
         test_aghiarian_resolves_as_spelling_variant,
         test_single_duplicate_is_only_weak_excess_over_chance,
+        test_symbolic_only_support_respects_absolute_twelve_percent_cap,
         test_observed_contradiction_outweighs_symbolic_support,
+        test_dashboard_does_not_relabel_available_weights_as_total_truth,
         test_tiered_constellation_accepts_creations_and_name_only_people,
         test_minor_psychology_is_rejected,
     ]
