@@ -38,11 +38,11 @@ docker rm -f '$CANARY_NAME' >/dev/null 2>&1 || true
 docker run -d --name '$CANARY_NAME' --restart=no -e HME_BIND_HOST=0.0.0.0 -p 127.0.0.1:8091:8080 '$IMAGE' >/dev/null
 sleep 2
 curl -fsS http://127.0.0.1:8091/api/health >/tmp/hme-canary-health.json
-python3 -c 'import json; p=json.load(open("/tmp/hme-canary-health.json")); assert p["ok"] and p["reference_count"] >= 100 and not p["reference_errors"], p'
-curl -fsS -H 'Content-Type: application/json' -d '{"name":"Canary Check","mode":"data"}' http://127.0.0.1:8091/api/analyze >/tmp/hme-canary-analyze.json
-python3 -c 'import json; p=json.load(open("/tmp/hme-canary-analyze.json")); assert p["analysis_mode"] == "data" and p["contract_version"] == "analysis-v1" and p["signature"]["snapshot"]["mode"] == "data", p'
-curl -fsS -H 'Content-Type: application/json' -d '{"text":"Canary Check"}' http://127.0.0.1:8091/api/sigil >/tmp/hme-canary-sigil.json
-python3 -c 'import json; p=json.load(open("/tmp/hme-canary-sigil.json")); assert p["render_spec"] == "sigil-v1" and p["svg"].startswith("<svg"), p'
+python3 -c 'import json; p=json.load(open(\"/tmp/hme-canary-health.json\")); assert p[\"ok\"] and p[\"reference_count\"] >= 100 and not p[\"reference_errors\"], p'
+curl -fsS -H 'Content-Type: application/json' -d '{\"name\":\"Canary Check\",\"mode\":\"data\"}' http://127.0.0.1:8091/api/analyze >/tmp/hme-canary-analyze.json
+python3 -c 'import json; p=json.load(open(\"/tmp/hme-canary-analyze.json\")); assert p[\"analysis_mode\"] == \"data\" and p[\"contract_version\"] == \"analysis-v1\" and p[\"signature\"][\"snapshot\"][\"mode\"] == \"data\", p'
+curl -fsS -H 'Content-Type: application/json' -d '{\"text\":\"Canary Check\"}' http://127.0.0.1:8091/api/sigil >/tmp/hme-canary-sigil.json
+python3 -c 'import json; p=json.load(open(\"/tmp/hme-canary-sigil.json\")); assert p[\"render_spec\"] == \"sigil-v1\" and p[\"svg\"].startswith(\"<svg\"), p'
 "
 
 ssh_vm "set -euo pipefail
@@ -61,9 +61,10 @@ if ! curl -fsS http://127.0.0.1:8084/api/health >/tmp/hme-production-health.json
   docker start '$PRODUCTION_NAME' >/dev/null
   exit 1
 fi
-curl -fsS -H 'Content-Type: application/json' -d '{"name":"Production Check","mode":"data"}' http://127.0.0.1:8084/api/analyze >/tmp/hme-production-analyze.json
-curl -fsS -H 'Content-Type: application/json' -d '{"text":"Production Check"}' http://127.0.0.1:8084/api/sigil >/tmp/hme-production-sigil.json
-python3 -c 'import json; h=json.load(open("/tmp/hme-production-health.json")); a=json.load(open("/tmp/hme-production-analyze.json")); s=json.load(open("/tmp/hme-production-sigil.json")); assert h["build_revision"] == "'$REVISION'", h; assert a["contract_version"] == "analysis-v1" and a["analysis_mode"] == "data", a; assert s["render_spec"] == "sigil-v1", s'
+curl -fsS -H 'Content-Type: application/json' -d '{\"name\":\"Production Check\",\"mode\":\"data\"}' http://127.0.0.1:8084/api/analyze >/tmp/hme-production-analyze.json
+curl -fsS -H 'Content-Type: application/json' -d '{\"text\":\"Production Check\"}' http://127.0.0.1:8084/api/sigil >/tmp/hme-production-sigil.json
+grep -q '$REVISION' /tmp/hme-production-health.json
+python3 -c 'import json; a=json.load(open(\"/tmp/hme-production-analyze.json\")); s=json.load(open(\"/tmp/hme-production-sigil.json\")); assert a[\"contract_version\"] == \"analysis-v1\" and a[\"analysis_mode\"] == \"data\", a; assert s[\"render_spec\"] == \"sigil-v1\", s'
 docker rm -f '$CANARY_NAME' >/dev/null
 if [ -f "\$PWD/output/famous_people.sqlite" ]; then
   cp "\$PWD/output/famous_people.sqlite" "\$PWD/output/famous_people.sqlite.rollback-${SHORT_REVISION}"
