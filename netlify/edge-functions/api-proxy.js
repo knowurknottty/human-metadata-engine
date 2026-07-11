@@ -1,20 +1,27 @@
+const configuredOrigins = () => new Set(
+  (Netlify.env.get("HME_ALLOWED_ORIGINS") || "https://knowurknottty.github.io")
+    .split(",")
+    .map((value) => value.trim())
+    .filter(Boolean),
+);
+
 const allowedOrigin = (request) => {
   const origin = request.headers.get("origin");
-  if (!origin) return "*";
-  try {
-    const host = new URL(origin).hostname;
-    if (host === "knowurknottty.github.io" || host.endsWith(".netlify.app")) return origin;
-  } catch (_) {}
-  return "null";
+  if (!origin) return null;
+  return configuredOrigins().has(origin) ? origin : null;
 };
 
-const corsHeaders = (request) => ({
-  "Access-Control-Allow-Origin": allowedOrigin(request),
+const corsHeaders = (request) => {
+  const origin = allowedOrigin(request);
+  const headers = {
   "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Max-Age": "86400",
   "Vary": "Origin",
-});
+  };
+  if (origin) headers["Access-Control-Allow-Origin"] = origin;
+  return headers;
+};
 
 export default async (request) => {
   if (request.method === "OPTIONS") {
@@ -63,7 +70,6 @@ export default async (request) => {
     return Response.json(
       {
         error: "The analysis service is unavailable.",
-        detail: error instanceof Error ? error.message : String(error),
       },
       { status: 502, headers: { "Cache-Control": "no-store", ...corsHeaders(request) } },
     );

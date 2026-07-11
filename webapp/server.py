@@ -6,6 +6,8 @@ import math
 import os
 import sys
 import traceback
+import hashlib
+import unicodedata
 from collections import deque
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -42,6 +44,14 @@ from etymology import analyze_name_etymology  # noqa: E402
 from evidence_v3 import evidence_dashboard  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
 from snapshot import personality_snapshot  # noqa: E402
+from public_contract import (  # noqa: E402
+    PublicContractError,
+    normalize_public_name,
+    validate_mode,
+    validate_observations,
+    validate_psychology,
+    validate_subject_type,
+)
 
 STATIC = os.path.join(ROOT, "static")
 MIME = {
@@ -55,7 +65,12 @@ MIME = {
 }
 _DEFAULTS = None
 _DEFAULT_ERRORS = []
+_DEFAULTS_LOCK = Lock()
 PUBLIC_REFERENCE_IDENTITIES = famous_reference_identities()
+APP_VERSION = "0.6.0"
+BUILD_REVISION = os.environ.get("HME_BUILD_REVISION", "unknown")
+REQUEST_TIMEOUT_SECONDS = float(os.environ.get("HME_REQUEST_TIMEOUT_SECONDS", "15"))
+MAX_REQUEST_BYTES = 64 * 1024
 RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", "60"))
 RATE_LIMIT_REQUESTS = int(os.environ.get("HME_RATE_LIMIT_REQUESTS", "20"))
 RATE_LIMIT_MAX_TRACKED_IPS = int(os.environ.get("HME_RATE_LIMIT_MAX_TRACKED_IPS", "10000"))
@@ -78,6 +93,8 @@ SECURITY_HEADERS = {
     "Referrer-Policy": "no-referrer",
     "X-Frame-Options": "DENY",
     "X-Content-Type-Options": "nosniff",
+    "X-Permitted-Cross-Domain-Policies": "none",
+    "Cross-Origin-Resource-Policy": "same-origin",
 }
 
 
@@ -93,11 +110,65 @@ def _safe_json(value):
         return [_safe_json(v) for v in value]
     if hasattr(value, "__dict__"):
         return _safe_json(vars(value))
-    return str(value)
+    # Unknown objects must not be stringified into an accidental data leak.
+    return None
+
+
+_SENSITIVE_OUTPUT_KEYS = {
+    "birth", "birth_data", "birth_location", "location", "lat", "lon",
+    "latitude", "longitude", "timezone_offset", "coordinates", "coord",
+}
+
+
+def _redact_public_output(value, key: str | None = None):
+    """Remove raw location/birth fields before returning a public response."""
+    if isinstance(value, dict):
+        result = {}
+        for child_key, child_value in value.items():
+            normalized = str(child_key).lower()
+            if normalized in _SENSITIVE_OUTPUT_KEYS and key != "normalized_input":
+                continue
+            if normalized == "text" and key == "observations":
+                continue
+            result[child_key] = _redact_public_output(child_value, normalized)
+        return result
+    if isinstance(value, list):
+        return [_redact_public_output(item, key) for item in value]
+    return value
+
+
+def _input_hash(payload: dict) -> str:
+    canonical = json.dumps(payload, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:24]
+
+
+def _data_snapshot(signature: dict, psychology: dict | None = None) -> dict:
+    """A non-interpretive snapshot for Data mode."""
+    encoders = signature.get("encoders", {})
+    return {
+        "available_layers": [
+            key for key, value in encoders.items()
+            if isinstance(value, dict) and not value.get("error") and value.get("available", True) is not False
+        ],
+        "narrative": (
+            "Data mode reports reproducible string measurements and configured "
+            "calculation outputs. It does not infer personality, fate, identity, "
+            "or real-world similarity from a name."
+        ),
+        "highlights": [
+            f"{len(encoders)} encoder outputs available",
+            "raw input is not retained by this process",
+            "interpretive claims are disabled in Data mode",
+        ],
+        "mode": "data",
+        "psychology_present": bool(psychology),
+    }
 
 
 def _validated_birth(raw):
     """Validate a living person's birth data at the public API boundary."""
+    if isinstance(raw, dict) and "time_accuracy" not in raw:
+        raw = {**raw, "time_accuracy": "unknown"}
     return validate_birth(raw, living_person=True, require_coordinates=True)
 
 
@@ -187,23 +258,30 @@ def _disable_unvalidated_human_design(signature, identity):
     )
 
 
-def _compute_signature(identity):
+def _compute_signature(identity, *, mode: str = "data"):
     """Compute a signature and apply the corrected public scoring contract."""
     signature = compute_unified_signature(identity)
     _disable_unvalidated_human_design(signature, identity)
     signature["resonance"] = accuracy_composite_resonance(signature)
+    if mode == "data":
+        signature["snapshot"] = _data_snapshot(signature, psychology=identity.get("psychology"))
+    else:
+        signature.setdefault("snapshot", {})["mode"] = "magic"
+    signature["analysis_mode"] = mode
     return signature
 
 
 def get_defaults():
     global _DEFAULTS, _DEFAULT_ERRORS
     if _DEFAULTS is None:
-        _DEFAULTS, _DEFAULT_ERRORS = [], []
-        for ident in PUBLIC_REFERENCE_IDENTITIES:
-            try:
-                _DEFAULTS.append(_compute_signature(_normalized_reference(ident)))
-            except Exception as exc:
-                _DEFAULT_ERRORS.append({"id": ident.get("id"), "error": str(exc)})
+        with _DEFAULTS_LOCK:
+            if _DEFAULTS is None:
+                _DEFAULTS, _DEFAULT_ERRORS = [], []
+                for ident in PUBLIC_REFERENCE_IDENTITIES:
+                    try:
+                        _DEFAULTS.append(_compute_signature(_normalized_reference(ident)))
+                    except Exception as exc:
+                        _DEFAULT_ERRORS.append({"id": ident.get("id"), "error": type(exc).__name__})
     return _DEFAULTS
 
 
@@ -235,29 +313,10 @@ def _validated_lineage_surnames(raw):
 
 
 def _validated_observations(raw):
-    if raw is None:
-        return []
-    if not isinstance(raw, list):
-        raise ValueError("observations must be an array.")
-    if len(raw) > 100:
-        raise ValueError("observations supports at most 100 entries.")
-    observations = []
-    for index, item in enumerate(raw):
-        if not isinstance(item, dict):
-            raise ValueError(f"observations[{index}] must be an object.")
-        text = item.get("text")
-        if not isinstance(text, str) or not text.strip():
-            raise ValueError(f"observations[{index}].text must be a non-empty string.")
-        observations.append({
-            "text": text.strip(),
-            "source": item.get("source", "user_supplied"),
-            "confidence": item.get("confidence", "unrated"),
-            "occurred_at": item.get("occurred_at"),
-        })
-    return observations
+    return validate_observations(raw)
 
 
-def _constellation_analysis(graph, analysis_year):
+def _constellation_analysis(graph, analysis_year, *, mode: str = "data"):
     if graph is None:
         return None
 
@@ -273,9 +332,9 @@ def _constellation_analysis(graph, analysis_year):
             if node["profile_level"] in {"birth", "self_report"} and node.get("birth"):
                 identity["birth"] = _validated_birth(node["birth"])
             if node["profile_level"] == "self_report" and node.get("psychology"):
-                identity["psychology"] = node["psychology"]
+                identity["psychology"] = validate_psychology(node["psychology"])
 
-        signature = _compute_signature(identity)
+        signature = _compute_signature(identity, mode=mode)
         signatures[node["id"]] = signature
         node_etymology = analyze_name_etymology(
             node["name"],
@@ -332,22 +391,32 @@ def _constellation_analysis(graph, analysis_year):
 def analyze(payload):
     if not isinstance(payload, dict):
         raise ValueError("Request body must be a JSON object.")
-    name = (payload.get("name") or "").strip()
-    if not name or not any(ch.isalpha() for ch in name):
-        raise ValueError("A name containing letters is required.")
-    if len(name) > 120:
-        raise ValueError("Name is too long (max 120 characters).")
+    mode = validate_mode(payload.get("mode"))
+    subject_type = validate_subject_type(payload.get("subject_type"))
+    name = normalize_public_name(payload.get("name"))
 
     analysis_year = datetime.now(timezone.utc).year
+    requested_year = payload.get("as_of_year", analysis_year)
+    if isinstance(requested_year, bool) or not isinstance(requested_year, int):
+        raise PublicContractError("as_of_year must be an integer.")
+    if not 1 <= requested_year <= analysis_year:
+        raise PublicContractError(f"as_of_year must be between 1 and {analysis_year}.")
     identity = {
         "id": "user:" + "".join(c for c in name.lower() if c.isalnum())[:40],
         "text": name,
-        "as_of_year": analysis_year,
+        "as_of_year": requested_year,
     }
-    birth = _validated_birth(payload.get("birth"))
+    raw_birth = payload.get("birth")
+    if isinstance(raw_birth, dict) and "time_accuracy" not in raw_birth:
+        raw_birth = {**raw_birth, "time_accuracy": "unknown"}
+    birth = validate_birth(
+        raw_birth,
+        living_person=subject_type == "self",
+        require_coordinates=True,
+    )
     if birth:
         identity["birth"] = birth
-    psychology = payload.get("psychology") or None
+    psychology = validate_psychology(payload.get("psychology"))
     if psychology:
         identity["psychology"] = psychology
 
@@ -363,11 +432,13 @@ def analyze(payload):
     observations = _validated_observations(payload.get("observations"))
     constellation = validate_constellation(payload.get("constellation"))
 
-    sig = _compute_signature(identity)
+    sig = _compute_signature(identity, mode=mode)
     sig["normalized_input"] = {
         "name": name,
         "birth": canonical_birth_record(birth),
-        "analysis_year": analysis_year,
+        "analysis_year": requested_year,
+        "subject_type": subject_type,
+        "mode": mode,
         "lineage_surnames": lineage_surnames,
     }
 
@@ -381,7 +452,7 @@ def analyze(payload):
         observations=observations,
         etymology=etymology,
     )
-    constellation_result = _constellation_analysis(constellation, analysis_year)
+    constellation_result = _constellation_analysis(constellation, requested_year, mode=mode)
 
     defaults = get_defaults()
     uv = feature_vector(sig)
@@ -392,8 +463,29 @@ def analyze(payload):
     } for d in defaults]
     comps.sort(key=lambda c: -c["agreement"])
     corr = cross_encoder_correlations(defaults + [sig])
-    report = generate_report(sig, psychology=psychology, comparisons=comps)
-    return {
+    report = generate_report(sig, psychology=psychology, comparisons=comps, mode=mode)
+    response = {
+        "contract_version": "analysis-v1",
+        "build_revision": BUILD_REVISION,
+        "engine_version": "signature-v2",
+        "analysis_mode": mode,
+        "subject_type": subject_type,
+        "input_hash": _input_hash({
+            "name": name,
+            "birth": birth,
+            "psychology": psychology,
+            "mode": mode,
+            "subject_type": subject_type,
+            "as_of_year": requested_year,
+            "lineage_surnames": lineage_surnames,
+            "observations": observations,
+            "constellation": constellation,
+        }),
+        "privacy": {
+            "retention": "not persisted by the web process",
+            "response_redaction": "raw birth coordinates, locations, and observation text are omitted",
+            "warning": "network, browser, and reverse-proxy logs may still exist outside this process",
+        },
         "signature": sig,
         "comparison_metric": FEATURE_AGREEMENT_METRIC,
         "comparisons": comps[:10],
@@ -405,11 +497,16 @@ def analyze(payload):
         "observations": observations,
         "constellation": constellation_result,
     }
+    return _redact_public_output(response)
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "IdentityResonance/1.3"
+    server_version = f"IdentityResonance/{APP_VERSION}"
     sys_version = ""
+
+    def setup(self):
+        super().setup()
+        self.connection.settimeout(REQUEST_TIMEOUT_SECONDS)
 
     def log_message(self, fmt, *args):
         sys.stderr.write("[web] %s\n" % (fmt % args))
@@ -433,13 +530,47 @@ class Handler(BaseHTTPRequestHandler):
         body = json.dumps(_safe_json(obj), ensure_ascii=False, allow_nan=False, separators=(",", ":")).encode("utf-8")
         self._send(code, body, "application/json; charset=utf-8", extra_headers)
 
+    def _read_json_body(self, max_bytes: int = MAX_REQUEST_BYTES):
+        raw_length = self.headers.get("Content-Length")
+        try:
+            length = int(raw_length or 0)
+        except ValueError as exc:
+            raise ValueError("Content-Length must be an integer.") from exc
+        if length <= 0:
+            raise ValueError("Request body is empty.")
+        if length > max_bytes:
+            raise ValueError("Payload too large.")
+        body = self.rfile.read(length)
+        if len(body) != length:
+            raise ValueError("Request body was truncated.")
+        try:
+            payload = json.loads(body)
+        except json.JSONDecodeError as exc:
+            raise ValueError(f"Invalid JSON: {exc.msg}.") from exc
+        return payload
+
     def do_GET(self):
         path = self.path.split("?", 1)[0]
         if path == "/api/health":
             get_defaults()
-            return self._json(200, {"ok": True, "reference_count": len(_DEFAULTS), "reference_errors": _DEFAULT_ERRORS})
+            ready = bool(_DEFAULTS) and not _DEFAULT_ERRORS
+            return self._json(200 if ready else 503, {
+                "ok": ready,
+                "ready": ready,
+                "version": APP_VERSION,
+                "build_revision": BUILD_REVISION,
+                "reference_count": len(_DEFAULTS),
+                "reference_errors": [{"id": item.get("id"), "error": item.get("error")} for item in _DEFAULT_ERRORS],
+            })
         if path == "/api/defaults":
             return self._json(200, {"identities": default_summaries()})
+        if path == "/api/modes":
+            return self._json(200, {
+                "modes": [
+                    {"id": "data", "label": "Data", "description": "Measurements, provenance, and cautious interpretation."},
+                    {"id": "magic", "label": "Magic", "description": "Symbolic reflection with explicit non-measurement limits."},
+                ],
+            })
         if path == "/":
             path = "/index.html"
         fs_path = os.path.realpath(os.path.join(STATIC, path.lstrip("/")))
@@ -465,12 +596,7 @@ class Handler(BaseHTTPRequestHandler):
         if not _ANALYSIS_SLOTS.acquire(blocking=False):
             return self._json(429, {"error": "Analysis service is busy. Please try again shortly."})
         try:
-            length = int(self.headers.get("Content-Length", 0))
-            if length <= 0:
-                raise ValueError("Request body is empty.")
-            if length > 64 * 1024:
-                return self._json(413, {"error": "Payload too large."})
-            payload = json.loads(self.rfile.read(length))
+            payload = self._read_json_body()
             return self._json(200, analyze(payload))
         except (
             BirthValidationError,
@@ -479,9 +605,9 @@ class Handler(BaseHTTPRequestHandler):
             json.JSONDecodeError,
         ) as exc:
             return self._json(400, {"error": str(exc)})
-        except Exception as exc:
+        except Exception:
             traceback.print_exc()
-            return self._json(500, {"error": "Analysis failed.", "detail": str(exc) if os.environ.get("DEBUG") == "1" else None})
+            return self._json(500, {"error": "Analysis failed.", "detail": None})
         finally:
             _ANALYSIS_SLOTS.release()
 
@@ -494,27 +620,35 @@ class Handler(BaseHTTPRequestHandler):
                 {"error": "Too many sigil requests. Please try again shortly."},
                 {"Retry-After": str(RATE_LIMIT_WINDOW_SECONDS)},
             )
+        if not _ANALYSIS_SLOTS.acquire(blocking=False):
+            return self._json(429, {"error": "Sigil service is busy. Please try again shortly."})
         try:
-            length = int(self.headers.get("Content-Length", 0))
-            if length <= 0:
-                raise ValueError("Request body is empty.")
-            if length > 8 * 1024:
-                return self._json(413, {"error": "Payload too large."})
-            payload = json.loads(self.rfile.read(length))
+            payload = self._read_json_body(max_bytes=8 * 1024)
             if not isinstance(payload, dict):
                 raise ValueError("Request body must be a JSON object.")
             return self._json(200, generate_custom_sigil(payload.get("text"), size=payload.get("size", 360)))
         except (ValueError, json.JSONDecodeError) as exc:
             return self._json(400, {"error": str(exc)})
+        finally:
+            _ANALYSIS_SLOTS.release()
 
 
 def main():
     port = int(os.environ.get("PORT", 8000))
+    bind_host = os.environ.get("HME_BIND_HOST", "127.0.0.1")
     print(f"Warming public reference population ({len(PUBLIC_REFERENCE_IDENTITIES)} identities)...")
     get_defaults()
     print(f"Loaded {len(_DEFAULTS)} references; {len(_DEFAULT_ERRORS)} failed.")
-    print(f"Identity Resonance running on http://0.0.0.0:{port}")
-    ThreadingHTTPServer(("0.0.0.0", port), Handler).serve_forever()
+    print(f"Identity Resonance running on http://{bind_host}:{port}")
+    server = ThreadingHTTPServer((bind_host, port), Handler)
+    server.daemon_threads = True
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.shutdown()
+        server.server_close()
 
 
 if __name__ == "__main__":

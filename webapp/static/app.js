@@ -45,7 +45,7 @@ const BONUS_CODE = "evan";
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-let STATE = { result: null, paid: false, psychology: null, customSigil: null };
+let STATE = { result: null, paid: false, psychology: null, customSigil: null, mode: "data", lastFocus: null };
 
 // ------------------------------------------------------------------
 // Fingerprint glyph renderer (from the deterministic server spec)
@@ -389,6 +389,7 @@ function renderDashboard(result) {
   const res = sig.resonance;
   const fp = sig.fingerprint;
   const name = sig.text;
+  const dataMode = result.analysis_mode === "data";
   const d = $("dashboard");
   const extensions = Object.values(e).filter(extension =>
     extension && extension.system && extension.data && extension.provenance
@@ -412,7 +413,7 @@ function renderDashboard(result) {
         <h3>${esc(name)}</h3>
         <p class="atlas-profile-subtitle">${fp.symmetry}-fold deterministic fingerprint</p>
         <div class="atlas-fingerprint">${fingerprintSVG(fp, 220)}</div>
-        <div class="resonance-readout"><span>Composite resonance</span><strong class="stat-num">${Number(res.score).toFixed(1)}</strong><small>/ 100 · composite only</small></div>
+        <div class="resonance-readout"><span>${dataMode ? "Interpretive engine index" : "Symbolic resonance"}</span><strong class="stat-num">${Number(res.score).toFixed(1)}</strong><small>/ 100 · not accuracy or probability</small></div>
         <div class="atlas-component-list">${Object.entries(res.components).map(([key, value]) => `<div><span>${esc(compactLabel(key))}</span><i><b style="width:${Math.max(3, Math.min(100, Number(value) * 100)).toFixed(1)}%"></b></i><em>${(Number(value) * 100).toFixed(0)}</em></div>`).join("")}</div>
         <div class="atlas-profile-foot"><span>${extensions.length} provenance-aware extensions</span><span>${astro ? (astro.time_sensitive_fields_withheld ? "Swiss Ephemeris date-only chart" : "Swiss Ephemeris chart") : "No chart requested"}</span></div>
       </aside>
@@ -436,7 +437,7 @@ function renderDashboard(result) {
   </section>`;
 
   html += provenanceLedger(extensions);
-  html += `<div class="analysis-section-heading"><div><p class="atlas-kicker">Complete analytical surface</p><h3>Core encoder detail</h3></div><p>Visual overview above; source values and derivations below.</p></div>`;
+  html += `<div class="analysis-section-heading"><div><p class="atlas-kicker">Complete analytical surface</p><h3>Core encoder detail</h3></div><p>${result.analysis_mode === "data" ? "Measurements and provenance first; interpretation is intentionally constrained." : "Symbolic reflection layer; read every claim as a creative lens, not a measurement."}</p></div>`;
 
   // --- Detailed encoder panels ---
   const p = e.pythagorean, c = e.chaldean, o = e.ordinal, l = e.linguistic,
@@ -449,14 +450,14 @@ function renderDashboard(result) {
       <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Soul urge</div><b class="stat-num text-lg">${p.soul_urge}</b> <span class="text-[11px] text-slate-400">${NUM_MEANING[p.soul_urge]||""}</span></div>
       <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Personality</div><b class="stat-num text-lg">${p.personality}</b> <span class="text-[11px] text-slate-400">${NUM_MEANING[p.personality]||""}</span></div>
     </div>
-    <p class="text-xs text-slate-400 mt-3">The expression is the name's operating system; soul urge is what it wants (vowels); personality is the surface strangers meet (consonants).${p.master_preserved ? " Master number preserved — high-voltage variant." : ""}</p>
+    <p class="text-xs text-slate-400 mt-3">${dataMode ? "These are configured letter-value outputs. Vowel and consonant totals describe the string, not its bearer." : "The expression is a symbolic lens; soul urge uses vowels and personality uses consonants. Treat the language as reflection, not measurement."}${p.master_preserved ? " Master number preserved as a convention." : ""}</p>
     ${meter("Raw total", p.total, 200, ACCENT.pythagorean)}`));
 
   cards.push(card("Chaldean Numerology", ACCENT.chaldean, `
     ${bigNum(c.name_number, "Name number", NUM_MEANING[c.name_number])}
     <div class="mt-4 rounded-lg bg-white/5 p-2.5 text-sm"><div class="text-[10px] text-slate-500">Compound (occult) number</div>
       <b class="stat-num text-lg">${c.compound_number}</b></div>
-    <p class="text-xs text-slate-400 mt-3">The Babylonian vibration table — no letter maps to the sacred 9. The compound number carries the karmic circumstance behind the visible digit.</p>`));
+    <p class="text-xs text-slate-400 mt-3">${dataMode ? "A named Chaldean mapping with a compound and reduced value; this is a reproducible convention." : "A symbolic Babylonian mapping. Read the compound number as a creative prompt, not a claim about a person."}</p>`));
 
   cards.push(card("Ordinal Ciphers", ACCENT.ordinal, `
     <div class="grid grid-cols-3 gap-2 text-center">
@@ -464,7 +465,7 @@ function renderDashboard(result) {
       <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Reverse</div><b class="stat-num text-xl">${o.reverse}</b><div class="text-[10px] text-slate-400">→ ${o.reverse_reduced}</div></div>
       <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Reduced</div><b class="stat-num text-xl">${o.reduced_total}</b><div class="text-[10px] text-slate-400">per-letter</div></div>
     </div>
-    <p class="text-xs text-slate-400 mt-3">${o.ordinal_total < o.reverse ? "Letters cluster toward the front of the alphabet — a primary, label-like signature." : "Letters cluster toward the back of the alphabet — an accumulated, pressure-bearing signature."}</p>`));
+    <p class="text-xs text-slate-400 mt-3">${dataMode ? "Standard and reverse totals are descriptive alphabet positions; the ordinary reduced root is mathematically coupled to the Pythagorean root." : (o.ordinal_total < o.reverse ? "Letters cluster toward the front of the alphabet — a symbolic, label-like prompt." : "Letters cluster toward the back of the alphabet — a symbolic, pressure-bearing prompt.")}</p>`));
 
   cards.push(card("Linguistic Analysis", ACCENT.linguistic, `
     ${meter("Shannon entropy", l.shannon_entropy, l.max_possible_entropy || 5, ACCENT.linguistic, " bits")}
@@ -506,7 +507,7 @@ function renderDashboard(result) {
     <div class="flex items-center gap-2 flex-wrap text-lg font-bold stat-num">
       ${chain.map((v, i) => `<span class="${i === chain.length - 1 ? "text-amber-300 text-2xl" : "text-slate-300"}">${v}</span>${i < chain.length - 1 ? '<span class="text-slate-600">→</span>' : ""}`).join("")}
     </div>
-    <p class="text-xs text-slate-400 mt-2">The digital-root cascade — each arrow is one act of distillation toward the name's terminal essence.</p>`));
+    <p class="text-xs text-slate-400 mt-2">${dataMode ? "The digital-root cascade is shown as a reproducible calculation path." : "The digital-root cascade is a symbolic act of distillation toward a terminal essence."}</p>`));
 
   // Astrology
   if (astro && astro.sun_sign) {
@@ -573,7 +574,7 @@ function renderDashboard(result) {
       <div class="mt-4">${heatmapHTML(result.correlations)}</div>
     </div>
     <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-semibold text-amber-300 tracking-wide">Composite Narrative</h3>
+      <h3 class="text-sm font-semibold text-amber-300 tracking-wide">${result.analysis_mode === "data" ? "Data reading" : "Magic reading"}</h3>
       <div class="mt-3 text-sm leading-relaxed text-slate-300 space-y-3">${
         sig.snapshot.narrative.split("\n\n").map(par => `<p>${esc(par)}</p>`).join("")
       }</div>
@@ -599,8 +600,8 @@ function renderDashboard(result) {
   html += `<div class="glass rounded-2xl p-6 sm:p-8 mt-6 fade-up-3" id="report-card">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
-        <h3 class="text-lg font-bold text-slate-50">The Full Written Analysis</h3>
-        <p class="text-xs text-slate-400 mt-0.5">${result.report.word_count.toLocaleString()} words · ${result.report.sections.length} sections · deterministic</p>
+        <h3 class="text-lg font-bold text-slate-50">${result.analysis_mode === "data" ? "The Data Report" : "The Magic Report"}</h3>
+        <p class="text-xs text-slate-400 mt-0.5">${result.report.word_count.toLocaleString()} words · ${result.report.sections.length} sections · ${esc(result.analysis_mode)} mode · deterministic</p>
       </div>
       <div class="flex gap-2" id="report-actions"></div>
     </div>
@@ -639,7 +640,7 @@ function renderReport() {
     body.innerHTML = mdToHTML(teaser) +
       `<div class="locked-blur">${mdToHTML(r.markdown.slice(teaserEnd, teaserEnd + 2200))}</div>`;
     overlay.classList.remove("hidden"); overlay.classList.add("flex");
-    actions.innerHTML = `<span class="px-3 py-2 rounded-lg text-xs bg-white/5 text-slate-400 border border-white/10">🔒 Sections 2–10 locked</span>`;
+    actions.innerHTML = `<span class="px-3 py-2 rounded-lg text-xs bg-white/5 text-slate-400 border border-white/10">🔒 Sections 2–${Math.max(2, r.sections.length)} locked</span>`;
   }
 }
 
@@ -652,7 +653,7 @@ const PROCESSING_STEPS = [
   "Chaldean vibration table…", "Ordinal ciphers (A1Z26 / reverse / reduced)…",
   "Shannon entropy & phonetic profile…", "Prime-index & binary polarity…",
   "Hebrew Gematria transliteration…", "Greek Isopsephy cascade…",
-  "Swiss Ephemeris planetary positions…", "Human Design gates & channels…",
+  "Swiss Ephemeris planetary positions…", "Checking time-sensitive layers…",
   "25 provenance-aware symbolic extensions…", "Composite resonance & fingerprint…", "Writing your report…",
 ];
 
@@ -664,13 +665,15 @@ const app = {
     const el = $(`${which}-fields`);
     el.classList.toggle("opacity-40", !on);
     el.classList.toggle("pointer-events-none", !on);
+    el.setAttribute("aria-disabled", String(!on));
+    el.querySelectorAll("input, select, textarea").forEach(control => { control.disabled = !on; });
     if (which === "birth") {
       ["b-date", "b-tz", "b-lat", "b-lon"].forEach(id => { $(id).required = on; });
     }
   },
 
   reset() {
-    STATE = {result: null, paid: false, psychology: null, customSigil: null};
+    STATE = {result: null, paid: false, psychology: null, customSigil: null, mode: "data", lastFocus: null};
     $("dashboard").classList.add("hidden");
     $("landing").classList.remove("hidden");
     $("form-section").classList.remove("hidden");
@@ -681,7 +684,9 @@ const app = {
     ev.preventDefault();
     const errEl = $("form-error");
     errEl.classList.add("hidden");
-    const payload = {name: $("name").value.trim()};
+    const mode = document.querySelector('input[name="mode"]:checked')?.value || "data";
+    const payload = {name: $("name").value.trim(), mode};
+    STATE.mode = mode;
 
     if ($("birth-enabled").checked && $("b-date").value) {
       const [y, m, day] = $("b-date").value.split("-").map(Number);
@@ -694,7 +699,7 @@ const app = {
         location: $("b-loc").value,
         lat: parseFloat($("b-lat").value),
         lon: parseFloat($("b-lon").value),
-        time_accuracy: suppliedTime ? "provided" : "unknown",
+        time_accuracy: suppliedTime ? "exact" : "unknown",
       };
     }
     if ($("psych-enabled").checked) {
@@ -723,8 +728,6 @@ const app = {
       step = (step + 1) % PROCESSING_STEPS.length;
       $("processing-step").textContent = PROCESSING_STEPS[step];
     }, 380);
-    const started = Date.now();
-
     try {
       const resp = await fetch("/api/analyze", {
         method: "POST", headers: {"Content-Type": "application/json"},
@@ -732,9 +735,6 @@ const app = {
       });
       const data = await resp.json();
       if (!resp.ok) throw new Error(data.error || "Analysis failed");
-      // Let the animation play at least ~2.2s so it feels substantive
-      const wait = Math.max(0, 2200 - (Date.now() - started));
-      await new Promise(res => setTimeout(res, wait));
       STATE.result = data;
       STATE.paid = false;
       renderDashboard(data);
@@ -749,13 +749,17 @@ const app = {
   },
 
   openPaywall() {
+    STATE.lastFocus = document.activeElement;
     $("paywall").classList.remove("hidden");
     $("paywall").classList.add("flex");
+    $("paywall").focus();
     $("cc-num").focus();
   },
   closePaywall() {
     $("paywall").classList.add("hidden");
     $("paywall").classList.remove("flex");
+    if (STATE.lastFocus && typeof STATE.lastFocus.focus === "function") STATE.lastFocus.focus();
+    STATE.lastFocus = null;
   },
 
   unlockReport() {
@@ -874,14 +878,16 @@ function init() {
 
   // Big Five sliders
   $("bigfive-sliders").innerHTML = B5.map(([k, label]) => `
-    <div><div class="flex justify-between text-xs text-slate-400 mb-1"><span>${label}</span><span id="bf-${k}-val" class="stat-num">50</span></div>
-    <input type="range" id="bf-${k}" min="0" max="100" value="50" class="w-full accent-rose-400"
+    <div><div class="flex justify-between text-xs text-slate-400 mb-1"><label for="bf-${k}">${label}</label><span id="bf-${k}-val" class="stat-num">50</span></div>
+    <input type="range" id="bf-${k}" aria-label="${label}" min="0" max="100" value="50" class="w-full accent-rose-400"
       oninput="document.getElementById('bf-${k}-val').textContent=this.value"></div>`).join("");
 
   // MBTI / Enneagram selects
   $("p-mbti").innerHTML += MBTI_TYPES.map(t => `<option>${t}</option>`).join("");
   $("p-enne").innerHTML += Array.from({length: 9}, (_, i) => `<option>${i + 1}</option>`).join("");
   $("p-wing").innerHTML += Array.from({length: 9}, (_, i) => `<option>${i + 1}</option>`).join("");
+  app.toggleSection("birth");
+  app.toggleSection("psych");
 
   // Reference-population gallery
   fetch("/api/defaults").then(r => r.json()).then(d => {
@@ -897,4 +903,9 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !$("paywall").classList.contains("hidden")) {
+    app.closePaywall();
+  }
+});
 })();

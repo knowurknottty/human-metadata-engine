@@ -17,6 +17,57 @@ EVIDENCE_NOTICE = """> **How to read this report**
 
 """
 
+DATA_MODE_NOTICE = """> **Data mode**
+> This version reports reproducible string measurements, provenance, and configured comparison outputs. It does not infer personality, fate, cultural origin, or real-world similarity from a name. Self-reported assessments remain self-reported.
+
+"""
+
+
+def _data_report(sig: dict, psychology: dict | None = None, comparisons: list[dict] | None = None) -> dict:
+    """Build a compact evidence-first report without legacy interpretive prose."""
+    encoders = sig.get("encoders", {})
+    pyth = encoders.get("pythagorean", {})
+    ling = encoders.get("linguistic", {})
+    resonance = sig.get("resonance", {})
+    lines = [
+        f"# Identity Resonance Data Report — {sig.get('text', 'Unknown')}",
+        "",
+        DATA_MODE_NOTICE.rstrip(),
+        "## 1. Input and method",
+        "",
+        f"- Contract: `{sig.get('contract_version', 'signature-v2')}`",
+        f"- Analysis mode: `data`",
+        f"- Encoders returned: `{len(encoders)}`",
+        f"- Signature dimensions: `{sig.get('dimensions', 0)}`",
+        "- Birth locations and coordinates are intentionally excluded from this exported report.",
+        "",
+        "## 2. Computed measurements",
+        "",
+        f"- Pythagorean expression: `{pyth.get('expression', '—')}`; total `{pyth.get('total', '—')}`",
+        f"- Chaldean name number: `{encoders.get('chaldean', {}).get('name_number', '—')}`",
+        f"- Ordinal reduced value: `{encoders.get('ordinal', {}).get('ordinal_reduced', '—')}`",
+        f"- Letter count: `{ling.get('letter_count', '—')}`",
+        f"- Entropy ratio: `{ling.get('entropy_ratio', 0):.3f}`",
+        f"- Interpretive engine index: `{resonance.get('score', '—')}/100` (not accuracy or probability)",
+        "",
+        "## 3. Evidence coverage",
+        "",
+        "The data mode separates computed string structure from self-report and symbolic layers. Missing evidence is not imputed.",
+        f"- Psychology supplied: `{'yes' if psychology else 'no'}`",
+        f"- Comparison metric: `{len(comparisons or [])}` reference rows returned",
+        "",
+        "## 4. Limitations",
+        "",
+        "These outputs describe the behavior of configured encoders over an input string. They do not establish personality, identity, causation, cultural origin, employment suitability, health status, or a relationship between people.",
+    ]
+    markdown = "\n".join(lines) + "\n"
+    return {
+        "markdown": markdown,
+        "word_count": len(markdown.split()),
+        "sections": [1, 2, 3, 4],
+        "mode": "data",
+    }
+
 
 def _harden_language(markdown: str) -> str:
     text = markdown
@@ -69,6 +120,14 @@ def _harden_language(markdown: str) -> str:
     text = text.replace(
         "The convergent themes of this analysis point to reliable capacities — the qualities multiple systems agree on are the ones to build strategy around rather than treat as accidents.",
         "Repeated symbolic themes can be useful reflection prompts, but they are not evidence of reliable capacities until confirmed by behavior, history, or validated assessment.",
+    )
+    text = text.replace(
+        "the only empirically-grounded section of this report",
+        "a self-reported section whose validity depends on the assessment method",
+    )
+    text = text.replace(
+        "The symbolic systems (numerology, gematria, astrology, Human Design) are interpretive traditions",
+        "The symbolic systems (numerology, gematria, astrology, and Human Design) are interpretive traditions",
     )
     text = text.replace(
         "**How others likely perceive this identity.**",
@@ -134,7 +193,11 @@ def _human_design_status(sig: dict) -> str:
     )
 
 
-def generate_report(sig: dict, psychology: dict | None = None, comparisons: list[dict] | None = None) -> dict:
+def generate_report(sig: dict, psychology: dict | None = None, comparisons: list[dict] | None = None, *, mode: str = "magic") -> dict:
+    if mode == "data":
+        report = _data_report(sig, psychology=psychology, comparisons=comparisons)
+        report["evidence_model"] = "computed-self_report-symbolic-experimental-v2"
+        return report
     report = generate_legacy_report(sig, psychology=psychology, comparisons=comparisons)
     markdown = _harden_language(report["markdown"])
     first_break = markdown.find("\n\n")
@@ -148,6 +211,7 @@ def generate_report(sig: dict, psychology: dict | None = None, comparisons: list
     result["markdown"] = markdown
     result["word_count"] = len(markdown.split())
     result["evidence_model"] = "computed-self_report-symbolic-experimental-v2"
+    result["mode"] = "magic"
     return result
 
 

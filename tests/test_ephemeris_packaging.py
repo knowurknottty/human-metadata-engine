@@ -25,10 +25,10 @@ class EphemerisPackagingTests(unittest.TestCase):
         self.assertIn("pip wheel", dockerfile)
         self.assertIn("COPY --from=ephemeris-builder", dockerfile)
         self.assertIn("pip install --no-cache-dir /wheels/*", dockerfile)
-        self.assertIn("pip install --no-cache-dir -r requirements.txt", deploy)
-        self.assertIn("pip install -r requirements.txt", workflow)
-        self.assertIn("tests/test_ephemeris_packaging.py", deploy)
-        self.assertIn("tests/test_ephemeris_packaging.py", workflow)
+        self.assertIn("pip install --require-hashes --no-cache-dir -r requirements.txt", deploy)
+        self.assertIn("pip install --require-hashes -r requirements.txt", workflow)
+        self.assertIn("tools/run_tests.py", deploy)
+        self.assertIn("tools/run_tests.py", workflow)
 
 
 if __name__ == "__main__":

@@ -11,6 +11,11 @@ from datetime import date, datetime, timezone
 import math
 from typing import Any
 
+# ``provided`` remains accepted for older internal callers; public clients
+# should use ``exact``. It is deliberately not inferred when the field is
+# omitted.
+TIME_ACCURACIES = {"unknown", "hour_only", "approximate", "exact", "provided"}
+
 
 class BirthValidationError(ValueError):
     """Raised when birth input cannot be safely normalized."""
@@ -71,6 +76,14 @@ def validate_birth(
     except ValueError as exc:
         raise BirthValidationError(f"Invalid birth date; birth date is not a real calendar date: {exc}.") from exc
 
+    # Internal callers historically treated an explicitly supplied hour and
+    # minute as provided. The web boundary injects ``unknown`` when the field
+    # is omitted, so public requests never inherit this compatibility default.
+    time_accuracy = raw.get("time_accuracy", "provided")
+    if time_accuracy not in TIME_ACCURACIES:
+        raise BirthValidationError(
+            "time_accuracy must be one of: unknown, hour_only, approximate, exact."
+        )
     try:
         hour = int(raw.get("hour", 12))
         minute = int(raw.get("minute", 0))
@@ -92,10 +105,9 @@ def validate_birth(
         "minute": minute,
         "timezone_offset": timezone_offset,
         "location": str(raw.get("location", ""))[:120],
-        # Legacy callers omitted this field while supplying an actual time;
-        # preserve that contract and require an explicit ``unknown`` marker
-        # for date-only analysis.
-        "time_accuracy": "unknown" if raw.get("time_accuracy") == "unknown" else "provided",
+        # Noon is a display/ephemeris placeholder for unknown time, never a
+        # claim that the subject was born at 12:00.
+        "time_accuracy": time_accuracy,
     }
 
     lat = raw.get("lat")
@@ -130,8 +142,8 @@ def canonical_birth_record(birth: dict[str, Any] | None) -> dict[str, Any] | Non
     return {
         "date": f"{birth['year']:04d}-{birth['month']:02d}-{birth['day']:02d}",
         "time": f"{birth['hour']:02d}:{birth['minute']:02d}",
+        "time_accuracy": birth.get("time_accuracy", "unknown"),
         "timezone_offset": birth["timezone_offset"],
-        "location": birth.get("location", ""),
-        "latitude": birth.get("lat"),
-        "longitude": birth.get("lon"),
+        "location_provided": bool(birth.get("location")),
+        "coordinates_provided": "lat" in birth and "lon" in birth,
     }

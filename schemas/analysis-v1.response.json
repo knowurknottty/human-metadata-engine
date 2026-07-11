@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Identity Resonance AnalysisResponse v1",
+  "type": "object",
+  "required": ["contract_version", "build_revision", "engine_version", "analysis_mode", "input_hash", "privacy", "signature", "comparison_metric", "comparisons", "correlations", "report", "normalized_input", "evidence"],
+  "properties": {
+    "contract_version": {"const": "analysis-v1"},
+    "build_revision": {"type": "string"},
+    "engine_version": {"type": "string"},
+    "analysis_mode": {"type": "string", "enum": ["data", "magic"]},
+    "subject_type": {"type": "string", "enum": ["self", "reference"]},
+    "input_hash": {"type": "string", "pattern": "^[0-9a-f]{24}$"},
+    "privacy": {"type": "object", "required": ["retention", "response_redaction", "warning"]},
+    "signature": {"type": "object", "required": ["id", "text", "contract_version", "analysis_mode", "encoders", "resonance", "fingerprint", "snapshot"]},
+    "comparison_metric": {"type": "string"},
+    "comparisons": {"type": "array"},
+    "correlations": {"type": "object"},
+    "report": {"type": "object", "required": ["markdown", "word_count", "sections", "mode"]},
+    "normalized_input": {"type": "object"},
+    "evidence": {"type": "object", "required": ["method_version", "layers", "claim_policy"]}
+  }
+}

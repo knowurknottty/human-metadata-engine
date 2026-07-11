@@ -198,6 +198,17 @@ def evidence_dashboard(
             "Consensus is a source category, not a truth status.",
             "Primary evidence, translation history, institutional claims, and interpretation remain separate layers.",
         ],
+        "claim_policy": {
+            "data_mode": "computed_measurements_only",
+            "magic_mode": "symbolic_reflection_with_disclaimer",
+            "blocked_claims": [
+                "personality_from_name",
+                "cultural_origin_from_name",
+                "career_or_employment_suitability",
+                "health_or_relationship_outcomes",
+                "person_level_similarity",
+            ],
+        },
     }
 
 

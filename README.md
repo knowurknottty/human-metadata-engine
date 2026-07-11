@@ -2,17 +2,17 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.5.0** — Core encoder suite plus 25 provenance-aware symbolic extensions across four phases, cross-encoder analytics (composite resonance score, identity fingerprints, correlation matrices), graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app** ($10-product storefront over the engine).
+**v0.6.0** — Core encoder suite plus 25 provenance-aware symbolic extensions across four phases, explicit Data/Magic reading modes, strict public contracts, redacted responses, cross-encoder analytics, graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app**. The payment flow remains a demo stub by design.
 
 ## Quick Start — Web App
 
 ```bash
-./deploy.sh                 # installs Swiss Ephemeris, runs 138 tests, serves :8000
+./deploy.sh                 # installs Swiss Ephemeris, runs the canonical test runner, serves :8000
 # or directly:
-python3 -m pip install -r requirements.txt && python3 webapp/server.py
+python3 -m pip install --require-hashes -r requirements.txt && python3 webapp/server.py
 ```
 
-Open http://localhost:8000 — enter a name (birth data unlocks astrology + Human Design; sliders/pickers unlock the psychology layer), get the free dashboard preview, and the simulated $10 Stripe checkout unlocks the full 3,000+ word ten-section report (downloadable as Markdown, printable to PDF).
+Open http://localhost:8000 — choose Data or Magic mode, enter a name, and optionally add birth or self-reported assessment data. Data mode stays measurement/provenance-first; Magic mode adds a clearly labeled symbolic reflection layer. Historical public-reference input can use `subject_type: "reference"`.
 
 **Deploying anywhere:** the app is a single Python process with one mandatory native dependency: the pinned `pyswisseph` Swiss Ephemeris extension for exact natal calculations. Use the repository Dockerfile or run `python3 -m pip install -r requirements.txt` before starting `python3 webapp/server.py`.
 
@@ -20,7 +20,7 @@ Open http://localhost:8000 — enter a name (birth data unlocks astrology + Huma
 # The repository Dockerfile builds pyswisseph in a GCC-enabled builder stage
 # and copies only the resulting wheel into the Python 3.12 runtime image.
 docker build -t identity-resonance .
-docker run --rm -p 8000:8080 identity-resonance
+docker run --rm -p 127.0.0.1:8000:8080 identity-resonance
 ```
 
 ## Architecture
@@ -31,10 +31,11 @@ human-metadata-engine/
 │   ├── server.py                    # Stdlib HTTP server (API + static)
 │   └── static/                      # Single-page dark-theme app (vendored Tailwind)
 ├── src/
-│   ├── engine.py                    # Master orchestrator (v0.4.0)
+│   ├── engine.py                    # Master orchestrator (signature-v2)
 │   ├── analytics.py                 # Resonance score, fingerprints, correlations, feature agreement
 │   ├── snapshot.py                  # Personality snapshot narratives
-│   ├── report.py                    # 10-section long-form report generator (3,000+ words)
+│   ├── report.py                    # Magic-mode long-form report generator
+│   ├── public_contract.py            # Strict public validation and two-mode contract
 │   ├── encoders/
 │   │   ├── pythagorean.py           # Pythagorean numerology (expression, soul urge, personality)
 │   │   ├── chaldean.py              # Chaldean numerology (ancient Babylonian, no master numbers)
@@ -106,7 +107,7 @@ print(f"Dimensions: {sig['dimensions']}")
 print(f"Encoders: {list(sig['encoders'].keys())}")
 ```
 
-## Cross-Encoder Analytics (v0.4.0)
+## Cross-Encoder Analytics
 
 Second-order analysis computed on top of the unified signatures:
 
@@ -114,8 +115,8 @@ Second-order analysis computed on top of the unified signatures:
 |---------|-------------|
 | **Composite Resonance Score** | 0–100 metric: 35% numerological convergence + 25% linguistic harmony + 20% polarity balance + 20% symbolic depth (formula documented in `src/analytics.py`) |
 | **Identity Fingerprint** | Deterministic visual hash: SHA-256-derived seed, n-fold symmetry from the expression number, one spoke per encoder, vowel/consonant binary ring |
-| **Correlation Matrices** | Pearson over raw magnitudes + digit-agreement rates between the five digit-producing systems |
-| **Feature Agreement** | 14-feature comparison: eight reduced digits match exactly and six continuous features use fixed tolerances; it is not person-level similarity |
+| **Correlation Matrices** | Pearson over raw magnitudes + digit-agreement rates with the mathematically coupled ordinal root excluded |
+| **Feature Agreement** | 14-feature comparison: eight independent reduced-digit categories match exactly and six continuous features use fixed tolerances; it is not person-level similarity |
 | **Batch Reports** | Comparative ranking of any identity set (markdown + JSON) |
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
 | **Long-Form Reports** | 10-section, 3,000+ word written analysis per identity (`src/report.py`) |
@@ -240,7 +241,7 @@ python3 -m src.cli anomaly
 python3 -m src.cli export --format csv
 python3 -m src.cli stats
 
-# Start API server
+# Start the legacy API only for loopback compatibility work; it is not the public surface.
 python3 -m src.api
 ```
 
@@ -254,7 +255,7 @@ test_analytics.py:    46 tests (Resonance, fingerprints, correlations, reports)
 test_symbolic_*.py:   16 tests (roadmap, Unicode, provenance, detail surface)
 test_ephemeris_packaging.py: 1 test (Docker/deploy/CI contract)
 ─────────────────────────────────────────────────────────────────
-Total:               138 tests, 100% passing
+The canonical runner discovers every `tests/test_*.py` file and reports its exact count; avoid hardcoding a stale total in product copy.
 ```
 
 ## Dependencies
@@ -269,10 +270,7 @@ Total:               138 tests, 100% passing
 python3 src/engine.py
 
 # Run all tests
-python3 tests/test_pythagorean.py
-python3 tests/test_extended.py
-python3 tests/test_final.py
-python3 tests/test_analytics.py
+python3 tools/run_tests.py
 
 # Run graph algorithms
 python3 src/graph/algorithms.py output/identity_graph.json

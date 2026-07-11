@@ -51,7 +51,7 @@ def score_confidence(sig: dict, name: str = "") -> dict:
 
         if enc_name in ["astrology", "human_design"]:
             # These need birth data
-            has_birth = bool(sig.get("birth") or sig.get("computed_at"))
+            has_birth = bool(sig.get("birth"))
             if not has_birth:
                 score *= 0.5
                 reasons.append("no_birth_data")

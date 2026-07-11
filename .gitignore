@@ -3,5 +3,7 @@ output/test_export.jsonl
 output/identity.db
 output/famous_people.sqlite
 output/famous_people_validation.json
+output/famous_people.sqlite.rollback-*
+output/*.rollback-*
 __pycache__/
 *.py[cod]

@@ -4,6 +4,11 @@ from __future__ import annotations
 
 from typing import Any
 
+try:
+    from public_contract import normalize_public_name, validate_psychology
+except ImportError:  # pragma: no cover - package-style import
+    from .public_contract import normalize_public_name, validate_psychology
+
 NODE_TYPES = {
     "person",
     "alias",
@@ -65,6 +70,8 @@ def _validated_metadata(item: dict[str, Any], *, node_type: str, index: int) -> 
         raise ConstellationValidationError(f"nodes[{index}].metadata must be an object.")
 
     metadata = dict(raw_metadata)
+    if len(metadata) > 20:
+        raise ConstellationValidationError(f"nodes[{index}].metadata supports at most 20 fields.")
     if node_type == "person":
         hidden_sensitive = sorted(
             key for key in metadata
@@ -76,6 +83,15 @@ def _validated_metadata(item: dict[str, Any], *, node_type: str, index: int) -> 
                 f"nodes[{index}].metadata contains reserved sensitive fields: {joined}. "
                 "Use the structured birth and psychology fields so privacy rules apply."
             )
+    for key, value in metadata.items():
+        if not isinstance(key, str) or len(key) > 60:
+            raise ConstellationValidationError(f"nodes[{index}].metadata keys must be short strings.")
+        if isinstance(value, (dict, list)):
+            raise ConstellationValidationError(
+                f"nodes[{index}].metadata.{key} must be a scalar; sensitive structured data has a typed field."
+            )
+        if value is not None and len(str(value)) > 240:
+            raise ConstellationValidationError(f"nodes[{index}].metadata.{key} is too long.")
     return metadata
 
 
@@ -119,6 +135,10 @@ def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
         name = _require_text(item.get("name"), f"nodes[{index}].name")
         if len(name) > 120:
             raise ConstellationValidationError(f"nodes[{index}].name is too long.")
+        try:
+            name = normalize_public_name(name)
+        except ValueError as exc:
+            raise ConstellationValidationError(f"nodes[{index}].name is not encodable: {exc}") from exc
 
         profile_level = item.get("profile_level") or "name_only"
         if profile_level not in PROFILE_LEVELS:
@@ -157,6 +177,12 @@ def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
                     raise ConstellationValidationError(
                         f"nodes[{index}] psychology requires self or explicit_consent."
                     )
+                try:
+                    psychology = validate_psychology(psychology)
+                except ValueError as exc:
+                    raise ConstellationValidationError(
+                        f"nodes[{index}].psychology is invalid: {exc}"
+                    ) from exc
             if is_minor and psychology is not None:
                 raise ConstellationValidationError(
                     f"nodes[{index}] is a minor; psychology is not accepted."
@@ -196,6 +222,17 @@ def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
             raise ConstellationValidationError(
                 f"edges[{index}].relation must be one of {sorted(RELATION_TYPES)}."
             )
+        started_year = item.get("started_year")
+        if started_year is not None and (
+            isinstance(started_year, bool) or not isinstance(started_year, int) or not 1 <= started_year <= 9999
+        ):
+            raise ConstellationValidationError(f"edges[{index}].started_year must be a year from 1 to 9999.")
+        confidence = item.get("confidence", "user_supplied")
+        if not isinstance(confidence, str) or confidence not in {"user_supplied", "low", "medium", "high"}:
+            raise ConstellationValidationError(f"edges[{index}].confidence is invalid.")
+        notes = item.get("notes")
+        if notes is not None and (not isinstance(notes, str) or len(notes) > 500):
+            raise ConstellationValidationError(f"edges[{index}].notes must be at most 500 characters.")
         key = (source, relation, target)
         if key in seen_edges:
             continue
@@ -204,9 +241,9 @@ def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
             "source": source,
             "target": target,
             "relation": relation,
-            "started_year": item.get("started_year"),
-            "confidence": item.get("confidence", "user_supplied"),
-            "notes": item.get("notes"),
+            "started_year": started_year,
+            "confidence": confidence,
+            "notes": notes,
         })
 
     return {

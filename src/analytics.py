@@ -19,9 +19,9 @@ Composite Resonance Score — formula and justification
                       + 0.20 * polarity_balance
                       + 0.20 * symbolic_depth )
 
-* numerological_convergence (0.35): the five independent digit systems
-  (Pythagorean expression, Chaldean name number, Ordinal reduced,
-  Gematria absolute reduced, Isopsephy reduced) use different letter
+* numerological_convergence (0.35): four independent digit systems
+  (Pythagorean expression, Chaldean name number, Gematria absolute reduced,
+  Isopsephy reduced) plus the reverse ordinal family use different letter
   mappings, so agreement between them is non-trivial. We measure the
   concentration of the five reduced digits: if m is the multiplicity of
   the most common digit, convergence = (m - 1) / 4. A master number
@@ -66,7 +66,7 @@ RESONANCE_WEIGHTS = {
 DIGIT_FIELDS = {
     "pythagorean": ("pythagorean", "expression"),
     "chaldean": ("chaldean", "name_number"),
-    "ordinal": ("ordinal", "ordinal_reduced"),
+    "ordinal": ("ordinal", "reverse_reduced"),
     "gematria": ("gematria", "absolute_reduced"),
     "isopsephy": ("isopsephy", "reduced"),
 }
@@ -231,13 +231,13 @@ def identity_fingerprint(sig: dict) -> dict:
 
 FEATURE_ORDER = [
     "pyth_expression", "pyth_soul_urge", "pyth_personality",
-    "chaldean_name", "ordinal_reduced", "gematria_reduced",
+    "chaldean_name", "ordinal_reverse_reduced", "gematria_reduced",
     "isopsephy_reduced", "prime_reduced",
     "entropy_ratio", "vowel_ratio", "binary_entropy",
     "polarity_norm", "syllables", "chain_depth",
 ]
 
-# The first eight values are reduced digit categories.  Their magnitude is an
+# The first eight values are reduced digit categories. Their magnitude is an
 # encoding of a category, not a position on a continuum: 1 and 2 are not
 # "almost the same" merely because their normalized values are nearby.  The
 # remaining values are bounded continuous measures and use declared scales.
@@ -265,7 +265,10 @@ def feature_vector(sig: dict) -> list[float]:
         digit("pythagorean", "soul_urge"),
         digit("pythagorean", "personality"),
         digit("chaldean", "name_number"),
-        digit("ordinal", "ordinal_reduced"),
+        # ``ordinal_reduced`` is mathematically coupled to the Pythagorean
+        # whole-name root. Use the reverse ordinal value as the independent
+        # ordinal family in comparisons.
+        digit("ordinal", "reverse_reduced"),
         digit("gematria", "absolute_reduced"),
         digit("isopsephy", "reduced"),
         digit("binary_prime", "prime_reduced"),
@@ -307,8 +310,10 @@ def _validated_feature_vector(vector: list[float]) -> list[float]:
 def feature_agreement(a: list[float], b: list[float]) -> float:
     """Return transparent agreement over the named 14-feature schema.
 
-    Eight categorical reduced-digit outputs contribute 1 only when they are
-    exactly equal.  Each of the six continuous features contributes a linear
+    Eight independent categorical reduced-digit outputs contribute 1 only when
+    they are exactly equal. The reverse ordinal family is used because the
+    ordinary ordinal root duplicates the Pythagorean root. Each of the six
+    continuous features contributes a linear
     score from 1 at equality to 0 at its documented tolerance.  The result is
     an encoder-output agreement score, *not* an empirical likelihood,
     compatibility measure, or percentage of person-level similarity.
@@ -343,7 +348,7 @@ def identity_similarity_matrix(sigs: list[dict]) -> dict:
     return {
         "metric": FEATURE_AGREEMENT_METRIC,
         "metric_note": (
-            "Eight reduced-digit categories require exact equality; six continuous "
+            "Eight independent reduced-digit categories require exact equality; six continuous "
             "features use declared linear tolerances. This is encoder-output "
             "agreement, not an empirical measure of people."
         ),

@@ -18,6 +18,16 @@ import os
 from analytics import feature_vector
 
 
+def _script_json(value) -> str:
+    return (
+        json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+        .replace("/", "\\u002f")
+    )
+
+
 def generate_dashboard(signatures_path: str, output_path: str = None) -> str:
     """Generate interactive comparison dashboard."""
     with open(signatures_path) as f:
@@ -121,8 +131,9 @@ tr:hover {{ background: #111; }}
 </div>
 
 <script>
-const data = {json.dumps(identities)};
+const data = {_script_json(identities)};
 const CONTINUOUS_TOLERANCES = [0.18, 0.15, 0.20, 0.30, 0.20, 0.35];
+const esc = (value) => String(value).replace(/[&<>"']/g, ch => ({{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}}[ch]));
 
 function featureAgreement(a, b) {{
   const discrete = a.slice(0, 8).map((value, index) => value === b[index] ? 1 : 0);
@@ -133,7 +144,7 @@ function featureAgreement(a, b) {{
 
 function renderCard(el, d, colorClass) {{
   el.innerHTML = `
-    <h2>${{d.name}}</h2>
+    <h2>${{esc(d.name)}}</h2>
     <div class="stat"><span class="stat-label">Expression</span><span class="stat-value">${{d.expression}}</span></div>
     <div class="stat"><span class="stat-label">Soul Urge</span><span class="stat-value">${{d.soul_urge}}</span></div>
     <div class="stat"><span class="stat-label">Personality</span><span class="stat-value">${{d.personality}}</span></div>
@@ -161,7 +172,7 @@ function compare() {{
 // Build table
 let html = '<tr><th>Name</th><th>Expression</th><th>Soul</th><th>Personality</th><th>Entropy</th><th>Resonance</th></tr>';
 data.forEach(d => {{
-  html += `<tr><td>${{d.name}}</td><td>${{d.expression}}</td><td>${{d.soul_urge}}</td><td>${{d.personality}}</td><td>${{(d.entropy||0).toFixed(2)}}</td><td>${{(d.resonance||0).toFixed(1)}}</td></tr>`;
+  html += `<tr><td>${{esc(d.name)}}</td><td>${{d.expression}}</td><td>${{d.soul_urge}}</td><td>${{d.personality}}</td><td>${{(d.entropy||0).toFixed(2)}}</td><td>${{(d.resonance||0).toFixed(1)}}</td></tr>`;
 }});
 document.getElementById('table').innerHTML = html;
 

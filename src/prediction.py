@@ -12,6 +12,7 @@ Usage:
 
 import math
 import hashlib
+import os
 from collections import Counter
 
 
@@ -24,6 +25,13 @@ def predict_personality(sig: dict) -> dict:
     - career_affinity: ranked career affinities
     - confidence: overall confidence (0-1)
     """
+    if os.environ.get("HME_ENABLE_UNSAFE_EXPERIMENTAL_INFERENCE", "").lower() not in {"1", "true", "yes"}:
+        return {
+            "status": "disabled",
+            "reason": "Name-derived personality, career, and MBTI inference is disabled because it is not validated.",
+            "method": "disabled-unvalidated-inference",
+        }
+
     encoders = sig.get("encoders", {})
     analytics = sig.get("analytics", {})
 

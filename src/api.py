@@ -81,14 +81,18 @@ class APIHandler(BaseHTTPRequestHandler):
     def _send_json(self, data, status=200):
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
         self.end_headers()
         self.wfile.write(json.dumps(data, indent=2).encode())
 
     def _send_text(self, text, status=200, content_type="text/plain"):
         self.send_response(status)
         self.send_header("Content-Type", content_type)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("X-Frame-Options", "DENY")
         self.end_headers()
         self.wfile.write(text.encode())
 
@@ -105,7 +109,7 @@ class APIHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self):
         self.send_response(200)
-        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Origin", "http://127.0.0.1")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
@@ -115,7 +119,12 @@ class APIHandler(BaseHTTPRequestHandler):
         path = parsed.path.rstrip("/")
 
         if path == "/health":
-            self._send_json({"status": "ok", "engine": "human-metadata-engine", "version": "0.4.0"})
+            self._send_json({
+                "status": "ok",
+                "engine": "human-metadata-engine",
+                "version": "0.6.0",
+                "status_note": "legacy loopback compatibility surface; use webapp/server.py for public traffic",
+            })
 
         elif path == "/identities":
             names = [_identity_name(i) for i in REFERENCE_IDENTITIES]
@@ -252,9 +261,15 @@ class APIHandler(BaseHTTPRequestHandler):
 
 
 def run(port=8090):
-    server = HTTPServer(("0.0.0.0", port), APIHandler)
-    logging.info(f"Identity API running on http://localhost:{port}")
-    logging.info(f"Endpoints: /encode, /compare, /search, /narrative, /fingerprint, /identities, /health")
+    """Run the compatibility API on loopback only.
+
+    The deployed public surface is ``webapp/server.py``. Keeping this legacy
+    adapter local prevents README/CLI users from accidentally exposing the
+    older wildcard-CORS contract to the network.
+    """
+    server = HTTPServer(("127.0.0.1", port), APIHandler)
+    logging.info(f"Legacy compatibility API running on http://127.0.0.1:{port}")
+    logging.info("Use webapp/server.py for the public API.")
     server.serve_forever()
 
 

@@ -83,12 +83,14 @@ def main() -> int:
     vectors = []
     revision = git_revision()
     try:
+        db.conn.execute("BEGIN")
         for record in records:
             signature = compute_unified_signature({"id": record["id"], "text": record["text"]})
             vector = feature_vector(signature)
-            db.store_reference_signature(record, signature, vector, revision)
+            db.store_reference_signature(record, signature, vector, revision, commit=False)
             signatures.append(signature)
             vectors.append(vector)
+        db.prune_reference_population([record["qid"] for record in records], commit=False)
         similarity = identity_similarity_matrix(signatures)
         validation_check = validate_population(catalog, signatures, vectors, similarity)
         validation = {
@@ -103,6 +105,10 @@ def main() -> int:
         (output / "famous_people_validation.json").write_text(
             json.dumps(validation, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
         )
+        db.conn.commit()
+    except Exception:
+        db.conn.rollback()
+        raise
     finally:
         db.close()
     print(f"Stored {len(signatures)} public-figure signatures in output/famous_people.sqlite")

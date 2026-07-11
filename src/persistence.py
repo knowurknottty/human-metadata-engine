@@ -99,7 +99,8 @@ class IdentityDB:
         self.conn.commit()
 
     def store_reference_signature(self, record: dict, sig: dict,
-                                  vector: list[float], engine_revision: str):
+                                  vector: list[float], engine_revision: str,
+                                  *, commit: bool = True):
         """Persist source metadata and the exact signature used for comparison."""
         self.conn.execute(
             """INSERT OR REPLACE INTO reference_figures
@@ -120,7 +121,20 @@ class IdentityDB:
                 json.dumps(vector), engine_revision,
             ),
         )
-        self.conn.commit()
+        if commit:
+            self.conn.commit()
+
+    def prune_reference_population(self, qids: list[str], *, commit: bool = True):
+        """Remove records no longer present in the current catalog refresh."""
+        if not qids:
+            self.conn.execute("DELETE FROM reference_signatures")
+            self.conn.execute("DELETE FROM reference_figures")
+        else:
+            placeholders = ",".join("?" for _ in qids)
+            self.conn.execute(f"DELETE FROM reference_signatures WHERE qid NOT IN ({placeholders})", qids)
+            self.conn.execute(f"DELETE FROM reference_figures WHERE qid NOT IN ({placeholders})", qids)
+        if commit:
+            self.conn.commit()
 
     def reference_stats(self) -> dict:
         figures = self.conn.execute("SELECT COUNT(*) FROM reference_figures").fetchone()[0]

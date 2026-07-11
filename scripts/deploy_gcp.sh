@@ -2,8 +2,8 @@
 # Reproducible canary deployment for the GCP production VM.
 #
 # Required local prerequisites: authenticated gcloud, Docker on the VM, and a
-# clean committed revision. This script intentionally does not open a public
-# firewall port; use docs/cloudflare-tunnel-runbook.md before closing 8084.
+# clean committed revision. The app binds to the VM loopback interface; public
+# HTTPS should be supplied by the Cloudflare Tunnel runbook.
 
 set -euo pipefail
 
@@ -35,7 +35,7 @@ ssh_vm "set -euo pipefail
 cd '$REMOTE_DIR'
 docker build --build-arg HME_BUILD_REVISION='$REVISION' -t '$IMAGE' .
 docker rm -f '$CANARY_NAME' >/dev/null 2>&1 || true
-docker run -d --name '$CANARY_NAME' --restart=no -p 127.0.0.1:8091:8080 '$IMAGE' >/dev/null
+docker run -d --name '$CANARY_NAME' --restart=no -e HME_BIND_HOST=0.0.0.0 -p 127.0.0.1:8091:8080 '$IMAGE' >/dev/null
 sleep 2
 curl -fsS http://127.0.0.1:8091/api/health >/tmp/hme-canary-health.json
 python3 - <<'PY'
@@ -43,13 +43,26 @@ import json
 payload = json.load(open('/tmp/hme-canary-health.json'))
 assert payload['ok'] and payload['reference_count'] >= 100 and not payload['reference_errors'], payload
 PY
+curl -fsS -H 'Content-Type: application/json' -d '{"name":"Canary Check","mode":"data"}' http://127.0.0.1:8091/api/analyze >/tmp/hme-canary-analyze.json
+python3 - <<'PY'
+import json
+payload = json.load(open('/tmp/hme-canary-analyze.json'))
+assert payload['analysis_mode'] == 'data' and payload['contract_version'] == 'analysis-v1', payload
+assert payload['signature']['snapshot']['mode'] == 'data', payload
+PY
+curl -fsS -H 'Content-Type: application/json' -d '{"text":"Canary Check"}' http://127.0.0.1:8091/api/sigil >/tmp/hme-canary-sigil.json
+python3 - <<'PY'
+import json
+payload = json.load(open('/tmp/hme-canary-sigil.json'))
+assert payload['render_spec'] == 'sigil-v1' and payload['svg'].startswith('<svg'), payload
+PY
 "
 
 ssh_vm "set -euo pipefail
 cd '$REMOTE_DIR'
 docker stop '$PRODUCTION_NAME' >/dev/null
 docker rename '$PRODUCTION_NAME' '$ROLLBACK_NAME'
-if ! docker run -d --name '$PRODUCTION_NAME' --restart unless-stopped -p 8084:8080 '$IMAGE' >/dev/null; then
+if ! docker run -d --name '$PRODUCTION_NAME' --restart unless-stopped -e HME_BIND_HOST=0.0.0.0 -p 127.0.0.1:8084:8080 '$IMAGE' >/dev/null; then
   docker rename '$ROLLBACK_NAME' '$PRODUCTION_NAME'
   docker start '$PRODUCTION_NAME' >/dev/null
   exit 1
@@ -61,7 +74,21 @@ if ! curl -fsS http://127.0.0.1:8084/api/health >/tmp/hme-production-health.json
   docker start '$PRODUCTION_NAME' >/dev/null
   exit 1
 fi
+curl -fsS -H 'Content-Type: application/json' -d '{"name":"Production Check","mode":"data"}' http://127.0.0.1:8084/api/analyze >/tmp/hme-production-analyze.json
+curl -fsS -H 'Content-Type: application/json' -d '{"text":"Production Check"}' http://127.0.0.1:8084/api/sigil >/tmp/hme-production-sigil.json
+python3 - <<'PY'
+import json
+health = json.load(open('/tmp/hme-production-health.json'))
+analyze = json.load(open('/tmp/hme-production-analyze.json'))
+sigil = json.load(open('/tmp/hme-production-sigil.json'))
+assert health['build_revision'] == '$REVISION', health
+assert analyze['contract_version'] == 'analysis-v1' and analyze['analysis_mode'] == 'data', analyze
+assert sigil['render_spec'] == 'sigil-v1', sigil
+PY
 docker rm -f '$CANARY_NAME' >/dev/null
+if [ -f "\$PWD/output/famous_people.sqlite" ]; then
+  cp "\$PWD/output/famous_people.sqlite" "\$PWD/output/famous_people.sqlite.rollback-${SHORT_REVISION}"
+fi
 docker run --rm --user 0 -e HME_BUILD_REVISION='$REVISION' -v \"\$PWD/output:/app/output\" '$IMAGE' python3 tools/build_famous_people_index.py
 docker run --rm --user 0 -v \"\$PWD/output:/app/output\" '$IMAGE' chown \$(id -u)\:\$(id -g) /app/output/famous_people.sqlite /app/output/famous_people_validation.json
 cat /tmp/hme-production-health.json

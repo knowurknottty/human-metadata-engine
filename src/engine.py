@@ -29,7 +29,6 @@ New in v0.4.0 (second-order analytics on top of the encoders):
 import sys
 import os
 import json
-from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -167,7 +166,9 @@ def compute_unified_signature(identity: dict) -> dict:
     """Run all encoders and produce a unified multi-dimensional signature."""
     text = identity["text"]
     birth = identity.get("birth")
-    birth_time_known = bool(birth and birth.get("time_accuracy", "provided") == "provided")
+    birth_time_known = bool(
+        birth and birth.get("time_accuracy", "provided") in {"provided", "exact"}
+    )
 
     # Core 7 encoders (always available)
     pyth = pythagorean_signature(text)
@@ -181,7 +182,8 @@ def compute_unified_signature(identity: dict) -> dict:
     result = {
         "id": identity["id"],
         "text": text,
-        "computed_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "contract_version": "signature-v2",
+        "determinism": "canonical-result-v1",
         "dimensions": 0,
         "encoders": {
             "pythagorean": {
