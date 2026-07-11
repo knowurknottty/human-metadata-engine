@@ -122,6 +122,17 @@ def chance_corrected_pair_agreement(digits: list[int]) -> dict[str, float | int]
     }
 
 
+def _has_resolved_etymology(etymology: dict[str, Any] | None) -> bool:
+    if not etymology:
+        return False
+    if etymology.get("components"):
+        return True
+    return any(
+        isinstance(record, dict) and record.get("status") != "unresolved"
+        for record in etymology.get("lineage_surnames", [])
+    )
+
+
 def evidence_dashboard(
     signature: dict[str, Any],
     *,
@@ -140,7 +151,7 @@ def evidence_dashboard(
         "observed_behavior": bool(observations),
         "self_report": bool(psychology),
         "measurable_name_structure": bool(encoders.get("linguistic")),
-        "etymology": bool(etymology and etymology.get("components")),
+        "etymology": _has_resolved_etymology(etymology),
         "astrology": bool(
             encoders.get("astrology")
             and not encoders["astrology"].get("error")
