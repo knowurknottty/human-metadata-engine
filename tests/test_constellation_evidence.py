@@ -20,7 +20,9 @@ def test_aghyarian_etymology_is_lineage_not_personality():
     )
     lineage = result["lineage_surnames"][0]
     assert lineage["canonical_form"] == "Aghyarian"
-    assert lineage["literal_glosses"] == ["family or descendants of Agha"]
+    assert lineage["literal_glosses"] == [
+        "family line associated with an ancestor who bore Agha as a title or byname"
+    ]
     assert result["personality_inference"] is False
     assert result["genetic_inference"] is False
 
@@ -73,6 +75,17 @@ def test_dashboard_does_not_relabel_available_weights_as_total_truth():
     assert layers["numerology"]["maximum_influence"] == 0.04
     assert "normalized_available_weight" not in layers["astrology"]
     assert "Consensus is a source category, not a truth status." in dashboard["rules"]
+
+
+def test_lineage_only_etymology_counts_as_available_evidence():
+    etymology = analyze_name_etymology(
+        "UnresolvedName",
+        lineage_surnames=["Aghyarian"],
+    )
+    dashboard = evidence_dashboard({"encoders": {}}, etymology=etymology)
+    layer = next(item for item in dashboard["layers"] if item["id"] == "etymology")
+    assert layer["available"] is True
+    assert dashboard["coverage"] == 0.08
 
 
 def test_symbolic_encoder_envelope_counts_as_experimental_correspondence():
@@ -168,6 +181,7 @@ def main():
         test_symbolic_only_support_respects_absolute_twelve_percent_cap,
         test_observed_contradiction_outweighs_symbolic_support,
         test_dashboard_does_not_relabel_available_weights_as_total_truth,
+        test_lineage_only_etymology_counts_as_available_evidence,
         test_symbolic_encoder_envelope_counts_as_experimental_correspondence,
         test_tiered_constellation_accepts_creations_and_name_only_people,
         test_minor_psychology_is_rejected,
