@@ -21,6 +21,7 @@ hostname to `http://127.0.0.1:8084` and include a final 404 catch-all rule.
 # App: no public host-port binding after this cutover.
 docker rm -f human-metadata-engine
 docker run -d --name human-metadata-engine --restart unless-stopped \
+  -e HME_TRUST_PROXY_HEADERS=1 \
   -p 127.0.0.1:8084:8080 human-metadata-engine:<reviewed-image-tag>
 
 # Run cloudflared with its token supplied from a protected environment file.
@@ -30,6 +31,10 @@ cloudflared tunnel --no-autoupdate run --token "$TUNNEL_TOKEN"
 Then verify the HTTPS hostname with `/api/health`, remove the GCP ingress rule
 for TCP/8084, and confirm that direct-IP HTTP no longer responds. Do not enable
 HSTS until the hostname is serving a valid public certificate.
+
+`HME_TRUST_PROXY_HEADERS=1` is safe only after direct ingress is closed: it
+lets the app rate-limit each Cloudflare-provided visitor IP instead of treating
+all tunneled traffic as localhost.
 
 ## Operational checks
 

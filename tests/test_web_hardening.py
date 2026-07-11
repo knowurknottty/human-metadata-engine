@@ -15,6 +15,7 @@ from server import (  # noqa: E402
     RATE_LIMIT_WINDOW_SECONDS,
     SECURITY_HEADERS,
     _allow_analysis,
+    _rate_limit_client_ip,
 )
 
 
@@ -39,6 +40,12 @@ class WebHardeningTests(unittest.TestCase):
         self.assertIn("Content-Security-Policy", config)
         self.assertIn('X-Frame-Options = "DENY"', config)
         self.assertIn('Referrer-Policy = "no-referrer"', config)
+
+    def test_proxy_ip_is_trusted_only_for_loopback_tunnel_traffic(self):
+        headers = {"CF-Connecting-IP": "203.0.113.9", "X-Forwarded-For": "198.51.100.8"}
+        self.assertEqual(_rate_limit_client_ip("127.0.0.1", headers, trust_proxy=True), "203.0.113.9")
+        self.assertEqual(_rate_limit_client_ip("198.51.100.2", headers, trust_proxy=True), "198.51.100.2")
+        self.assertEqual(_rate_limit_client_ip("127.0.0.1", headers, trust_proxy=False), "127.0.0.1")
 
 
 if __name__ == "__main__":

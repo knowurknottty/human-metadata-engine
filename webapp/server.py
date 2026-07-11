@@ -8,6 +8,7 @@ import sys
 import traceback
 from collections import deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from ipaddress import ip_address
 from threading import BoundedSemaphore, Lock
 from time import monotonic
 
@@ -43,6 +44,7 @@ RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", 
 RATE_LIMIT_REQUESTS = int(os.environ.get("HME_RATE_LIMIT_REQUESTS", "20"))
 RATE_LIMIT_MAX_TRACKED_IPS = int(os.environ.get("HME_RATE_LIMIT_MAX_TRACKED_IPS", "10000"))
 MAX_CONCURRENT_ANALYSES = int(os.environ.get("HME_MAX_CONCURRENT_ANALYSES", "4"))
+TRUST_PROXY_HEADERS = os.environ.get("HME_TRUST_PROXY_HEADERS", "").lower() in {"1", "true", "yes"}
 if min(RATE_LIMIT_WINDOW_SECONDS, RATE_LIMIT_REQUESTS, RATE_LIMIT_MAX_TRACKED_IPS, MAX_CONCURRENT_ANALYSES) < 1:
     raise RuntimeError("HME rate-limit and concurrency settings must be positive integers.")
 _RATE_LIMIT_LOCK = Lock()
@@ -100,6 +102,18 @@ def _allow_analysis(client_ip: str, now: float | None = None) -> bool:
             return False
         timestamps.append(current)
         return True
+
+
+def _rate_limit_client_ip(peer_ip: str, headers, trust_proxy: bool = TRUST_PROXY_HEADERS) -> str:
+    """Use a proxy-supplied IP only after direct public ingress is closed."""
+    if trust_proxy and peer_ip in {"127.0.0.1", "::1"}:
+        for header_name in ("CF-Connecting-IP", "X-Forwarded-For"):
+            candidate = (headers.get(header_name) or "").split(",", 1)[0].strip()
+            try:
+                return str(ip_address(candidate))
+            except ValueError:
+                continue
+    return peer_ip
 
 
 def _normalized_reference(identity):
@@ -222,7 +236,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path.split("?", 1)[0] != "/api/analyze":
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
-        if not _allow_analysis(self.client_address[0]):
+        client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
+        if not _allow_analysis(client_ip):
             return self._json(
                 429,
                 {"error": "Too many analysis requests. Please try again shortly."},
