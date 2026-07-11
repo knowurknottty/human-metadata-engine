@@ -24,11 +24,9 @@ from __future__ import annotations
 import json
 
 try:
-    from analytics import composite_resonance, identity_fingerprint, \
-        feature_vector, cosine_similarity, DIGIT_FIELDS
+    from analytics import composite_resonance, identity_fingerprint, DIGIT_FIELDS
 except ImportError:  # pragma: no cover - package-style import
-    from .analytics import composite_resonance, identity_fingerprint, \
-        feature_vector, cosine_similarity, DIGIT_FIELDS
+    from .analytics import composite_resonance, identity_fingerprint, DIGIT_FIELDS
 
 try:
     from snapshot import SIGN_TRAITS, HD_TYPE_TEXT
@@ -396,8 +394,15 @@ def _sec5_celestial(name, sig):
     h = sig["encoders"].get("human_design")
     if not a or a.get("error") or not a.get("sun_sign"):
         return ""
-    sun, moon, asc = a["sun_sign"], a["moon_sign"], a["ascendant"]
+    sun, moon, asc = a["sun_sign"], a["moon_sign"], a.get("ascendant")
     sq, sdesc = SIGN_TRAITS.get(sun, ("", ""))
+    if a.get("date_only"):
+        return f"""## 5. Celestial Profile
+
+*A birth date was supplied without a birth time. The engine reports only a date-level solar reference and intentionally withholds Moon, Ascendant, houses, aspects, and Human Design rather than treating noon as the actual time of birth.*
+
+**Sun in {sun}** ({sq}). The Sun is the chart's broad solar reference. In this symbolic system, {sun} is associated with {sdesc}. No time-specific natal interpretation is included here."""
+
     mq, mdesc = SIGN_TRAITS.get(moon, ("", ""))
     aq, adesc = SIGN_TRAITS.get(asc, ("", ""))
     aspects = a.get("aspects", [])[:5]
@@ -436,6 +441,11 @@ The **{profile[0]}/{profile[1]} profile** combines line {profile[0]} — {PROFIL
 
 Defined channels: {ch_txt}. Definition type is **{h.get('definition', 'Single')}**, and the incarnation cross — the life's thematic axis — is *{h.get('incarnation_cross', 'undetermined')}*.
 """
+    ascendant_section = (
+        f"""**Ascendant in {asc}** ({aq}). The rising sign is the chart's user interface — the involuntary first impression. Others meet {adesc} before they meet anything else. The Ascendant is neither mask nor lie; it is the genuine outermost layer, and its ruler ({a.get('chart_ruler', 'the chart ruler')}) becomes the chart's steering planet."""
+        if asc else
+        "*Birth time was not supplied, so Ascendant, houses, and Human Design are intentionally withheld rather than estimated.*"
+    )
     return f"""## 5. Celestial Profile
 
 *Computed with Swiss Ephemeris from the supplied birth data (confidence {a.get('confidence', 0.5)}).*
@@ -444,7 +454,7 @@ Defined channels: {ch_txt}. Definition type is **{h.get('definition', 'Single')}
 
 **Moon in {moon}** ({mq}). The Moon governs the pre-verbal emotional landscape — what safety feels like, what hunger feels like, how the nervous system self-soothes. In {moon}, the inner life runs on {mdesc}. Where the Sun describes what this identity is *for*, the Moon describes what it *needs*, and the distance between {sun} and {moon} agendas is the chart's primary inner dialogue.
 
-**Ascendant in {asc}** ({aq}). The rising sign is the chart's user interface — the involuntary first impression. Others meet {adesc} before they meet anything else. The Ascendant is neither mask nor lie; it is the genuine outermost layer, and its ruler ({a.get('chart_ruler', 'the chart ruler')}) becomes the chart's steering planet.
+{ascendant_section}
 
 **Dominant element: {a.get('dominant_element', '—')}; dominant modality: {a.get('dominant_modality', '—')}.** Elemental weighting describes the identity's home medium; modality describes its relationship to change — cardinal initiates, fixed sustains, mutable adapts. This chart's center of gravity is {a.get('dominant_element', '')}-{a.get('dominant_modality', '')}: read every other placement through that climate.
 
@@ -520,23 +530,24 @@ def _sec7_graph(name, sig, comparisons):
     if comparisons:
         top = comparisons[:3]
         nbr_lines = "\n".join(
-            f"- **{c['text']}** (`{c['id']}`) — cosine similarity {c['similarity']:.2f}: shares {c.get('shared', 'multiple digit-level agreements')}"
+            f"- **{c['text']}** (`{c['id']}`) — feature agreement {c.get('agreement', c.get('similarity', 0.0)):.2f}: shares {c.get('shared', 'some encoder outputs')}"
             for c in top)
-        centrality = ("a well-connected position — its feature vector sits near the population centroid, making it a natural bridge node"
-                      if top and top[0]["similarity"] >= 0.9 else
-                      "a peripheral position — its nearest neighbor is relatively distant, marking it as an outlier signature in this population")
+        top_agreement = top[0].get("agreement", top[0].get("similarity", 0.0))
+        centrality = ("a higher-agreement region of this encoder-output space"
+                      if top_agreement >= 0.7 else
+                      "a lower-agreement region of this encoder-output space")
     else:
         nbr_lines = "- No comparison population supplied."
         centrality = "an unmapped position (no reference population)"
     return f"""## 7. Graph Position
 
-Every identity the engine has processed lives in a shared 14-dimensional feature space (eight reduced digits, entropy ratio, vowel ratio, binary balance, polarity, syllables, root-chain depth). Placing **"{name}"** into that space and measuring cosine similarity against the reference population of pre-analyzed identities yields its *graph position* — where this name sits in the constellation of names.
+Every identity in this comparison uses the same 14-feature schema: eight reduced digits, entropy ratio, vowel ratio, binary balance, polarity, syllables, and root-chain depth. For a comparison, digit categories must agree exactly; continuous features earn decreasing agreement within fixed tolerances. This locates **"{name}"** in an encoder-output space only — it is not a statement that two people are personally, historically, or empirically similar.
 
 **Nearest neighbors:**
 
 {nbr_lines}
 
-In network terms, this identity occupies {centrality}. Names that cluster tightly with famous or archetypal identities inherit a useful shorthand ("numerologically adjacent to X"); names in sparse regions are, measurably, rare signatures. Community-detection over the full graph groups identities by convergent digit-votes and linguistic texture rather than by surface spelling — which is why near-neighbors often *look* nothing alike while *behaving* alike under the encoders.
+In this descriptive view, the name occupies {centrality}. The ranking is useful for seeing which configured encoder outputs coincide; it should not be read as evidence of a shared identity, personality, fate, or real-world relationship.
 """
 
 
@@ -626,7 +637,7 @@ def generate_report(sig: dict,
                     comparisons: list[dict] | None = None) -> dict:
     """Generate the full ten-section report for a unified signature.
 
-    comparisons: optional list of {"id","text","similarity"} against the
+    comparisons: optional list of {"id","text","agreement"} against the
     reference population (already ranked descending).
     Returns {"markdown": str, "word_count": int, "sections": [names]}.
     """

@@ -32,7 +32,7 @@ human-metadata-engine/
 │   └── static/                      # Single-page dark-theme app (vendored Tailwind)
 ├── src/
 │   ├── engine.py                    # Master orchestrator (v0.4.0)
-│   ├── analytics.py                 # Resonance score, fingerprints, correlations, similarity
+│   ├── analytics.py                 # Resonance score, fingerprints, correlations, feature agreement
 │   ├── snapshot.py                  # Personality snapshot narratives
 │   ├── report.py                    # 10-section long-form report generator (3,000+ words)
 │   ├── encoders/
@@ -61,7 +61,7 @@ human-metadata-engine/
 ├── output/
 │   ├── unified_signatures.json      # generated signatures + analytics
 │   ├── encoder_correlations.json    # Pearson + digit-agreement matrices
-│   ├── comparative_report.{json,md} # Batch ranking + similarity report
+│   ├── comparative_report.{json,md} # Batch ranking + feature-agreement report
 │   ├── identity_graph.json          # 19 nodes, 25 edges
 │   └── graph_analysis.json          # PageRank, spectral, HITS
 └── schemas/
@@ -115,7 +115,7 @@ Second-order analysis computed on top of the unified signatures:
 | **Composite Resonance Score** | 0–100 metric: 35% numerological convergence + 25% linguistic harmony + 20% polarity balance + 20% symbolic depth (formula documented in `src/analytics.py`) |
 | **Identity Fingerprint** | Deterministic visual hash: SHA-256-derived seed, n-fold symmetry from the expression number, one spoke per encoder, vowel/consonant binary ring |
 | **Correlation Matrices** | Pearson over raw magnitudes + digit-agreement rates between the five digit-producing systems |
-| **Similarity Space** | 14-dimensional normalized feature vectors, cosine similarity, nearest neighbors |
+| **Feature Agreement** | 14-feature comparison: eight reduced digits match exactly and six continuous features use fixed tolerances; it is not person-level similarity |
 | **Batch Reports** | Comparative ranking of any identity set (markdown + JSON) |
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
 | **Long-Form Reports** | 10-section, 3,000+ word written analysis per identity (`src/report.py`) |
@@ -204,7 +204,7 @@ The engine ships with 20 self-contained invention modules:
 9. **Human Design** — Type, strategy, authority (requires birth data)
 
 ### Analytics & Search (3)
-10. **Identity Search** — Cosine similarity search across all signatures
+10. **Identity Search** — Feature-agreement search across the declared 14-feature schema
 11. **Signature Diff** — Dimension-by-dimension comparison of two identities
 12. **Clustering** — Unsupervised hierarchical grouping of identities
 

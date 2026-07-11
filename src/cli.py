@@ -153,9 +153,9 @@ def cmd_search(args):
     search = IdentitySearch.from_signatures("output/unified_signatures.json")
     results = search.find_similar(args.query, top_n=args.top)
 
-    print(f"Top {args.top} similar to '{args.query}':")
+    print(f"Top {args.top} feature-agreement matches for '{args.query}':")
     for r in results:
-        print(f"  #{r.rank} {r.identity} (similarity: {r.score:.4f})")
+        print(f"  #{r.rank} {r.identity} (agreement: {r.score:.4f})")
 
 
 def cmd_narrative(args):

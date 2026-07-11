@@ -76,9 +76,15 @@ def personality_snapshot(name: str,
         sun_q, sun_desc = SIGN_TRAITS.get(sun, ("", "distinctive solar energy"))
         moon_q, moon_desc = SIGN_TRAITS.get(moon, ("", "a distinctive emotional signature"))
         asc_q, asc_desc = SIGN_TRAITS.get(asc, ("", "a distinctive first impression"))
-        p = (f"Celestially, {name} carries a {sun} Sun ({sun_q}): {sun_desc}. "
-             f"The {moon} Moon colors the inner life with {moon_desc}, "
-             f"while a {asc} Ascendant means others first meet {asc_desc}.")
+        p = f"Celestially, {name} carries a {sun} Sun ({sun_q}): {sun_desc}."
+        if moon:
+            p += f" The {moon} Moon colors the inner life with {moon_desc}."
+        else:
+            p += " The birth time is unknown, so Moon, angles, and other time-sensitive placements are withheld."
+        if asc:
+            p += f" A {asc} Ascendant means others first meet {asc_desc}."
+        else:
+            p += " Birth time was not supplied, so no Ascendant is claimed."
         if element:
             p += f" The chart is weighted toward {element}: {ELEMENT_THEMES.get(element, '')}."
         if lunar:
@@ -86,7 +92,10 @@ def personality_snapshot(name: str,
                   + ("building and increase." if astrology.get("is_waxing")
                      else "release, distillation, and completion."))
         paragraphs.append(p)
-        highlights.append(f"{sun} Sun / {moon} Moon / {asc} Rising")
+        highlights.append(
+            f"{sun} Sun" + (f" / {moon} Moon" if moon else "") +
+            (f" / {asc} Rising" if asc else "")
+        )
 
     if human_design and not human_design.get("error") and human_design.get("type"):
         layers.append("human_design")

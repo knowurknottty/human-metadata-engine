@@ -166,6 +166,7 @@ def compute_unified_signature(identity: dict) -> dict:
     """Run all encoders and produce a unified multi-dimensional signature."""
     text = identity["text"]
     birth = identity.get("birth")
+    birth_time_known = bool(birth and birth.get("time_accuracy", "provided") == "provided")
 
     # Core 7 encoders (always available)
     pyth = pythagorean_signature(text)
@@ -290,36 +291,43 @@ def compute_unified_signature(identity: dict) -> dict:
             )
             result["encoders"]["astrology"] = {
                 "sun_sign": chart.sun_sign,
-                "moon_sign": chart.moon_sign,
-                "ascendant": chart.ascendant,
-                "midheaven": chart.midheaven,
-                "chart_ruler": chart.chart_ruler,
-                "dominant_element": chart.dominant_element,
-                "dominant_modality": chart.dominant_modality,
-                "element_counts": chart.element_counts,
-                "modality_counts": chart.modality_counts,
-                "yin_yang_balance": chart.yin_yang_balance,
-                "lunar_phase": chart.lunar_phase,
-                "is_waxing": chart.is_waxing,
+                # A date does not establish a reliable Moon placement, houses,
+                # aspects, element balance, or any angle.  The noon calculation
+                # is used only to obtain a date-level solar reference.
+                "moon_sign": chart.moon_sign if birth_time_known else None,
+                "ascendant": chart.ascendant if birth_time_known else None,
+                "midheaven": chart.midheaven if birth_time_known else None,
+                "chart_ruler": chart.chart_ruler if birth_time_known else None,
+                "dominant_element": chart.dominant_element if birth_time_known else None,
+                "dominant_modality": chart.dominant_modality if birth_time_known else None,
+                "element_counts": chart.element_counts if birth_time_known else {},
+                "modality_counts": chart.modality_counts if birth_time_known else {},
+                "yin_yang_balance": chart.yin_yang_balance if birth_time_known else {},
+                "lunar_phase": chart.lunar_phase if birth_time_known else None,
+                "is_waxing": chart.is_waxing if birth_time_known else None,
                 "planets": [
                     {"planet": p.planet, "sign": p.sign, "degree": round(p.sign_degree, 2),
                      "retrograde": p.is_retrograde}
                     for p in chart.planets
+                    if birth_time_known or p.planet == "Sun"
                 ],
                 "aspects": [
                     {"planets": (a.planet1, a.planet2), "type": a.aspect_name,
                      "exact": a.exact, "orb": round(a.orb, 2)}
                     for a in chart.aspects[:15]
-                ],
-                "confidence": chart.confidence,
+                ] if birth_time_known else [],
+                "confidence": chart.confidence if birth_time_known else min(chart.confidence, 0.4),
                 "calculation_engine": chart.calculation_engine,
+                "time_accuracy": birth.get("time_accuracy", "provided"),
+                "time_sensitive_fields_withheld": not birth_time_known,
+                "date_only": not birth_time_known,
             }
             dim_count += 20
         except Exception as e:
             result["encoders"]["astrology"] = {"error": str(e)}
 
     # Optional: Human Design (requires birth data)
-    if birth and HAS_HumanDesign:
+    if birth and HAS_HumanDesign and birth_time_known:
         try:
             hd = compute_human_design(
                 birth["year"], birth["month"], birth["day"],
@@ -356,6 +364,11 @@ def compute_unified_signature(identity: dict) -> dict:
             dim_count += 15
         except Exception as e:
             result["encoders"]["human_design"] = {"error": str(e)}
+    elif birth and HAS_HumanDesign:
+        result["encoders"]["human_design"] = {
+            "unavailable": "A known birth time is required for Human Design output.",
+            "time_accuracy": birth.get("time_accuracy", "unknown"),
+        }
 
     # Second-order analytics (v0.4.0)
     result["resonance"] = composite_resonance(result)

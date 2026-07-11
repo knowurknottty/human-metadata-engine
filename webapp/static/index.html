@@ -69,11 +69,11 @@
         <div id="birth-fields" class="grid grid-cols-2 sm:grid-cols-4 gap-3 opacity-40 pointer-events-none transition">
           <div><label class="lbl">Date</label><input type="date" id="b-date" class="inp"></div>
           <div><label class="lbl">Time</label><input type="time" id="b-time" class="inp"></div>
-          <div><label class="lbl">UTC offset</label><input type="number" id="b-tz" step="0.25" min="-12" max="14" placeholder="-7" class="inp"></div>
-          <div><label class="lbl">Location</label><input type="text" id="b-loc" placeholder="City, Country" class="inp"></div>
-          <div><label class="lbl">Latitude <span class="text-slate-600">(opt)</span></label><input type="number" id="b-lat" step="0.0001" min="-90" max="90" placeholder="41.26" class="inp"></div>
-          <div><label class="lbl">Longitude <span class="text-slate-600">(opt)</span></label><input type="number" id="b-lon" step="0.0001" min="-180" max="180" placeholder="-110.96" class="inp"></div>
-          <p class="col-span-2 text-xs text-slate-500 self-end pb-1.5">Time unknown? Leave it — a noon chart is used with reduced confidence.</p>
+          <div><label class="lbl">UTC offset <span class="text-rose-400">*</span></label><input type="number" id="b-tz" step="0.25" min="-12" max="14" placeholder="-7" class="inp"></div>
+          <div><label class="lbl">Location <span class="text-slate-600">(display)</span></label><input type="text" id="b-loc" placeholder="City, Country" class="inp"></div>
+          <div><label class="lbl">Latitude <span class="text-rose-400">*</span></label><input type="number" id="b-lat" step="0.0001" min="-90" max="90" placeholder="41.26" class="inp"></div>
+          <div><label class="lbl">Longitude <span class="text-rose-400">*</span></label><input type="number" id="b-lon" step="0.0001" min="-180" max="180" placeholder="-110.96" class="inp"></div>
+          <p class="col-span-2 text-xs text-slate-500 self-end pb-1.5">Time unknown? Leave it blank for a date-only chart. Rising sign, houses, and Human Design stay withheld.</p>
         </div>
       </fieldset>
 

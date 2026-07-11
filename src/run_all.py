@@ -19,7 +19,7 @@ os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 from engine import IDENTITIES, compute_unified_signature
 from analytics import (
-    composite_resonance, identity_fingerprint, cosine_similarity,
+    composite_resonance, identity_fingerprint,
     numerological_convergence, linguistic_harmony, polarity_balance,
     symbolic_depth, identity_similarity_matrix, cross_encoder_correlations,
     batch_report

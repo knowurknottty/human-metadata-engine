@@ -151,8 +151,9 @@ def get_coordinates(location: str) -> tuple[float, float]:
     loc_lower = location.lower().strip()
     if loc_lower in CITY_COORDS:
         return CITY_COORDS[loc_lower]
-    # Default to center of US if not found
-    return (39.8283, -98.5795)
+    raise ValueError(
+        "Latitude and longitude are required for locations outside the built-in city list."
+    )
 
 
 def longitude_to_sign(lon: float) -> tuple[str, float]:
@@ -228,6 +229,16 @@ def compute_chart(
 
     if lat is None or lon is None:
         lat, lon = get_coordinates(location)
+    if not all(math.isfinite(value) for value in (float(lat), float(lon), float(timezone_offset))):
+        raise ValueError("Birth coordinates and UTC offset must be finite numbers.")
+    if not -90 <= lat <= 90 or not -180 <= lon <= 180:
+        raise ValueError("Birth coordinates are outside their valid ranges.")
+    if not -14 <= timezone_offset <= 14:
+        raise ValueError("UTC offset must be between -14 and +14.")
+    try:
+        datetime(year, month, day, hour, minute)
+    except ValueError as exc:
+        raise ValueError("Birth date and time are not valid.") from exc
 
     # Determine time precision and confidence
     if hour == 12 and minute == 0:

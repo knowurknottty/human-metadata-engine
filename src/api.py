@@ -27,14 +27,20 @@ from urllib.parse import urlparse, parse_qs
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from engine import compute_unified_signature, IDENTITIES
-from analytics import composite_resonance
+from engine import compute_unified_signature
+from analytics import FEATURE_AGREEMENT_METRIC, feature_agreement, feature_vector
+from reference_population import famous_reference_identities
 from search import IdentitySearch
 from narrative import generate_narrative
 from fingerprint import generate_fingerprint_svg
 
 # Build search index on startup
 _search_index = None
+REFERENCE_IDENTITIES = famous_reference_identities()
+
+
+def _identity_name(identity: dict) -> str:
+    return identity.get("text", identity.get("name", identity.get("id", "")))
 
 
 def _get_search():
@@ -82,13 +88,13 @@ class APIHandler(BaseHTTPRequestHandler):
             self._send_json({"status": "ok", "engine": "human-metadata-engine", "version": "0.4.0"})
 
         elif path == "/identities":
-            names = [i.get("name", i.get("id", "")) for i in IDENTITIES]
+            names = [_identity_name(i) for i in REFERENCE_IDENTITIES]
             self._send_json({"identities": names, "count": len(names)})
 
         elif path.startswith("/identity/"):
             name = path.split("/identity/", 1)[1]
-            for ident in IDENTITIES:
-                ident_name = ident.get("name", ident.get("id", ""))
+            for ident in REFERENCE_IDENTITIES:
+                ident_name = _identity_name(ident)
                 if ident_name.lower() == name.lower():
                     try:
                         sig = compute_unified_signature(ident)
@@ -114,13 +120,13 @@ class APIHandler(BaseHTTPRequestHandler):
 
             # Find in known identities or create ad-hoc
             ident = None
-            for i in IDENTITIES:
-                if i.get("name", i.get("id", "")).lower() == name.lower():
+            for i in REFERENCE_IDENTITIES:
+                if _identity_name(i).lower() == name.lower():
                     ident = i
                     break
 
             if ident is None:
-                ident = {"name": name, "id": name}
+                ident = {"text": name, "id": name}
                 if birth_date:
                     ident["birth_date"] = birth_date
                 if birth_time:
@@ -144,8 +150,8 @@ class APIHandler(BaseHTTPRequestHandler):
             name_b = body.get("name_b", "")
             sig_a, sig_b = None, None
 
-            for i in IDENTITIES:
-                n = i.get("name", i.get("id", ""))
+            for i in REFERENCE_IDENTITIES:
+                n = _identity_name(i)
                 if n.lower() == name_a.lower():
                     sig_a = compute_unified_signature(i)
                 if n.lower() == name_b.lower():
@@ -156,22 +162,14 @@ class APIHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": f"Identities not found: {missing}"}, 404)
                 return
 
-            from analytics import cosine_similarity, identity_fingerprint
-            vec_a = _flat_vector(sig_a)
-            vec_b = _flat_vector(sig_b)
-            common_keys = set(vec_a.keys()) & set(vec_b.keys())
-            if common_keys:
-                similarity = cosine_similarity(
-                    [vec_a[k] for k in sorted(common_keys)],
-                    [vec_b[k] for k in sorted(common_keys)],
-                )
-            else:
-                similarity = 0.0
+            from analytics import identity_fingerprint
+            agreement = feature_agreement(feature_vector(sig_a), feature_vector(sig_b))
 
             self._send_json({
                 "name_a": name_a,
                 "name_b": name_b,
-                "similarity": round(similarity, 6),
+                "comparison_metric": FEATURE_AGREEMENT_METRIC,
+                "agreement": round(agreement, 6),
                 "fingerprint_a": identity_fingerprint(sig_a),
                 "fingerprint_b": identity_fingerprint(sig_b),
             })
@@ -192,8 +190,8 @@ class APIHandler(BaseHTTPRequestHandler):
         elif path == "/narrative":
             name = body.get("name", "")
             ident = None
-            for i in IDENTITIES:
-                if i.get("name", i.get("id", "")).lower() == name.lower():
+            for i in REFERENCE_IDENTITIES:
+                if _identity_name(i).lower() == name.lower():
                     ident = i
                     break
             if ident is None:
@@ -206,8 +204,8 @@ class APIHandler(BaseHTTPRequestHandler):
         elif path == "/fingerprint":
             name = body.get("name", "")
             ident = None
-            for i in IDENTITIES:
-                if i.get("name", i.get("id", "")).lower() == name.lower():
+            for i in REFERENCE_IDENTITIES:
+                if _identity_name(i).lower() == name.lower():
                     ident = i
                     break
             if ident is None:
@@ -222,20 +220,6 @@ class APIHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format, *args):
         pass  # Suppress logs
-
-
-def _flat_vector(sig: dict) -> dict:
-    vec = {}
-    for enc_name, enc_data in sig.get("encoders", {}).items():
-        if isinstance(enc_data, dict):
-            for k, v in enc_data.items():
-                if isinstance(v, (int, float)):
-                    vec[f"{enc_name}_{k}"] = float(v)
-                elif isinstance(v, list):
-                    for i, val in enumerate(v):
-                        if isinstance(val, (int, float)):
-                            vec[f"{enc_name}_{k}_{i}"] = float(val)
-    return vec
 
 
 def run(port=8090):

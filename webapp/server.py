@@ -6,15 +6,22 @@ import math
 import os
 import sys
 import traceback
+from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(ROOT)
 sys.path.insert(0, os.path.join(REPO, "src"))
 
-from engine import compute_unified_signature, IDENTITIES  # noqa: E402
-from analytics import feature_vector, cosine_similarity, cross_encoder_correlations  # noqa: E402
+from engine import compute_unified_signature  # noqa: E402
+from analytics import (  # noqa: E402
+    FEATURE_AGREEMENT_METRIC,
+    cross_encoder_correlations,
+    feature_agreement,
+    feature_vector,
+)
 from report import generate_report  # noqa: E402
+from reference_population import famous_reference_identities  # noqa: E402
 
 STATIC = os.path.join(ROOT, "static")
 MIME = {
@@ -28,6 +35,7 @@ MIME = {
 }
 _DEFAULTS = None
 _DEFAULT_ERRORS = []
+PUBLIC_REFERENCE_IDENTITIES = famous_reference_identities()
 
 
 def _safe_json(value):
@@ -46,32 +54,45 @@ def _safe_json(value):
 
 
 def _validated_birth(raw):
-    if not raw or not raw.get("year"):
+    if raw is None:
         return None
-    birth = {
-        "year": int(raw["year"]),
-        "month": int(raw.get("month", 1)),
-        "day": int(raw.get("day", 1)),
-        "hour": int(raw.get("hour", 12)),
-        "minute": int(raw.get("minute", 0)),
-        "timezone_offset": float(raw.get("timezone_offset", 0)),
-        "location": str(raw.get("location", ""))[:120],
-    }
-    if not 1 <= birth["month"] <= 12:
-        raise ValueError("Birth month must be between 1 and 12.")
-    if not 1 <= birth["day"] <= 31:
-        raise ValueError("Birth day must be between 1 and 31.")
+    if not isinstance(raw, dict):
+        raise ValueError("Birth data must be an object.")
+    required = ("year", "month", "day", "timezone_offset", "lat", "lon")
+    missing = [field for field in required if raw.get(field) in (None, "")]
+    if missing:
+        raise ValueError("Birth data requires " + ", ".join(missing) + ".")
+    try:
+        birth = {
+            "year": int(raw["year"]),
+            "month": int(raw["month"]),
+            "day": int(raw["day"]),
+            "hour": int(raw.get("hour", 12)),
+            "minute": int(raw.get("minute", 0)),
+            "timezone_offset": float(raw["timezone_offset"]),
+            "location": str(raw.get("location", "")).strip()[:120],
+            "lat": float(raw["lat"]),
+            "lon": float(raw["lon"]),
+        }
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Birth data contains an invalid number.") from exc
+    try:
+        date(birth["year"], birth["month"], birth["day"])
+    except ValueError as exc:
+        raise ValueError("Birth date is not a real calendar date.") from exc
     if not 0 <= birth["hour"] <= 23:
         raise ValueError("Birth hour must be between 0 and 23.")
     if not 0 <= birth["minute"] <= 59:
         raise ValueError("Birth minute must be between 0 and 59.")
-    if not -14 <= birth["timezone_offset"] <= 14:
+    if not math.isfinite(birth["timezone_offset"]) or not -14 <= birth["timezone_offset"] <= 14:
         raise ValueError("UTC offset must be between -14 and +14.")
-    if raw.get("lat") not in (None, "") and raw.get("lon") not in (None, ""):
-        birth["lat"] = float(raw["lat"])
-        birth["lon"] = float(raw["lon"])
-        if not -90 <= birth["lat"] <= 90 or not -180 <= birth["lon"] <= 180:
-            raise ValueError("Latitude or longitude is outside its valid range.")
+    if not math.isfinite(birth["lat"]) or not math.isfinite(birth["lon"]):
+        raise ValueError("Latitude and longitude must be finite numbers.")
+    if not -90 <= birth["lat"] <= 90 or not -180 <= birth["lon"] <= 180:
+        raise ValueError("Latitude or longitude is outside its valid range.")
+    birth["time_accuracy"] = "provided" if raw.get("time_accuracy") == "provided" else "unknown"
+    if not birth["location"]:
+        birth["location"] = f"{birth['lat']:.4f}, {birth['lon']:.4f}"
     return birth
 
 
@@ -92,7 +113,7 @@ def get_defaults():
     global _DEFAULTS, _DEFAULT_ERRORS
     if _DEFAULTS is None:
         _DEFAULTS, _DEFAULT_ERRORS = [], []
-        for ident in IDENTITIES:
+        for ident in PUBLIC_REFERENCE_IDENTITIES:
             try:
                 _DEFAULTS.append(compute_unified_signature(_normalized_reference(ident)))
             except Exception as exc:
@@ -136,12 +157,18 @@ def analyze(payload):
     comps = [{
         "id": d["id"], "text": d["text"],
         "resonance": d["resonance"]["score"],
-        "similarity": round(cosine_similarity(uv, feature_vector(d)), 4),
+        "agreement": round(feature_agreement(uv, feature_vector(d)), 4),
     } for d in defaults]
-    comps.sort(key=lambda c: -c["similarity"])
+    comps.sort(key=lambda c: -c["agreement"])
     corr = cross_encoder_correlations(defaults + [sig])
     report = generate_report(sig, psychology=psychology, comparisons=comps)
-    return {"signature": sig, "comparisons": comps[:10], "correlations": corr, "report": report}
+    return {
+        "signature": sig,
+        "comparison_metric": FEATURE_AGREEMENT_METRIC,
+        "comparisons": comps[:10],
+        "correlations": corr,
+        "report": report,
+    }
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -199,7 +226,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     port = int(os.environ.get("PORT", 8000))
-    print(f"Warming reference population ({len(IDENTITIES)} identities)...")
+    print(f"Warming public reference population ({len(PUBLIC_REFERENCE_IDENTITIES)} identities)...")
     get_defaults()
     print(f"Loaded {len(_DEFAULTS)} references; {len(_DEFAULT_ERRORS)} failed.")
     print(f"Identity Resonance running on http://0.0.0.0:{port}")

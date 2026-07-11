@@ -1,3 +1,7 @@
 output/test_export.csv
 output/test_export.jsonl
 output/identity.db
+output/famous_people.sqlite
+output/famous_people_validation.json
+__pycache__/
+*.py[cod]

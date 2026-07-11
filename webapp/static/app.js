@@ -218,7 +218,8 @@ function natalWheelSVG(astro) {
     el.push(`<line x1="${C + (R2-4) * Math.cos(a)}" y1="${C + (R2-4) * Math.sin(a)}" x2="${C + R2 * Math.cos(a)}" y2="${C + R2 * Math.sin(a)}" stroke="#f0abfc" stroke-width="1.5"/>`);
   });
   el.push(`<text x="${C}" y="${C - 4}" text-anchor="middle" font-size="13" fill="#e2e8f0" font-weight="700">${esc(astro.sun_sign)} ☉</text>`);
-  el.push(`<text x="${C}" y="${C + 14}" text-anchor="middle" font-size="10" fill="#94a3b8">${esc(astro.moon_sign)} ☽ · ${esc(astro.ascendant)} ↑</text>`);
+  const rising = astro.ascendant ? `${esc(astro.ascendant)} ↑` : "birth time unknown";
+  el.push(`<text x="${C}" y="${C + 14}" text-anchor="middle" font-size="10" fill="#94a3b8">${esc(astro.moon_sign)} ☽ · ${rising}</text>`);
   return `<svg viewBox="0 0 260 260" class="w-full max-w-[280px] mx-auto">${el.join("")}</svg>`;
 }
 
@@ -395,7 +396,7 @@ function renderDashboard(result) {
   const astro = e.astrology && !e.astrology.error ? e.astrology : null;
   const hd = e.human_design && !e.human_design.error ? e.human_design : null;
   const kabbalah = extensionBySystem(e, "kabbalah_tree_of_life");
-  const birthState = astro ? "birth data resolved" : "name-derived systems";
+  const birthState = astro ? (astro.time_sensitive_fields_withheld ? "date-only birth data resolved" : "birth data resolved") : "name-derived systems";
   const definedCount = (hd?.centers || []).filter(center => center.defined).length;
 
   // --- Identity Atlas: the visual overview is driven directly by encoder output. ---
@@ -413,7 +414,7 @@ function renderDashboard(result) {
         <div class="atlas-fingerprint">${fingerprintSVG(fp, 220)}</div>
         <div class="resonance-readout"><span>Composite resonance</span><strong class="stat-num">${Number(res.score).toFixed(1)}</strong><small>/ 100 · composite only</small></div>
         <div class="atlas-component-list">${Object.entries(res.components).map(([key, value]) => `<div><span>${esc(compactLabel(key))}</span><i><b style="width:${Math.max(3, Math.min(100, Number(value) * 100)).toFixed(1)}%"></b></i><em>${(Number(value) * 100).toFixed(0)}</em></div>`).join("")}</div>
-        <div class="atlas-profile-foot"><span>${extensions.length} provenance-aware extensions</span><span>${astro ? "Swiss Ephemeris chart" : "No chart requested"}</span></div>
+        <div class="atlas-profile-foot"><span>${extensions.length} provenance-aware extensions</span><span>${astro ? (astro.time_sensitive_fields_withheld ? "Swiss Ephemeris date-only chart" : "Swiss Ephemeris chart") : "No chart requested"}</span></div>
       </aside>
       <div class="atlas-stage">
         <div class="atlas-stage-heading"><div><p class="atlas-kicker">Visual correspondence field</p><h3>Systems in conversation</h3></div><p>Every glyph below is an encoder result or an explicit convention; interpretive layers do not alter the composite score.</p></div>
@@ -423,7 +424,7 @@ function renderDashboard(result) {
       </div>
       <aside class="atlas-rail" aria-label="Celestial and Human Design detail">
         <section class="rail-panel celestial-panel"><div class="rail-panel-heading"><p class="atlas-kicker">Celestial profile</p><span>${astro ? esc(astro.calculation_engine || "chart") : "birth details needed"}</span></div>
-          ${astro ? `<div class="celestial-triad"><div><span>☉ Sun</span><b>${esc(astro.sun_sign)}</b></div><div><span>☽ Moon</span><b>${esc(astro.moon_sign)}</b></div><div><span>↑ Rising</span><b>${esc(astro.ascendant)}</b></div></div><div class="celestial-list">${(astro.planets || []).map(planet => `<div><span>${PLANET_GLYPH[planet.planet] || "•"} ${esc(planet.planet)}</span><b>${esc(planet.sign)} ${Number(planet.degree).toFixed(2)}°${planet.retrograde ? " ℞" : ""}</b></div>`).join("")}</div><p class="rail-note">${esc(astro.lunar_phase || "—")} · ${esc(astro.dominant_element || "—")} element · ${esc(astro.dominant_modality || "—")} modality</p>` : `<p class="rail-empty">Birth data was not supplied. The atlas retains the name-derived systems and leaves astronomical positions intentionally unclaimed.</p>`}
+          ${astro ? `<div class="celestial-triad"><div><span>☉ Sun</span><b>${esc(astro.sun_sign)}</b></div><div><span>☽ Moon</span><b>${esc(astro.moon_sign)}</b></div><div><span>↑ Rising</span><b>${esc(astro.ascendant || "Time unknown")}</b></div></div><div class="celestial-list">${(astro.planets || []).map(planet => `<div><span>${PLANET_GLYPH[planet.planet] || "•"} ${esc(planet.planet)}</span><b>${esc(planet.sign)} ${Number(planet.degree).toFixed(2)}°${planet.retrograde ? " ℞" : ""}</b></div>`).join("")}</div><p class="rail-note">${esc(astro.lunar_phase || "—")} · ${esc(astro.dominant_element || "—")} element · ${esc(astro.dominant_modality || "—")} modality${astro.time_sensitive_fields_withheld ? " · time-sensitive fields withheld" : ""}</p>` : `<p class="rail-empty">Birth data was not supplied. The atlas retains the name-derived systems and leaves astronomical positions intentionally unclaimed.</p>`}
         </section>
         <section class="rail-panel bodygraph-panel"><div class="rail-panel-heading"><p class="atlas-kicker">Human Design</p><span>${hd?.type ? `${definedCount}/9 defined` : "birth details needed"}</span></div>
           <div class="bodygraph-wrap">${bodygraphMiniSVG(hd)}</div>
@@ -510,15 +511,15 @@ function renderDashboard(result) {
   // Astrology
   if (astro && astro.sun_sign) {
     cards.push(card("Astrology — Natal Chart", ACCENT.astrology, `
-      ${natalWheelSVG(astro)}
+      ${astro.date_only ? `<p class="text-xs text-slate-400 text-center py-6">Date-only solar reference. Moon, rising sign, houses, aspects, and Human Design are withheld until a birth time is supplied.</p>` : natalWheelSVG(astro)}
       <div class="grid grid-cols-3 gap-2 text-center text-xs mt-3">
         <div class="rounded-lg bg-white/5 p-2">☉ <b>${esc(astro.sun_sign)}</b><div class="text-[10px] text-slate-500">Sun</div></div>
-        <div class="rounded-lg bg-white/5 p-2">☽ <b>${esc(astro.moon_sign)}</b><div class="text-[10px] text-slate-500">Moon</div></div>
-        <div class="rounded-lg bg-white/5 p-2">↑ <b>${esc(astro.ascendant)}</b><div class="text-[10px] text-slate-500">Rising</div></div>
+        <div class="rounded-lg bg-white/5 p-2">☽ <b>${esc(astro.moon_sign || "—")}</b><div class="text-[10px] text-slate-500">${astro.moon_sign ? "Moon" : "Time unknown"}</div></div>
+        <div class="rounded-lg bg-white/5 p-2">↑ <b>${esc(astro.ascendant || "—")}</b><div class="text-[10px] text-slate-500">${astro.ascendant ? "Rising" : "Time unknown"}</div></div>
       </div>
       <div class="mt-3 text-xs text-slate-300 space-y-1">
         <div>Dominant element: <b style="color:${ACCENT.astrology}">${esc(astro.dominant_element || "—")}</b> · modality: <b>${esc(astro.dominant_modality || "—")}</b></div>
-        <div>Lunar phase: <b>${esc(astro.lunar_phase || "—")}</b> (${astro.is_waxing ? "waxing" : "waning"}) · chart ruler: <b>${esc(astro.chart_ruler || "—")}</b></div>
+        <div>Lunar phase: <b>${esc(astro.lunar_phase || "—")}</b>${astro.lunar_phase ? ` (${astro.is_waxing ? "waxing" : "waning"})` : ""} · chart ruler: <b>${esc(astro.chart_ruler || "—")}</b></div>
       </div>
       <div class="mt-3 space-y-1">${(astro.aspects || []).map(a =>
         `<div class="text-[11px] text-slate-400 flex justify-between"><span>${esc(a.planets[0])} <span class="text-fuchsia-300">${esc(a.type)}</span> ${esc(a.planets[1])}</span><span class="stat-num">${a.orb}°${a.exact ? " ✦" : ""}</span></div>`).join("")}</div>
@@ -582,15 +583,15 @@ function renderDashboard(result) {
   </div>`;
 
   // --- Comparison section ---
-  const maxSim = Math.max(...result.comparisons.map(cm => cm.similarity), 0.01);
+  const maxAgreement = Math.max(...result.comparisons.map(cm => cm.agreement), 0.01);
   html += `<div class="glass rounded-2xl p-6 mt-6 fade-up-2">
-    <h3 class="text-sm font-semibold text-sky-300 tracking-wide">Resonance With the Reference Population</h3>
-    <p class="text-xs text-slate-500 mt-1">Cosine similarity in the shared 14-dimensional feature space.</p>
+    <h3 class="text-sm font-semibold text-sky-300 tracking-wide">Encoder Agreement With Public Figures</h3>
+    <p class="text-xs text-slate-500 mt-1">Eight reduced-digit outputs must match exactly; six continuous features use fixed tolerances. This is output agreement, not a claim of personal similarity.</p>
     <div class="mt-4 space-y-2">${result.comparisons.map(cm => `
       <div class="flex items-center gap-3 text-sm">
         <span class="w-36 sm:w-48 truncate text-slate-300">${esc(cm.text)}</span>
-        <div class="flex-1 h-2 rounded-full bg-white/5"><div class="h-full rounded-full bg-gradient-to-r from-sky-500 to-fuchsia-400" style="width:${(cm.similarity / maxSim * 100).toFixed(1)}%"></div></div>
-        <span class="stat-num text-xs text-slate-400 w-12 text-right">${(cm.similarity * 100).toFixed(1)}%</span>
+        <div class="flex-1 h-2 rounded-full bg-white/5"><div class="h-full rounded-full bg-gradient-to-r from-sky-500 to-fuchsia-400" style="width:${(cm.agreement / maxAgreement * 100).toFixed(1)}%"></div></div>
+        <span class="stat-num text-xs text-slate-400 w-12 text-right">${(cm.agreement * 100).toFixed(1)}%</span>
       </div>`).join("")}</div>
   </div>`;
 
@@ -663,6 +664,9 @@ const app = {
     const el = $(`${which}-fields`);
     el.classList.toggle("opacity-40", !on);
     el.classList.toggle("pointer-events-none", !on);
+    if (which === "birth") {
+      ["b-date", "b-tz", "b-lat", "b-lon"].forEach(id => { $(id).required = on; });
+    }
   },
 
   reset() {
@@ -681,17 +685,17 @@ const app = {
 
     if ($("birth-enabled").checked && $("b-date").value) {
       const [y, m, day] = $("b-date").value.split("-").map(Number);
-      const t = $("b-time").value || "12:00";
+      const suppliedTime = $("b-time").value;
+      const t = suppliedTime || "12:00";
       const [hh, mm] = t.split(":").map(Number);
       payload.birth = {
         year: y, month: m, day: day, hour: hh, minute: mm,
-        timezone_offset: parseFloat($("b-tz").value || "0"),
+        timezone_offset: parseFloat($("b-tz").value),
         location: $("b-loc").value,
+        lat: parseFloat($("b-lat").value),
+        lon: parseFloat($("b-lon").value),
+        time_accuracy: suppliedTime ? "provided" : "unknown",
       };
-      if ($("b-lat").value && $("b-lon").value) {
-        payload.birth.lat = parseFloat($("b-lat").value);
-        payload.birth.lon = parseFloat($("b-lon").value);
-      }
     }
     if ($("psych-enabled").checked) {
       const psych = {};
