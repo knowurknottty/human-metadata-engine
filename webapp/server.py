@@ -6,8 +6,10 @@ import math
 import os
 import sys
 import traceback
-from datetime import date
+from collections import deque
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from threading import BoundedSemaphore, Lock
+from time import monotonic
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(ROOT)
@@ -22,6 +24,7 @@ from analytics import (  # noqa: E402
 )
 from report import generate_report  # noqa: E402
 from reference_population import famous_reference_identities  # noqa: E402
+from birth import validate_birth  # noqa: E402
 
 STATIC = os.path.join(ROOT, "static")
 MIME = {
@@ -36,6 +39,28 @@ MIME = {
 _DEFAULTS = None
 _DEFAULT_ERRORS = []
 PUBLIC_REFERENCE_IDENTITIES = famous_reference_identities()
+RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", "60"))
+RATE_LIMIT_REQUESTS = int(os.environ.get("HME_RATE_LIMIT_REQUESTS", "20"))
+RATE_LIMIT_MAX_TRACKED_IPS = int(os.environ.get("HME_RATE_LIMIT_MAX_TRACKED_IPS", "10000"))
+MAX_CONCURRENT_ANALYSES = int(os.environ.get("HME_MAX_CONCURRENT_ANALYSES", "4"))
+if min(RATE_LIMIT_WINDOW_SECONDS, RATE_LIMIT_REQUESTS, RATE_LIMIT_MAX_TRACKED_IPS, MAX_CONCURRENT_ANALYSES) < 1:
+    raise RuntimeError("HME rate-limit and concurrency settings must be positive integers.")
+_RATE_LIMIT_LOCK = Lock()
+_RECENT_ANALYSES: dict[str, deque[float]] = {}
+_ANALYSIS_SLOTS = BoundedSemaphore(MAX_CONCURRENT_ANALYSES)
+SECURITY_HEADERS = {
+    "Content-Security-Policy": (
+        "default-src 'self'; base-uri 'self'; form-action 'self'; "
+        "frame-ancestors 'none'; object-src 'none'; img-src 'self' data: blob:; "
+        "font-src 'self' data:; connect-src 'self'; script-src 'self' 'unsafe-inline'; "
+        "style-src 'self' 'unsafe-inline'"
+    ),
+    "Cross-Origin-Opener-Policy": "same-origin",
+    "Permissions-Policy": "camera=(), geolocation=(), microphone=(), payment=()",
+    "Referrer-Policy": "no-referrer",
+    "X-Frame-Options": "DENY",
+    "X-Content-Type-Options": "nosniff",
+}
 
 
 def _safe_json(value):
@@ -53,47 +78,28 @@ def _safe_json(value):
     return str(value)
 
 
-def _validated_birth(raw):
-    if raw is None:
-        return None
-    if not isinstance(raw, dict):
-        raise ValueError("Birth data must be an object.")
-    required = ("year", "month", "day", "timezone_offset", "lat", "lon")
-    missing = [field for field in required if raw.get(field) in (None, "")]
-    if missing:
-        raise ValueError("Birth data requires " + ", ".join(missing) + ".")
-    try:
-        birth = {
-            "year": int(raw["year"]),
-            "month": int(raw["month"]),
-            "day": int(raw["day"]),
-            "hour": int(raw.get("hour", 12)),
-            "minute": int(raw.get("minute", 0)),
-            "timezone_offset": float(raw["timezone_offset"]),
-            "location": str(raw.get("location", "")).strip()[:120],
-            "lat": float(raw["lat"]),
-            "lon": float(raw["lon"]),
-        }
-    except (TypeError, ValueError) as exc:
-        raise ValueError("Birth data contains an invalid number.") from exc
-    try:
-        date(birth["year"], birth["month"], birth["day"])
-    except ValueError as exc:
-        raise ValueError("Birth date is not a real calendar date.") from exc
-    if not 0 <= birth["hour"] <= 23:
-        raise ValueError("Birth hour must be between 0 and 23.")
-    if not 0 <= birth["minute"] <= 59:
-        raise ValueError("Birth minute must be between 0 and 59.")
-    if not math.isfinite(birth["timezone_offset"]) or not -14 <= birth["timezone_offset"] <= 14:
-        raise ValueError("UTC offset must be between -14 and +14.")
-    if not math.isfinite(birth["lat"]) or not math.isfinite(birth["lon"]):
-        raise ValueError("Latitude and longitude must be finite numbers.")
-    if not -90 <= birth["lat"] <= 90 or not -180 <= birth["lon"] <= 180:
-        raise ValueError("Latitude or longitude is outside its valid range.")
-    birth["time_accuracy"] = "provided" if raw.get("time_accuracy") == "provided" else "unknown"
-    if not birth["location"]:
-        birth["location"] = f"{birth['lat']:.4f}, {birth['lon']:.4f}"
-    return birth
+_validated_birth = validate_birth
+
+
+def _allow_analysis(client_ip: str, now: float | None = None) -> bool:
+    """Apply a bounded, process-local sliding-window rate limit per IP."""
+    current = monotonic() if now is None else now
+    cutoff = current - RATE_LIMIT_WINDOW_SECONDS
+    with _RATE_LIMIT_LOCK:
+        for ip, timestamps in list(_RECENT_ANALYSES.items()):
+            while timestamps and timestamps[0] <= cutoff:
+                timestamps.popleft()
+            if not timestamps:
+                del _RECENT_ANALYSES[ip]
+        timestamps = _RECENT_ANALYSES.get(client_ip)
+        if timestamps is None:
+            if len(_RECENT_ANALYSES) >= RATE_LIMIT_MAX_TRACKED_IPS:
+                return False
+            timestamps = _RECENT_ANALYSES[client_ip] = deque()
+        if len(timestamps) >= RATE_LIMIT_REQUESTS:
+            return False
+        timestamps.append(current)
+        return True
 
 
 def _normalized_reference(identity):
@@ -144,7 +150,7 @@ def analyze(payload):
         "id": "user:" + "".join(c for c in name.lower() if c.isalnum())[:40],
         "text": name,
     }
-    birth = _validated_birth(payload.get("birth"))
+    birth = validate_birth(payload.get("birth"))
     if birth:
         identity["birth"] = birth
     psychology = payload.get("psychology") or None
@@ -172,23 +178,30 @@ def analyze(payload):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "IdentityResonance/1.1"
+    server_version = "IdentityResonance"
+    sys_version = ""
 
     def log_message(self, fmt, *args):
         sys.stderr.write("[web] %s\n" % (fmt % args))
 
-    def _send(self, code, body, ctype):
+    def version_string(self):
+        return self.server_version
+
+    def _send(self, code, body, ctype, extra_headers=None):
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
         self.send_header("Cache-Control", "no-store" if ctype.startswith("application/json") else "max-age=300")
-        self.send_header("X-Content-Type-Options", "nosniff")
+        for name, value in SECURITY_HEADERS.items():
+            self.send_header(name, value)
+        for name, value in (extra_headers or {}).items():
+            self.send_header(name, value)
         self.end_headers()
         self.wfile.write(body)
 
-    def _json(self, code, obj):
+    def _json(self, code, obj, extra_headers=None):
         body = json.dumps(_safe_json(obj), ensure_ascii=False, allow_nan=False, separators=(",", ":")).encode("utf-8")
-        self._send(code, body, "application/json; charset=utf-8")
+        self._send(code, body, "application/json; charset=utf-8", extra_headers)
 
     def do_GET(self):
         path = self.path.split("?", 1)[0]
@@ -209,6 +222,14 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path.split("?", 1)[0] != "/api/analyze":
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
+        if not _allow_analysis(self.client_address[0]):
+            return self._json(
+                429,
+                {"error": "Too many analysis requests. Please try again shortly."},
+                {"Retry-After": str(RATE_LIMIT_WINDOW_SECONDS)},
+            )
+        if not _ANALYSIS_SLOTS.acquire(blocking=False):
+            return self._json(429, {"error": "Analysis service is busy. Please try again shortly."})
         try:
             length = int(self.headers.get("Content-Length", 0))
             if length <= 0:
@@ -222,6 +243,8 @@ class Handler(BaseHTTPRequestHandler):
         except Exception as exc:
             traceback.print_exc()
             return self._json(500, {"error": "Analysis failed.", "detail": str(exc) if os.environ.get("DEBUG") == "1" else None})
+        finally:
+            _ANALYSIS_SLOTS.release()
 
 
 def main():

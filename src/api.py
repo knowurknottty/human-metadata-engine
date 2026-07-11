@@ -29,6 +29,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from engine import compute_unified_signature
 from analytics import FEATURE_AGREEMENT_METRIC, feature_agreement, feature_vector
+from birth import validate_birth
 from reference_population import famous_reference_identities
 from search import IdentitySearch
 from narrative import generate_narrative
@@ -41,6 +42,29 @@ REFERENCE_IDENTITIES = famous_reference_identities()
 
 def _identity_name(identity: dict) -> str:
     return identity.get("text", identity.get("name", identity.get("id", "")))
+
+
+def _identity_from_encode_request(body: dict) -> dict:
+    """Build an engine identity from the canonical API request shape.
+
+    Older ``birth_date``/``birth_time``/``birth_place`` fields could never be
+    consumed by the engine and therefore produced a silently name-only result.
+    Reject them explicitly rather than accepting incorrect analysis.
+    """
+    name = body.get("name", "")
+    if not isinstance(name, str) or not name.strip():
+        raise ValueError("A name is required.")
+    if len(name) > 120:
+        raise ValueError("Name is too long (max 120 characters).")
+    if any(body.get(field) is not None for field in ("birth_date", "birth_time", "birth_place")):
+        raise ValueError(
+            "Use the canonical 'birth' object with year, month, day, timezone_offset, lat, and lon."
+        )
+    identity = {"text": name.strip(), "id": name.strip()}
+    birth = validate_birth(body.get("birth"))
+    if birth:
+        identity["birth"] = birth
+    return identity
 
 
 def _get_search():
@@ -69,9 +93,14 @@ class APIHandler(BaseHTTPRequestHandler):
 
     def _read_body(self):
         length = int(self.headers.get("Content-Length", 0))
-        if length == 0:
-            return {}
-        return json.loads(self.rfile.read(length))
+        if length <= 0:
+            raise ValueError("Request body is empty.")
+        if length > 64 * 1024:
+            raise ValueError("Payload too large.")
+        body = json.loads(self.rfile.read(length))
+        if not isinstance(body, dict):
+            raise ValueError("Request body must be a JSON object.")
+        return body
 
     def do_OPTIONS(self):
         self.send_response(200)
@@ -110,13 +139,14 @@ class APIHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         parsed = urlparse(self.path)
         path = parsed.path.rstrip("/")
-        body = self._read_body()
+        try:
+            body = self._read_body()
+        except (ValueError, json.JSONDecodeError) as exc:
+            self._send_json({"error": str(exc)}, 400)
+            return
 
         if path == "/encode":
             name = body.get("name", "")
-            birth_date = body.get("birth_date")
-            birth_time = body.get("birth_time")
-            birth_place = body.get("birth_place")
 
             # Find in known identities or create ad-hoc
             ident = None
@@ -126,13 +156,11 @@ class APIHandler(BaseHTTPRequestHandler):
                     break
 
             if ident is None:
-                ident = {"text": name, "id": name}
-                if birth_date:
-                    ident["birth_date"] = birth_date
-                if birth_time:
-                    ident["birth_time"] = birth_time
-                if birth_place:
-                    ident["birth_place"] = birth_place
+                try:
+                    ident = _identity_from_encode_request(body)
+                except ValueError as exc:
+                    self._send_json({"error": str(exc)}, 400)
+                    return
 
             try:
                 sig = compute_unified_signature(ident)

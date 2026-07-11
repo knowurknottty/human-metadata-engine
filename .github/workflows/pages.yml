@@ -34,11 +34,12 @@ jobs:
 
           # Project Pages is hosted below /human-metadata-engine/, so root-absolute
           # asset URLs must become document-relative.
-          sed -i 's|src="/vendor/|src="./vendor/|g; s|href="/styles.css"|href="./styles.css"|g; s|src="/app.js"|src="./app.js"|g' dist/index.html
+          sed -i 's|src="/vendor/|src="./vendor/|g; s|href="/styles.css"|href="./styles.css"|g; s|src="/app.js|src="./app.js|g' dist/index.html
 
           python3 - <<'PY'
           import json
           import os
+          import re
           from pathlib import Path
 
           origin = os.environ.get("HME_API_ORIGIN", "").rstrip("/")
@@ -68,7 +69,15 @@ jobs:
             }};
           }})();
           </script>'''
-          html = html.replace('<script src="./app.js"></script>', bridge + '\n<script src="./app.js"></script>')
+          script_pattern = r'<script src="(\./app\.js(?:\?[^\"]*)?)"></script>'
+          html, replacements = re.subn(
+              script_pattern,
+              lambda match: bridge + f'\n<script src="{match.group(1)}"></script>',
+              html,
+              count=1,
+          )
+          if replacements != 1:
+              raise SystemExit("Expected exactly one document-relative app.js script tag.")
           path.write_text(html, encoding="utf-8")
           PY
 

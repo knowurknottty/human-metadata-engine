@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -21,6 +22,9 @@ from reference_population import load_famous_reference_catalog  # noqa: E402
 
 
 def git_revision() -> str:
+    build_revision = os.environ.get("HME_BUILD_REVISION", "").strip()
+    if build_revision:
+        return build_revision
     try:
         return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
     except (OSError, subprocess.CalledProcessError):

@@ -1,14 +1,6 @@
-name: Deploy Fly.io API
+name: Manual legacy Fly.io deploy
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "src/**"
-      - "webapp/**"
-      - "Dockerfile"
-      - "fly.toml"
-      - ".github/workflows/fly-deploy.yml"
   workflow_dispatch:
 
 concurrency:
@@ -44,6 +36,12 @@ jobs:
           python3 tests/test_symbolic_contract.py
           python3 tests/test_web_symbolic_surface.py
           python3 tests/test_ephemeris_packaging.py
+          python3 tests/test_birth_validation.py
+          python3 tests/test_reference_population.py
+          python3 tests/test_web_hardening.py
+          python3 tests/test_api_birth_contract.py
+          python3 tests/test_build_revision.py
+          python3 tests/test_sigil.py
 
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master

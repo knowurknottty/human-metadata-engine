@@ -25,6 +25,12 @@ if [[ "${1:-}" != "--no-test" ]]; then
   python3 tests/test_symbolic_contract.py >/dev/null
   python3 tests/test_web_symbolic_surface.py >/dev/null
   python3 tests/test_ephemeris_packaging.py >/dev/null
+  python3 tests/test_birth_validation.py >/dev/null
+  python3 tests/test_reference_population.py >/dev/null
+  python3 tests/test_web_hardening.py >/dev/null
+  python3 tests/test_api_birth_contract.py >/dev/null
+  python3 tests/test_build_revision.py >/dev/null
+  python3 tests/test_sigil.py >/dev/null
   echo "All test suites passed."
 fi
 

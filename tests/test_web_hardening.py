@@ -1,0 +1,45 @@
+"""Regression tests for public web-server hardening controls."""
+
+from __future__ import annotations
+
+import os
+import sys
+import unittest
+
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "webapp"))
+
+from server import (  # noqa: E402
+    RATE_LIMIT_REQUESTS,
+    RATE_LIMIT_WINDOW_SECONDS,
+    SECURITY_HEADERS,
+    _allow_analysis,
+)
+
+
+class WebHardeningTests(unittest.TestCase):
+    def test_security_headers_cover_browser_boundaries(self):
+        self.assertIn("frame-ancestors 'none'", SECURITY_HEADERS["Content-Security-Policy"])
+        self.assertEqual(SECURITY_HEADERS["X-Frame-Options"], "DENY")
+        self.assertEqual(SECURITY_HEADERS["Referrer-Policy"], "no-referrer")
+        self.assertEqual(SECURITY_HEADERS["X-Content-Type-Options"], "nosniff")
+
+    def test_rate_limit_blocks_then_recovers_after_window(self):
+        ip = "test-rate-limit-isolated"
+        start = 10_000.0
+        for _ in range(RATE_LIMIT_REQUESTS):
+            self.assertTrue(_allow_analysis(ip, now=start))
+        self.assertFalse(_allow_analysis(ip, now=start))
+        self.assertTrue(_allow_analysis(ip, now=start + RATE_LIMIT_WINDOW_SECONDS + 0.1))
+
+    def test_netlify_static_host_uses_matching_security_headers(self):
+        with open(os.path.join(ROOT, "netlify.toml"), encoding="utf-8") as handle:
+            config = handle.read()
+        self.assertIn("Content-Security-Policy", config)
+        self.assertIn('X-Frame-Options = "DENY"', config)
+        self.assertIn('Referrer-Policy = "no-referrer"', config)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
