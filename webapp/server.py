@@ -6,6 +6,7 @@ import math
 import os
 import sys
 import traceback
+from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -14,7 +15,13 @@ sys.path.insert(0, os.path.join(REPO, "src"))
 
 from engine import compute_unified_signature, IDENTITIES  # noqa: E402
 from analytics import feature_vector, cosine_similarity, cross_encoder_correlations  # noqa: E402
-from report import generate_report  # noqa: E402
+from analytics_v2 import composite_resonance  # noqa: E402
+from birth_validation import (  # noqa: E402
+    BirthValidationError,
+    canonical_birth_record,
+    validate_birth,
+)
+from report_safe import generate_report  # noqa: E402
 
 STATIC = os.path.join(ROOT, "static")
 MIME = {
@@ -46,33 +53,8 @@ def _safe_json(value):
 
 
 def _validated_birth(raw):
-    if not raw or not raw.get("year"):
-        return None
-    birth = {
-        "year": int(raw["year"]),
-        "month": int(raw.get("month", 1)),
-        "day": int(raw.get("day", 1)),
-        "hour": int(raw.get("hour", 12)),
-        "minute": int(raw.get("minute", 0)),
-        "timezone_offset": float(raw.get("timezone_offset", 0)),
-        "location": str(raw.get("location", ""))[:120],
-    }
-    if not 1 <= birth["month"] <= 12:
-        raise ValueError("Birth month must be between 1 and 12.")
-    if not 1 <= birth["day"] <= 31:
-        raise ValueError("Birth day must be between 1 and 31.")
-    if not 0 <= birth["hour"] <= 23:
-        raise ValueError("Birth hour must be between 0 and 23.")
-    if not 0 <= birth["minute"] <= 59:
-        raise ValueError("Birth minute must be between 0 and 59.")
-    if not -14 <= birth["timezone_offset"] <= 14:
-        raise ValueError("UTC offset must be between -14 and +14.")
-    if raw.get("lat") not in (None, "") and raw.get("lon") not in (None, ""):
-        birth["lat"] = float(raw["lat"])
-        birth["lon"] = float(raw["lon"])
-        if not -90 <= birth["lat"] <= 90 or not -180 <= birth["lon"] <= 180:
-            raise ValueError("Latitude or longitude is outside its valid range.")
-    return birth
+    """Validate a living person's birth data at the public API boundary."""
+    return validate_birth(raw, living_person=True)
 
 
 def _normalized_reference(identity):
@@ -88,13 +70,20 @@ def _normalized_reference(identity):
     return item
 
 
+def _compute_signature(identity):
+    """Compute a signature and apply the corrected public scoring contract."""
+    signature = compute_unified_signature(identity)
+    signature["resonance"] = composite_resonance(signature)
+    return signature
+
+
 def get_defaults():
     global _DEFAULTS, _DEFAULT_ERRORS
     if _DEFAULTS is None:
         _DEFAULTS, _DEFAULT_ERRORS = [], []
         for ident in IDENTITIES:
             try:
-                _DEFAULTS.append(compute_unified_signature(_normalized_reference(ident)))
+                _DEFAULTS.append(_compute_signature(_normalized_reference(ident)))
             except Exception as exc:
                 _DEFAULT_ERRORS.append({"id": ident.get("id"), "error": str(exc)})
     return _DEFAULTS
@@ -119,9 +108,11 @@ def analyze(payload):
     if len(name) > 120:
         raise ValueError("Name is too long (max 120 characters).")
 
+    analysis_year = datetime.now(timezone.utc).year
     identity = {
         "id": "user:" + "".join(c for c in name.lower() if c.isalnum())[:40],
         "text": name,
+        "as_of_year": analysis_year,
     }
     birth = _validated_birth(payload.get("birth"))
     if birth:
@@ -130,7 +121,13 @@ def analyze(payload):
     if psychology:
         identity["psychology"] = psychology
 
-    sig = compute_unified_signature(identity)
+    sig = _compute_signature(identity)
+    sig["normalized_input"] = {
+        "name": name,
+        "birth": canonical_birth_record(birth),
+        "analysis_year": analysis_year,
+    }
+
     defaults = get_defaults()
     uv = feature_vector(sig)
     comps = [{
@@ -141,11 +138,17 @@ def analyze(payload):
     comps.sort(key=lambda c: -c["similarity"])
     corr = cross_encoder_correlations(defaults + [sig])
     report = generate_report(sig, psychology=psychology, comparisons=comps)
-    return {"signature": sig, "comparisons": comps[:10], "correlations": corr, "report": report}
+    return {
+        "signature": sig,
+        "comparisons": comps[:10],
+        "correlations": corr,
+        "report": report,
+        "normalized_input": sig["normalized_input"],
+    }
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "IdentityResonance/1.1"
+    server_version = "IdentityResonance/1.2"
 
     def log_message(self, fmt, *args):
         sys.stderr.write("[web] %s\n" % (fmt % args))
@@ -190,7 +193,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(413, {"error": "Payload too large."})
             payload = json.loads(self.rfile.read(length))
             return self._json(200, analyze(payload))
-        except (ValueError, json.JSONDecodeError) as exc:
+        except (BirthValidationError, ValueError, json.JSONDecodeError) as exc:
             return self._json(400, {"error": str(exc)})
         except Exception as exc:
             traceback.print_exc()
