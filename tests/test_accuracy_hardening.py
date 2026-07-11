@@ -100,6 +100,23 @@ class ConvergenceTests(unittest.TestCase):
         self.assertIn("not a percentage of accuracy", report["markdown"])
         self.assertNotIn("third, independent digit-vote", report["markdown"])
 
+    def test_public_report_does_not_claim_disabled_human_design_was_computed(self):
+        signature = compute_unified_signature({"id": "test:name", "text": "Kirk Evan Brown"})
+        signature["encoders"]["human_design"] = {
+            "available": False,
+            "status": "disabled_failed_validation",
+            "reason": "Legacy calculator failed validation.",
+            "user_reported_type": "Manifestor",
+        }
+        report = generate_report(signature)
+        markdown = report["markdown"]
+        self.assertIn("Human Design status", markdown)
+        self.assertIn("unavailable", markdown)
+        self.assertIn("User-reported type: **Manifestor**", markdown)
+        self.assertNotIn("Human Design encoders", markdown)
+        self.assertNotIn("Human Design combines birth", markdown)
+        self.assertNotIn("Human Design implementation is a simplified model", markdown)
+
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
