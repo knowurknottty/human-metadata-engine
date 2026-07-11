@@ -2,13 +2,13 @@
 
 ## Decision
 
-The engine accepts **Aghyarian** and **Aghiarian** as documented spelling variants and analyzes the surname as an Armenian patronymic built from an **Agha** title-root plus the Armenian **-ian** suffix.
+The engine accepts **Aghyarian** and **Aghiarian** as documented spelling variants and analyzes the surname as an Armenian patronymic built from an **Agha** title/byname root plus the Armenian **-ian** suffix.
 
 Safe gloss:
 
-> **family or descendants of Agha**
+> **family line associated with an ancestor who bore Agha as a title or byname**
 
-This is a morphological interpretation, not proof that a specific ancestor held office, owned land, belonged to nobility, or used the title formally.
+`Agha` is treated as a reusable honorific—not as one original personal name or a uniquely identifiable founder. The gloss is a morphological interpretation, not proof that a specific ancestor held office, owned land, belonged to nobility, or occupied any particular Ottoman rank.
 
 ## Evidence retained
 
@@ -26,7 +26,7 @@ Source: `https://www.armeniapedia.org/wiki/Dictionary_of_Armenian_Surnames_A`
 
 ### Agha root
 
-*Agha* is a Turkic/Ottoman honorific carrying meanings such as master, lord, chief, respected man, or influential person. Historically it could be used for civilian or military officers, court personnel, local leaders, or influential landholders.
+*Agha* is a Turkic/Ottoman honorific carrying meanings such as master, lord, chief, respected man, or influential person. Historically it could be used for civilian or military officers, court personnel, local leaders, or influential landholders. Because many unrelated people could bear the title, the title alone cannot identify the ancestor behind a particular surname.
 
 Source: `https://en.wikipedia.org/wiki/Agha_(title)`
 
@@ -36,6 +36,7 @@ Source: `https://en.wikipedia.org/wiki/Agha_(title)`
 - Aghyarian and Aghiarian may represent the same surname under different Latin transliterations.
 - Searches should preserve both variants and later add the native Armenian spelling when documentary evidence identifies it.
 - Similar-looking Agha-derived surnames may share a lexical root without sharing a recent genealogical line.
+- Armenian vishap/dragon stories may be preserved as family or cultural context when independently supplied, but they are not inferred from this surname.
 
 ## Claims not promoted to fact
 
@@ -61,6 +62,8 @@ Relevant paper: Marc Haber et al., “Genetic evidence for an origin of the Arme
 
 1. Preserve the user-supplied spelling exactly.
 2. Store canonical variants separately from identity replacement.
-3. Keep lived surname, genetic lineage surname, chosen names, and creation names as different relationship types.
-4. Etymology may inform historical meaning but receives no personality or genetic inference weight.
-5. Native-script spelling, ancestral locality, and family linkage remain unresolved until sourced.
+3. Keep lived surname, lineage surname, chosen names, and creation names as different relationship types.
+4. Treat titles, personal names, translated forms, and later cultural representations as distinct layers.
+5. Etymology may inform historical meaning but receives no personality or genetic inference weight.
+6. Consensus is recorded as a source category, not promoted automatically to truth status.
+7. Native-script spelling, ancestral locality, and family linkage remain unresolved until sourced.
