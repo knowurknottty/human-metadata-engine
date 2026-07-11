@@ -149,8 +149,9 @@ def evidence_dashboard(
         "numerology": bool(encoders.get("pythagorean")),
         "experimental_correspondence": any(
             isinstance(value, dict)
-            and value.get("provenance")
-            and value.get("epistemic_level") in {"experimental", "symbolic-experimental"}
+            and value.get("status") == "computed"
+            and value.get("interpretation_level") == "symbolic"
+            and isinstance(value.get("provenance"), dict)
             for value in encoders.values()
         ),
     }
