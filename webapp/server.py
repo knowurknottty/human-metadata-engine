@@ -167,6 +167,7 @@ def _disable_unvalidated_human_design(signature, identity):
     encoders["human_design"] = {
         "available": False,
         "status": "disabled_failed_validation",
+        "unavailable": "A known birth time is required for Human Design output.",
         "reason": (
             "The legacy calculator does not derive gates, centers, type, authority, "
             "profile, or design time using validated Human Design mechanics."
