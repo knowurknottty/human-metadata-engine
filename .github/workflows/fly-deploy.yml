@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: fly-production
+  group: fly-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -42,6 +42,7 @@ jobs:
           python3 tests/test_api_birth_contract.py
           python3 tests/test_build_revision.py
           python3 tests/test_sigil.py
+          python3 tests/test_accuracy_hardening.py
 
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@master

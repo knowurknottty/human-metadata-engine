@@ -1,3 +1,4 @@
+import logging
 """
 Identity Comparison API
 ========================
@@ -29,7 +30,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from engine import compute_unified_signature
 from analytics import FEATURE_AGREEMENT_METRIC, feature_agreement, feature_vector
-from birth import validate_birth
+from birth_validation import validate_birth
 from reference_population import famous_reference_identities
 from search import IdentitySearch
 from narrative import generate_narrative
@@ -61,7 +62,7 @@ def _identity_from_encode_request(body: dict) -> dict:
             "Use the canonical 'birth' object with year, month, day, timezone_offset, lat, and lon."
         )
     identity = {"text": name.strip(), "id": name.strip()}
-    birth = validate_birth(body.get("birth"))
+    birth = validate_birth(body.get("birth"), living_person=True, require_coordinates=True)
     if birth:
         identity["birth"] = birth
     return identity
@@ -252,8 +253,8 @@ class APIHandler(BaseHTTPRequestHandler):
 
 def run(port=8090):
     server = HTTPServer(("0.0.0.0", port), APIHandler)
-    print(f"Identity API running on http://localhost:{port}")
-    print(f"Endpoints: /encode, /compare, /search, /narrative, /fingerprint, /identities, /health")
+    logging.info(f"Identity API running on http://localhost:{port}")
+    logging.info(f"Endpoints: /encode, /compare, /search, /narrative, /fingerprint, /identities, /health")
     server.serve_forever()
 
 
