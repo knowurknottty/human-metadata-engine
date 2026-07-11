@@ -80,8 +80,24 @@ def _normalized_reference(identity):
 
 def _disable_unvalidated_human_design(signature, identity):
     """Remove unsupported Human Design conclusions from public output."""
-    previous = signature.get("encoders", {}).get("human_design")
-    signature["encoders"]["human_design"] = {
+    encoders = signature.setdefault("encoders", {})
+    previous = encoders.get("human_design")
+
+    removed_dimensions = 0
+    if (
+        isinstance(previous, dict)
+        and previous
+        and not previous.get("error")
+        and previous.get("type")
+    ):
+        removed_dimensions = 15
+        signature["dimensions"] = max(
+            0,
+            int(signature.get("dimensions", 0)) - removed_dimensions,
+        )
+
+    signature.setdefault("invalidated_dimensions", {})["human_design"] = removed_dimensions
+    encoders["human_design"] = {
         "available": False,
         "status": "disabled_failed_validation",
         "reason": (
@@ -89,12 +105,13 @@ def _disable_unvalidated_human_design(signature, identity):
             "profile, or design time using validated Human Design mechanics."
         ),
         "previous_result_removed": bool(previous),
+        "removed_dimension_count": removed_dimensions,
         "user_reported_type": identity.get("user_reported_human_design_type"),
         "epistemic_class": "symbolic-unavailable",
     }
     signature["snapshot"] = personality_snapshot(
         identity["text"],
-        astrology=signature["encoders"].get("astrology"),
+        astrology=encoders.get("astrology"),
         human_design=None,
         psychology=identity.get("psychology"),
     )
@@ -192,7 +209,9 @@ def _constellation_analysis(graph, analysis_year):
         signatures[node["id"]] = signature
         node_etymology = analyze_name_etymology(
             node["name"],
-            lineage_surnames=node.get("metadata", {}).get("lineage_surnames", []),
+            lineage_surnames=_validated_lineage_surnames(
+                node.get("metadata", {}).get("lineage_surnames")
+            ),
         )
         node_results.append({
             "id": node["id"],
