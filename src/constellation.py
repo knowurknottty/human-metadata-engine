@@ -33,6 +33,18 @@ RELATION_TYPES = {
 
 PROFILE_LEVELS = {"name_only", "birth", "self_report"}
 CONSENT_BASES = {"self", "explicit_consent", "parent_or_guardian", "public_record"}
+SENSITIVE_METADATA_KEYS = {
+    "birth",
+    "birth_data",
+    "psychology",
+    "psychological_profile",
+    "health",
+    "medical",
+    "medical_data",
+    "biometrics",
+    "genetics",
+    "genetic_data",
+}
 
 
 class ConstellationValidationError(ValueError):
@@ -45,12 +57,35 @@ def _require_text(value: Any, field: str) -> str:
     return value.strip()
 
 
+def _validated_metadata(item: dict[str, Any], *, node_type: str, index: int) -> dict[str, Any]:
+    raw_metadata = item.get("metadata")
+    if raw_metadata is None:
+        return {}
+    if not isinstance(raw_metadata, dict):
+        raise ConstellationValidationError(f"nodes[{index}].metadata must be an object.")
+
+    metadata = dict(raw_metadata)
+    if node_type == "person":
+        hidden_sensitive = sorted(
+            key for key in metadata
+            if str(key).strip().lower() in SENSITIVE_METADATA_KEYS
+        )
+        if hidden_sensitive:
+            joined = ", ".join(hidden_sensitive)
+            raise ConstellationValidationError(
+                f"nodes[{index}].metadata contains reserved sensitive fields: {joined}. "
+                "Use the structured birth and psychology fields so privacy rules apply."
+            )
+    return metadata
+
+
 def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
     """Validate a tiered identity graph.
 
     People default to name-only. Birth data requires an explicit profile level.
     Psychology requires self-report or explicit consent. Minors never expose
-    psychology in this version.
+    psychology in this version. Sensitive person data cannot be hidden inside
+    free-form metadata.
     """
     if raw is None:
         return None
@@ -95,6 +130,7 @@ def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
         consent_basis = item.get("consent_basis")
         birth = item.get("birth")
         psychology = item.get("psychology")
+        metadata = _validated_metadata(item, node_type=node_type, index=index)
 
         if node_type != "person":
             profile_level = "name_only"
@@ -139,7 +175,7 @@ def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
             "consent_basis": consent_basis,
             "birth": birth,
             "psychology": psychology,
-            "metadata": item.get("metadata") if isinstance(item.get("metadata"), dict) else {},
+            "metadata": metadata,
         })
 
     edges: list[dict[str, Any]] = []
@@ -181,6 +217,7 @@ def validate_constellation(raw: dict[str, Any] | None) -> dict[str, Any] | None:
             "People default to name-only.",
             "Birth analysis is optional and explicit.",
             "Psychology requires self-report or explicit consent.",
+            "Sensitive person data cannot bypass privacy rules through metadata.",
             "Projects, aliases, brands, inventions, and works may be analyzed as creations.",
             "Genetic lineage, lived identity, chosen identity, and creative authorship remain separate relations.",
         ],
@@ -211,6 +248,7 @@ __all__ = [
     "NODE_TYPES",
     "RELATION_TYPES",
     "PROFILE_LEVELS",
+    "SENSITIVE_METADATA_KEYS",
     "validate_constellation",
     "connection_summary",
 ]
