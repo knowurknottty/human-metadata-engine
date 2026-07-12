@@ -17,6 +17,7 @@
     "correlations": {"type": "object"},
     "report": {"type": "object", "required": ["markdown", "word_count", "sections", "mode"]},
     "normalized_input": {"type": "object"},
+    "psychology": {"type": ["object", "null"]},
     "evidence": {"type": "object", "required": ["method_version", "layers", "claim_policy"]}
   }
 }

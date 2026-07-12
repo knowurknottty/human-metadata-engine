@@ -517,6 +517,7 @@ def analyze(payload):
         "comparisons": comps[:10],
         "correlations": corr,
         "report": report,
+        "psychology": psychology,
         "normalized_input": sig["normalized_input"],
         "etymology": etymology,
         "evidence": evidence,

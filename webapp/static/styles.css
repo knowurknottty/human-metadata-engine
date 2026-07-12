@@ -40,6 +40,18 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline:2px so
 
 .lbl { display:block;font-size:.72rem;letter-spacing:.055em;text-transform:uppercase;color:#9ca3b5;margin-bottom:.38rem; }
 .field-hint { margin:.42rem .1rem 0; color:#718096; font-size:.66rem; line-height:1.45; }
+.profile-subheading { margin:0 0 .7rem; color:#d8b77a; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; }
+.field-warning { margin:.42rem .1rem 0; color:#f7b6a7; font-size:.66rem; line-height:1.4; }
+.profile-status-details { border-top:1px solid rgba(255,255,255,.08); padding-top:.8rem; }
+.profile-status-details summary { cursor:pointer; color:#b6a0d8; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; }
+.profile-status-details summary::marker { color:#e7b866; }
+.profile-output-group { margin-top:.75rem; padding-top:.65rem; border-top:1px solid rgba(255,255,255,.07); }
+.profile-output-group h4 { margin:0 0 .42rem; color:#c9a75c; font-size:.62rem; letter-spacing:.1em; text-transform:uppercase; }
+.profile-output-row { display:grid; grid-template-columns:minmax(0,1fr) auto auto; gap:.45rem; align-items:center; padding:.28rem 0; color:#aeb7c7; font-size:.72rem; }
+.profile-output-row b { color:#f2d49a; font-weight:600; }
+.profile-status-badge { padding:.12rem .35rem; border:1px solid rgba(192,132,252,.3); border-radius:.35rem; color:#cdb8e6; font-size:.56rem; white-space:nowrap; }
+.profile-compact-summary { margin-top:.75rem; padding-top:.65rem; border-top:1px solid rgba(255,255,255,.07); color:#d8c28f; font-size:.68rem; line-height:1.5; }
+.profile-compact-summary span { display:block; margin-bottom:.15rem; color:#77859a; font-size:.56rem; letter-spacing:.1em; text-transform:uppercase; }
 .inp {
   width:100%; border-radius:.78rem; background:rgba(255,255,255,.055);
   border:1px solid rgba(255,255,255,.11); padding:.68rem .85rem; color:#eef2ff;

@@ -16,7 +16,23 @@ from typing import Any
 MODES = {"data", "magic"}
 SUBJECT_TYPES = {"self", "reference"}
 TIME_ACCURACIES = {"unknown", "hour_only", "approximate", "exact"}
-ATTACHMENT_STYLES = {"secure", "anxious", "avoidant", "disorganized", "fearful_avoidant"}
+ATTACHMENT_STYLES = {
+    "secure", "anxious", "avoidant", "disorganized", "fearful_avoidant",
+    "anxious_preoccupied", "dismissive_avoidant", "mixed_context_dependent", "unknown",
+}
+ASSESSMENT_STATUSES = {"validated", "structured", "self_identified", "provisional", "unknown"}
+ENNEAGRAM_WINGS = {
+    1: (9, 2), 2: (1, 3), 3: (2, 4), 4: (3, 5), 5: (4, 6),
+    6: (5, 7), 7: (6, 8), 8: (7, 9), 9: (8, 1),
+}
+INSTINCTUAL_VARIANTS = {
+    "self_preservation", "social", "one_to_one",
+    "sp_so", "sp_sx", "so_sp", "so_sx", "sx_sp", "sx_so", "unknown",
+}
+CONFLICT_STYLES = {
+    "direct", "collaborative", "accommodating", "avoidant", "competitive",
+    "context_dependent", "unknown",
+}
 MBTI_TYPES = {
     "INTJ", "INTP", "ENTJ", "ENTP", "INFJ", "INFP", "ENFJ", "ENFP",
     "ISTJ", "ISFJ", "ESTJ", "ESFJ", "ISTP", "ISFP", "ESTP", "ESFP",
@@ -61,12 +77,69 @@ def validate_subject_type(raw: Any) -> str:
     return subject_type
 
 
+def _validate_assessment_status(raw: Any) -> dict[str, dict[str, Any]]:
+    if raw in (None, {}):
+        return {}
+    if not isinstance(raw, dict):
+        raise PublicContractError("assessment_status must be an object.")
+    aliases = {
+        "secondaryEnneagramInfluence": "secondary_enneagram_influence",
+        "instinctualVariant": "instinctual_variant",
+        "attachmentStyle": "attachment",
+        "conflictStyle": "conflict_style",
+    }
+    allowed_fields = {
+        "big_five", "mbti", "enneagram", "wing", "secondary_enneagram_influence",
+        "instinctual_variant", "attachment", "conflict_style",
+    }
+    result: dict[str, dict[str, Any]] = {}
+    for raw_key, metadata in raw.items():
+        key = aliases.get(raw_key, raw_key)
+        if key not in allowed_fields:
+            raise PublicContractError(f"assessment_status contains unsupported field: {raw_key}.")
+        if not isinstance(metadata, dict):
+            raise PublicContractError(f"assessment_status.{raw_key} must be an object.")
+        unknown = set(metadata) - {"status", "assessed_at", "source", "notes"}
+        if unknown:
+            raise PublicContractError(
+                f"assessment_status.{raw_key} contains unsupported fields: {', '.join(sorted(unknown))}."
+            )
+        status = metadata.get("status", "unknown")
+        if status not in ASSESSMENT_STATUSES:
+            raise PublicContractError(
+                f"assessment_status.{raw_key}.status must be one of: {', '.join(sorted(ASSESSMENT_STATUSES))}."
+            )
+        assessed_at = metadata.get("assessed_at")
+        source = metadata.get("source")
+        notes = metadata.get("notes")
+        if assessed_at is not None and (not isinstance(assessed_at, str) or len(assessed_at) > 40):
+            raise PublicContractError(f"assessment_status.{raw_key}.assessed_at must be a short string or null.")
+        if source is not None and (not isinstance(source, str) or len(source.strip()) > 120):
+            raise PublicContractError(f"assessment_status.{raw_key}.source must be a short string or null.")
+        if notes is not None and (not isinstance(notes, str) or len(notes) > 500):
+            raise PublicContractError(f"assessment_status.{raw_key}.notes must be at most 500 characters or null.")
+        clean = {"status": status}
+        if assessed_at is not None:
+            clean["assessed_at"] = assessed_at
+        if source is not None:
+            clean["source"] = source.strip()
+        if notes is not None:
+            clean["notes"] = notes
+        result[key] = clean
+    return result
+
+
 def validate_psychology(raw: Any) -> dict[str, Any] | None:
     if raw in (None, {}):
         return None
     if not isinstance(raw, dict):
         raise PublicContractError("psychology must be an object.")
-    unknown = sorted(set(raw) - {"big_five", "mbti", "enneagram", "attachment"})
+    unknown = sorted(set(raw) - {
+        "big_five", "mbti", "enneagram", "attachment", "relational_patterns",
+        "secondary_enneagram_influence", "secondaryEnneagramInfluence",
+        "instinctual_variant", "instinctualVariant", "assessment_status",
+        "assessmentStatus", "conflict_style", "conflictStyle",
+    })
     if unknown:
         raise PublicContractError(f"psychology contains unsupported fields: {', '.join(unknown)}.")
 
@@ -109,17 +182,70 @@ def validate_psychology(raw: Any) -> dict[str, Any] | None:
             raise PublicContractError("psychology.enneagram.type must be an integer from 1 to 9.")
         if wing is not None and (isinstance(wing, bool) or not isinstance(wing, int) or not 1 <= wing <= 9):
             raise PublicContractError("psychology.enneagram.wing must be an integer from 1 to 9.")
+        if wing is not None and wing not in ENNEAGRAM_WINGS[core_type]:
+            allowed_wings = ", ".join(str(value) for value in ENNEAGRAM_WINGS[core_type])
+            raise PublicContractError(
+                f"psychology.enneagram.wing must be adjacent to core type {core_type} ({allowed_wings})."
+            )
         result["enneagram"] = {"type": core_type, "wing": wing}
 
+    secondary = raw.get("secondary_enneagram_influence", raw.get("secondaryEnneagramInfluence"))
+    if secondary not in (None, "", "unknown"):
+        if isinstance(secondary, bool) or not isinstance(secondary, int) or not 1 <= secondary <= 9:
+            raise PublicContractError("psychology.secondary_enneagram_influence must be an integer from 1 to 9 or null.")
+        result["secondary_enneagram_influence"] = secondary
+    elif secondary == "unknown":
+        result["secondary_enneagram_influence"] = None
+
+    instinctual = raw.get("instinctual_variant", raw.get("instinctualVariant"))
+    if instinctual not in (None, ""):
+        if instinctual not in INSTINCTUAL_VARIANTS:
+            raise PublicContractError(
+                "psychology.instinctual_variant must be a supported dominant or stacked variant."
+            )
+        result["instinctual_variant"] = instinctual
+
     attachment = raw.get("attachment")
+    relational = raw.get("relational_patterns")
+    if relational is not None:
+        if not isinstance(relational, dict) or set(relational) - {"attachment_style"}:
+            raise PublicContractError("psychology.relational_patterns only accepts attachment_style.")
+        relational_attachment = relational.get("attachment_style")
+        if attachment not in (None, "") and relational_attachment not in (None, "", attachment):
+            raise PublicContractError("psychology.attachment and psychology.relational_patterns.attachment_style disagree.")
+        if attachment in (None, ""):
+            attachment = relational_attachment
     if attachment not in (None, ""):
         if attachment not in ATTACHMENT_STYLES:
             raise PublicContractError(
                 "psychology.attachment must be one of: " + ", ".join(sorted(ATTACHMENT_STYLES)) + "."
             )
         result["attachment"] = attachment
+        result["relational_patterns"] = {"attachment_style": attachment}
 
-    if not result:
+    conflict_style = raw.get("conflict_style", raw.get("conflictStyle"))
+    if conflict_style not in (None, ""):
+        if conflict_style not in CONFLICT_STYLES:
+            raise PublicContractError("psychology.conflict_style is not a supported self-observation value.")
+        result["conflict_style"] = conflict_style
+
+    statuses = _validate_assessment_status(raw.get("assessment_status", raw.get("assessmentStatus")))
+    supplied_fields = set(result)
+    if "relational_patterns" in supplied_fields:
+        supplied_fields.add("attachment")
+    if isinstance(result.get("enneagram"), dict) and result["enneagram"].get("wing") is not None:
+        supplied_fields.add("wing")
+    for field in (
+        "big_five", "mbti", "enneagram", "secondary_enneagram_influence",
+        "instinctual_variant", "attachment", "conflict_style",
+    ):
+        if field in supplied_fields and field not in statuses:
+            statuses[field] = {"status": "self_identified"}
+    if statuses:
+        result["assessment_status"] = statuses
+
+    value_fields = set(result) - {"assessment_status", "relational_patterns"}
+    if not value_fields:
         raise PublicContractError("psychology must contain at least one assessment.")
     return result
 
@@ -164,7 +290,11 @@ def validate_observations(raw: Any) -> list[dict[str, Any]]:
 
 __all__ = [
     "ATTACHMENT_STYLES",
+    "ASSESSMENT_STATUSES",
     "BIG_FIVE",
+    "CONFLICT_STYLES",
+    "ENNEAGRAM_WINGS",
+    "INSTINCTUAL_VARIANTS",
     "MBTI_TYPES",
     "MODES",
     "SUBJECT_TYPES",

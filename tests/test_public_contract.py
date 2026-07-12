@@ -12,6 +12,7 @@ sys.path[:0] = [os.path.join(ROOT, "webapp"), os.path.join(ROOT, "src")]
 
 from server import analyze  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
+from public_contract import ENNEAGRAM_WINGS, PublicContractError, validate_psychology  # noqa: E402
 
 
 class PublicContractTests(unittest.TestCase):
@@ -27,6 +28,44 @@ class PublicContractTests(unittest.TestCase):
     def test_malformed_psychology_is_a_client_error(self):
         with self.assertRaisesRegex(ValueError, "finite number"):
             analyze({"name": "Test", "psychology": {"big_five": {"openness": "bad"}}})
+
+    def test_all_sixteen_mbti_values_are_accepted(self):
+        values = [
+            "INTJ", "INTP", "ENTJ", "ENTP", "INFJ", "INFP", "ENFJ", "ENFP",
+            "ISTJ", "ISFJ", "ESTJ", "ESFJ", "ISTP", "ISFP", "ESTP", "ESFP",
+        ]
+        for value in values:
+            self.assertEqual(validate_psychology({"mbti": value.lower()})["mbti"], value)
+
+    def test_wings_are_adjacent_and_impossible_pairings_are_rejected(self):
+        for core, wings in ENNEAGRAM_WINGS.items():
+            for wing in wings:
+                self.assertEqual(validate_psychology({"enneagram": {"type": core, "wing": wing}})["enneagram"]["wing"], wing)
+        with self.assertRaisesRegex(PublicContractError, "adjacent"):
+            validate_psychology({"enneagram": {"type": 5, "wing": 8}})
+
+    def test_know_thyself_fields_round_trip_with_status_and_legacy_attachment(self):
+        psychology = validate_psychology({
+            "mbti": "INTJ",
+            "enneagram": {"type": 5, "wing": 4},
+            "secondaryEnneagramInfluence": 8,
+            "instinctualVariant": "sp_so",
+            "relational_patterns": {"attachment_style": "secure"},
+            "conflict_style": "context_dependent",
+            "assessmentStatus": {
+                "mbti": {"status": "provisional"},
+                "attachment": {"status": "structured", "source": "questionnaire"},
+            },
+        })
+        self.assertEqual(psychology["secondary_enneagram_influence"], 8)
+        self.assertEqual(psychology["relational_patterns"]["attachment_style"], "secure")
+        self.assertEqual(psychology["assessment_status"]["mbti"]["status"], "provisional")
+        self.assertEqual(psychology["assessment_status"]["attachment"]["status"], "structured")
+        self.assertIsNone(validate_psychology({"secondaryEnneagramInfluence": "unknown"})["secondary_enneagram_influence"])
+        result = analyze({"name": "Know Thyself", "psychology": psychology, "mode": "magic"})
+        self.assertEqual(result["psychology"]["enneagram"], {"type": 5, "wing": 4})
+        self.assertTrue(any("Type 8 influence" in item for item in result["signature"]["snapshot"]["profile_summary"]))
+        self.assertIn("Relational patterns", result["report"]["markdown"])
 
     def test_public_birth_without_time_is_explicitly_unknown(self):
         result = analyze({

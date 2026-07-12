@@ -79,7 +79,9 @@ class MBTI:
 
     @staticmethod
     def validate_type(code: str) -> bool:
-        valid = True
+        if not isinstance(code, str):
+            return False
+        code = code.upper()
         if len(code) != 4:
             return False
         if code[0] not in "EI":
@@ -120,7 +122,7 @@ class MBTI:
 class Enneagram:
     """Enneagram personality type."""
     core_type: int  # 1-9
-    wing: Optional[int]  # 2-9 (adjacent to core)
+    wing: Optional[int]  # adjacent to core
     instinctual_variant: str  # SO, SX, SP
     level_of_development: int  # 1-9 (healthy to unhealthy)
     integration_point: int
@@ -136,6 +138,7 @@ class Enneagram:
 
     INTEGRATION = {1: 7, 2: 4, 3: 6, 4: 1, 5: 8, 6: 9, 7: 5, 8: 2, 9: 3}
     DISINTEGRATION = {1: 4, 2: 8, 3: 9, 4: 2, 5: 7, 6: 3, 7: 1, 8: 5, 9: 6}
+    WINGS = {1: (9, 2), 2: (1, 3), 3: (2, 4), 4: (3, 5), 5: (4, 6), 6: (5, 7), 7: (6, 8), 8: (7, 9), 9: (8, 1)}
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -154,7 +157,10 @@ class AttachmentStyle:
     source: str
     confidence: float
 
-    STYLES = ["Secure", "Anxious", "Avoidant", "Disorganized"]
+    STYLES = [
+        "Secure", "Anxious", "Avoidant", "Disorganized", "Fearful-avoidant",
+        "Anxious-preoccupied", "Dismissive-avoidant", "Mixed/context-dependent",
+    ]
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -173,6 +179,7 @@ class PsychologicalProfile:
     mbti: Optional[MBTI]
     enneagram: Optional[Enneagram]
     attachment_style: Optional[AttachmentStyle]
+    secondary_enneagram_influence: Optional[int]
 
     # Additional user-supplied data
     communication_style: Optional[str]  # direct, diplomatic, analytical, expressive
@@ -199,6 +206,8 @@ class PsychologicalProfile:
             parts.append(self.mbti.summary())
         if self.enneagram:
             parts.append(self.enneagram.summary())
+        if self.secondary_enneagram_influence:
+            parts.append(f"Secondary pattern: Type {self.secondary_enneagram_influence} influence")
         if self.attachment_style:
             parts.append(self.attachment_style.summary())
         return " | ".join(parts) if parts else "No psychological data provided"
@@ -226,6 +235,7 @@ def create_profile(
     enneagram_type: Optional[int] = None,
     enneagram_wing: Optional[int] = None,
     attachment: Optional[str] = None,
+    secondary_enneagram_influence: Optional[int] = None,
     **kwargs,
 ) -> PsychologicalProfile:
     """Factory function to create a psychological profile from user input."""
@@ -243,7 +253,10 @@ def create_profile(
         )
 
     mbti = None
-    if mbti_type and MBTI.validate_type(mbti_type):
+    if mbti_type:
+        if not MBTI.validate_type(mbti_type):
+            raise ValueError("mbti_type must be one of the 16 valid MBTI combinations.")
+        mbti_type = mbti_type.upper()
         mbti = MBTI(
             type_code=mbti_type,
             cognitive_functions=MBTI.get_cognitive_functions(mbti_type),
@@ -252,7 +265,13 @@ def create_profile(
         )
 
     enne = None
-    if enneagram_type and 1 <= enneagram_type <= 9:
+    if enneagram_type is not None:
+        if not isinstance(enneagram_type, int) or not 1 <= enneagram_type <= 9:
+            raise ValueError("enneagram_type must be an integer from 1 to 9.")
+        if enneagram_wing is not None and enneagram_wing not in Enneagram.WINGS[enneagram_type]:
+            raise ValueError(f"Enneagram wing {enneagram_wing} is not adjacent to core type {enneagram_type}.")
+        if secondary_enneagram_influence is not None and not 1 <= secondary_enneagram_influence <= 9:
+            raise ValueError("secondary_enneagram_influence must be between 1 and 9.")
         enne = Enneagram(
             core_type=enneagram_type,
             wing=enneagram_wing,
@@ -265,9 +284,15 @@ def create_profile(
         )
 
     attach = None
-    if attachment and attachment in AttachmentStyle.STYLES:
+    if attachment:
+        canonical_attachment = next(
+            (style for style in AttachmentStyle.STYLES if style.lower().replace("/", "_").replace("-", "_") == str(attachment).lower().replace("/", "_").replace("-", "_")),
+            None,
+        )
+        if canonical_attachment is None:
+            raise ValueError("attachment is not a supported relational-pattern value.")
         attach = AttachmentStyle(
-            primary_style=attachment,
+            primary_style=canonical_attachment,
             secondary_style=kwargs.get("secondary_attachment"),
             source="self_assessment",
             confidence=0.7,
@@ -279,6 +304,7 @@ def create_profile(
         mbti=mbti,
         enneagram=enne,
         attachment_style=attach,
+        secondary_enneagram_influence=secondary_enneagram_influence,
         communication_style=kwargs.get("communication_style"),
         risk_tolerance=kwargs.get("risk_tolerance"),
         ambiguity_tolerance=kwargs.get("ambiguity_tolerance"),

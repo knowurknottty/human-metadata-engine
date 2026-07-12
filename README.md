@@ -85,6 +85,28 @@ human-metadata-engine/
 | **Human Design** | Gene Keys | 15+ | Type, strategy, 64 gates, channels, centers, profile |
 | **Psychology** | User-supplied | 20+ | Big Five, MBTI, Enneagram, attachment style |
 
+### Know Thyself profile model
+
+The public psychology form separates different kinds of self-report rather than
+presenting them as one equivalent personality score:
+
+- **Core cognition and motivation:** MBTI, Enneagram core type, adjacent wing,
+  optional secondary pattern, and instinctual variant.
+- **Relational patterns:** attachment style, preserved under the legacy
+  `attachment` field and also exposed as `relational_patterns.attachment_style`.
+- **Self-regulation:** optional conflict-style self-observation.
+
+Secondary Enneagram patterns are displayed as `Type N influence`; they are not a
+second core type. “Fix,” “trifix,” and “tritype” terminology is not standardized
+across schools. Assessment metadata uses `validated`, `structured`,
+`self_identified`, `provisional`, or `unknown` and never upgrades an unknown
+value into a validated result. Legacy attachment values continue to load without
+destructive migration because the public API is process-local and does not persist
+profile records; compatibility is handled at validation and serialization time.
+
+These frameworks describe different dimensions of self-understanding. They are
+reflective tools, not clinical diagnoses.
+
 ## Quick Start
 
 ```python

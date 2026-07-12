@@ -37,8 +37,21 @@ class BirthDateFieldTests(unittest.TestCase):
             self.assertIn(f'id="p-{field}-help"', html)
         self.assertIn("validated MBTI", html)
         self.assertIn("Enneagram assessment", html)
-        self.assertIn("assessment reports a wing", html)
-        self.assertIn("qualified clinician", html)
+        self.assertIn("supports a wing", html)
+        self.assertIn("professionally assessed", html)
+
+    def test_know_thyself_profile_is_separated_and_accessible(self):
+        html = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+
+        for field in ("p-secondary", "p-instinct", "p-attach", "p-conflict"):
+            self.assertIn(f'id="{field}"', html)
+        self.assertIn("Core cognition and motivation", html)
+        self.assertIn("Relational patterns", html)
+        self.assertIn("Self-regulation", html)
+        self.assertIn("assessment_status", script)
+        self.assertIn("updateWingOptions", script)
+        self.assertIn("Same as the core type", script)
 
 
 if __name__ == "__main__":

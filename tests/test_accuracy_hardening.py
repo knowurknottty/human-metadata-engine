@@ -138,15 +138,12 @@ class ConvergenceTests(unittest.TestCase):
 
     def test_public_report_does_not_overstate_feature_independence_or_assessment_confidence(self):
         signature = compute_unified_signature({"id": "test:name", "text": "Kirk Evan Brown"})
-        report = generate_report(
-            signature,
-            psychology={"mbti": "INTJ", "enneagram": {"type": 5, "wing": 4}, "attachment": "secure"},
-        )
+        report = generate_report(signature, psychology={"mbti": "INTJ"})
         markdown = report["markdown"]
         self.assertNotIn("eight independent reduced-digit categories", markdown)
         self.assertIn("eight reduced-digit feature categories", markdown)
         self.assertNotIn("confidence of its assessment method and is the only empirically-grounded", markdown)
-        self.assertIn("not independently verified by this engine", markdown)
+        self.assertIn("not an independently verified capability claim", markdown)
         self.assertNotIn("quantity of divine energy the letters carry", markdown)
 
     def test_public_report_does_not_claim_disabled_human_design_was_computed(self):

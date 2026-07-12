@@ -112,32 +112,86 @@
           <span class="text-slate-500 font-normal">(self-reported, optional)</span>
         </legend>
         <div id="psych-fields" class="space-y-5 opacity-40 pointer-events-none transition" aria-disabled="true">
+          <p class="text-xs text-slate-400 leading-relaxed">These frameworks describe different dimensions of self-understanding. They are reflective tools, not clinical diagnoses.</p>
           <div class="grid sm:grid-cols-2 gap-x-8 gap-y-3" id="bigfive-sliders"></div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div>
-              <label class="lbl" for="p-mbti">MBTI type</label>
-              <select id="p-mbti" class="inp" aria-describedby="p-mbti-help"><option value="">Select</option></select>
-              <p id="p-mbti-help" class="field-hint">Four-letter preference profile (for example, INFJ). Use a validated MBTI® or comparable assessment result; leave blank if unknown.</p>
+          <section aria-labelledby="core-profile-heading">
+            <h3 id="core-profile-heading" class="profile-subheading">Core cognition and motivation</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="lbl" for="p-mbti">MBTI type</label>
+                <select id="p-mbti" class="inp" aria-describedby="p-mbti-help"><option value="">Select</option></select>
+                <p id="p-mbti-help" class="field-hint">Four-letter cognitive preference profile. Use a validated MBTI® or comparable assessment result; leave blank if unknown.</p>
+              </div>
+              <div>
+                <label class="lbl" for="p-enne">Enneagram</label>
+                <select id="p-enne" class="inp" aria-describedby="p-enne-help"><option value="">Select</option></select>
+                <p id="p-enne-help" class="field-hint">Core motivational pattern, numbered 1–9. Use the type identified by an Enneagram assessment or sustained self-observation; leave blank if uncertain.</p>
+              </div>
+              <div>
+                <label class="lbl" for="p-wing">Wing</label>
+                <select id="p-wing" class="inp" aria-describedby="p-wing-help"><option value="">Select a core type first</option></select>
+                <p id="p-wing-help" class="field-hint">Adjacent Enneagram influence. Use only when an assessment or sustained self-observation supports a wing.</p>
+                <p id="p-wing-warning" class="hidden field-warning" role="alert"></p>
+              </div>
+              <div>
+                <label class="lbl" for="p-secondary">Secondary pattern</label>
+                <select id="p-secondary" class="inp" aria-describedby="p-secondary-help">
+                  <option value="">Not assessed</option><option value="1">Type 1 influence</option><option value="2">Type 2 influence</option>
+                  <option value="3">Type 3 influence</option><option value="4">Type 4 influence</option><option value="5">Type 5 influence</option>
+                  <option value="6">Type 6 influence</option><option value="7">Type 7 influence</option><option value="8">Type 8 influence</option>
+                  <option value="9">Type 9 influence</option><option value="unknown">Unknown / not assessed</option>
+                </select>
+                <p id="p-secondary-help" class="field-hint">A recurring secondary Enneagram strategy that shapes how the core type responds. Sometimes called a fix in trifix or tritype systems. It is not a second core type.</p>
+                <p id="p-secondary-warning" class="hidden field-warning" role="alert"></p>
+              </div>
+              <div>
+                <label class="lbl" for="p-instinct">Instinctual variant</label>
+                <select id="p-instinct" class="inp" aria-describedby="p-instinct-help">
+                  <option value="">Not assessed</option><option value="self_preservation">Self-preservation</option><option value="social">Social</option><option value="one_to_one">One-to-one</option>
+                  <option value="sp_so">sp/so</option><option value="sp_sx">sp/sx</option><option value="so_sp">so/sp</option><option value="so_sx">so/sx</option><option value="sx_sp">sx/sp</option><option value="sx_so">sx/so</option><option value="unknown">Unknown / not assessed</option>
+                </select>
+                <p id="p-instinct-help" class="field-hint">The instinctive priority through which Enneagram patterns are most often expressed. Stacked variants are supported when known.</p>
+              </div>
             </div>
-            <div>
-              <label class="lbl" for="p-enne">Enneagram</label>
-              <select id="p-enne" class="inp" aria-describedby="p-enne-help"><option value="">Select</option></select>
-              <p id="p-enne-help" class="field-hint">Core motivation type, numbered 1–9. Choose the type named in an Enneagram assessment, not a quiz score; leave blank if unsure.</p>
-            </div>
-            <div>
-              <label class="lbl" for="p-wing">Wing</label>
-              <select id="p-wing" class="inp" aria-describedby="p-wing-help"><option value="">Select</option></select>
-              <p id="p-wing-help" class="field-hint">An adjacent Enneagram influence, written like 4w5. Use it only when your assessment reports a wing; otherwise leave blank.</p>
-            </div>
-            <div>
-              <label class="lbl" for="p-attach">Attachment</label>
+          </section>
+
+          <section aria-labelledby="relational-profile-heading">
+            <h3 id="relational-profile-heading" class="profile-subheading">Relational patterns</h3>
+            <div class="max-w-sm">
+              <label class="lbl" for="p-attach">Attachment style</label>
               <select id="p-attach" class="inp" aria-describedby="p-attach-help">
-              <option value="">Select</option><option value="secure">Secure</option><option value="anxious">Anxious</option>
-              <option value="avoidant">Avoidant</option><option value="fearful_avoidant">Fearful-avoidant</option>
+                <option value="">Not assessed</option><option value="secure">Secure</option><option value="anxious_preoccupied">Anxious-preoccupied</option>
+                <option value="dismissive_avoidant">Dismissive-avoidant</option><option value="fearful_avoidant">Fearful-avoidant</option><option value="mixed_context_dependent">Mixed / context-dependent</option>
+                <option value="anxious">Anxious (legacy)</option><option value="avoidant">Avoidant (legacy)</option><option value="disorganized">Disorganized (legacy)</option><option value="unknown">Unknown / not assessed</option>
               </select>
-              <p id="p-attach-help" class="field-hint">A relationship-pattern label. Use a trusted questionnaire or qualified clinician’s result; it is optional and self-reported.</p>
+              <p id="p-attach-help" class="field-hint">A self-reported or professionally assessed relationship pattern. It is distinct from personality type and may vary by relationship, context, and life stage.</p>
             </div>
-          </div>
+          </section>
+
+          <section aria-labelledby="self-regulation-heading">
+            <h3 id="self-regulation-heading" class="profile-subheading">Self-regulation <span class="text-slate-500 font-normal">(optional self-observation)</span></h3>
+            <div class="max-w-sm">
+              <label class="lbl" for="p-conflict">Conflict style</label>
+              <select id="p-conflict" class="inp" aria-describedby="p-conflict-help">
+                <option value="">Not assessed</option><option value="direct">Direct</option><option value="collaborative">Collaborative</option><option value="accommodating">Accommodating</option><option value="avoidant">Avoidant</option><option value="competitive">Competitive</option><option value="context_dependent">Context-dependent</option><option value="unknown">Unknown</option>
+              </select>
+              <p id="p-conflict-help" class="field-hint">A self-observed way of responding during disagreement. This is not a diagnosis and can vary by context.</p>
+            </div>
+          </section>
+
+          <details class="profile-status-details">
+            <summary>Assessment status (optional)</summary>
+            <p class="field-hint mt-2">Choose how you know each value. This never upgrades a self-estimate into a validated result.</p>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
+              <div><label class="lbl" for="p-status-mbti">MBTI status</label><select id="p-status-mbti" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
+              <div><label class="lbl" for="p-status-enneagram">Enneagram status</label><select id="p-status-enneagram" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
+              <div><label class="lbl" for="p-status-wing">Wing status</label><select id="p-status-wing" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
+              <div><label class="lbl" for="p-status-secondary">Secondary pattern status</label><select id="p-status-secondary" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
+              <div><label class="lbl" for="p-status-instinct">Instinct status</label><select id="p-status-instinct" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
+              <div><label class="lbl" for="p-status-attachment">Attachment status</label><select id="p-status-attachment" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
+              <div><label class="lbl" for="p-status-conflict">Conflict status</label><select id="p-status-conflict" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
+            </div>
+          </details>
         </div>
       </fieldset>
 
@@ -217,6 +271,6 @@
   <p class="mt-1">Deterministic computation: identical normalized inputs and convention versions produce identical results. &copy; Inversion Labs.</p>
 </footer>
 
-<script src="/app.js?v=date-input-1-report-switch-1-hints-1"></script>
+<script src="/app.js?v=date-input-1-report-switch-1-know-thyself-2"></script>
 </body>
 </html>

@@ -477,9 +477,23 @@ Defined channels: {ch_txt}. Definition type is **{h.get('definition', 'Single')}
 def _sec6_psychology(name, sig, psychology):
     if not psychology:
         return ""
+    status_labels = {
+        "validated": "validated",
+        "structured": "structured assessment",
+        "self_identified": "self-identified",
+        "provisional": "provisional",
+        "unknown": "unknown status",
+    }
+    statuses = psychology.get("assessment_status") or {}
+
+    def status_suffix(field):
+        metadata = statuses.get(field) or {}
+        status = metadata.get("status", "unknown") if isinstance(metadata, dict) else "unknown"
+        return f" · {status_labels.get(status, status)}" if status != "unknown" else ""
+
     parts = [f"""## 6. Psychological Profile
 
-*This layer is self-reported, not name-derived. It carries the confidence of its assessment method and is the only empirically-grounded section of this report.*
+*This layer is self-reported, not name-derived. Status labels describe the source state supplied with each field; they are not a clinical diagnosis or a guarantee of validity.*
 """]
     b5 = psychology.get("big_five")
     if b5:
@@ -502,6 +516,7 @@ def _sec6_psychology(name, sig, psychology):
         parts.append("**Big Five (OCEAN):**\n\n" + "\n".join(rows) + "\n")
     mbti = psychology.get("mbti")
     if mbti:
+        parts.append("### Core cognition and motivation\n")
         try:
             try:
                 from encoders.psychology import MBTI
@@ -514,23 +529,39 @@ def _sec6_psychology(name, sig, psychology):
             stack = "\n".join(
                 f"{i}. **{f}** — {MBTI_FUNCTION_TEXT.get(f, f)} ({role})"
                 for i, (f, role) in enumerate(zip(funcs, ["dominant: the identity's default cognition", "auxiliary: the trusted co-pilot", "tertiary: the developing relief function", "inferior: the aspirational stress point"]), 1))
-            parts.append(f"**MBTI: {mbti}.** The cognitive function stack:\n\n{stack}\n\nThe practical read: the dominant-auxiliary pair is where this identity is effortlessly competent; the inferior function is where it is either defensive or, with maturity, most surprisingly creative.\n")
+            parts.append(f"**MBTI: {mbti}{status_suffix('mbti')}.** The cognitive function stack:\n\n{stack}\n\nThe practical read is a model-specific reflection prompt, not an independently verified capability claim.\n")
         else:
-            parts.append(f"**MBTI: {mbti}.**\n")
+            parts.append(f"**MBTI: {mbti}{status_suffix('mbti')}.**\n")
     enne = psychology.get("enneagram") or {}
     if enne.get("type"):
         t = enne["type"]
         wing = enne.get("wing")
         wing_txt = f" with a {wing} wing, borrowing {ENNEAGRAM_TEXT.get(wing, 'adjacent flavor').split('—')[0].strip()} as seasoning" if wing else ""
-        parts.append(f"**Enneagram: Type {t}{f'w{wing}' if wing else ''}** — {ENNEAGRAM_TEXT.get(t, 'a distinctive core pattern')}{wing_txt}. The Enneagram adds a motivational X-ray the trait models lack: it names the core fear the personality is organized to avoid, which is why type knowledge tends to be uncomfortable before it is useful.\n")
-    attach = psychology.get("attachment")
+        parts.append(f"**Enneagram: Type {t}{status_suffix('enneagram')}** — {ENNEAGRAM_TEXT.get(t, 'a distinctive core pattern')}. This is a motivational reflection model; a wing is an adjacent influence, not a second core type.\n")
+        if wing:
+            parts.append(f"**Wing: {t}w{wing}{status_suffix('wing')}.** The wing is adjacent to the core type and may shape its expression; it is not a second core type.\n")
+        secondary = psychology.get("secondary_enneagram_influence")
+        if secondary:
+            warning = " (same as core; adds little additional information)" if secondary == t else ""
+            parts.append(f"**Secondary pattern: Type {secondary} influence{status_suffix('secondary_enneagram_influence')}{warning}.** Sometimes called a fix in trifix or tritype systems, this is a recurring strategy, not a second core type.\n")
+        instinctual = psychology.get("instinctual_variant")
+        if instinctual and instinctual != "unknown":
+            parts.append(f"**Instinctual variant: {instinctual.replace('_', '/')}{status_suffix('instinctual_variant')}.** This describes an instinctive priority, not a diagnosis.\n")
+    attach = psychology.get("attachment") or (psychology.get("relational_patterns") or {}).get("attachment_style")
     if attach:
         ATT = {"secure": "a **secure** base: conflict is survivable, closeness is not a threat, and repair comes naturally",
                "anxious": "an **anxious** lean: high relational vigilance — the gift is attunement, the tax is protest behavior under uncertainty",
+               "anxious_preoccupied": "an **anxious-preoccupied** pattern: high relational vigilance — the gift is attunement, the tax is protest behavior under uncertainty",
                "avoidant": "an **avoidant** lean: self-regulation over co-regulation — the gift is composure, the tax is under-asking",
+               "dismissive_avoidant": "a **dismissive-avoidant** pattern: self-regulation over co-regulation — the gift is composure, the tax is under-asking",
                "disorganized": "a **disorganized** pattern: approach and avoidance both active — integration work pays the highest dividends here",
-               "fearful_avoidant": "a **fearful-avoidant** pattern: longing and guarding in the same gesture"}
-        parts.append(f"**Attachment style:** {ATT.get(attach, attach)}. In collaboration and partnership, this is the invisible variable that decides how the rest of the profile behaves under relational stress.\n")
+               "fearful_avoidant": "a **fearful-avoidant** pattern: longing and guarding in the same gesture",
+               "mixed_context_dependent": "a **mixed/context-dependent** pattern that may vary by relationship and life stage",
+               "unknown": "an **unknown/not assessed** pattern"}
+        parts.append(f"### Relational patterns\n\n**Attachment style{status_suffix('attachment')}:** {ATT.get(attach, attach)}. This is distinct from personality type and may vary by relationship, context, and life stage.\n")
+    conflict_style = psychology.get("conflict_style")
+    if conflict_style and conflict_style != "unknown":
+        parts.append(f"### Self-regulation\n\n**Conflict style: {conflict_style.replace('_', '-')}{status_suffix('conflict_style')}.** This is a self-observation about conflict behavior, not a diagnosis.\n")
     return "\n".join(parts)
 
 

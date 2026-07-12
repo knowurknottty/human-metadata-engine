@@ -24,6 +24,9 @@ const NUM_MEANING = {
 
 const MBTI_TYPES = ["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP",
                     "ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
+const ENNEAGRAM_WINGS = {
+  1:[9,2],2:[1,3],3:[2,4],4:[3,5],5:[4,6],6:[5,7],7:[6,8],8:[7,9],9:[8,1],
+};
 const MBTI_STACK = {
   INTJ:["Ni","Te","Fi","Se"],INTP:["Ti","Ne","Si","Fe"],ENTJ:["Te","Ni","Se","Fi"],
   ENTP:["Ne","Ti","Fe","Si"],INFJ:["Ni","Fe","Ti","Se"],INFP:["Fi","Ne","Si","Te"],
@@ -46,6 +49,66 @@ const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 let STATE = { result: null, paid: false, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false, lastFocus: null };
+
+function updateWingOptions() {
+  const core = parseInt($("p-enne").value, 10);
+  const wing = $("p-wing");
+  const warning = $("p-wing-warning");
+  const current = wing.value;
+  if (!core || !ENNEAGRAM_WINGS[core]) {
+    wing.innerHTML = '<option value="">Select a core type first</option>';
+    wing.disabled = true;
+    if (warning) warning.classList.add("hidden");
+    return;
+  }
+  const options = ['<option value="">Not assessed</option>']
+    .concat(ENNEAGRAM_WINGS[core].map(value => `<option value="${value}">${core}w${value}</option>`));
+  wing.innerHTML = options.join("");
+  wing.disabled = false;
+  if (ENNEAGRAM_WINGS[core].map(String).includes(current)) wing.value = current;
+  else if (current) {
+    wing.value = "";
+    if (warning) {
+      warning.textContent = `Wing reset: ${core} can only use ${ENNEAGRAM_WINGS[core].join(" or ")}.`;
+      warning.classList.remove("hidden");
+    }
+  }
+}
+
+function updateSecondaryWarning() {
+  const core = $("p-enne").value;
+  const secondary = $("p-secondary").value;
+  const warning = $("p-secondary-warning");
+  if (warning && core && secondary && secondary !== "unknown" && core === secondary) {
+    warning.textContent = "Same as the core type: this adds little additional information.";
+    warning.classList.remove("hidden");
+  } else if (warning) {
+    warning.classList.add("hidden");
+  }
+}
+
+function clientProfileSections(psychology) {
+  const statusLabels = {validated:"validated", structured:"structured assessment", self_identified:"self-identified", provisional:"provisional", unknown:"unknown status"};
+  const statuses = psychology.assessment_status || {};
+  const sections = {core_cognition_motivation: [], relational_patterns: [], self_regulation: []};
+  const add = (section, field, label, value) => {
+    if (value === null || value === undefined || value === "" || value === "unknown") return;
+    const status = statuses[field]?.status || "unknown";
+    sections[section].push({field, label, value: String(value), status, status_label: statusLabels[status] || status});
+  };
+  if (psychology.mbti) add("core_cognition_motivation", "mbti", "MBTI", psychology.mbti);
+  const enne = psychology.enneagram || {};
+  if (enne.type) {
+    add("core_cognition_motivation", "enneagram", "Enneagram", `Type ${enne.type}`);
+    if (enne.wing) add("core_cognition_motivation", "wing", "Wing", `${enne.type}w${enne.wing}`);
+  }
+  if (psychology.secondary_enneagram_influence) add("core_cognition_motivation", "secondary_enneagram_influence", "Secondary pattern", `Type ${psychology.secondary_enneagram_influence} influence`);
+  if (psychology.instinctual_variant) add("core_cognition_motivation", "instinctual_variant", "Instinctual variant", psychology.instinctual_variant.replaceAll("_", "/"));
+  const attachment = psychology.attachment || psychology.relational_patterns?.attachment_style;
+  if (attachment) add("relational_patterns", "attachment", "Attachment style", attachment.replaceAll("_", "-"));
+  if (psychology.conflict_style) add("self_regulation", "conflict_style", "Conflict style", psychology.conflict_style.replaceAll("_", "-"));
+  return sections;
+}
 
 // ------------------------------------------------------------------
 // Fingerprint glyph renderer (from the deterministic server spec)
@@ -549,6 +612,21 @@ function renderDashboard(result) {
   // Psychology
   if (STATE.psychology) {
     const ps = STATE.psychology;
+    const profile = sig.snapshot || {};
+    const serverProfileSections = profile.profile_sections || {};
+    const hasServerProfile = Object.values(serverProfileSections).some(items => Array.isArray(items) && items.length);
+    const profileSections = hasServerProfile ? serverProfileSections : clientProfileSections(ps);
+    const profileSummary = profile.profile_summary?.length
+      ? profile.profile_summary
+      : Object.values(profileSections).flat().map(item => `${item.label}: ${item.value}${item.status !== "unknown" ? ` · ${item.status_label}` : ""}`);
+    const statusBadge = (item) => item.status && item.status !== "unknown"
+      ? `<span class="profile-status-badge">${esc(item.status_label || item.status)}</span>` : "";
+    const profileGroup = (title, key) => {
+      const items = profileSections[key] || [];
+      if (!items.length) return "";
+      return `<div class="profile-output-group"><h4>${title}</h4>${items.map(item =>
+        `<div class="profile-output-row"><span>${esc(item.label)}</span><b>${esc(item.value)}</b>${statusBadge(item)}</div>`).join("")}</div>`;
+    };
     let body = "";
     if (ps.big_five) {
       body += radarSVG(B5.map(([k]) => ps.big_five[k] ?? 0.5), B5.map(([,l]) => l.slice(0,5)), ACCENT.psychology);
@@ -559,10 +637,13 @@ function renderDashboard(result) {
         <div class="flex justify-center gap-1.5 mt-1">${stack.map((f, i) =>
           `<span class="px-2 py-1 rounded bg-white/5 text-[11px] ${i === 0 ? "text-rose-300 font-bold" : "text-slate-400"}">${f}</span>`).join("")}</div></div>`;
     }
-    if (ps.enneagram && ps.enneagram.type) {
-      body += `<div class="mt-3 text-center text-sm text-slate-300">Enneagram <b class="text-rose-300">Type ${ps.enneagram.type}${ps.enneagram.wing ? "w" + ps.enneagram.wing : ""}</b>${ps.attachment ? ` · ${esc(ps.attachment)} attachment` : ""}</div>`;
+    body += profileGroup("Core cognition and motivation", "core_cognition_motivation");
+    body += profileGroup("Relational patterns", "relational_patterns");
+    body += profileGroup("Self-regulation", "self_regulation");
+    if (profileSummary.length) {
+      body += `<p class="profile-compact-summary"><span>Compact profile</span>${profileSummary.map(esc).join(" · ")}</p>`;
     }
-    cards.push(card("Psychology (self-reported)", ACCENT.psychology, body || "<p class='text-xs text-slate-500'>No assessments supplied.</p>"));
+    cards.push(card("Know Thyself profile", ACCENT.psychology, body || "<p class='text-xs text-slate-500'>No assessments supplied.</p>"));
   }
 
   html += `<div class="analysis-card-grid fade-up-1">${cards.join("")}</div>`;
@@ -736,6 +817,7 @@ const app = {
     }
     if ($("psych-enabled").checked) {
       const psych = {};
+      const assessmentStatus = {};
       const bf = {};
       let any = false;
       B5.forEach(([k]) => { const v = $(`bf-${k}`); if (v) { bf[k] = parseInt(v.value, 10) / 100; any = true; } });
@@ -743,7 +825,22 @@ const app = {
       if ($("p-mbti").value) psych.mbti = $("p-mbti").value;
       if ($("p-enne").value) psych.enneagram = {type: parseInt($("p-enne").value, 10),
         wing: $("p-wing").value ? parseInt($("p-wing").value, 10) : null};
+      if ($("p-secondary").value && $("p-secondary").value !== "unknown") psych.secondary_enneagram_influence = parseInt($("p-secondary").value, 10);
+      if ($("p-instinct").value && $("p-instinct").value !== "unknown") psych.instinctual_variant = $("p-instinct").value;
       if ($("p-attach").value) psych.attachment = $("p-attach").value;
+      if ($("p-conflict").value && $("p-conflict").value !== "unknown") psych.conflict_style = $("p-conflict").value;
+      const statusFields = [
+        ["mbti", "p-mbti", "p-status-mbti"], ["enneagram", "p-enne", "p-status-enneagram"], ["wing", "p-wing", "p-status-wing"],
+        ["secondary_enneagram_influence", "p-secondary", "p-status-secondary"], ["instinctual_variant", "p-instinct", "p-status-instinct"],
+        ["attachment", "p-attach", "p-status-attachment"], ["conflict_style", "p-conflict", "p-status-conflict"],
+      ];
+      statusFields.forEach(([field, control, statusControl]) => {
+        const value = $(control).value;
+        if (value && value !== "unknown" && value !== "Not assessed" && $(statusControl)) {
+          assessmentStatus[field] = {status: $(statusControl).value};
+        }
+      });
+      if (Object.keys(assessmentStatus).length) psych.assessment_status = assessmentStatus;
       if (Object.keys(psych).length) payload.psychology = psych;
       STATE.psychology = payload.psychology || null;
     } else {
@@ -956,12 +1053,15 @@ function init() {
   // MBTI / Enneagram selects
   $("p-mbti").innerHTML += MBTI_TYPES.map(t => `<option>${t}</option>`).join("");
   $("p-enne").innerHTML += Array.from({length: 9}, (_, i) => `<option>${i + 1}</option>`).join("");
-  $("p-wing").innerHTML += Array.from({length: 9}, (_, i) => `<option>${i + 1}</option>`).join("");
+  $("p-enne").addEventListener("change", () => { updateWingOptions(); updateSecondaryWarning(); });
+  $("p-secondary").addEventListener("change", updateSecondaryWarning);
+  updateWingOptions();
   $("b-date").addEventListener("input", (event) => {
     event.target.value = normalizeBirthDateInput(event.target.value);
   });
   app.toggleSection("birth");
   app.toggleSection("psych");
+  updateWingOptions();
 
   // Reference-population gallery
   fetch("/api/defaults").then(r => r.json()).then(d => {
