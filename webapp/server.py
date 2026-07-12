@@ -49,6 +49,7 @@ from etymology import analyze_name_etymology  # noqa: E402
 from evidence_v3 import evidence_dashboard  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
 from snapshot import personality_snapshot  # noqa: E402
+from true_human_design.public_adapter import calculate_public_human_design  # noqa: E402
 from public_contract import (  # noqa: E402
     PublicContractError,
     normalize_public_name,
@@ -122,7 +123,7 @@ def _safe_json(value):
 
 _SENSITIVE_OUTPUT_KEYS = {
     "birth", "birth_data", "birth_location", "location", "lat", "lon",
-    "latitude", "longitude", "timezone_offset", "coordinates", "coord",
+    "latitude", "longitude", "timezone_offset", "timezone_name", "coordinates", "coord",
 }
 
 
@@ -230,6 +231,19 @@ def _disable_unvalidated_human_design(signature, identity):
     encoders = signature.setdefault("encoders", {})
     previous = encoders.get("human_design")
 
+    # Preserve the versioned public core result.  The legacy calculator is not
+    # allowed to overwrite or downgrade a chart produced by this adapter.
+    if (
+        isinstance(previous, dict)
+        and previous.get("available") is True
+        and previous.get("status") == "provisional_calculation"
+    ):
+        signature.setdefault("invalidated_dimensions", {})["human_design"] = 0
+        return
+    if isinstance(previous, dict) and previous.get("status") == "unavailable_uncertain_birth_time":
+        signature.setdefault("invalidated_dimensions", {})["human_design"] = 0
+        return
+
     removed_dimensions = 0
     if (
         isinstance(previous, dict)
@@ -264,6 +278,7 @@ def _compute_signature(identity, *, mode: str = "data"):
         identity,
         resonance_fn=accuracy_composite_resonance,
         snapshot_fn=None,
+        human_design_fn=calculate_public_human_design,
     )
     _disable_unvalidated_human_design(signature, identity)
     if mode == "data":

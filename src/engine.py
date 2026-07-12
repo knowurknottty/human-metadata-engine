@@ -220,10 +220,11 @@ def compute_unified_signature(
     *,
     resonance_fn=None,
     snapshot_fn=personality_snapshot,
+    human_design_fn=None,
 ) -> dict:
     """Run all encoders and produce a unified multi-dimensional signature.
 
-    ``resonance_fn`` and ``snapshot_fn`` are injectable so the public API can
+    ``resonance_fn``, ``snapshot_fn``, and ``human_design_fn`` are injectable so the public API can
     use its corrected resonance contract and build exactly one final snapshot
     after public sanitization. Defaults preserve the legacy engine behavior
     for CLI and library callers.
@@ -386,45 +387,60 @@ def compute_unified_signature(
     # Optional: Human Design (requires birth data)
     if birth and HAS_HumanDesign and birth_time_known:
         try:
-            hd = compute_human_design(
-                birth["year"], birth["month"], birth["day"],
-                birth["hour"], birth["minute"],
-                birth["timezone_offset"], birth["location"],
-                lat=birth.get("lat"), lon=birth.get("lon"),
-            )
-            result["encoders"]["human_design"] = {
-                "type": hd.hd_type,
-                "strategy": hd.strategy,
-                "authority": hd.authority,
-                "profile": list(hd.profile_number),
-                "profile_description": hd.profile_description,
-                "not_self_theme": hd.not_self_theme,
-                "signature": hd.signature,
-                "definition": hd.definition_type,
-                "incarnation_cross": hd.incarnation_cross,
-                "personality_gates": [
-                    {"gate": g.gate, "line": g.line, "planet": g.planet, "sign": g.sign}
-                    for g in hd.personality_gates
-                ],
-                "design_gates": [
-                    {"gate": g.gate, "line": g.line, "planet": g.planet}
-                    for g in hd.design_gates
-                ],
-                "channels": hd.channels,
-                "centers": [
-                    {"name": c.name, "defined": c.defined}
-                    for c in hd.centers
-                ],
-                "gates": hd.all_gates,
-                "confidence": hd.confidence,
-            }
+            if human_design_fn is not None:
+                result["encoders"]["human_design"] = human_design_fn(
+                    birth,
+                    subject_id=identity.get("id"),
+                )
+            else:
+                hd = compute_human_design(
+                    birth["year"], birth["month"], birth["day"],
+                    birth["hour"], birth["minute"],
+                    birth["timezone_offset"], birth["location"],
+                    lat=birth.get("lat"), lon=birth.get("lon"),
+                )
+                result["encoders"]["human_design"] = {
+                    "type": hd.hd_type,
+                    "strategy": hd.strategy,
+                    "authority": hd.authority,
+                    "profile": list(hd.profile_number),
+                    "profile_description": hd.profile_description,
+                    "not_self_theme": hd.not_self_theme,
+                    "signature": hd.signature,
+                    "definition": hd.definition_type,
+                    "incarnation_cross": hd.incarnation_cross,
+                    "personality_gates": [
+                        {"gate": g.gate, "line": g.line, "planet": g.planet, "sign": g.sign}
+                        for g in hd.personality_gates
+                    ],
+                    "design_gates": [
+                        {"gate": g.gate, "line": g.line, "planet": g.planet}
+                        for g in hd.design_gates
+                    ],
+                    "channels": hd.channels,
+                    "centers": [
+                        {"name": c.name, "defined": c.defined}
+                        for c in hd.centers
+                    ],
+                    "gates": hd.all_gates,
+                    "confidence": hd.confidence,
+                }
         except Exception as e:
             result["encoders"]["human_design"] = {"error": str(e)}
     elif birth and HAS_HumanDesign:
-        result["encoders"]["human_design"] = {
-            "unavailable": "A known birth time is required for Human Design output.",
-            "time_accuracy": birth.get("time_accuracy", "unknown"),
-        }
+        if human_design_fn is not None:
+            result["encoders"]["human_design"] = {
+                "available": False,
+                "status": "unavailable_uncertain_birth_time",
+                "unavailable": "A known birth time with precise time_accuracy is required for Human Design output.",
+                "time_accuracy": birth.get("time_accuracy", "unknown"),
+                "epistemic_class": "symbolic-unavailable",
+            }
+        else:
+            result["encoders"]["human_design"] = {
+                "unavailable": "A known birth time is required for Human Design output.",
+                "time_accuracy": birth.get("time_accuracy", "unknown"),
+            }
 
     # Second-order analytics (v0.4.0)
     result["resonance"] = (resonance_fn or composite_resonance)(result)

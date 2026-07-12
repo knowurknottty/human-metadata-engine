@@ -14,7 +14,7 @@ from engine import available_encoder_names
 
 
 EVIDENCE_NOTICE = """> **How to read this report**
-> Name arithmetic and linguistic counts are computed. Psychology is self-reported. Numerology, astrology, and cross-tradition correspondences are symbolic reflection systems rather than validated personality measurements. The resonance value is an interpretive engine index, not a percentage of accuracy. Human Design is withheld whenever its calculator has not passed validation.
+> Name arithmetic and linguistic counts are computed. Psychology is self-reported. Numerology, astrology, and cross-tradition correspondences are symbolic reflection systems rather than validated personality measurements. The resonance value is an interpretive engine index, not a percentage of accuracy. Human Design is shown only as a provisional symbolic calculation from the versioned core; uncertain birth times remain withheld.
 
 """
 
@@ -71,7 +71,7 @@ def _data_report(sig: dict, psychology: dict | None = None, comparisons: list[di
     }
 
 
-def _harden_language(markdown: str) -> str:
+def _harden_language(markdown: str, *, human_design_available: bool = False) -> str:
     text = markdown
     text = text.replace(
         "This is a high reading: several independent systems arrive at compatible readings.",
@@ -152,23 +152,24 @@ def _harden_language(markdown: str) -> str:
         "Everything below is deterministic for the same normalized inputs and convention versions. Reproducibility does not establish empirical validity.",
     )
 
-    # Human Design failed validation and must not survive in legacy report copy.
-    text = text.replace(
-        "numerological, linguistic, Hebrew, Greek, astrological, and Human Design encoders",
-        "numerological, linguistic, Hebrew, Greek, and astrological encoders",
-    )
-    text = text.replace(
-        "Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. Human Design combines birth and 88-days-prior ephemeris positions into gates, channels, type, and profile. The psychology layer",
-        "Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. Human Design output is withheld because the legacy calculator failed validation. The psychology layer",
-    )
-    text = text.replace(
-        "The symbolic systems (numerology, gematria, astrology, Human Design) are interpretive traditions",
-        "The available symbolic systems (numerology, gematria, and astrology) are interpretive traditions",
-    )
-    text = text.replace(
-        "the Human Design implementation is a simplified model of the full bodygraph; ",
-        "Human Design is withheld because the legacy implementation failed validation; ",
-    )
+    if not human_design_available:
+        # Human Design failed validation and must not survive in legacy report copy.
+        text = text.replace(
+            "numerological, linguistic, Hebrew, Greek, astrological, and Human Design encoders",
+            "numerological, linguistic, Hebrew, Greek, and astrological encoders",
+        )
+        text = text.replace(
+            "Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. The validated Human Design core solves the design timestamp from an 88-degree solar arc, then maps Swiss Ephemeris positions into versioned gates, channels, topology, type, authority, and profile. The psychology layer",
+            "Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. Human Design output is withheld because the legacy calculator failed validation. The psychology layer",
+        )
+        text = text.replace(
+            "The symbolic systems (numerology, gematria, astrology, Human Design) are interpretive traditions",
+            "The available symbolic systems (numerology, gematria, and astrology) are interpretive traditions",
+        )
+        text = text.replace(
+            "the Human Design implementation is a simplified model of the full bodygraph; ",
+            "Human Design is withheld because the legacy implementation failed validation; ",
+        )
     return text
 
 
@@ -201,7 +202,14 @@ def generate_report(sig: dict, psychology: dict | None = None, comparisons: list
         report["evidence_model"] = "computed-self_report-symbolic-experimental-v2"
         return report
     report = generate_legacy_report(sig, psychology=psychology, comparisons=comparisons)
-    markdown = _harden_language(report["markdown"])
+    human_design = sig.get("encoders", {}).get("human_design") or {}
+    markdown = _harden_language(
+        report["markdown"],
+        human_design_available=(
+            human_design.get("available") is True
+            and human_design.get("status") == "provisional_calculation"
+        ),
+    )
     first_break = markdown.find("\n\n")
     status = _human_design_status(sig)
     insert = EVIDENCE_NOTICE + status

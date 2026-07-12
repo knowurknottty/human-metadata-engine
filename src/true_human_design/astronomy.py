@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone, tzinfo
+import re
 import math
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
@@ -12,6 +13,33 @@ except ImportError:  # pragma: no cover
 
 EPHEMERIS_PROFILE = "pyswisseph-moshier-v1"
 CALC_FLAGS = None if swe is None else swe.FLG_MOSEPH | swe.FLG_SPEED
+
+
+_FIXED_OFFSET_RE = re.compile(r"^UTC([+-])(\d{2}):(\d{2})$")
+
+
+def _resolve_timezone(timezone_name: str) -> tzinfo:
+    """Resolve an IANA zone or an explicit fixed UTC offset.
+
+    The public API currently accepts a numeric UTC offset rather than silently
+    guessing an IANA zone from a place name.  Fixed offsets therefore need to
+    be first-class inputs to the same astronomy path.  No DST rule is inferred
+    for these values; that limitation is recorded by the public adapter.
+    """
+    try:
+        return ZoneInfo(timezone_name)
+    except ZoneInfoNotFoundError as exc:
+        match = _FIXED_OFFSET_RE.fullmatch(str(timezone_name))
+        if not match:
+            raise ValueError(f"unknown timezone: {timezone_name}") from exc
+        hours = int(match.group(2))
+        minutes = int(match.group(3))
+        if minutes >= 60 or hours > 14 or (hours == 14 and minutes != 0):
+            raise ValueError(f"invalid fixed UTC offset: {timezone_name}")
+        total_minutes = hours * 60 + minutes
+        if match.group(1) == "-":
+            total_minutes *= -1
+        return timezone(timedelta(minutes=total_minutes), name=str(timezone_name))
 
 
 @dataclass(frozen=True)
@@ -65,10 +93,7 @@ def civil_to_julian_day(
     fold: int = 0,
 ) -> TimeLedger:
     _require_ephemeris()
-    try:
-        zone = ZoneInfo(timezone_name)
-    except ZoneInfoNotFoundError as exc:
-        raise ValueError(f"unknown timezone: {timezone_name}") from exc
+    zone = _resolve_timezone(timezone_name)
     local = datetime(year, month, day, hour, minute, second, tzinfo=zone, fold=fold)
     utc = local.astimezone(timezone.utc)
     offset = local.utcoffset()

@@ -432,10 +432,18 @@ def _sec5_celestial(name, sig):
                         4: "the Opportunist (advances through network and friendship)",
                         5: "the Heretic (projected upon; saves or scapegoated)",
                         6: "the Role Model (three-act life arc toward exemplarhood)"}
+        not_self_clause = (
+            f" The recurring not-self signal is **{h['not_self_theme']}**."
+            if h.get("not_self_theme") else ""
+        )
+        signature_clause = (
+            f" The symbolic signature state is **{h['signature']}**."
+            if h.get("signature") else ""
+        )
         hd_txt = f"""
 ### Human Design
 
-The Human Design synthesis casts **{name}** as a **{h['type']}** — {role}. Type is the chassis of the design; everything else is trim. The operating **strategy is "{h['strategy']}"** and the inner **authority is {h['authority']}**: decisions are reliable when they {advice}, and the recurring not-self signal — the emotional smoke-alarm indicating strategy has been abandoned — is **{h.get('not_self_theme', 'resistance')}**. The promised signature state, when living correctly by design, is **{h.get('signature', 'flow')}**.
+The Human Design synthesis casts **{name}** as a **{h['type']}** — {role}. In this engine, Type is resolved from defined-center topology. The operating **strategy is "{h['strategy']}"** and the inner **authority is {h['authority']}**: within this symbolic rule set, decisions are described as most consistent when they {advice}.{not_self_clause}{signature_clause}
 
 The **{profile[0]}/{profile[1]} profile** combines line {profile[0]} — {PROFILE_LINE.get(profile[0], 'a distinctive learning style')} — with line {profile[1]} — {PROFILE_LINE.get(profile[1], 'a distinctive social role')}. Read together: the conscious personality learns one way while the body's design socializes another, and maturity is learning to run both without apology.
 
@@ -612,7 +620,7 @@ def _sec9_practical(name, sig, resonance):
 def _sec10_methodology():
     return """## 10. Methodology & Caveats
 
-**How the encoders work.** Pythagorean numerology maps A–Z to 1–9 cyclically and reads totals over the whole name, its vowels, and its consonants. Chaldean numerology uses the older Babylonian sound-value table (no letter maps to 9) and preserves the unreduced compound number. The ordinal ciphers are raw alphabet arithmetic (A1Z26, its reverse, and per-letter digital roots). The linguistic encoder computes Shannon entropy, syllable estimates, phoneme-class counts, and vowel/consonant statistics — measurable properties only. The binary/prime encoder writes the name as a vowel/consonant bit-string and weighs letters by primes (A=2 … Z=101). Gematria and Isopsephy transliterate into the Hebrew and Greek number-alphabets and reduce. Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. Human Design combines birth and 88-days-prior ephemeris positions into gates, channels, type, and profile. The psychology layer is entirely user-supplied assessment data.
+**How the encoders work.** Pythagorean numerology maps A–Z to 1–9 cyclically and reads totals over the whole name, its vowels, and its consonants. Chaldean numerology uses the older Babylonian sound-value table (no letter maps to 9) and preserves the unreduced compound number. The ordinal ciphers are raw alphabet arithmetic (A1Z26, its reverse, and per-letter digital roots). The linguistic encoder computes Shannon entropy, syllable estimates, phoneme-class counts, and vowel/consonant statistics — measurable properties only. The binary/prime encoder writes the name as a vowel/consonant bit-string and weighs letters by primes (A=2 … Z=101). Gematria and Isopsephy transliterate into the Hebrew and Greek number-alphabets and reduce. Astrology uses the Swiss Ephemeris for tropical positions, houses, aspects, and lunar phase. The validated Human Design core solves the design timestamp from an 88-degree solar arc, then maps Swiss Ephemeris positions into versioned gates, channels, topology, type, authority, and profile. The psychology layer is entirely user-supplied assessment data.
 
 **What this analysis IS:** a reproducible, deterministic computation over a name (and optional birth data) through core formal symbolic systems plus provenance-aware extensions, alongside honest measurements of the name as a signal. Run it twice with the same inputs and convention versions, get the identical result. It is a structured mirror — useful for reflection, naming decisions, brand work, and pattern exploration.
 
@@ -620,7 +628,7 @@ def _sec10_methodology():
 
 **Extension boundaries.** The expansion layer contains 25 provenance-aware symbolic extensions, spanning historic number systems, writing traditions, comparative correspondences, and structural Unicode analysis. Every one names the versioned convention used, preserves the input script, and records whether it used a native mapping, the built-in transliteration profile, or only a structural representation. It is intentionally kept outside the composite resonance score and fingerprint: adding more traditions must not create the appearance of more empirical evidence. Some systems expose only a partial calculation because the necessary primary inputs are absent. For example, full Bazi and Jyotish calculations require a precise birth time, timezone, location, and appropriate ephemeris; character stroke counts require a sourced dictionary; and cuneiform, Egyptian, and Indus inputs are not assigned invented readings. In those cases, the result says what it did compute and what it could not compute. The provenance catalog is a review trail for conventions, not a claim that any one convention is uniquely authoritative.
 
-**Limitations.** Transliteration into Hebrew and Greek involves convention choices; birth-time uncertainty degrades astrological precision (confidence is reported); the Human Design implementation is a simplified model of the full bodygraph; and all interpretive text is generated from fixed scholarly-tradition templates. Appropriate use: curiosity, self-reflection, and creative decision support — never gatekeeping, hiring, or judgments about other people.
+**Limitations.** Transliteration into Hebrew and Greek involves convention choices; birth-time uncertainty degrades astrological precision (confidence is reported); the Human Design result is a versioned symbolic calculation, not an empirical instrument or a claim of personal authority; and all interpretive text is generated from fixed scholarly-tradition templates. Appropriate use: curiosity, self-reflection, and creative decision support — never gatekeeping, hiring, or judgments about other people.
 
 ---
 
