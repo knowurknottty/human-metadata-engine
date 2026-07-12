@@ -19,7 +19,11 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(ROOT)
 sys.path.insert(0, os.path.join(REPO, "src"))
 
-from engine import compute_unified_signature  # noqa: E402
+from engine import (  # noqa: E402
+    available_encoder_names,
+    compute_unified_signature,
+    count_signature_dimensions,
+)
 from analytics import (  # noqa: E402
     FEATURE_AGREEMENT_METRIC,
     cosine_similarity,
@@ -145,19 +149,16 @@ def _input_hash(payload: dict) -> str:
 
 def _data_snapshot(signature: dict, psychology: dict | None = None) -> dict:
     """A non-interpretive snapshot for Data mode."""
-    encoders = signature.get("encoders", {})
+    available_layers = available_encoder_names(signature)
     return {
-        "available_layers": [
-            key for key, value in encoders.items()
-            if isinstance(value, dict) and not value.get("error") and value.get("available", True) is not False
-        ],
+        "available_layers": available_layers,
         "narrative": (
             "Data mode reports reproducible string measurements and configured "
             "calculation outputs. It does not infer personality, fate, identity, "
             "or real-world similarity from a name."
         ),
         "highlights": [
-            f"{len(encoders)} encoder outputs available",
+            f"{len(available_layers)} encoder outputs available",
             "raw input is not retained by this process",
             "interpretive claims are disabled in Data mode",
         ],
@@ -220,7 +221,11 @@ def _normalized_reference(identity):
 
 
 def _disable_unvalidated_human_design(signature, identity):
-    """Remove unsupported Human Design conclusions from public output."""
+    """Replace unsupported Human Design conclusions with an explicit stub.
+
+    This function intentionally does not build a personality snapshot. The
+    public pipeline computes its final snapshot once, after this sanitization.
+    """
     encoders = signature.setdefault("encoders", {})
     previous = encoders.get("human_design")
 
@@ -251,23 +256,26 @@ def _disable_unvalidated_human_design(signature, identity):
         "user_reported_type": identity.get("user_reported_human_design_type"),
         "epistemic_class": "symbolic-unavailable",
     }
-    signature["snapshot"] = personality_snapshot(
-        identity["text"],
-        astrology=encoders.get("astrology"),
-        human_design=None,
-        psychology=identity.get("psychology"),
-    )
-
 
 def _compute_signature(identity, *, mode: str = "data"):
     """Compute a signature and apply the corrected public scoring contract."""
-    signature = compute_unified_signature(identity)
+    signature = compute_unified_signature(
+        identity,
+        resonance_fn=accuracy_composite_resonance,
+        snapshot_fn=None,
+    )
     _disable_unvalidated_human_design(signature, identity)
-    signature["resonance"] = accuracy_composite_resonance(signature)
     if mode == "data":
         signature["snapshot"] = _data_snapshot(signature, psychology=identity.get("psychology"))
     else:
-        signature.setdefault("snapshot", {})["mode"] = "magic"
+        signature["snapshot"] = personality_snapshot(
+            identity["text"],
+            astrology=signature["encoders"].get("astrology"),
+            human_design=signature["encoders"].get("human_design"),
+            psychology=identity.get("psychology"),
+        )
+        signature["snapshot"]["mode"] = "magic"
+    signature["dimensions"] = count_signature_dimensions(signature)
     signature["analysis_mode"] = mode
     return signature
 

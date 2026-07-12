@@ -7,6 +7,8 @@ import os
 import sys
 import unittest
 from datetime import datetime, timezone
+from pathlib import Path
+from unittest.mock import patch
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "src"))
@@ -14,7 +16,7 @@ sys.path.insert(0, os.path.join(ROOT, "webapp"))
 
 from analytics_v2 import numerological_convergence  # noqa: E402
 from birth_validation import BirthValidationError, canonical_birth_record, validate_birth  # noqa: E402
-from engine import compute_unified_signature  # noqa: E402
+from engine import compute_unified_signature, count_signature_dimensions  # noqa: E402
 from report_safe import generate_report  # noqa: E402
 from server import _disable_unvalidated_human_design  # noqa: E402
 
@@ -82,6 +84,37 @@ class TemporalAndAstrologyRegressionTests(unittest.TestCase):
 
 
 class ConvergenceTests(unittest.TestCase):
+    def test_data_snapshot_counts_only_available_encoder_outputs(self):
+        from server import _compute_signature
+
+        signature = _compute_signature({"id": "test:name", "text": "Ada Lovelace"}, mode="data")
+        available = signature["snapshot"]["available_layers"]
+        self.assertEqual(len(available), 32)
+        self.assertEqual(signature["snapshot"]["highlights"][0], "32 encoder outputs available")
+        self.assertEqual(signature["dimensions"], count_signature_dimensions(signature))
+        self.assertNotEqual(len(signature["encoders"]), len(available))
+
+    def test_public_pipeline_does_not_compute_discarded_legacy_resonance(self):
+        from server import _compute_signature
+
+        with patch("engine.composite_resonance", side_effect=AssertionError("legacy resonance called")):
+            signature = _compute_signature({"id": "test:name", "text": "Ada Lovelace"}, mode="data")
+        self.assertEqual(signature["resonance"]["method_version"], "resonance-v3-chance-corrected")
+
+    def test_public_snapshot_is_built_once_after_sanitization(self):
+        from server import _compute_signature
+
+        with patch("server.personality_snapshot", wraps=__import__("snapshot").personality_snapshot) as snapshot:
+            _compute_signature({"id": "test:name", "text": "Ada Lovelace"}, mode="data")
+            snapshot.assert_not_called()
+            _compute_signature({"id": "test:name", "text": "Ada Lovelace"}, mode="magic")
+            self.assertEqual(snapshot.call_count, 1)
+
+    def test_landing_stat_labels_extensions_not_total_encoder_count(self):
+        html = (Path(ROOT) / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
+        self.assertIn("25</strong><span>provenance extensions", html)
+        self.assertNotIn("25</strong><span>named systems", html)
+
     def test_ordinal_does_not_create_a_second_independent_vote(self):
         signature = {
             "encoders": {

@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import re
 from report import generate_report as generate_legacy_report
+from engine import available_encoder_names
 
 
 EVIDENCE_NOTICE = """> **How to read this report**
@@ -37,7 +38,7 @@ def _data_report(sig: dict, psychology: dict | None = None, comparisons: list[di
         "",
         f"- Contract: `{sig.get('contract_version', 'signature-v2')}`",
         f"- Analysis mode: `data`",
-        f"- Encoders returned: `{len(encoders)}`",
+        f"- Encoder outputs available: `{len(available_encoder_names(sig))}`",
         f"- Signature dimensions: `{sig.get('dimensions', 0)}`",
         "- Birth locations and coordinates are intentionally excluded from this exported report.",
         "",
