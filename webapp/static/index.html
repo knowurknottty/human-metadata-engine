@@ -114,13 +114,29 @@
         <div id="psych-fields" class="space-y-5 opacity-40 pointer-events-none transition" aria-disabled="true">
           <div class="grid sm:grid-cols-2 gap-x-8 gap-y-3" id="bigfive-sliders"></div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div><label class="lbl" for="p-mbti">MBTI type</label><select id="p-mbti" class="inp"><option value="">Select</option></select></div>
-            <div><label class="lbl" for="p-enne">Enneagram</label><select id="p-enne" class="inp"><option value="">Select</option></select></div>
-            <div><label class="lbl" for="p-wing">Wing</label><select id="p-wing" class="inp"><option value="">Select</option></select></div>
-            <div><label class="lbl" for="p-attach">Attachment</label><select id="p-attach" class="inp">
+            <div>
+              <label class="lbl" for="p-mbti">MBTI type</label>
+              <select id="p-mbti" class="inp" aria-describedby="p-mbti-help"><option value="">Select</option></select>
+              <p id="p-mbti-help" class="field-hint">Four-letter preference profile (for example, INFJ). Use a validated MBTI® or comparable assessment result; leave blank if unknown.</p>
+            </div>
+            <div>
+              <label class="lbl" for="p-enne">Enneagram</label>
+              <select id="p-enne" class="inp" aria-describedby="p-enne-help"><option value="">Select</option></select>
+              <p id="p-enne-help" class="field-hint">Core motivation type, numbered 1–9. Choose the type named in an Enneagram assessment, not a quiz score; leave blank if unsure.</p>
+            </div>
+            <div>
+              <label class="lbl" for="p-wing">Wing</label>
+              <select id="p-wing" class="inp" aria-describedby="p-wing-help"><option value="">Select</option></select>
+              <p id="p-wing-help" class="field-hint">An adjacent Enneagram influence, written like 4w5. Use it only when your assessment reports a wing; otherwise leave blank.</p>
+            </div>
+            <div>
+              <label class="lbl" for="p-attach">Attachment</label>
+              <select id="p-attach" class="inp" aria-describedby="p-attach-help">
               <option value="">Select</option><option value="secure">Secure</option><option value="anxious">Anxious</option>
               <option value="avoidant">Avoidant</option><option value="fearful_avoidant">Fearful-avoidant</option>
-            </select></div>
+              </select>
+              <p id="p-attach-help" class="field-hint">A relationship-pattern label. Use a trusted questionnaire or qualified clinician’s result; it is optional and self-reported.</p>
+            </div>
           </div>
         </div>
       </fieldset>
@@ -201,6 +217,6 @@
   <p class="mt-1">Deterministic computation: identical normalized inputs and convention versions produce identical results. &copy; Inversion Labs.</p>
 </footer>
 
-<script src="/app.js?v=date-input-1-report-switch-1"></script>
+<script src="/app.js?v=date-input-1-report-switch-1-hints-1"></script>
 </body>
 </html>

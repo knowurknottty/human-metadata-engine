@@ -151,6 +151,42 @@ def _harden_language(markdown: str, *, human_design_available: bool = False) -> 
         "Everything below is deterministic: run the engine again on the same inputs and you will get the same result, character for character.",
         "Everything below is deterministic for the same normalized inputs and convention versions. Reproducibility does not establish empirical validity.",
     )
+    text = text.replace(
+        "eight independent reduced-digit categories",
+        "eight reduced-digit feature categories",
+    )
+    text = text.replace(
+        "the name's full metaphysical weight — the quantity of divine energy the letters carry",
+        "a tradition-specific symbolic weight; this report records the convention's transliteration total rather than a physical or personal energy",
+    )
+    text = text.replace(
+        "holds three orders of magnitude of numeric structure before yielding its essence — a deep name in the Pythagorean-mystical sense",
+        "records repeated digital-root reductions; chain length is a property of this calculation, not a measure of personal depth",
+    )
+    text = text.replace(
+        "yields its essence quickly — a transparent name whose surface and depth are close together",
+        "has fewer reductions; chain length is a property of this calculation, not a measure of transparency or depth",
+    )
+    text = text.replace(
+        "The convergent themes of this analysis point to reliable capacities — the qualities multiple systems agree on are the ones to build strategy around rather than treat as accidents.",
+        "Repeated symbolic themes can be useful reflection prompts, but they are not evidence of reliable capacities until confirmed by behavior, history, or validated assessment.",
+    )
+    text = text.replace(
+        "It carries the confidence of its assessment method and is the only empirically-grounded section of this report.",
+        "Its meaning depends on the assessment method and the person's self-report; it is not independently verified by this engine.",
+    )
+    text = text.replace(
+        "It carries the confidence of its assessment method and is a self-reported section whose validity depends on the assessment method.",
+        "Its meaning depends on the assessment method and the person's self-report; it is not independently verified by this engine.",
+    )
+    text = text.replace(
+        "this is the invisible variable that decides how the rest of the profile behaves under relational stress",
+        "this is one self-reported context to reflect on when considering relational stress",
+    )
+    text = text.replace(
+        "when name-sound, presented surface, and actual motivation align, others experience congruence, and congruence is trust",
+        "when name-sound, presented surface, and lived behavior align, people may experience the interaction as more coherent; trust still depends on observed conduct",
+    )
 
     if not human_design_available:
         # Human Design failed validation and must not survive in legacy report copy.

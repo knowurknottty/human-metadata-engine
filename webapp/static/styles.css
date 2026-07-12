@@ -39,6 +39,7 @@ button:focus-visible, input:focus-visible, select:focus-visible { outline:2px so
 }
 
 .lbl { display:block;font-size:.72rem;letter-spacing:.055em;text-transform:uppercase;color:#9ca3b5;margin-bottom:.38rem; }
+.field-hint { margin:.42rem .1rem 0; color:#718096; font-size:.66rem; line-height:1.45; }
 .inp {
   width:100%; border-radius:.78rem; background:rgba(255,255,255,.055);
   border:1px solid rgba(255,255,255,.11); padding:.68rem .85rem; color:#eef2ff;

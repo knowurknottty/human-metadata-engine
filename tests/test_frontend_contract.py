@@ -29,6 +29,17 @@ class BirthDateFieldTests(unittest.TestCase):
         self.assertIn("STATE.requestPayload", script)
         self.assertIn("payload.mode = nextMode", script)
 
+    def test_self_report_dropdowns_explain_values_and_discovery(self):
+        html = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
+
+        for field in ("mbti", "enne", "wing", "attach"):
+            self.assertIn(f'aria-describedby="p-{field}-help"', html)
+            self.assertIn(f'id="p-{field}-help"', html)
+        self.assertIn("validated MBTI", html)
+        self.assertIn("Enneagram assessment", html)
+        self.assertIn("assessment reports a wing", html)
+        self.assertIn("qualified clinician", html)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
