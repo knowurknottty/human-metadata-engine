@@ -7,3 +7,4 @@ output/famous_people.sqlite.rollback-*
 output/*.rollback-*
 __pycache__/
 *.py[cod]
+site/

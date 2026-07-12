@@ -9,6 +9,7 @@ Usage:
     search = IdentitySearch.from_signatures("output/unified_signatures.json")
     results = search.find_similar("Captain", top_n=5)
 """
+from __future__ import annotations
 
 import json
 import os

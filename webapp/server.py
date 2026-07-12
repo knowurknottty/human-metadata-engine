@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Identity Resonance web server: API, validation, and static assets."""
+from __future__ import annotations
 
 import json
 import math
