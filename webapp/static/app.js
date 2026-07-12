@@ -657,6 +657,22 @@ const PROCESSING_STEPS = [
   "25 provenance-aware symbolic extensions…", "Composite resonance & fingerprint…", "Writing your report…",
 ];
 
+function normalizeBirthDateInput(value) {
+  const digits = String(value || "").replace(/\D/g, "").slice(0, 8);
+  if (digits.length <= 4) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+}
+
+function parseBirthDateInput(value) {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || "").trim());
+  if (!match) return null;
+  const year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
+  const check = new Date(Date.UTC(year, month - 1, day));
+  if (check.getUTCFullYear() !== year || check.getUTCMonth() !== month - 1 || check.getUTCDate() !== day) return null;
+  return {year, month, day};
+}
+
 const app = {
   scrollToForm() { $("form-section").scrollIntoView({behavior: "smooth"}); $("name").focus({preventScroll: true}); },
 
@@ -689,12 +705,18 @@ const app = {
     STATE.mode = mode;
 
     if ($("birth-enabled").checked && $("b-date").value) {
-      const [y, m, day] = $("b-date").value.split("-").map(Number);
+      const dateParts = parseBirthDateInput($("b-date").value);
+      if (!dateParts) {
+        errEl.textContent = "Enter a real birth date in YYYY-MM-DD format.";
+        errEl.classList.remove("hidden");
+        $("b-date").focus();
+        return;
+      }
       const suppliedTime = $("b-time").value;
       const t = suppliedTime || "12:00";
       const [hh, mm] = t.split(":").map(Number);
       payload.birth = {
-        year: y, month: m, day: day, hour: hh, minute: mm,
+        year: dateParts.year, month: dateParts.month, day: dateParts.day, hour: hh, minute: mm,
         timezone_offset: parseFloat($("b-tz").value),
         location: $("b-loc").value,
         lat: parseFloat($("b-lat").value),
@@ -886,6 +908,9 @@ function init() {
   $("p-mbti").innerHTML += MBTI_TYPES.map(t => `<option>${t}</option>`).join("");
   $("p-enne").innerHTML += Array.from({length: 9}, (_, i) => `<option>${i + 1}</option>`).join("");
   $("p-wing").innerHTML += Array.from({length: 9}, (_, i) => `<option>${i + 1}</option>`).join("");
+  $("b-date").addEventListener("input", (event) => {
+    event.target.value = normalizeBirthDateInput(event.target.value);
+  });
   app.toggleSection("birth");
   app.toggleSection("psych");
 
