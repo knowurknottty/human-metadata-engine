@@ -15,6 +15,7 @@ class BirthDateFieldTests(unittest.TestCase):
         self.assertIn('type="text" id="b-date"', html)
         self.assertIn('placeholder="YYYY-MM-DD"', html)
         self.assertNotIn('type="date" id="b-date"', html)
+        self.assertIn('/app.js?v=date-input-1', html)
         self.assertIn("function normalizeBirthDateInput", script)
         self.assertIn("function parseBirthDateInput", script)
         self.assertIn('Enter a real birth date in YYYY-MM-DD format.', script)
