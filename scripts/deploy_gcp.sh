@@ -2,8 +2,10 @@
 # Reproducible canary deployment for the GCP production VM.
 #
 # Required local prerequisites: authenticated gcloud, Docker on the VM, and a
-# clean committed revision. The app binds to the VM loopback interface; public
-# HTTPS should be supplied by the Cloudflare Tunnel runbook.
+# clean committed revision. The app binds to the VM loopback interface by
+# default; set GCP_PUBLIC_BIND=1 only when direct public HTTP access is
+# intentionally required. Public HTTPS should normally be supplied by the
+# Cloudflare Tunnel runbook.
 
 set -euo pipefail
 
@@ -20,6 +22,12 @@ IMAGE="human-metadata-engine:${SHORT_REVISION}"
 CANARY_NAME="human-metadata-engine-canary"
 PRODUCTION_NAME="human-metadata-engine"
 ROLLBACK_NAME="human-metadata-engine-rollback-${SHORT_REVISION}"
+PUBLIC_BIND="${GCP_PUBLIC_BIND:-0}"
+if [[ "$PUBLIC_BIND" == "1" ]]; then
+  PRODUCTION_BIND_HOST="0.0.0.0"
+else
+  PRODUCTION_BIND_HOST="127.0.0.1"
+fi
 
 ssh_vm() {
   gcloud compute ssh "$INSTANCE" --project="$PROJECT" --zone="$ZONE" --command="$1"
@@ -49,7 +57,7 @@ ssh_vm "set -euo pipefail
 cd '$REMOTE_DIR'
 docker stop '$PRODUCTION_NAME' >/dev/null
 docker rename '$PRODUCTION_NAME' '$ROLLBACK_NAME'
-if ! docker run -d --name '$PRODUCTION_NAME' --restart unless-stopped -e HME_BIND_HOST=0.0.0.0 -p 127.0.0.1:8084:8080 '$IMAGE' >/dev/null; then
+if ! docker run -d --name '$PRODUCTION_NAME' --restart unless-stopped -e HME_BIND_HOST=0.0.0.0 -p '$PRODUCTION_BIND_HOST':8084:8080 '$IMAGE' >/dev/null; then
   docker rename '$ROLLBACK_NAME' '$PRODUCTION_NAME'
   docker start '$PRODUCTION_NAME' >/dev/null
   exit 1

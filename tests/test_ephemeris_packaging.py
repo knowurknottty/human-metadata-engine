@@ -30,6 +30,15 @@ class EphemerisPackagingTests(unittest.TestCase):
         self.assertIn("tools/run_tests.py", deploy)
         self.assertIn("tools/run_tests.py", workflow)
 
+    def test_gcp_deploy_preserves_explicit_public_bind_choice(self):
+        with open(os.path.join(ROOT, "scripts", "deploy_gcp.sh"), encoding="utf-8") as handle:
+            deploy_gcp = handle.read()
+
+        self.assertIn('PUBLIC_BIND="${GCP_PUBLIC_BIND:-0}"', deploy_gcp)
+        self.assertIn('PRODUCTION_BIND_HOST="0.0.0.0"', deploy_gcp)
+        self.assertIn('PRODUCTION_BIND_HOST="127.0.0.1"', deploy_gcp)
+        self.assertIn('GCP_PUBLIC_BIND=1', deploy_gcp)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
