@@ -275,7 +275,8 @@ def _compute_signature(identity, *, mode: str = "data"):
             psychology=identity.get("psychology"),
         )
         signature["snapshot"]["mode"] = "magic"
-    signature["dimensions"] = count_signature_dimensions(signature)
+    signature["computed_dimensions"] = count_signature_dimensions(signature)
+    signature["dimensions"] = count_signature_dimensions(signature, include_unavailable=True)
     signature["analysis_mode"] = mode
     return signature
 

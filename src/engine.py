@@ -180,16 +180,20 @@ def available_encoder_names(signature: dict) -> list[str]:
     ]
 
 
-def count_signature_dimensions(signature: dict) -> int:
+def count_signature_dimensions(signature: dict, *, include_unavailable: bool = False) -> int:
     """Count dimensions from the final signature shape.
 
     This is deliberately computed after public overrides (for example the
     chance-corrected resonance object and an unavailable Human Design record)
-    so the displayed count cannot describe an intermediate result.
+    so the displayed count cannot describe an intermediate result. By default
+    unavailable layers are excluded; the public response can opt into the
+    serialized-surface count so its displayed total matches the returned keys.
     """
     total = 0
     for name, encoder in signature.get("encoders", {}).items():
-        if not _encoder_is_available(encoder):
+        if not isinstance(encoder, dict) or encoder.get("error"):
+            continue
+        if not include_unavailable and not _encoder_is_available(encoder):
             continue
         if name == "astrology":
             # Astrology historically exposes 20 contract dimensions even though

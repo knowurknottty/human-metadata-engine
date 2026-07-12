@@ -40,6 +40,7 @@ def _data_report(sig: dict, psychology: dict | None = None, comparisons: list[di
         f"- Analysis mode: `data`",
         f"- Encoder outputs available: `{len(available_encoder_names(sig))}`",
         f"- Signature dimensions: `{sig.get('dimensions', 0)}`",
+        f"- Computed dimensions (excluding unavailable layers): `{sig.get('computed_dimensions', sig.get('dimensions', 0))}`",
         "- Birth locations and coordinates are intentionally excluded from this exported report.",
         "",
         "## 2. Computed measurements",

@@ -91,7 +91,9 @@ class ConvergenceTests(unittest.TestCase):
         available = signature["snapshot"]["available_layers"]
         self.assertEqual(len(available), 32)
         self.assertEqual(signature["snapshot"]["highlights"][0], "32 encoder outputs available")
-        self.assertEqual(signature["dimensions"], count_signature_dimensions(signature))
+        self.assertEqual(signature["dimensions"], 176)
+        self.assertEqual(signature["computed_dimensions"], count_signature_dimensions(signature))
+        self.assertEqual(signature["dimensions"] - signature["computed_dimensions"], 8)
         self.assertNotEqual(len(signature["encoders"]), len(available))
 
     def test_public_pipeline_does_not_compute_discarded_legacy_resonance(self):
