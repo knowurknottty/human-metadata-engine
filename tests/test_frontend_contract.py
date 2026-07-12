@@ -20,6 +20,15 @@ class BirthDateFieldTests(unittest.TestCase):
         self.assertIn("function parseBirthDateInput", script)
         self.assertIn('Enter a real birth date in YYYY-MM-DD format.', script)
 
+    def test_report_can_switch_modes_after_generation(self):
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn('data-report-mode="data"', script)
+        self.assertIn('data-report-mode="magic"', script)
+        self.assertIn("async switchMode(nextMode)", script)
+        self.assertIn("STATE.requestPayload", script)
+        self.assertIn("payload.mode = nextMode", script)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

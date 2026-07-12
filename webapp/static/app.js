@@ -45,7 +45,7 @@ const BONUS_CODE = "evan";
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-let STATE = { result: null, paid: false, psychology: null, customSigil: null, mode: "data", lastFocus: null };
+let STATE = { result: null, paid: false, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false, lastFocus: null };
 
 // ------------------------------------------------------------------
 // Fingerprint glyph renderer (from the deterministic server spec)
@@ -603,7 +603,17 @@ function renderDashboard(result) {
         <h3 class="text-lg font-bold text-slate-50">${result.analysis_mode === "data" ? "The Data Report" : "The Magic Report"}</h3>
         <p class="text-xs text-slate-400 mt-0.5">${result.report.word_count.toLocaleString()} words · ${result.report.sections.length} sections · ${esc(result.analysis_mode)} mode · deterministic</p>
       </div>
-      <div class="flex gap-2" id="report-actions"></div>
+      <div class="flex flex-col items-stretch sm:items-end gap-2">
+        <div class="flex items-center gap-1.5" role="group" aria-label="Switch report mode">
+          <span class="text-[10px] uppercase tracking-widest text-slate-500 mr-1">View</span>
+          <button type="button" data-report-mode="data" aria-pressed="${result.analysis_mode === "data" ? "true" : "false"}"
+            onclick="app.switchMode('data')" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "data" ? "bg-sky-400/15 text-sky-200 border-sky-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Data</button>
+          <button type="button" data-report-mode="magic" aria-pressed="${result.analysis_mode === "magic" ? "true" : "false"}"
+            onclick="app.switchMode('magic')" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "magic" ? "bg-fuchsia-400/15 text-fuchsia-200 border-fuchsia-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Magic</button>
+          <span id="report-mode-status" class="sr-only" aria-live="polite"></span>
+        </div>
+        <div class="flex gap-2" id="report-actions"></div>
+      </div>
     </div>
     <div class="relative mt-5">
       <div id="report-print-area"><div class="report-body" id="report-body"></div></div>
@@ -689,7 +699,7 @@ const app = {
   },
 
   reset() {
-    STATE = {result: null, paid: false, psychology: null, customSigil: null, mode: "data", lastFocus: null};
+    STATE = {result: null, paid: false, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false, lastFocus: null};
     $("dashboard").classList.add("hidden");
     $("landing").classList.remove("hidden");
     $("form-section").classList.remove("hidden");
@@ -740,6 +750,10 @@ const app = {
       STATE.psychology = null;
     }
 
+    // Keep the normalized request in memory only so the user can switch
+    // report modes after generation without re-entering private birth data.
+    STATE.requestPayload = JSON.parse(JSON.stringify(payload));
+
     // Processing animation
     $("landing").classList.add("hidden");
     $("form-section").classList.add("hidden");
@@ -767,6 +781,41 @@ const app = {
     } finally {
       clearInterval(stepTimer);
       $("processing").classList.add("hidden");
+    }
+  },
+
+  async switchMode(nextMode) {
+    if (!STATE.result || !STATE.requestPayload || !["data", "magic"].includes(nextMode)) return;
+    if (STATE.switchingMode || STATE.result.analysis_mode === nextMode) return;
+    const payload = JSON.parse(JSON.stringify(STATE.requestPayload));
+    payload.mode = nextMode;
+    const controls = Array.from(document.querySelectorAll("[data-report-mode]"));
+    const status = $("report-mode-status");
+    STATE.switchingMode = true;
+    controls.forEach(button => { button.disabled = true; button.setAttribute("aria-busy", "true"); });
+    if (status) status.textContent = `Loading ${nextMode} report`;
+    try {
+      const resp = await fetch("/api/analyze", {
+        method: "POST", headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload),
+      });
+      const data = await resp.json();
+      if (!resp.ok) throw new Error(data.error || "Report mode switch failed");
+      const paid = STATE.paid;
+      STATE.result = data;
+      STATE.mode = nextMode;
+      STATE.paid = paid;
+      renderDashboard(data);
+      const reportCard = $("report-card");
+      if (reportCard) reportCard.scrollIntoView({behavior: "smooth", block: "start"});
+    } catch (err) {
+      if (status) status.textContent = err.message;
+    } finally {
+      STATE.switchingMode = false;
+      Array.from(document.querySelectorAll("[data-report-mode]")).forEach(button => {
+        button.disabled = false;
+        button.removeAttribute("aria-busy");
+      });
     }
   },
 
