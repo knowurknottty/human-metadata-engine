@@ -12,6 +12,8 @@ deployment, payment boundary, or privacy posture is production-ready.
 | Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 tools/validate_contracts.py` | Verified locally |
 | Structured Know Thyself profile | Adjacent-wing API validation, compatibility tests, status round-trip tests | Verified locally |
 | Browser flow | Local Data → Magic profile rendering, dynamic wings, secondary-pattern warning, console health | Verified locally |
+| Plain-English result layer | First-view synthesis, evidence legend, and neutral pattern-index language | Verified locally |
+| Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
 | Commerce | Current checkout is explicitly a simulated demo and client-side unlock | Not production-ready |
 | Persistence | Public web process does not intentionally retain profile inputs; infrastructure logs require separate policy | Process-local only |
@@ -26,8 +28,8 @@ Release only when every item below is true:
 - [ ] Security headers are present at the actual ingress, including HSTS, CSP, Referrer-Policy, Permissions-Policy, and X-Content-Type-Options.
 - [ ] The UI says that inputs are processed for the report, are not intentionally retained by the web process, and may still appear in infrastructure logs.
 - [ ] The page clearly labels checkout as a demo and does not imply that a test card creates a real purchase.
-- [ ] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores.
-- [ ] The first result view contains a plain-English synthesis, an evidence legend, and an explicit “what this does not mean” statement.
+- [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
+- [x] The first result view contains a plain-English synthesis, an evidence legend, and an explicit “what this does not mean” statement (verified in local browser flow and frontend contract test).
 - [ ] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings.
 - [ ] Mobile QA confirms readable explanatory text, expandable technical detail, and no critical meaning encoded only by color.
 

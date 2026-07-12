@@ -60,6 +60,17 @@ class BirthDateFieldTests(unittest.TestCase):
         self.assertIn('v.dataset.touched === "true"', script)
         self.assertIn('>Not answered</span>', script)
 
+    def test_release_first_view_explains_evidence_and_index(self):
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+        report = (ROOT / "src" / "report_safe.py").read_text(encoding="utf-8")
+
+        for phrase in ("Your result in plain English", "What this does not mean", "What each layer means",
+                       "Computed", "Birth data", "You reported", "Traditional lens", "Experimental index",
+                       "Pattern convergence index"):
+            self.assertIn(phrase, script)
+        self.assertIn("Pattern convergence index", report)
+        self.assertNotIn("Interpretive engine index: `", report)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

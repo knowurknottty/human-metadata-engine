@@ -50,7 +50,7 @@ def _data_report(sig: dict, psychology: dict | None = None, comparisons: list[di
         f"- Ordinal reduced value: `{encoders.get('ordinal', {}).get('ordinal_reduced', '—')}`",
         f"- Letter count: `{ling.get('letter_count', '—')}`",
         f"- Entropy ratio: `{ling.get('entropy_ratio', 0):.3f}`",
-        f"- Interpretive engine index: `{resonance.get('score', '—')}/100` (not accuracy or probability)",
+        f"- Pattern convergence index: `{resonance.get('score', '—')}/100` (configured output agreement; not accuracy or probability)",
         "",
         "## 3. Evidence coverage",
         "",

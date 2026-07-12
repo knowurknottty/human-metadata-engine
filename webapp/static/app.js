@@ -403,6 +403,48 @@ function provenanceLedger(extensions) {
   }).join("")}</div></section>`;
 }
 
+function evidenceLegend({astro, hd, psychology}) {
+  const sources = [
+    ["Computed", "Direct string structure and arithmetic calculated by the engine."],
+    ["Birth data", astro || hd ? "Astronomical or Human Design fields calculated from the supplied birth data." : "Appears only when birth date/time data is supplied."],
+    ["You reported", psychology ? "Optional personality information supplied by you; it is not independently verified." : "Appears only when optional personality information is supplied."],
+    ["Traditional lens", "Named symbolic conventions retained with their provenance and limits."],
+    ["Experimental index", "A configured composite for comparing outputs; not accuracy, diagnosis, worth, or compatibility."],
+  ];
+  return `<section class="evidence-legend" aria-labelledby="evidence-legend-title">
+    <div class="evidence-legend-heading"><div><p class="atlas-kicker">Read the evidence</p><h3 id="evidence-legend-title">What each layer means</h3></div><p>Labels stay attached to the result so technical detail does not look like proof.</p></div>
+    <div class="evidence-legend-grid">${sources.map(([label, description]) => `<div class="evidence-item"><span class="evidence-badge evidence-${label.toLowerCase().replace(/\s+/g, "-")}">${esc(label)}</span><p>${esc(description)}</p></div>`).join("")}</div>
+  </section>`;
+}
+
+function plainEnglishSynthesis(res, astro, hd, psychology) {
+  const components = Object.entries(res?.components || {})
+    .map(([key, value]) => ({key, value: Number(value)}))
+    .filter(item => Number.isFinite(item.value))
+    .sort((a, b) => b.value - a.value);
+  const componentLabels = {
+    numerological_convergence: "numeric agreement across configured ciphers",
+    linguistic_harmony: "language-pattern balance",
+    polarity_balance: "vowel/consonant balance",
+    symbolic_depth: "coverage across registered symbolic conventions",
+  };
+  const strongest = components.slice(0, 2).map(item => componentLabels[item.key] || compactLabel(item.key).toLowerCase());
+  const inputSources = ["the submitted name"];
+  if (astro) inputSources.push("birth data");
+  if (psychology) inputSources.push("optional self-report");
+  const strongestText = strongest.length ? strongest.join(" and ") : "the configured encoder outputs";
+  const birthNote = hd?.type ? " Human Design fields are shown only because a birth time was available for the versioned calculation." : "";
+  return `<section class="plain-english-panel" aria-labelledby="plain-english-title">
+    <div class="plain-english-heading"><div><p class="atlas-kicker">Start here</p><h3 id="plain-english-title">Your result in plain English</h3></div><span class="evidence-badge evidence-experimental-index">Interpretive summary</span></div>
+    <p class="plain-english-lede">This page describes what the configured systems did with ${esc(inputSources.join(", "))}. It does not decide who you are. In this run, the largest configured components were <strong>${esc(strongestText)}</strong>. That is a description of output agreement, not a claim that the result is true about your personality.${esc(birthNote)}</p>
+    <div class="plain-english-columns">
+      <div><h4>What came from this run</h4><ul><li><strong>Direct calculations:</strong> letter counts, totals, ratios, and the deterministic fingerprint.</li><li><strong>Optional context:</strong> ${astro ? "birth-data fields" : "no birth-data fields"}${psychology ? " and self-reported personality fields" : " and no self-reported personality fields"}.</li><li><strong>Symbolic lenses:</strong> named conventions shown with their provenance in the ledger below.</li></ul></div>
+      <div><h4>What this does not mean</h4><ul><li>It is not a diagnosis, psychological assessment, or prediction.</li><li>A higher index is not higher accuracy, ability, worth, or compatibility.</li><li>Agreement with a public reference is mathematical output proximity, not personal similarity.</li></ul></div>
+    </div>
+    <div class="plain-english-reflection"><span>Try this reflection</span><p>Which part matches something you can observe? Which part conflicts? Treat both answers as useful prompts, and test one observation in real life before treating a symbolic phrase as a conclusion.</p></div>
+  </section>`;
+}
+
 // ------------------------------------------------------------------
 // Markdown → HTML (small, safe subset for our own generated report)
 // ------------------------------------------------------------------
@@ -458,7 +500,7 @@ function renderDashboard(result) {
     extension && extension.system && extension.data && extension.provenance
   );
   const astro = e.astrology && !e.astrology.error ? e.astrology : null;
-  const hd = e.human_design && !e.human_design.error ? e.human_design : null;
+  const hd = e.human_design && !e.human_design.error && e.human_design.available !== false ? e.human_design : null;
   const kabbalah = extensionBySystem(e, "kabbalah_tree_of_life");
   const birthState = astro ? (astro.time_sensitive_fields_withheld ? "date-only birth data resolved" : "birth data resolved") : "name-derived systems";
   const definedCount = (hd?.centers || []).filter(center => center.defined).length;
@@ -476,7 +518,7 @@ function renderDashboard(result) {
         <h3>${esc(name)}</h3>
         <p class="atlas-profile-subtitle">${fp.symmetry}-fold deterministic fingerprint</p>
         <div class="atlas-fingerprint">${fingerprintSVG(fp, 220)}</div>
-        <div class="resonance-readout"><span>${dataMode ? "Interpretive engine index" : "Symbolic resonance"}</span><strong class="stat-num">${Number(res.score).toFixed(1)}</strong><small>/ 100 · not accuracy or probability</small></div>
+        <div class="resonance-readout"><span>Pattern convergence index</span><strong class="stat-num">${Number(res.score).toFixed(1)}</strong><small>/ 100 · configured output agreement, not accuracy</small></div>
         <div class="atlas-component-list">${Object.entries(res.components).map(([key, value]) => `<div><span>${esc(compactLabel(key))}</span><i><b style="width:${Math.max(3, Math.min(100, Number(value) * 100)).toFixed(1)}%"></b></i><em>${(Number(value) * 100).toFixed(0)}</em></div>`).join("")}</div>
         <div class="atlas-profile-foot"><span>${extensions.length} provenance-aware extensions</span><span>${astro ? (astro.time_sensitive_fields_withheld ? "Swiss Ephemeris date-only chart" : "Swiss Ephemeris chart") : "No chart requested"}</span></div>
       </aside>
@@ -499,6 +541,8 @@ function renderDashboard(result) {
     </div>
   </section>`;
 
+  html += plainEnglishSynthesis(res, astro, hd, STATE.psychology);
+  html += evidenceLegend({astro, hd, psychology: STATE.psychology});
   html += provenanceLedger(extensions);
   html += `<div class="analysis-section-heading"><div><p class="atlas-kicker">Complete analytical surface</p><h3>Core encoder detail</h3></div><p>${result.analysis_mode === "data" ? "Measurements and provenance first; interpretation is intentionally constrained." : "Symbolic reflection layer; read every claim as a creative lens, not a measurement."}</p></div>`;
 
