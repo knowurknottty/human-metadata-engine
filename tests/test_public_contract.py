@@ -67,6 +67,17 @@ class PublicContractTests(unittest.TestCase):
         self.assertTrue(any("Type 8 influence" in item for item in result["signature"]["snapshot"]["profile_summary"]))
         self.assertIn("Relational patterns", result["report"]["markdown"])
 
+    def test_attachment_compatibility_has_explicit_no_conflict_precedence(self):
+        legacy = validate_psychology({"attachment": "secure"})
+        canonical = validate_psychology({"relational_patterns": {"attachment_style": "secure"}})
+        self.assertEqual(legacy["relational_patterns"]["attachment_style"], "secure")
+        self.assertEqual(canonical["attachment"], "secure")
+        with self.assertRaisesRegex(PublicContractError, "disagree"):
+            validate_psychology({
+                "attachment": "secure",
+                "relational_patterns": {"attachment_style": "avoidant"},
+            })
+
     def test_public_birth_without_time_is_explicitly_unknown(self):
         result = analyze({
             "name": "Date Only",

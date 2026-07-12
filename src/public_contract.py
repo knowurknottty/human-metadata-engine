@@ -130,6 +130,13 @@ def _validate_assessment_status(raw: Any) -> dict[str, dict[str, Any]]:
 
 
 def validate_psychology(raw: Any) -> dict[str, Any] | None:
+    """Validate and canonicalize user-supplied self-knowledge fields.
+
+    ``relational_patterns.attachment_style`` is the canonical attachment path.
+    The legacy top-level ``attachment`` alias is retained in normalized output
+    for existing consumers. If both paths are supplied they must match exactly;
+    there is intentionally no silent precedence rule for conflicting values.
+    """
     if raw in (None, {}):
         return None
     if not isinstance(raw, dict):

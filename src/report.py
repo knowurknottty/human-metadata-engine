@@ -543,7 +543,7 @@ def _sec6_psychology(name, sig, psychology):
         secondary = psychology.get("secondary_enneagram_influence")
         if secondary:
             warning = " (same as core; adds little additional information)" if secondary == t else ""
-            parts.append(f"**Secondary pattern: Type {secondary} influence{status_suffix('secondary_enneagram_influence')}{warning}.** Sometimes called a fix in trifix or tritype systems, this is a recurring strategy, not a second core type.\n")
+            parts.append(f"**Secondary pattern: Type {secondary} influence{status_suffix('secondary_enneagram_influence')}{warning}.** Sometimes called a fix in trifix or tritype systems, this nonstandard terminology varies by school; it describes a recurring strategy, not a standardized second core type.\n")
         instinctual = psychology.get("instinctual_variant")
         if instinctual and instinctual != "unknown":
             parts.append(f"**Instinctual variant: {instinctual.replace('_', '/')}{status_suffix('instinctual_variant')}.** This describes an instinctive priority, not a diagnosis.\n")

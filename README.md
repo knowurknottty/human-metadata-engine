@@ -103,6 +103,11 @@ across schools. Assessment metadata uses `validated`, `structured`,
 value into a validated result. Legacy attachment values continue to load without
 destructive migration because the public API is process-local and does not persist
 profile records; compatibility is handled at validation and serialization time.
+The canonical attachment path is `relational_patterns.attachment_style`. A
+legacy-only payload is copied into that path; a canonical-only payload receives
+the deprecated top-level alias for older consumers; if both are supplied they
+must match exactly, otherwise the request is rejected rather than resolved by
+silent precedence.
 
 These frameworks describe different dimensions of self-understanding. They are
 reflective tools, not clinical diagnoses.
