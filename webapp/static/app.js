@@ -819,7 +819,8 @@ const app = {
     el.setAttribute("aria-disabled", String(!on));
     el.querySelectorAll("input, select, textarea").forEach(control => { control.disabled = !on; });
     if (which === "birth") {
-      ["b-date", "b-tz", "b-lat", "b-lon"].forEach(id => { $(id).required = on; });
+      $("b-date").required = on;
+      ["b-tz", "b-lat", "b-lon"].forEach(id => { $(id).required = false; });
     }
   },
 
@@ -850,14 +851,25 @@ const app = {
       const suppliedTime = $("b-time").value;
       const t = suppliedTime || "12:00";
       const [hh, mm] = t.split(":").map(Number);
+      const location = $("b-loc").value.trim();
+      const manualChartInputs = [$("b-tz").value, $("b-lat").value, $("b-lon").value];
+      const hasManualChartInputs = manualChartInputs.every(value => value !== "");
+      if (!location && !hasManualChartInputs) {
+        errEl.textContent = "Enter a birth location so the chart timezone and coordinates can be resolved.";
+        errEl.classList.remove("hidden");
+        $("b-loc").focus();
+        return;
+      }
       payload.birth = {
         year: dateParts.year, month: dateParts.month, day: dateParts.day, hour: hh, minute: mm,
-        timezone_offset: parseFloat($("b-tz").value),
-        location: $("b-loc").value,
-        lat: parseFloat($("b-lat").value),
-        lon: parseFloat($("b-lon").value),
         time_accuracy: suppliedTime ? "exact" : "unknown",
       };
+      if (location) payload.birth.location = location;
+      if (hasManualChartInputs) {
+        payload.birth.timezone_offset = parseFloat($("b-tz").value);
+        payload.birth.lat = parseFloat($("b-lat").value);
+        payload.birth.lon = parseFloat($("b-lon").value);
+      }
     }
     if ($("psych-enabled").checked) {
       const psych = {};

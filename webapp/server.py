@@ -50,6 +50,7 @@ from evidence_v3 import evidence_dashboard  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
 from snapshot import personality_snapshot  # noqa: E402
 from true_human_design.public_adapter import calculate_public_human_design  # noqa: E402
+from location_resolution import LocationResolutionError, resolve_birth_location  # noqa: E402
 from public_contract import (  # noqa: E402
     PublicContractError,
     normalize_public_name,
@@ -174,6 +175,36 @@ def _validated_birth(raw):
     if isinstance(raw, dict) and "time_accuracy" not in raw:
         raw = {**raw, "time_accuracy": "unknown"}
     return validate_birth(raw, living_person=True, require_coordinates=True)
+
+
+def _resolve_birth_location(raw):
+    """Fill missing chart coordinates and timezone from a supplied place name."""
+    if not isinstance(raw, dict) or not raw.get("location"):
+        return raw
+    missing = [field for field in ("timezone_offset", "lat", "lon") if raw.get(field) in (None, "")]
+    if not missing:
+        return raw
+    try:
+        resolved = resolve_birth_location(
+            raw["location"],
+            year=int(raw["year"]),
+            month=int(raw["month"]),
+            day=int(raw["day"]),
+            hour=int(raw.get("hour", 12)),
+            minute=int(raw.get("minute", 0)),
+        )
+    except (LocationResolutionError, KeyError, TypeError, ValueError) as exc:
+        raise BirthValidationError(str(exc)) from exc
+    enriched = dict(raw)
+    if enriched.get("timezone_offset") in (None, ""):
+        enriched["timezone_offset"] = resolved["timezone_offset"]
+    if enriched.get("lat") in (None, ""):
+        enriched["lat"] = resolved["latitude"]
+    if enriched.get("lon") in (None, ""):
+        enriched["lon"] = resolved["longitude"]
+    if enriched.get("timezone_name") in (None, ""):
+        enriched["timezone_name"] = resolved["timezone_name"]
+    return enriched
 
 
 def _allow_analysis(client_ip: str, now: float | None = None) -> bool:
@@ -435,6 +466,7 @@ def analyze(payload):
     raw_birth = payload.get("birth")
     if isinstance(raw_birth, dict) and "time_accuracy" not in raw_birth:
         raw_birth = {**raw_birth, "time_accuracy": "unknown"}
+    raw_birth = _resolve_birth_location(raw_birth)
     birth = validate_birth(
         raw_birth,
         living_person=subject_type == "self",

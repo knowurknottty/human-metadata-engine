@@ -20,6 +20,15 @@ class BirthDateFieldTests(unittest.TestCase):
         self.assertIn("function parseBirthDateInput", script)
         self.assertIn('Enter a real birth date in YYYY-MM-DD format.', script)
 
+    def test_birth_location_resolves_chart_inputs_for_regular_users(self):
+        html = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn("Coordinates and the historical UTC offset are resolved automatically", html)
+        self.assertIn("The place is sent to a geocoding service", html)
+        self.assertIn('Enter a birth location so the chart timezone and coordinates can be resolved.', script)
+        self.assertIn('const hasManualChartInputs', script)
+
     def test_report_can_switch_modes_after_generation(self):
         script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
 

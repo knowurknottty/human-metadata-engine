@@ -109,6 +109,11 @@ def validate_birth(
         # claim that the subject was born at 12:00.
         "time_accuracy": time_accuracy,
     }
+    timezone_name = raw.get("timezone_name")
+    if timezone_name not in (None, ""):
+        if not isinstance(timezone_name, str) or len(timezone_name) > 120:
+            raise BirthValidationError("timezone_name must be a short IANA timezone string.")
+        birth["timezone_name"] = timezone_name
 
     lat = raw.get("lat")
     lon = raw.get("lon")

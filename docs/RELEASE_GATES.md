@@ -12,6 +12,7 @@ deployment, payment boundary, or privacy posture is production-ready.
 | Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 tools/validate_contracts.py` | Verified locally |
 | Structured Know Thyself profile | Adjacent-wing API validation, compatibility tests, status round-trip tests | Verified locally |
 | Browser flow | Local Data → Magic profile rendering, dynamic wings, secondary-pattern warning, console health | Verified locally |
+| Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |
 | Plain-English result layer | First-view synthesis, evidence legend, and neutral pattern-index language | Verified locally |
 | Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
@@ -27,6 +28,8 @@ Release only when every item below is true:
 - [ ] The process is supervised with restart policy, bounded timeouts, and structured error IDs.
 - [ ] Security headers are present at the actual ingress, including HSTS, CSP, Referrer-Policy, Permissions-Policy, and X-Content-Type-Options.
 - [ ] The UI says that inputs are processed for the report, are not intentionally retained by the web process, and may still appear in infrastructure logs.
+- [x] A regular user can provide a birth place without calculating latitude, longitude, or UTC offset; the server resolves those values for the requested date (verified by API and browser tests).
+- [ ] The privacy notice names the geocoding provider and explains that the supplied place is sent to that external service; availability and rate limits are monitored.
 - [ ] The page clearly labels checkout as a demo and does not imply that a test card creates a real purchase.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
 - [x] The first result view contains a plain-English synthesis, an evidence legend, and an explicit “what this does not mean” statement (verified in local browser flow and frontend contract test).
