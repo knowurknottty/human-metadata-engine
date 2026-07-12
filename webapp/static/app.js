@@ -820,7 +820,10 @@ const app = {
       const assessmentStatus = {};
       const bf = {};
       let any = false;
-      B5.forEach(([k]) => { const v = $(`bf-${k}`); if (v) { bf[k] = parseInt(v.value, 10) / 100; any = true; } });
+      B5.forEach(([k]) => {
+        const v = $(`bf-${k}`);
+        if (v && v.dataset.touched === "true") { bf[k] = parseInt(v.value, 10) / 100; any = true; }
+      });
       if (any) psych.big_five = bf;
       if ($("p-mbti").value) psych.mbti = $("p-mbti").value;
       if ($("p-enne").value) psych.enneagram = {type: parseInt($("p-enne").value, 10),
@@ -1046,9 +1049,9 @@ function init() {
 
   // Big Five sliders
   $("bigfive-sliders").innerHTML = B5.map(([k, label]) => `
-    <div><div class="flex justify-between text-xs text-slate-400 mb-1"><label for="bf-${k}">${label}</label><span id="bf-${k}-val" class="stat-num">50</span></div>
-    <input type="range" id="bf-${k}" aria-label="${label}" min="0" max="100" value="50" class="w-full accent-rose-400"
-      oninput="document.getElementById('bf-${k}-val').textContent=this.value"></div>`).join("");
+    <div><div class="flex justify-between text-xs text-slate-400 mb-1"><label for="bf-${k}">${label}</label><span id="bf-${k}-val" class="stat-num">Not answered</span></div>
+    <input type="range" id="bf-${k}" aria-label="${label}" min="0" max="100" value="50" data-touched="false" class="w-full accent-rose-400"
+      oninput="this.dataset.touched='true'; document.getElementById('bf-${k}-val').textContent=this.value"></div>`).join("");
 
   // MBTI / Enneagram selects
   $("p-mbti").innerHTML += MBTI_TYPES.map(t => `<option>${t}</option>`).join("");

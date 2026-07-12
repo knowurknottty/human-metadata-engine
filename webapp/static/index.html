@@ -108,7 +108,7 @@
       <!-- Psychology -->
       <fieldset class="border border-white/10 rounded-xl p-5">
         <legend class="px-2 text-sm font-medium text-rose-300 flex items-center gap-2">
-          <input type="checkbox" id="psych-enabled" class="accent-rose-400" onchange="app.toggleSection('psych')"> Psychology assessments
+          <input type="checkbox" id="psych-enabled" class="accent-rose-400" onchange="app.toggleSection('psych')"> Optional personality information
           <span class="text-slate-500 font-normal">(self-reported, optional)</span>
         </legend>
         <div id="psych-fields" class="space-y-5 opacity-40 pointer-events-none transition" aria-disabled="true">
@@ -200,7 +200,7 @@
           class="button-primary w-full sm:w-auto px-8 py-3.5 rounded-xl text-slate-950 font-bold text-lg hover:scale-[1.02] transition">
           Run the engine, free preview
         </button>
-        <p class="text-xs text-slate-500">This app does not persist analysis inputs. Do not enter sensitive information.</p>
+        <p class="text-xs text-slate-500">Submitted data is processed to generate this report and is not intentionally retained by the web process. Network and infrastructure logs may still exist; do not enter sensitive information.</p>
       </div>
       <p id="form-error" class="hidden text-rose-400 text-sm" role="alert" aria-live="assertive"></p>
     </form>
@@ -271,6 +271,6 @@
   <p class="mt-1">Deterministic computation: identical normalized inputs and convention versions produce identical results. &copy; Inversion Labs.</p>
 </footer>
 
-<script src="/app.js?v=date-input-1-report-switch-1-know-thyself-2"></script>
+<script src="/app.js?v=date-input-1-report-switch-1-know-thyself-3"></script>
 </body>
 </html>

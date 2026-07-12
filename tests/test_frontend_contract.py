@@ -53,6 +53,13 @@ class BirthDateFieldTests(unittest.TestCase):
         self.assertIn("updateWingOptions", script)
         self.assertIn("Same as the core type", script)
 
+    def test_untouched_big_five_sliders_are_not_submitted_as_scores(self):
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn('data-touched="false"', script)
+        self.assertIn('v.dataset.touched === "true"', script)
+        self.assertIn('>Not answered</span>', script)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
