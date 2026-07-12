@@ -14,7 +14,7 @@ from engine import available_encoder_names
 
 
 EVIDENCE_NOTICE = """> **How to read this report**
-> Name arithmetic and linguistic counts are computed. Psychology is self-reported. Numerology, astrology, and cross-tradition correspondences are symbolic reflection systems rather than validated personality measurements. The resonance value is an interpretive engine index, not a percentage of accuracy. Human Design is shown only as a provisional symbolic calculation from the versioned core; uncertain birth times remain withheld.
+> Name arithmetic and linguistic counts are computed. Psychology is self-reported. Numerology, astrology, and cross-tradition correspondences are symbolic reflection systems rather than validated personality measurements. The pattern convergence index is configured output agreement, not a percentage of accuracy. Human Design is shown only when its versioned calculation is validated; otherwise it is withheld. Uncertain birth times remain withheld.
 
 """
 
