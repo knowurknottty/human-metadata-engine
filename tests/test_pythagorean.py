@@ -166,7 +166,7 @@ def test_normalization_contract():
     print("✓ test_normalization_contract passed")
 
 
-def test_all_tests():
+def run_all_tests():
     tests = [
         test_letter_mapping,
         test_capt,
@@ -208,5 +208,5 @@ def test_all_tests():
 
 
 if __name__ == "__main__":
-    success = test_all_tests()
+    success = run_all_tests()
     sys.exit(0 if success else 1)

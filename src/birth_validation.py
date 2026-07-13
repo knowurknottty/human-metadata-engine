@@ -36,6 +36,57 @@ def _required_int(raw: dict[str, Any], field: str) -> int:
     return parsed
 
 
+def validate_birth_datetime_fields(
+    raw: dict[str, Any],
+    *,
+    living_person: bool = True,
+    current_year: int | None = None,
+) -> dict[str, Any]:
+    """Validate calendar and local-clock fields before any location lookup."""
+    if not isinstance(raw, dict):
+        raise BirthValidationError("Birth data must be a JSON object.")
+    year = _required_int(raw, "year")
+    month = _required_int(raw, "month")
+    day = _required_int(raw, "day")
+    now_year = current_year or datetime.now(timezone.utc).year
+    minimum_year = 1900 if living_person else 1
+    if year < minimum_year:
+        if living_person:
+            raise BirthValidationError(
+                f"Birth year must be four digits between {minimum_year} and {now_year}; received {year}."
+            )
+        raise BirthValidationError("Birth year must be between 1 and 9999.")
+    if year > now_year:
+        raise BirthValidationError(f"Birth year cannot be later than {now_year}.")
+    try:
+        canonical_date = date(year, month, day)
+    except ValueError as exc:
+        raise BirthValidationError(f"Invalid birth date; birth date is not a real calendar date: {exc}.") from exc
+
+    time_accuracy = raw.get("time_accuracy", "provided")
+    if time_accuracy not in TIME_ACCURACIES:
+        raise BirthValidationError(
+            "time_accuracy must be one of: unknown, hour_only, approximate, exact."
+        )
+    try:
+        hour = int(raw.get("hour", 12))
+        minute = int(raw.get("minute", 0))
+    except (TypeError, ValueError) as exc:
+        raise BirthValidationError("Birth time must be numeric.") from exc
+    if not 0 <= hour <= 23:
+        raise BirthValidationError("Birth hour must be between 0 and 23.")
+    if not 0 <= minute <= 59:
+        raise BirthValidationError("Birth minute must be between 0 and 59.")
+    return {
+        "year": canonical_date.year,
+        "month": canonical_date.month,
+        "day": canonical_date.day,
+        "hour": hour,
+        "minute": minute,
+        "time_accuracy": time_accuracy,
+    }
+
+
 def validate_birth(
     raw: dict[str, Any] | None,
     *,
@@ -56,64 +107,45 @@ def validate_birth(
     if require_coordinates and raw.get("timezone_offset") in (None, ""):
         raise BirthValidationError("Birth data requires timezone_offset.")
 
-    year = _required_int(raw, "year")
-    month = _required_int(raw, "month")
-    day = _required_int(raw, "day")
-    now_year = current_year or datetime.now(timezone.utc).year
-
-    minimum_year = 1900 if living_person else 1
-    if year < minimum_year:
-        if living_person:
-            raise BirthValidationError(
-                f"Birth year must be four digits between {minimum_year} and {now_year}; received {year}."
-            )
-        raise BirthValidationError("Birth year must be between 1 and 9999.")
-    if year > now_year:
-        raise BirthValidationError(f"Birth year cannot be later than {now_year}.")
-
+    clock = validate_birth_datetime_fields(
+        raw,
+        living_person=living_person,
+        current_year=current_year,
+    )
     try:
-        canonical_date = date(year, month, day)
-    except ValueError as exc:
-        raise BirthValidationError(f"Invalid birth date; birth date is not a real calendar date: {exc}.") from exc
-
-    # Internal callers historically treated an explicitly supplied hour and
-    # minute as provided. The web boundary injects ``unknown`` when the field
-    # is omitted, so public requests never inherit this compatibility default.
-    time_accuracy = raw.get("time_accuracy", "provided")
-    if time_accuracy not in TIME_ACCURACIES:
-        raise BirthValidationError(
-            "time_accuracy must be one of: unknown, hour_only, approximate, exact."
-        )
-    try:
-        hour = int(raw.get("hour", 12))
-        minute = int(raw.get("minute", 0))
         timezone_offset = float(raw.get("timezone_offset", 0))
     except (TypeError, ValueError) as exc:
-        raise BirthValidationError("Birth time and UTC offset must be numeric.") from exc
-    if not 0 <= hour <= 23:
-        raise BirthValidationError("Birth hour must be between 0 and 23.")
-    if not 0 <= minute <= 59:
-        raise BirthValidationError("Birth minute must be between 0 and 59.")
+        raise BirthValidationError("UTC offset must be numeric.") from exc
     if not math.isfinite(timezone_offset) or not -14 <= timezone_offset <= 14:
         raise BirthValidationError("UTC offset must be between -14 and +14.")
 
+    location = raw.get("location", "")
+    if not isinstance(location, str):
+        raise BirthValidationError("Birth location must be a string.")
+    location = " ".join(location.split()).strip()
+    if len(location) > 160:
+        raise BirthValidationError("Birth location must be at most 160 characters.")
+
     birth: dict[str, Any] = {
-        "year": canonical_date.year,
-        "month": canonical_date.month,
-        "day": canonical_date.day,
-        "hour": hour,
-        "minute": minute,
+        **clock,
         "timezone_offset": timezone_offset,
-        "location": str(raw.get("location", ""))[:120],
-        # Noon is a display/ephemeris placeholder for unknown time, never a
-        # claim that the subject was born at 12:00.
-        "time_accuracy": time_accuracy,
+        "location": location,
     }
     timezone_name = raw.get("timezone_name")
     if timezone_name not in (None, ""):
         if not isinstance(timezone_name, str) or len(timezone_name) > 120:
             raise BirthValidationError("timezone_name must be a short IANA timezone string.")
         birth["timezone_name"] = timezone_name
+    reliability = raw.get("timezone_reliability")
+    if reliability not in (None, ""):
+        if reliability not in {"resolved_iana", "verified_iana", "offset_only_unverified"}:
+            raise BirthValidationError("timezone_reliability is invalid.")
+        birth["timezone_reliability"] = reliability
+    resolution_source = raw.get("resolution_source")
+    if resolution_source not in (None, ""):
+        if not isinstance(resolution_source, str) or len(resolution_source) > 80:
+            raise BirthValidationError("resolution_source must be a short string.")
+        birth["resolution_source"] = resolution_source
 
     lat = raw.get("lat")
     lon = raw.get("lon")
@@ -149,6 +181,8 @@ def canonical_birth_record(birth: dict[str, Any] | None) -> dict[str, Any] | Non
         "time": f"{birth['hour']:02d}:{birth['minute']:02d}",
         "time_accuracy": birth.get("time_accuracy", "unknown"),
         "timezone_offset": birth["timezone_offset"],
+        "timezone_basis": birth.get("timezone_reliability", "offset_only_unverified"),
+        "resolution_source": birth.get("resolution_source", "manual"),
         "location_provided": bool(birth.get("location")),
         "coordinates_provided": "lat" in birth and "lon" in birth,
     }

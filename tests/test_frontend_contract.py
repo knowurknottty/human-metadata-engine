@@ -24,10 +24,50 @@ class BirthDateFieldTests(unittest.TestCase):
         html = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
         script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
 
-        self.assertIn("Coordinates and the historical UTC offset are resolved automatically", html)
-        self.assertIn("The place is sent to a geocoding service", html)
-        self.assertIn('Enter a birth location so the chart timezone and coordinates can be resolved.', script)
+        self.assertIn("Location resolves coordinates and the historical timezone", html)
+        self.assertIn("The place is sent to Open-Meteo", html)
+        self.assertIn('Enter a birth location, or provide latitude, longitude, and an IANA timezone', script)
         self.assertIn('const hasManualChartInputs', script)
+
+    def test_advanced_birth_inputs_support_iana_timezone_without_manual_offset(self):
+        html = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn('id="b-zone"', html)
+        self.assertIn("Advanced chart inputs", html)
+        self.assertIn("payload.birth.timezone_name", script)
+        self.assertIn('timezoneName !== "" || timezoneOffset !== ""', script)
+
+    def test_simulated_checkout_is_not_present(self):
+        html = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertNotIn('id="cc-num"', html)
+        self.assertNotIn("openPaywall", script)
+        self.assertIn("app.downloadReport()", script)
+
+    def test_aliases_are_optional_bounded_and_rendered_separately(self):
+        html = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+
+        self.assertIn('id="aliases"', html)
+        self.assertIn("per line", html)
+        self.assertIn("payload.aliases", script)
+        self.assertIn("Alias calculations", script)
+
+    def test_recoverable_errors_are_field_associated_and_preserve_the_form(self):
+        script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+        self.assertIn("function showFormError(message, fieldId)", script)
+        self.assertIn('control.setAttribute("aria-invalid", "true")', script)
+        self.assertIn('describedBy.add("form-error")', script)
+        self.assertIn("requestError.fieldId = apiErrorField(data)", script)
+
+    def test_focus_and_print_styles_cover_interactive_and_report_surfaces(self):
+        styles = (ROOT / "webapp" / "static" / "styles.css").read_text(encoding="utf-8")
+        self.assertIn("textarea:focus-visible", styles)
+        self.assertIn("summary:focus-visible", styles)
+        self.assertIn("break-after:avoid-page", styles)
+        self.assertIn("break-inside:avoid-page", styles)
 
     def test_report_can_switch_modes_after_generation(self):
         script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")

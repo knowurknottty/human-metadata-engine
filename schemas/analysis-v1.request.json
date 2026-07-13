@@ -6,11 +6,13 @@
   "required": ["name"],
   "properties": {
     "name": {"type": "string", "minLength": 1, "maxLength": 120},
+    "aliases": {"type": "array", "maxItems": 12, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 120}},
     "mode": {"type": "string", "enum": ["data", "magic"], "default": "data"},
     "subject_type": {"type": "string", "enum": ["self", "reference"], "default": "self"},
     "as_of_year": {"type": "integer", "minimum": 1},
     "birth": {"$ref": "#/$defs/birth"},
     "psychology": {"$ref": "#/$defs/psychology"},
+    "user_reported_human_design_type": {"type": "string", "enum": ["Manifestor", "Generator", "Manifesting Generator", "Projector", "Reflector"]},
     "lineage_surnames": {"type": "array", "maxItems": 12, "items": {"type": "string", "minLength": 1, "maxLength": 120}},
     "observations": {"type": "array", "maxItems": 40, "items": {"$ref": "#/$defs/observation"}},
     "constellation": {"type": "object"}
@@ -18,24 +20,37 @@
   "$defs": {
     "birth": {
       "type": "object",
-      "required": ["year", "month", "day", "timezone_offset", "lat", "lon"],
+      "additionalProperties": false,
+      "required": ["year", "month", "day"],
+      "anyOf": [
+        {"required": ["location"]},
+        {"required": ["lat", "lon", "timezone_name"]},
+        {"required": ["lat", "lon", "timezone_offset"]}
+      ],
       "properties": {
         "year": {"type": "integer"}, "month": {"type": "integer", "minimum": 1, "maximum": 12},
         "day": {"type": "integer", "minimum": 1, "maximum": 31},
         "hour": {"type": "integer", "minimum": 0, "maximum": 23},
         "minute": {"type": "integer", "minimum": 0, "maximum": 59},
         "timezone_offset": {"type": "number", "minimum": -14, "maximum": 14},
-        "time_accuracy": {"type": "string", "enum": ["unknown", "hour_only", "approximate", "exact", "provided"]},
-        "location": {"type": "string", "maxLength": 120},
+        "time_accuracy": {"type": "string", "enum": ["unknown", "hour_only", "approximate", "exact"]},
+        "location": {"type": "string", "minLength": 2, "maxLength": 160},
         "lat": {"type": "number", "minimum": -90, "maximum": 90},
-        "lon": {"type": "number", "minimum": -180, "maximum": 180}
+        "lon": {"type": "number", "minimum": -180, "maximum": 180},
+        "timezone_name": {"type": "string", "minLength": 1, "maxLength": 120}
       }
     },
     "psychology": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "big_five": {"type": "object", "additionalProperties": {"type": "number", "minimum": 0, "maximum": 1}},
+        "big_five": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {
+          "openness": {"type": "number", "minimum": 0, "maximum": 1},
+          "conscientiousness": {"type": "number", "minimum": 0, "maximum": 1},
+          "extraversion": {"type": "number", "minimum": 0, "maximum": 1},
+          "agreeableness": {"type": "number", "minimum": 0, "maximum": 1},
+          "neuroticism": {"type": "number", "minimum": 0, "maximum": 1}
+        }},
         "mbti": {"type": "string", "pattern": "^[EI][NS][TF][JP]$"},
         "enneagram": {"type": "object", "additionalProperties": false, "properties": {"type": {"type": "integer", "minimum": 1, "maximum": 9}, "wing": {"type": ["integer", "null"], "minimum": 1, "maximum": 9}}},
         "attachment": {"$ref": "#/$defs/attachment"},

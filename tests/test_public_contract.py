@@ -12,10 +12,30 @@ sys.path[:0] = [os.path.join(ROOT, "webapp"), os.path.join(ROOT, "src")]
 
 from server import analyze  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
-from public_contract import ENNEAGRAM_WINGS, PublicContractError, validate_psychology  # noqa: E402
+from public_contract import (  # noqa: E402
+    ENNEAGRAM_WINGS,
+    PublicContractError,
+    normalize_public_name,
+    validate_aliases,
+    validate_psychology,
+)
 
 
 class PublicContractTests(unittest.TestCase):
+    def test_name_rejects_html_markup_characters(self):
+        with self.assertRaisesRegex(PublicContractError, "markup"):
+            normalize_public_name('<script>alert("x")</script>')
+
+    def test_aliases_are_bounded_normalized_and_distinct(self):
+        self.assertEqual(
+            validate_aliases([" Capt ", "Captain"], primary_name="Kirk Brown"),
+            ["Capt", "Captain"],
+        )
+        with self.assertRaisesRegex(PublicContractError, "duplicates"):
+            validate_aliases(["kirk brown"], primary_name="Kirk Brown")
+        with self.assertRaisesRegex(PublicContractError, "at most 12"):
+            validate_aliases([f"Alias {index}" for index in range(13)], primary_name="Kirk Brown")
+
     def test_data_and_magic_modes_are_explicit(self):
         data = analyze({"name": "Ada Lovelace", "mode": "data"})
         magic = analyze({"name": "Ada Lovelace", "mode": "magic"})
@@ -24,6 +44,27 @@ class PublicContractTests(unittest.TestCase):
         self.assertEqual(magic["analysis_mode"], "magic")
         self.assertEqual(magic["report"]["mode"], "magic")
         self.assertNotEqual(data["report"]["markdown"], magic["report"]["markdown"])
+        self.assertEqual(magic["report"]["sections"], list(range(1, 11)))
+        self.assertEqual(len(magic["report"]["section_metadata"]), 10)
+        self.assertEqual(
+            [item["section"] for item in data["report"]["section_metadata"]],
+            data["report"]["sections"],
+        )
+        self.assertEqual(
+            [item["section"] for item in magic["report"]["section_metadata"]],
+            magic["report"]["sections"],
+        )
+        self.assertEqual(
+            {item["category"] for item in magic["report"]["section_metadata"]},
+            {"mathematical", "astronomical", "user_reported", "traditional_symbolic", "heuristic", "speculative_synthesis"},
+        )
+        self.assertEqual(magic["report"]["metadata"]["report_schema_version"], "report-v1")
+        self.assertEqual(magic["report"]["metadata"]["reproducibility_id"], magic["input_hash"])
+
+    def test_report_markdown_escapes_user_controlled_markers(self):
+        result = analyze({"name": "Ada *Star*", "mode": "magic"})
+        self.assertIn(r"Ada \*Star\*", result["report"]["markdown"])
+        self.assertNotIn("# Ada *Star*", result["report"]["markdown"])
 
     def test_malformed_psychology_is_a_client_error(self):
         with self.assertRaisesRegex(ValueError, "finite number"):
@@ -77,6 +118,21 @@ class PublicContractTests(unittest.TestCase):
                 "attachment": "secure",
                 "relational_patterns": {"attachment_style": "avoidant"},
             })
+
+    def test_legacy_psychology_aliases_cannot_silently_override_canonical_values(self):
+        conflict_pairs = (
+            {"secondary_enneagram_influence": 5, "secondaryEnneagramInfluence": 8},
+            {"instinctual_variant": "social", "instinctualVariant": "one_to_one"},
+            {"conflict_style": "direct", "conflictStyle": "avoidant"},
+            {
+                "mbti": "INTJ",
+                "assessment_status": {"mbti": {"status": "validated"}},
+                "assessmentStatus": {"mbti": {"status": "provisional"}},
+            },
+        )
+        for payload in conflict_pairs:
+            with self.subTest(payload=payload), self.assertRaisesRegex(PublicContractError, "disagree"):
+                validate_psychology(payload)
 
     def test_public_birth_without_time_is_explicitly_unknown(self):
         result = analyze({

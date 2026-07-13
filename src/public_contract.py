@@ -45,6 +45,20 @@ class PublicContractError(ValueError):
     """Raised when a request violates the public API contract."""
 
 
+def _coalesced_alias(raw: dict[str, Any], canonical: str, legacy: str) -> Any:
+    canonical_value = raw.get(canonical)
+    legacy_value = raw.get(legacy)
+    if (
+        canonical_value not in (None, "")
+        and legacy_value not in (None, "")
+        and canonical_value != legacy_value
+    ):
+        raise PublicContractError(
+            f"psychology.{canonical} and psychology.{legacy} disagree."
+        )
+    return canonical_value if canonical_value not in (None, "") else legacy_value
+
+
 def normalize_public_name(raw: Any, *, max_length: int = 120) -> str:
     if not isinstance(raw, str):
         raise PublicContractError("name must be a string.")
@@ -55,12 +69,37 @@ def normalize_public_name(raw: Any, *, max_length: int = 120) -> str:
         raise PublicContractError(f"Name is too long (max {max_length} characters).")
     if _BIDI_OR_CONTROL.search(name):
         raise PublicContractError("Name contains unsupported control or bidirectional characters.")
+    if "<" in name or ">" in name:
+        raise PublicContractError("Name contains unsupported markup characters.")
     # The encoders use the built-in transliteration profile.  Reject values
     # that produce no mapped Latin letters instead of returning an empty score.
     latin = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode("ascii")
     if not any("A" <= char.upper() <= "Z" for char in latin):
         raise PublicContractError("Name must contain at least one encodable Latin letter.")
     return name
+
+
+def validate_aliases(raw: Any, *, primary_name: str, max_items: int = 12) -> list[str]:
+    if raw in (None, []):
+        return []
+    if not isinstance(raw, list):
+        raise PublicContractError("aliases must be an array of names.")
+    if len(raw) > max_items:
+        raise PublicContractError(f"aliases supports at most {max_items} entries.")
+    primary_key = primary_name.casefold()
+    seen = {primary_key}
+    aliases = []
+    for index, value in enumerate(raw):
+        try:
+            alias = normalize_public_name(value)
+        except PublicContractError as exc:
+            raise PublicContractError(f"aliases[{index}]: {exc}") from exc
+        key = alias.casefold()
+        if key in seen:
+            raise PublicContractError(f"aliases[{index}] duplicates the primary name or another alias.")
+        seen.add(key)
+        aliases.append(alias)
+    return aliases
 
 
 def validate_mode(raw: Any) -> str:
@@ -196,7 +235,9 @@ def validate_psychology(raw: Any) -> dict[str, Any] | None:
             )
         result["enneagram"] = {"type": core_type, "wing": wing}
 
-    secondary = raw.get("secondary_enneagram_influence", raw.get("secondaryEnneagramInfluence"))
+    secondary = _coalesced_alias(
+        raw, "secondary_enneagram_influence", "secondaryEnneagramInfluence"
+    )
     if secondary not in (None, "", "unknown"):
         if isinstance(secondary, bool) or not isinstance(secondary, int) or not 1 <= secondary <= 9:
             raise PublicContractError("psychology.secondary_enneagram_influence must be an integer from 1 to 9 or null.")
@@ -204,7 +245,7 @@ def validate_psychology(raw: Any) -> dict[str, Any] | None:
     elif secondary == "unknown":
         result["secondary_enneagram_influence"] = None
 
-    instinctual = raw.get("instinctual_variant", raw.get("instinctualVariant"))
+    instinctual = _coalesced_alias(raw, "instinctual_variant", "instinctualVariant")
     if instinctual not in (None, ""):
         if instinctual not in INSTINCTUAL_VARIANTS:
             raise PublicContractError(
@@ -230,13 +271,15 @@ def validate_psychology(raw: Any) -> dict[str, Any] | None:
         result["attachment"] = attachment
         result["relational_patterns"] = {"attachment_style": attachment}
 
-    conflict_style = raw.get("conflict_style", raw.get("conflictStyle"))
+    conflict_style = _coalesced_alias(raw, "conflict_style", "conflictStyle")
     if conflict_style not in (None, ""):
         if conflict_style not in CONFLICT_STYLES:
             raise PublicContractError("psychology.conflict_style is not a supported self-observation value.")
         result["conflict_style"] = conflict_style
 
-    statuses = _validate_assessment_status(raw.get("assessment_status", raw.get("assessmentStatus")))
+    statuses = _validate_assessment_status(
+        _coalesced_alias(raw, "assessment_status", "assessmentStatus")
+    )
     supplied_fields = set(result)
     if "relational_patterns" in supplied_fields:
         supplied_fields.add("attachment")
@@ -308,6 +351,7 @@ __all__ = [
     "PublicContractError",
     "TIME_ACCURACIES",
     "normalize_public_name",
+    "validate_aliases",
     "validate_mode",
     "validate_subject_type",
     "validate_observations",

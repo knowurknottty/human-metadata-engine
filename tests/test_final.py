@@ -15,7 +15,7 @@ def _exact_chart_or_skip(test_name):
     """Ad hoc source-only runs may omit the deployment-mandatory extension."""
     from encoders.astrology import SWE_AVAILABLE, compute_chart
     if not SWE_AVAILABLE:
-        print(f"✓ {test_name} skipped (pyswisseph unavailable in this ad hoc interpreter; stub covered separately)")
+        print(f"✓ {test_name} skipped (pyswisseph unavailable in this ad hoc interpreter; fail-closed behavior covered separately)")
         return None
     return compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
 
@@ -133,7 +133,7 @@ def test_astrology_confidence():
 def test_astrology_noon_default():
     from encoders.astrology import SWE_AVAILABLE, compute_chart
     if not SWE_AVAILABLE:
-        print("✓ test_astrology_noon_default skipped (pyswisseph unavailable in this ad hoc interpreter; stub covered separately)")
+        print("✓ test_astrology_noon_default skipped (pyswisseph unavailable in this ad hoc interpreter; fail-closed behavior covered separately)")
         return
     chart = compute_chart(1985, 6, 15, 12, 0, -7, "Portland, Oregon, USA")
     assert chart.confidence == 0.4  # Noon default
@@ -157,16 +157,31 @@ def test_astrology_lunar_phase():
     print("✓ test_astrology_lunar_phase passed")
 
 
-def test_astrology_stub_fallback():
-    from encoders.astrology import SWE_AVAILABLE, compute_chart
-    if SWE_AVAILABLE:
-        print("✓ test_astrology_stub_fallback skipped (Swiss Ephemeris available)")
+def test_astrology_missing_ephemeris_fails_closed():
+    import encoders.astrology as astrology
+    original = astrology.SWE_AVAILABLE
+    astrology.SWE_AVAILABLE = False
+    try:
+        try:
+            astrology.compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
+        except RuntimeError as exc:
+            assert "Swiss Ephemeris is required" in str(exc)
+        else:
+            raise AssertionError("missing ephemeris must fail closed")
+    finally:
+        astrology.SWE_AVAILABLE = original
+    print("✓ test_astrology_missing_ephemeris_fails_closed passed")
+
+
+def test_astrology_houses_are_computed():
+    chart = _exact_chart_or_skip("test_astrology_houses_are_computed")
+    if chart is None:
         return
-    chart = compute_chart(1985, 6, 15, 1, 42, -7, "Portland, Oregon, USA")
-    assert chart.time_precision.endswith("_stub")
-    assert len(chart.planets) == 1 and chart.planets[0].planet == "Sun"
-    assert chart.moon_sign == "Unknown"
-    print("✓ test_astrology_stub_fallback passed")
+    assert chart.house_system == "Placidus"
+    assert len(chart.house_cusps) == 12
+    assert all(0 <= cusp < 360 for cusp in chart.house_cusps)
+    assert all(position.house in range(1, 13) for position in chart.planets)
+    print("✓ test_astrology_houses_are_computed passed")
 
 
 def test_astrology_engine_metadata():
@@ -398,7 +413,8 @@ def run_all():
         test_astrology_noon_default,
         test_astrology_chart_ruler,
         test_astrology_lunar_phase,
-        test_astrology_stub_fallback,
+        test_astrology_missing_ephemeris_fails_closed,
+        test_astrology_houses_are_computed,
         test_astrology_engine_metadata,
         # Human Design
         test_human_design_type,

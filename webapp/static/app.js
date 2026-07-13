@@ -1,5 +1,5 @@
 /* Identity Resonance — client app.
-   Renders the free dashboard + paywalled report from /api/analyze. */
+   Renders the complete dashboard and report returned by /api/analyze. */
 
 (function () {
 "use strict";
@@ -43,12 +43,10 @@ const B5 = [
 const ZODIAC = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
 const ZODIAC_GLYPH = {Aries:"♈",Taurus:"♉",Gemini:"♊",Cancer:"♋",Leo:"♌",Virgo:"♍",Libra:"♎",Scorpio:"♏",Sagittarius:"♐",Capricorn:"♑",Aquarius:"♒",Pisces:"♓"};
 const PLANET_GLYPH = {Sun:"☉",Moon:"☽",Mercury:"☿",Venus:"♀",Mars:"♂",Jupiter:"♃",Saturn:"♄",Uranus:"♅",Neptune:"♆",Pluto:"♇"};
-const BONUS_CODE = "evan";
-
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-let STATE = { result: null, paid: false, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false, lastFocus: null };
+let STATE = { result: null, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false };
 
 function updateWingOptions() {
   const core = parseInt($("p-enne").value, 10);
@@ -542,6 +540,16 @@ function renderDashboard(result) {
   </section>`;
 
   html += plainEnglishSynthesis(res, astro, hd, STATE.psychology);
+  if (Array.isArray(result.aliases) && result.aliases.length) {
+    html += `<section class="glass rounded-2xl p-6 mt-6" aria-labelledby="alias-results-title">
+      <div class="analysis-section-heading"><div><p class="atlas-kicker">Deterministic name variants</p><h3 id="alias-results-title">Alias calculations</h3></div><p>Aliases are calculated independently from the primary name and do not alter the birth chart.</p></div>
+      <div class="grid sm:grid-cols-2 gap-3">${result.aliases.map(alias => `<article class="enc-card">
+        <h4 class="text-slate-100 font-semibold">${esc(alias.name)}</h4>
+        <p class="text-xs text-slate-500 mt-1">Traditional symbolic mappings · deterministic · not empirically validated</p>
+        <dl class="grid grid-cols-3 gap-2 mt-3 text-center"><div><dt class="text-[10px] text-slate-500">Pythagorean</dt><dd class="stat-num text-lg">${alias.calculations.pythagorean_expression}</dd></div><div><dt class="text-[10px] text-slate-500">Chaldean</dt><dd class="stat-num text-lg">${alias.calculations.chaldean_name_number}</dd></div><div><dt class="text-[10px] text-slate-500">Ordinal total</dt><dd class="stat-num text-lg">${alias.calculations.ordinal_total}</dd></div></dl>
+      </article>`).join("")}</div>
+    </section>`;
+  }
   html += evidenceLegend({astro, hd, psychology: STATE.psychology});
   html += provenanceLedger(extensions);
   html += `<div class="analysis-section-heading"><div><p class="atlas-kicker">Complete analytical surface</p><h3>Core encoder detail</h3></div><p>${result.analysis_mode === "data" ? "Measurements and provenance first; interpretation is intentionally constrained." : "Symbolic reflection layer; read every claim as a creative lens, not a measurement."}</p></div>`;
@@ -721,7 +729,7 @@ function renderDashboard(result) {
       </div>`).join("")}</div>
   </div>`;
 
-  // --- Report section (paywalled) ---
+  // --- Complete report section ---
   html += `<div class="glass rounded-2xl p-6 sm:p-8 mt-6 fade-up-3" id="report-card">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <div>
@@ -732,9 +740,9 @@ function renderDashboard(result) {
         <div class="flex items-center gap-1.5" role="group" aria-label="Switch report mode">
           <span class="text-[10px] uppercase tracking-widest text-slate-500 mr-1">View</span>
           <button type="button" data-report-mode="data" aria-pressed="${result.analysis_mode === "data" ? "true" : "false"}"
-            onclick="app.switchMode('data')" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "data" ? "bg-sky-400/15 text-sky-200 border-sky-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Data</button>
+            onclick="app.switchMode('data')" class="min-h-11 px-3 py-2.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "data" ? "bg-sky-400/15 text-sky-200 border-sky-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Data</button>
           <button type="button" data-report-mode="magic" aria-pressed="${result.analysis_mode === "magic" ? "true" : "false"}"
-            onclick="app.switchMode('magic')" class="px-3 py-1.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "magic" ? "bg-fuchsia-400/15 text-fuchsia-200 border-fuchsia-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Magic</button>
+            onclick="app.switchMode('magic')" class="min-h-11 px-3 py-2.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "magic" ? "bg-fuchsia-400/15 text-fuchsia-200 border-fuchsia-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Magic</button>
           <span id="report-mode-status" class="sr-only" aria-live="polite"></span>
         </div>
         <div class="flex gap-2" id="report-actions"></div>
@@ -742,11 +750,6 @@ function renderDashboard(result) {
     </div>
     <div class="relative mt-5">
       <div id="report-print-area"><div class="report-body" id="report-body"></div></div>
-      <div id="report-overlay" class="absolute inset-0 hidden items-end justify-center bg-gradient-to-b from-transparent via-[#07070d]/60 to-[#07070d] pb-10">
-        <button onclick="app.openPaywall()" class="px-8 py-4 rounded-2xl bg-[#886a3f] text-white font-bold text-lg shadow-2xl shadow-black/40 hover:scale-[1.03] transition">
-          $10 | Unlock Full Analysis
-        </button>
-      </div>
     </div>
   </div>`;
 
@@ -759,24 +762,12 @@ function renderDashboard(result) {
 function renderReport() {
   const r = STATE.result.report;
   const body = $("report-body");
-  const overlay = $("report-overlay");
   const actions = $("report-actions");
-  if (STATE.paid) {
-    body.innerHTML = mdToHTML(r.markdown);
-    body.classList.remove("locked-blur");
-    overlay.classList.add("hidden"); overlay.classList.remove("flex");
-    actions.innerHTML = `
-      <button onclick="app.downloadReport()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-emerald-400/10 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-400/20 transition">⬇ Download .md</button>
-      <button onclick="window.print()" class="px-3.5 py-2 rounded-lg text-xs font-semibold bg-white/5 text-slate-300 border border-white/15 hover:bg-white/10 transition">🖨 Save as PDF</button>`;
-  } else {
-    // Free preview: executive summary only, then blur teaser
-    const teaserEnd = r.markdown.indexOf("## 2.");
-    const teaser = teaserEnd > 0 ? r.markdown.slice(0, teaserEnd) : r.markdown.slice(0, 1500);
-    body.innerHTML = mdToHTML(teaser) +
-      `<div class="locked-blur">${mdToHTML(r.markdown.slice(teaserEnd, teaserEnd + 2200))}</div>`;
-    overlay.classList.remove("hidden"); overlay.classList.add("flex");
-    actions.innerHTML = `<span class="px-3 py-2 rounded-lg text-xs bg-white/5 text-slate-400 border border-white/10">🔒 Sections 2–${Math.max(2, r.sections.length)} locked</span>`;
-  }
+  body.innerHTML = mdToHTML(r.markdown);
+  body.classList.remove("locked-blur");
+  actions.innerHTML = `
+    <button onclick="app.downloadReport()" class="min-h-11 px-3.5 py-2.5 rounded-lg text-xs font-semibold bg-emerald-400/10 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-400/20 transition">⬇ Download .md</button>
+    <button onclick="window.print()" class="min-h-11 px-3.5 py-2.5 rounded-lg text-xs font-semibold bg-white/5 text-slate-300 border border-white/15 hover:bg-white/10 transition">🖨 Save as PDF</button>`;
 }
 
 // ------------------------------------------------------------------
@@ -808,6 +799,50 @@ function parseBirthDateInput(value) {
   return {year, month, day};
 }
 
+function apiErrorMessage(data, fallback) {
+  const message = data && (data.message || data.error) || fallback;
+  const choices = data?.details?.choices;
+  if (!Array.isArray(choices) || !choices.length) return message;
+  const labels = choices.slice(0, 5).map(choice => choice.display_name).filter(Boolean);
+  return labels.length ? `${message} Try: ${labels.join("; ")}.` : message;
+}
+
+function clearFormErrors() {
+  const errEl = $("form-error");
+  errEl.classList.add("hidden");
+  document.querySelectorAll('[aria-invalid="true"]').forEach(control => {
+    control.removeAttribute("aria-invalid");
+    const describedBy = (control.getAttribute("aria-describedby") || "")
+      .split(/\s+/).filter(value => value && value !== "form-error");
+    if (describedBy.length) control.setAttribute("aria-describedby", describedBy.join(" "));
+    else control.removeAttribute("aria-describedby");
+  });
+}
+
+function showFormError(message, fieldId) {
+  const errEl = $("form-error");
+  errEl.textContent = message;
+  errEl.classList.remove("hidden");
+  const control = fieldId ? $(fieldId) : null;
+  if (control) {
+    control.setAttribute("aria-invalid", "true");
+    const describedBy = new Set((control.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+    describedBy.add("form-error");
+    control.setAttribute("aria-describedby", Array.from(describedBy).join(" "));
+    control.focus();
+  }
+}
+
+function apiErrorField(data) {
+  const code = data?.code || "";
+  const message = String(data?.message || data?.error || "").toLowerCase();
+  if (code.includes("location") || code === "invalid_timezone") return $("b-zone").value ? "b-zone" : "b-loc";
+  if (message.includes("birth") || message.includes("calendar date")) return "b-date";
+  if (message.includes("alias")) return "aliases";
+  if (message.includes("name")) return "name";
+  return null;
+}
+
 const app = {
   scrollToForm() { $("form-section").scrollIntoView({behavior: "smooth"}); $("name").focus({preventScroll: true}); },
 
@@ -825,7 +860,7 @@ const app = {
   },
 
   reset() {
-    STATE = {result: null, paid: false, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false, lastFocus: null};
+    STATE = {result: null, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false};
     $("dashboard").classList.add("hidden");
     $("landing").classList.remove("hidden");
     $("form-section").classList.remove("hidden");
@@ -834,30 +869,35 @@ const app = {
 
   async submit(ev) {
     ev.preventDefault();
-    const errEl = $("form-error");
-    errEl.classList.add("hidden");
+    clearFormErrors();
     const mode = document.querySelector('input[name="mode"]:checked')?.value || "data";
     const payload = {name: $("name").value.trim(), mode};
+    const aliases = $("aliases").value.split(/\r?\n/).map(value => value.trim()).filter(Boolean);
+    if (aliases.length > 12) {
+      showFormError("Enter at most 12 aliases, one per line.", "aliases");
+      return;
+    }
+    if (aliases.length) payload.aliases = aliases;
     STATE.mode = mode;
 
     if ($("birth-enabled").checked && $("b-date").value) {
       const dateParts = parseBirthDateInput($("b-date").value);
       if (!dateParts) {
-        errEl.textContent = "Enter a real birth date in YYYY-MM-DD format.";
-        errEl.classList.remove("hidden");
-        $("b-date").focus();
+        showFormError("Enter a real birth date in YYYY-MM-DD format.", "b-date");
         return;
       }
       const suppliedTime = $("b-time").value;
       const t = suppliedTime || "12:00";
       const [hh, mm] = t.split(":").map(Number);
       const location = $("b-loc").value.trim();
-      const manualChartInputs = [$("b-tz").value, $("b-lat").value, $("b-lon").value];
-      const hasManualChartInputs = manualChartInputs.every(value => value !== "");
+      const timezoneName = $("b-zone").value.trim();
+      const timezoneOffset = $("b-tz").value;
+      const latitude = $("b-lat").value;
+      const longitude = $("b-lon").value;
+      const hasCoordinates = latitude !== "" && longitude !== "";
+      const hasManualChartInputs = hasCoordinates && (timezoneName !== "" || timezoneOffset !== "");
       if (!location && !hasManualChartInputs) {
-        errEl.textContent = "Enter a birth location so the chart timezone and coordinates can be resolved.";
-        errEl.classList.remove("hidden");
-        $("b-loc").focus();
+        showFormError("Enter a birth location, or provide latitude, longitude, and an IANA timezone in Advanced chart inputs.", "b-loc");
         return;
       }
       payload.birth = {
@@ -865,11 +905,12 @@ const app = {
         time_accuracy: suppliedTime ? "exact" : "unknown",
       };
       if (location) payload.birth.location = location;
-      if (hasManualChartInputs) {
-        payload.birth.timezone_offset = parseFloat($("b-tz").value);
-        payload.birth.lat = parseFloat($("b-lat").value);
-        payload.birth.lon = parseFloat($("b-lon").value);
+      if (hasCoordinates) {
+        payload.birth.lat = parseFloat(latitude);
+        payload.birth.lon = parseFloat(longitude);
       }
+      if (timezoneName) payload.birth.timezone_name = timezoneName;
+      if (timezoneOffset !== "") payload.birth.timezone_offset = parseFloat(timezoneOffset);
     }
     if ($("psych-enabled").checked) {
       const psych = {};
@@ -911,6 +952,9 @@ const app = {
     STATE.requestPayload = JSON.parse(JSON.stringify(payload));
 
     // Processing animation
+    const submitButton = $("submit-btn");
+    submitButton.disabled = true;
+    submitButton.setAttribute("aria-busy", "true");
     $("landing").classList.add("hidden");
     $("form-section").classList.add("hidden");
     $("dashboard").classList.add("hidden");
@@ -926,16 +970,20 @@ const app = {
         body: JSON.stringify(payload),
       });
       const data = await resp.json();
-      if (!resp.ok) throw new Error(data.error || "Analysis failed");
+      if (!resp.ok) {
+        const requestError = new Error(apiErrorMessage(data, "Analysis failed"));
+        requestError.fieldId = apiErrorField(data);
+        throw requestError;
+      }
       STATE.result = data;
-      STATE.paid = false;
       renderDashboard(data);
     } catch (err) {
       $("form-section").classList.remove("hidden");
-      errEl.textContent = err.message;
-      errEl.classList.remove("hidden");
+      showFormError(err.message, err.fieldId);
     } finally {
       clearInterval(stepTimer);
+      submitButton.disabled = false;
+      submitButton.removeAttribute("aria-busy");
       $("processing").classList.add("hidden");
     }
   },
@@ -956,11 +1004,9 @@ const app = {
         body: JSON.stringify(payload),
       });
       const data = await resp.json();
-      if (!resp.ok) throw new Error(data.error || "Report mode switch failed");
-      const paid = STATE.paid;
+      if (!resp.ok) throw new Error(apiErrorMessage(data, "Report mode switch failed"));
       STATE.result = data;
       STATE.mode = nextMode;
-      STATE.paid = paid;
       renderDashboard(data);
       const reportCard = $("report-card");
       if (reportCard) reportCard.scrollIntoView({behavior: "smooth", block: "start"});
@@ -973,64 +1019,6 @@ const app = {
         button.removeAttribute("aria-busy");
       });
     }
-  },
-
-  openPaywall() {
-    STATE.lastFocus = document.activeElement;
-    $("paywall").classList.remove("hidden");
-    $("paywall").classList.add("flex");
-    $("paywall").focus();
-    $("cc-num").focus();
-  },
-  closePaywall() {
-    $("paywall").classList.add("hidden");
-    $("paywall").classList.remove("flex");
-    if (STATE.lastFocus && typeof STATE.lastFocus.focus === "function") STATE.lastFocus.focus();
-    STATE.lastFocus = null;
-  },
-
-  unlockReport() {
-    this.closePaywall();
-    STATE.paid = true;
-    renderReport();
-    $("report-card").scrollIntoView({behavior: "smooth"});
-  },
-
-  redeemBonus(ev) {
-    ev.preventDefault();
-    const code = $("bonus-code").value.trim().toLowerCase();
-    const err = $("bonus-error");
-    if (code !== BONUS_CODE) {
-      err.textContent = "That bonus code is not valid.";
-      err.classList.remove("hidden");
-      return;
-    }
-    err.classList.add("hidden");
-    $("bonus-code").value = "";
-    this.unlockReport();
-  },
-
-  pay(ev) {
-    ev.preventDefault();
-    const num = $("cc-num").value.replace(/\s/g, "");
-    const err = $("pay-error");
-    if (!/^\d{13,19}$/.test(num)) {
-      err.textContent = "Enter a valid card number (test mode: 4242 4242 4242 4242).";
-      err.classList.remove("hidden");
-      return;
-    }
-    err.classList.add("hidden");
-    const btn = $("pay-btn");
-    btn.disabled = true;
-    btn.textContent = "Processing payment…";
-    setTimeout(() => {
-      btn.textContent = "✓ Payment confirmed";
-      setTimeout(() => {
-        btn.disabled = false;
-        btn.textContent = "$10 — Unlock Full Analysis";
-        this.unlockReport();
-      }, 700);
-    }, 1400);
   },
 
   downloadReport() {
@@ -1136,9 +1124,4 @@ function init() {
 }
 
 document.addEventListener("DOMContentLoaded", init);
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape" && !$("paywall").classList.contains("hidden")) {
-    app.closePaywall();
-  }
-});
 })();

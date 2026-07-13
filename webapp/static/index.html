@@ -6,7 +6,7 @@
 <title>Identity Resonance | Provenance-Aware Name Analysis</title>
 <meta name="description" content="Your name through core encoders and 25 provenance-aware symbolic extensions. Interpretive, deterministic, and explicit about source conventions.">
 <script src="/vendor/tailwind.js"></script>
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/styles.css?v=0.7.0-truthful-report-1">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#10057;</text></svg>">
 </head>
 <body class="text-slate-200 antialiased min-h-screen selection:bg-amber-400/30">
@@ -45,8 +45,8 @@
     <div><strong>1</strong><span>deterministic glyph</span></div>
   </div>
   <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-    <button onclick="app.scrollToForm()" class="button-primary px-7 py-3 rounded-xl text-slate-950 font-semibold hover:scale-[1.02] transition">Start free preview</button>
-    <span class="text-slate-500 text-sm">A concise preview is free · the payment flow remains a demo stub</span>
+    <button onclick="app.scrollToForm()" class="button-primary px-7 py-3 rounded-xl text-slate-950 font-semibold hover:scale-[1.02] transition">Start your analysis</button>
+    <span class="text-slate-500 text-sm">The complete report is available without checkout</span>
   </div>
   <div id="gallery" class="reference-strip mt-14 grid grid-cols-2 sm:grid-cols-5 gap-3 opacity-90"></div>
   <p class="mt-3 text-xs text-slate-600">Reference fingerprints. Each glyph is generated from the displayed name.</p>
@@ -79,6 +79,11 @@
         <input id="name" name="name" required maxlength="120" placeholder="e.g. Ada Lovelace"
           class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-lg text-slate-100 placeholder-slate-600 focus:border-amber-400/60 focus:ring-2 focus:ring-amber-400/20 outline-none transition">
       </div>
+      <div>
+        <label class="lbl" for="aliases">Aliases <span class="text-slate-600">(optional)</span></label>
+        <textarea id="aliases" class="inp min-h-24" maxlength="1450" placeholder="One alias, nickname, or pen name per line" aria-describedby="aliases-help"></textarea>
+        <p id="aliases-help" class="field-hint">Up to 12 distinct names. Each alias receives its own deterministic name calculations; it does not change the primary birth chart.</p>
+      </div>
 
       <fieldset class="border border-white/10 rounded-xl p-5">
         <legend class="px-2 text-sm font-medium text-sky-300">Reading mode</legend>
@@ -94,14 +99,23 @@
           <input type="checkbox" id="birth-enabled" class="accent-fuchsia-400" onchange="app.toggleSection('birth')"> Birth data
           <span class="text-slate-500 font-normal">(adds date-level astronomy; exact time is required for time-sensitive fields)</span>
         </legend>
-        <div id="birth-fields" class="grid grid-cols-2 sm:grid-cols-4 gap-3 opacity-40 pointer-events-none transition" aria-disabled="true">
-          <div><label class="lbl" for="b-date">Date</label><input type="text" id="b-date" class="inp" inputmode="numeric" autocomplete="bday" maxlength="10" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" aria-describedby="birth-date-help"></div>
-          <div><label class="lbl" for="b-time">Time <span class="text-slate-600">(optional)</span></label><input type="time" id="b-time" class="inp"></div>
-          <div><label class="lbl" for="b-tz">UTC offset <span class="text-slate-600">(advanced)</span></label><input type="number" id="b-tz" step="0.25" min="-12" max="14" placeholder="resolved from location" class="inp"></div>
-          <div><label class="lbl" for="b-loc">Birth location</label><input type="text" id="b-loc" placeholder="City, Country or postal code" class="inp" aria-describedby="birth-date-help"></div>
-          <div><label class="lbl" for="b-lat">Latitude <span class="text-slate-600">(advanced)</span></label><input type="number" id="b-lat" step="0.0001" min="-90" max="90" placeholder="resolved from location" class="inp"></div>
-          <div><label class="lbl" for="b-lon">Longitude <span class="text-slate-600">(advanced)</span></label><input type="number" id="b-lon" step="0.0001" min="-180" max="180" placeholder="resolved from location" class="inp"></div>
-          <p id="birth-date-help" class="col-span-2 text-xs text-slate-500 self-end pb-1.5">Use YYYY-MM-DD and enter the birth city or postal code. Coordinates and the historical UTC offset are resolved automatically; advanced fields are optional. The place is sent to a geocoding service for this lookup. Time unknown? Leave it blank; Human Design stays withheld.</p>
+        <div id="birth-fields" class="space-y-4 opacity-40 pointer-events-none transition" aria-disabled="true">
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div><label class="lbl" for="b-date">Date</label><input type="text" id="b-date" class="inp" inputmode="numeric" autocomplete="bday" maxlength="10" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" aria-describedby="birth-date-help"></div>
+            <div><label class="lbl" for="b-time">Time <span class="text-slate-600">(optional)</span></label><input type="time" id="b-time" class="inp" aria-describedby="birth-date-help"></div>
+            <div class="sm:col-span-2"><label class="lbl" for="b-loc">Birth location</label><input type="text" id="b-loc" maxlength="160" placeholder="Evanston, Wyoming or Chicago, Illinois" class="inp" aria-describedby="birth-date-help"></div>
+          </div>
+          <p id="birth-date-help" class="text-xs text-slate-500">Location resolves coordinates and the historical timezone for the exact birth date. The place is sent to Open-Meteo for this lookup. Birth time sets the rising sign, houses, and Human Design; if unknown, leave it blank and those time-sensitive results stay withheld.</p>
+          <details class="profile-status-details">
+            <summary>Advanced chart inputs</summary>
+            <p class="field-hint mt-2">Use these only when you already know the coordinates and timezone. An IANA timezone such as America/Chicago lets the server derive daylight-saving and fractional offsets for the historical date.</p>
+            <div class="grid grid-cols-2 gap-3 mt-3">
+              <div class="col-span-2"><label class="lbl" for="b-zone">IANA timezone</label><input type="text" id="b-zone" maxlength="120" placeholder="America/Chicago" class="inp"></div>
+              <div><label class="lbl" for="b-lat">Latitude</label><input type="number" id="b-lat" step="0.0001" min="-90" max="90" class="inp"></div>
+              <div><label class="lbl" for="b-lon">Longitude</label><input type="number" id="b-lon" step="0.0001" min="-180" max="180" class="inp"></div>
+              <div class="col-span-2"><label class="lbl" for="b-tz">UTC offset <span class="text-slate-600">(less reliable without an IANA timezone)</span></label><input type="number" id="b-tz" step="0.25" min="-14" max="14" placeholder="e.g. -6 or +5.5" class="inp"></div>
+            </div>
+          </details>
         </div>
       </fieldset>
 
@@ -198,7 +212,7 @@
       <div class="flex flex-col sm:flex-row items-center gap-4">
         <button type="submit" id="submit-btn"
           class="button-primary w-full sm:w-auto px-8 py-3.5 rounded-xl text-slate-950 font-bold text-lg hover:scale-[1.02] transition">
-          Run the engine, free preview
+          Run the engine
         </button>
         <p class="text-xs text-slate-500">Submitted data is processed to generate this report and is not intentionally retained by the web process. A supplied birth place is sent to a geocoding service to resolve chart inputs. Network and infrastructure logs may still exist; do not enter sensitive information.</p>
       </div>
@@ -224,53 +238,11 @@
 
 </main>
 
-<!-- ======================= PAYWALL MODAL ======================= -->
-<div id="paywall" class="hidden fixed inset-0 z-50 items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="paywall-title" tabindex="-1">
-  <div class="absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="app.closePaywall()" aria-hidden="true"></div>
-  <div class="relative glass-strong rounded-2xl max-w-md w-full p-7 shadow-2xl">
-    <button type="button" class="absolute top-4 right-4 text-slate-500 hover:text-slate-300" onclick="app.closePaywall()" aria-label="Close">&#10005;</button>
-    <div class="flex items-center gap-2 text-xs text-slate-400 mb-4">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6v6c0 5 3.6 8.4 8 10 4.4-1.6 8-5 8-10V6l-8-4z" stroke="currentColor" stroke-width="2"/></svg>
-      Simulated Stripe checkout: demo mode, no real charge
-    </div>
-    <h3 id="paywall-title" class="text-xl font-bold text-slate-50">Unlock the full analysis</h3>
-    <ul class="mt-3 space-y-1.5 text-sm text-slate-300">
-      <li>&#10003; 3,000+ word ten-section written report</li>
-      <li>&#10003; Full numerological, symbolic &amp; celestial interpretation</li>
-      <li>&#10003; Downloadable report (Markdown / PDF via print)</li>
-      <li>&#10003; Cross-encoder synthesis &amp; practical guidance</li>
-    </ul>
-    <form class="mt-5 space-y-3" onsubmit="app.pay(event)">
-      <input id="cc-num" inputmode="numeric" placeholder="Card number | use 4242 4242 4242 4242" class="inp w-full" maxlength="19" required>
-      <div class="grid grid-cols-2 gap-3">
-        <input id="cc-exp" placeholder="MM / YY" class="inp" maxlength="7" required>
-        <input id="cc-cvc" placeholder="CVC" class="inp" maxlength="4" inputmode="numeric" required>
-      </div>
-      <button id="pay-btn" class="w-full py-3.5 rounded-xl bg-[#886a3f] font-bold text-white shadow-lg shadow-black/30 hover:scale-[1.01] transition">
-        $10 | Unlock Full Analysis
-      </button>
-      <p id="pay-error" class="hidden text-rose-400 text-xs"></p>
-      <p class="text-center text-[11px] text-slate-500">Test mode accepts 4242 4242 4242 4242 · any future expiry · any CVC</p>
-    </form>
-    <div class="my-5 flex items-center gap-3 text-xs text-slate-600" aria-hidden="true">
-      <span class="h-px flex-1 bg-white/10"></span><span>or</span><span class="h-px flex-1 bg-white/10"></span>
-    </div>
-    <form class="space-y-2" onsubmit="app.redeemBonus(event)">
-      <label class="block text-xs font-medium text-slate-300" for="bonus-code">Bonus code</label>
-      <div class="flex gap-2">
-        <input id="bonus-code" autocomplete="off" placeholder="Enter your code" class="inp min-w-0 flex-1" maxlength="64">
-        <button class="rounded-xl border border-amber-400/40 px-4 text-sm font-semibold text-amber-200 hover:bg-amber-400/10 transition">Redeem</button>
-      </div>
-      <p id="bonus-error" class="hidden text-rose-400 text-xs" role="alert"></p>
-    </form>
-  </div>
-</div>
-
 <footer class="border-t border-white/5 mt-16 py-8 text-center text-xs text-slate-600 px-4">
   <p>Symbolic systems (numerology, gematria, astrology, Human Design) are interpretive lenses, not empirical claims.</p>
   <p class="mt-1">Deterministic computation: identical normalized inputs and convention versions produce identical results. &copy; Inversion Labs.</p>
 </footer>
 
-<script src="/app.js?v=date-input-1-report-switch-1-know-thyself-6"></script>
+<script src="/app.js?v=date-input-1-location-contract-2-no-demo-checkout-1-field-errors-1"></script>
 </body>
 </html>

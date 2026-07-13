@@ -355,7 +355,11 @@ def compute_unified_signature(
                 # is used only to obtain a date-level solar reference.
                 "moon_sign": chart.moon_sign if birth_time_known else None,
                 "ascendant": chart.ascendant if birth_time_known else None,
+                "ascendant_longitude": chart.ascendant_longitude if birth_time_known else None,
                 "midheaven": chart.midheaven if birth_time_known else None,
+                "midheaven_longitude": chart.midheaven_longitude if birth_time_known else None,
+                "house_system": chart.house_system if birth_time_known else None,
+                "house_cusps": chart.house_cusps if birth_time_known else [],
                 "chart_ruler": chart.chart_ruler if birth_time_known else None,
                 "dominant_element": chart.dominant_element if birth_time_known else None,
                 "dominant_modality": chart.dominant_modality if birth_time_known else None,
@@ -366,6 +370,7 @@ def compute_unified_signature(
                 "is_waxing": chart.is_waxing if birth_time_known else None,
                 "planets": [
                     {"planet": p.planet, "sign": p.sign, "degree": round(p.sign_degree, 2),
+                     "house": p.house if birth_time_known else None,
                      "retrograde": p.is_retrograde}
                     for p in chart.planets
                     if birth_time_known or p.planet == "Sun"

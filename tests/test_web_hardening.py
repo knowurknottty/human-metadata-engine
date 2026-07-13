@@ -16,6 +16,7 @@ from server import (  # noqa: E402
     SECURITY_HEADERS,
     _allow_analysis,
     _rate_limit_client_ip,
+    _safe_request_log,
 )
 
 
@@ -40,12 +41,18 @@ class WebHardeningTests(unittest.TestCase):
         self.assertIn("Content-Security-Policy", config)
         self.assertIn('X-Frame-Options = "DENY"', config)
         self.assertIn('Referrer-Policy = "no-referrer"', config)
+        self.assertIn("Strict-Transport-Security", config)
 
     def test_proxy_ip_is_trusted_only_for_loopback_tunnel_traffic(self):
         headers = {"CF-Connecting-IP": "203.0.113.9", "X-Forwarded-For": "198.51.100.8"}
         self.assertEqual(_rate_limit_client_ip("127.0.0.1", headers, trust_proxy=True), "203.0.113.9")
         self.assertEqual(_rate_limit_client_ip("198.51.100.2", headers, trust_proxy=True), "198.51.100.2")
         self.assertEqual(_rate_limit_client_ip("127.0.0.1", headers, trust_proxy=False), "127.0.0.1")
+
+    def test_request_logs_drop_query_data_and_never_include_bodies(self):
+        line = _safe_request_log("GET", "/api/version?name=Private%20Name", 200)
+        self.assertEqual(line, "[web] GET /api/version 200")
+        self.assertNotIn("Private", line)
 
 
 if __name__ == "__main__":

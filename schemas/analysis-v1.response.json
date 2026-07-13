@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Identity Resonance AnalysisResponse v1",
   "type": "object",
-  "required": ["contract_version", "build_revision", "engine_version", "analysis_mode", "input_hash", "privacy", "signature", "comparison_metric", "comparisons", "correlations", "report", "normalized_input", "evidence"],
+  "required": ["contract_version", "build_revision", "engine_version", "analysis_mode", "input_hash", "privacy", "signature", "aliases", "comparison_metric", "comparisons", "correlations", "report", "normalized_input", "evidence"],
   "properties": {
     "contract_version": {"const": "analysis-v1"},
     "build_revision": {"type": "string"},
@@ -15,9 +15,53 @@
     "comparison_metric": {"type": "string"},
     "comparisons": {"type": "array"},
     "correlations": {"type": "object"},
-    "report": {"type": "object", "required": ["markdown", "word_count", "sections", "mode"]},
+    "report": {
+      "type": "object",
+      "required": ["markdown", "word_count", "sections", "section_metadata", "evidence_model", "mode", "metadata"],
+      "properties": {
+        "markdown": {"type": "string"},
+        "word_count": {"type": "integer", "minimum": 0},
+        "sections": {"type": "array", "items": {"type": "integer", "minimum": 1, "maximum": 10}},
+        "section_metadata": {"type": "array", "items": {"$ref": "#/$defs/report_section_metadata"}},
+        "evidence_model": {"const": "computed-self_report-symbolic-experimental-v2"},
+        "mode": {"type": "string", "enum": ["data", "magic"]},
+        "metadata": {"$ref": "#/$defs/report_metadata"}
+      }
+    },
     "normalized_input": {"type": "object"},
     "psychology": {"type": ["object", "null"]},
+    "aliases": {"type": "array", "items": {"type": "object", "required": ["name", "category", "deterministic", "scientific_validation", "calculations", "fingerprint", "pattern_convergence"]}},
     "evidence": {"type": "object", "required": ["method_version", "layers", "claim_policy"]}
+  },
+  "$defs": {
+    "report_section_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["section", "title", "category", "evidence_level", "confidence", "deterministic", "scientific_validation", "provenance", "limitations"],
+      "properties": {
+        "section": {"type": "integer", "minimum": 1, "maximum": 10},
+        "title": {"type": "string"},
+        "category": {"type": "string", "enum": ["mathematical", "astronomical", "user_reported", "traditional_symbolic", "heuristic", "speculative_synthesis"]},
+        "evidence_level": {"type": "string"},
+        "confidence": {"type": ["number", "null"]},
+        "deterministic": {"type": "boolean"},
+        "scientific_validation": {"type": "string"},
+        "provenance": {"type": "array", "items": {"type": "string"}},
+        "limitations": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "report_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["report_schema_version", "analysis_schema_version", "engine_version", "convention_set_version", "build_revision", "reproducibility_id"],
+      "properties": {
+        "report_schema_version": {"const": "report-v1"},
+        "analysis_schema_version": {"const": "analysis-v1"},
+        "engine_version": {"type": "string"},
+        "convention_set_version": {"type": "string"},
+        "build_revision": {"type": "string"},
+        "reproducibility_id": {"type": "string", "pattern": "^[0-9a-f]{24}$"}
+      }
+    }
   }
 }

@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 import math
 import os
+import re
+import subprocess
 import sys
 import traceback
 import hashlib
@@ -39,6 +41,7 @@ from birth_validation import (  # noqa: E402
     BirthValidationError,
     canonical_birth_record,
     validate_birth,
+    validate_birth_datetime_fields,
 )
 from constellation import (  # noqa: E402
     ConstellationValidationError,
@@ -47,13 +50,19 @@ from constellation import (  # noqa: E402
 )
 from etymology import analyze_name_etymology  # noqa: E402
 from evidence_v3 import evidence_dashboard  # noqa: E402
+from encoders.pipeline import MANIFEST_VERSION as CONVENTION_SET_VERSION  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
 from snapshot import personality_snapshot  # noqa: E402
 from true_human_design.public_adapter import calculate_public_human_design  # noqa: E402
-from location_resolution import LocationResolutionError, resolve_birth_location  # noqa: E402
+from location_resolution import (  # noqa: E402
+    LocationResolutionError,
+    resolve_birth_location,
+    resolve_local_datetime,
+)
 from public_contract import (  # noqa: E402
     PublicContractError,
     normalize_public_name,
+    validate_aliases,
     validate_mode,
     validate_observations,
     validate_psychology,
@@ -74,8 +83,36 @@ _DEFAULTS = None
 _DEFAULT_ERRORS = []
 _DEFAULTS_LOCK = Lock()
 PUBLIC_REFERENCE_IDENTITIES = famous_reference_identities()
-APP_VERSION = "0.6.0"
-BUILD_REVISION = os.environ.get("HME_BUILD_REVISION", "unknown")
+APP_VERSION = "0.7.0"
+SCHEMA_VERSION = "analysis-v1"
+ENGINE_VERSION = "signature-v2"
+
+
+def _build_revision() -> str:
+    configured = os.environ.get("HME_BUILD_REVISION", "").strip()
+    if configured and configured != "unknown":
+        return configured[:64] if re.fullmatch(r"[A-Za-z0-9._-]+", configured) else "unknown"
+    try:
+        completed = subprocess.run(
+            ["git", "rev-parse", "--short=12", "HEAD"],
+            cwd=REPO,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=1,
+        )
+        revision = completed.stdout.strip()
+        return revision if re.fullmatch(r"[0-9a-f]{7,40}", revision) else "unknown"
+    except (FileNotFoundError, subprocess.SubprocessError):
+        return "unknown"
+
+
+BUILD_REVISION = _build_revision()
+try:
+    import swisseph as _swisseph  # type: ignore
+except ImportError:
+    _swisseph = None
+EPHEMERIS_AVAILABLE = _swisseph is not None
 REQUEST_TIMEOUT_SECONDS = float(os.environ.get("HME_REQUEST_TIMEOUT_SECONDS", "15"))
 MAX_REQUEST_BYTES = 64 * 1024
 RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", "60"))
@@ -104,6 +141,59 @@ SECURITY_HEADERS = {
     "X-Permitted-Cross-Domain-Policies": "none",
     "Cross-Origin-Resource-Policy": "same-origin",
 }
+
+ANALYSIS_REQUEST_FIELDS = {
+    "name", "aliases", "mode", "subject_type", "as_of_year", "birth", "psychology",
+    "user_reported_human_design_type", "lineage_surnames", "observations", "constellation",
+}
+PUBLIC_BIRTH_FIELDS = {
+    "year", "month", "day", "hour", "minute", "time_accuracy", "location",
+    "lat", "lon", "timezone_name", "timezone_offset",
+}
+
+
+class HTTPRequestError(ValueError):
+    def __init__(self, message: str, *, code: str, status: int = 400) -> None:
+        super().__init__(message)
+        self.code = code
+        self.status = status
+
+
+def _error_payload(exc: Exception, *, code: str = "invalid_request") -> dict:
+    error_code = getattr(exc, "code", code)
+    payload = {"error": str(exc), "code": error_code, "message": str(exc)}
+    if isinstance(exc, LocationResolutionError):
+        details = exc.details()
+        if details:
+            payload["details"] = details
+    return payload
+
+
+def _safe_request_log(method: str, target: str, status: object) -> str:
+    """Format a request log without query parameters or request bodies."""
+    clean_method = method if method in {"GET", "HEAD", "POST", "OPTIONS"} else "OTHER"
+    path = target.split("?", 1)[0][:256]
+    return f"[web] {clean_method} {path} {status}"
+
+
+def _version_payload() -> dict:
+    return {
+        "application_version": APP_VERSION,
+        "schema_version": SCHEMA_VERSION,
+        "engine_version": ENGINE_VERSION,
+        "git_commit": BUILD_REVISION,
+        "ephemeris": {
+            "available": EPHEMERIS_AVAILABLE,
+            "library": "pyswisseph" if EPHEMERIS_AVAILABLE else None,
+            "version": getattr(_swisseph, "__version__", None),
+        },
+        "feature_flags": {
+            "location_resolution": True,
+            "historical_timezone": True,
+            "demo_checkout": False,
+            "persistence": False,
+        },
+    }
 
 
 def _safe_json(value):
@@ -177,33 +267,102 @@ def _validated_birth(raw):
     return validate_birth(raw, living_person=True, require_coordinates=True)
 
 
-def _resolve_birth_location(raw):
-    """Fill missing chart coordinates and timezone from a supplied place name."""
-    if not isinstance(raw, dict) or not raw.get("location"):
+def _resolve_birth_location(raw, *, living_person: bool = True):
+    """Resolve or verify public chart coordinates and historical timezone."""
+    if raw in (None, {}):
         return raw
-    missing = [field for field in ("timezone_offset", "lat", "lon") if raw.get(field) in (None, "")]
-    if not missing:
+    if not isinstance(raw, dict):
         return raw
-    try:
-        resolved = resolve_birth_location(
-            raw["location"],
-            year=int(raw["year"]),
-            month=int(raw["month"]),
-            day=int(raw["day"]),
-            hour=int(raw.get("hour", 12)),
-            minute=int(raw.get("minute", 0)),
+    unsupported = sorted(set(raw) - PUBLIC_BIRTH_FIELDS)
+    if unsupported:
+        raise BirthValidationError(
+            "Birth data contains unsupported fields: " + ", ".join(unsupported) + "."
         )
-    except (LocationResolutionError, KeyError, TypeError, ValueError) as exc:
-        raise BirthValidationError(str(exc)) from exc
+    for field in ("year", "month", "day"):
+        if isinstance(raw.get(field), bool) or not isinstance(raw.get(field), int):
+            raise BirthValidationError(f"Birth {field} must be a JSON integer.")
+    for field in ("hour", "minute"):
+        if field in raw and (isinstance(raw[field], bool) or not isinstance(raw[field], int)):
+            raise BirthValidationError(f"Birth {field} must be a JSON integer.")
+    if raw.get("time_accuracy") == "provided":
+        raise BirthValidationError(
+            "Public birth data must label time_accuracy as unknown, hour_only, approximate, or exact."
+        )
+    clock = validate_birth_datetime_fields(raw, living_person=living_person)
     enriched = dict(raw)
-    if enriched.get("timezone_offset") in (None, ""):
-        enriched["timezone_offset"] = resolved["timezone_offset"]
-    if enriched.get("lat") in (None, ""):
-        enriched["lat"] = resolved["latitude"]
-    if enriched.get("lon") in (None, ""):
-        enriched["lon"] = resolved["longitude"]
-    if enriched.get("timezone_name") in (None, ""):
-        enriched["timezone_name"] = resolved["timezone_name"]
+    timezone_name = enriched.get("timezone_name")
+    explicit_offset = enriched.get("timezone_offset") not in (None, "")
+    latitude_present = enriched.get("lat") not in (None, "")
+    longitude_present = enriched.get("lon") not in (None, "")
+    if latitude_present != longitude_present:
+        raise BirthValidationError("Latitude and longitude must be supplied together.")
+    has_coordinates = latitude_present and longitude_present
+
+    if timezone_name not in (None, ""):
+        local, _ = resolve_local_datetime(str(timezone_name), **{
+            field: clock[field] for field in ("year", "month", "day", "hour", "minute")
+        })
+        derived_offset = local.utcoffset()
+        if derived_offset is None:
+            raise LocationResolutionError(
+                "The supplied timezone has no UTC offset for the birth date.",
+                code="invalid_timezone",
+            )
+        derived_hours = derived_offset.total_seconds() / 3600.0
+        if explicit_offset:
+            try:
+                supplied_hours = float(enriched["timezone_offset"])
+            except (TypeError, ValueError) as exc:
+                raise BirthValidationError("UTC offset must be numeric.") from exc
+            if abs(supplied_hours - derived_hours) > 1e-9:
+                raise BirthValidationError(
+                    "The supplied UTC offset conflicts with the IANA timezone for that birth date and local time."
+                )
+            enriched["timezone_reliability"] = "verified_iana"
+        else:
+            enriched["timezone_offset"] = derived_hours
+            enriched["timezone_reliability"] = "resolved_iana"
+
+    # Explicit coordinates plus an IANA timezone intentionally bypass the
+    # external geocoder. Their historical offset was derived above.
+    if has_coordinates and enriched.get("timezone_offset") not in (None, ""):
+        enriched.setdefault(
+            "timezone_reliability",
+            "offset_only_unverified" if not timezone_name else "verified_iana",
+        )
+        enriched.setdefault("resolution_source", "manual")
+        return enriched
+
+    location = enriched.get("location")
+    if location in (None, ""):
+        return enriched
+    resolved = resolve_birth_location(
+        location,
+        year=clock["year"],
+        month=clock["month"],
+        day=clock["day"],
+        hour=clock["hour"],
+        minute=clock["minute"],
+    )
+    if timezone_name not in (None, "") and str(timezone_name) != resolved.timezone_name:
+        raise BirthValidationError("The supplied timezone conflicts with the resolved birth location.")
+    if explicit_offset and abs(float(enriched["timezone_offset"]) - resolved.utc_offset_hours) > 1e-9:
+        raise BirthValidationError("The supplied UTC offset conflicts with the resolved birth location.")
+    if has_coordinates:
+        if (
+            abs(float(enriched["lat"]) - resolved.latitude) > 0.25
+            or abs(float(enriched["lon"]) - resolved.longitude) > 0.25
+        ):
+            raise BirthValidationError("The supplied coordinates conflict with the resolved birth location.")
+    enriched.update({
+        "location": resolved.display_name,
+        "timezone_offset": resolved.utc_offset_hours,
+        "lat": resolved.latitude,
+        "lon": resolved.longitude,
+        "timezone_name": resolved.timezone_name,
+        "timezone_reliability": "resolved_iana",
+        "resolution_source": resolved.resolution_source,
+    })
     return enriched
 
 
@@ -254,7 +413,7 @@ def _normalized_reference(identity):
 
 
 def _disable_unvalidated_human_design(signature, identity):
-    """Replace unsupported Human Design conclusions with an explicit stub.
+    """Replace unsupported Human Design conclusions with an unavailable envelope.
 
     This function intentionally does not build a personality snapshot. The
     public pipeline computes its final snapshot once, after this sanitization.
@@ -326,6 +485,32 @@ def _compute_signature(identity, *, mode: str = "data"):
     signature["dimensions"] = count_signature_dimensions(signature, include_unavailable=True)
     signature["analysis_mode"] = mode
     return signature
+
+
+def _alias_summaries(aliases: list[str], analysis_year: int) -> list[dict]:
+    """Return bounded calculations for aliases without duplicating full reports."""
+    summaries = []
+    for index, alias in enumerate(aliases):
+        signature = _compute_signature({
+            "id": f"user-alias:{index}",
+            "text": alias,
+            "as_of_year": analysis_year,
+        }, mode="data")
+        encoders = signature["encoders"]
+        summaries.append({
+            "name": alias,
+            "category": "traditional_symbolic",
+            "deterministic": True,
+            "scientific_validation": "not_established",
+            "calculations": {
+                "pythagorean_expression": encoders["pythagorean"]["expression"],
+                "chaldean_name_number": encoders["chaldean"]["name_number"],
+                "ordinal_total": encoders["ordinal"]["ordinal_total"],
+            },
+            "fingerprint": signature["fingerprint"],
+            "pattern_convergence": signature["resonance"],
+        })
+    return summaries
 
 
 def get_defaults():
@@ -448,9 +633,15 @@ def _constellation_analysis(graph, analysis_year, *, mode: str = "data"):
 def analyze(payload):
     if not isinstance(payload, dict):
         raise ValueError("Request body must be a JSON object.")
+    unknown_fields = sorted(set(payload) - ANALYSIS_REQUEST_FIELDS)
+    if unknown_fields:
+        raise PublicContractError(
+            "Request contains unsupported fields: " + ", ".join(unknown_fields) + "."
+        )
     mode = validate_mode(payload.get("mode"))
     subject_type = validate_subject_type(payload.get("subject_type"))
     name = normalize_public_name(payload.get("name"))
+    aliases = validate_aliases(payload.get("aliases"), primary_name=name)
 
     analysis_year = datetime.now(timezone.utc).year
     requested_year = payload.get("as_of_year", analysis_year)
@@ -466,7 +657,7 @@ def analyze(payload):
     raw_birth = payload.get("birth")
     if isinstance(raw_birth, dict) and "time_accuracy" not in raw_birth:
         raw_birth = {**raw_birth, "time_accuracy": "unknown"}
-    raw_birth = _resolve_birth_location(raw_birth)
+    raw_birth = _resolve_birth_location(raw_birth, living_person=subject_type == "self")
     birth = validate_birth(
         raw_birth,
         living_person=subject_type == "self",
@@ -498,6 +689,7 @@ def analyze(payload):
         "subject_type": subject_type,
         "mode": mode,
         "lineage_surnames": lineage_surnames,
+        "aliases": aliases,
     }
 
     etymology = analyze_name_etymology(
@@ -521,24 +713,44 @@ def analyze(payload):
     } for d in defaults]
     comps.sort(key=lambda c: -c["agreement"])
     corr = cross_encoder_correlations(defaults + [sig])
+    request_fingerprint = _input_hash({
+        "name": name,
+        "aliases": aliases,
+        "birth": birth,
+        "psychology": psychology,
+        "mode": mode,
+        "subject_type": subject_type,
+        "as_of_year": requested_year,
+        "lineage_surnames": lineage_surnames,
+        "observations": observations,
+        "constellation": constellation,
+    })
     report = generate_report(sig, psychology=psychology, comparisons=comps, mode=mode)
-    response = {
-        "contract_version": "analysis-v1",
+    report["metadata"] = {
+        "report_schema_version": "report-v1",
+        "analysis_schema_version": SCHEMA_VERSION,
+        "engine_version": ENGINE_VERSION,
+        "convention_set_version": CONVENTION_SET_VERSION,
         "build_revision": BUILD_REVISION,
-        "engine_version": "signature-v2",
+        "reproducibility_id": request_fingerprint,
+    }
+    report["markdown"] = report["markdown"].replace(
+        "\n",
+        (
+            f"\n\n> Report schema `report-v1` · engine `{ENGINE_VERSION}` · "
+            f"conventions `{CONVENTION_SET_VERSION}` · build `{BUILD_REVISION}` · "
+            f"reproduction `{request_fingerprint}`\n"
+        ),
+        1,
+    )
+    report["word_count"] = len(report["markdown"].split())
+    response = {
+        "contract_version": SCHEMA_VERSION,
+        "build_revision": BUILD_REVISION,
+        "engine_version": ENGINE_VERSION,
         "analysis_mode": mode,
         "subject_type": subject_type,
-        "input_hash": _input_hash({
-            "name": name,
-            "birth": birth,
-            "psychology": psychology,
-            "mode": mode,
-            "subject_type": subject_type,
-            "as_of_year": requested_year,
-            "lineage_surnames": lineage_surnames,
-            "observations": observations,
-            "constellation": constellation,
-        }),
+        "input_hash": request_fingerprint,
         "privacy": {
             "retention": "not persisted by the web process",
             "response_redaction": "raw birth coordinates, locations, and observation text are omitted",
@@ -550,6 +762,7 @@ def analyze(payload):
         "correlations": corr,
         "report": report,
         "psychology": psychology,
+        "aliases": _alias_summaries(aliases, requested_year),
         "normalized_input": sig["normalized_input"],
         "etymology": etymology,
         "evidence": evidence,
@@ -568,7 +781,8 @@ class Handler(BaseHTTPRequestHandler):
         self.connection.settimeout(REQUEST_TIMEOUT_SECONDS)
 
     def log_message(self, fmt, *args):
-        sys.stderr.write("[web] %s\n" % (fmt % args))
+        status = args[1] if len(args) > 1 else "-"
+        sys.stderr.write(_safe_request_log(self.command, self.path, status) + "\n")
 
     def version_string(self):
         return self.server_version
@@ -590,37 +804,55 @@ class Handler(BaseHTTPRequestHandler):
         self._send(code, body, "application/json; charset=utf-8", extra_headers)
 
     def _read_json_body(self, max_bytes: int = MAX_REQUEST_BYTES):
+        content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+        if content_type != "application/json":
+            raise HTTPRequestError(
+                "Content-Type must be application/json.", code="invalid_content_type", status=415
+            )
         raw_length = self.headers.get("Content-Length")
         try:
             length = int(raw_length or 0)
         except ValueError as exc:
-            raise ValueError("Content-Length must be an integer.") from exc
+            raise HTTPRequestError(
+                "Content-Length must be an integer.", code="invalid_content_length"
+            ) from exc
         if length <= 0:
-            raise ValueError("Request body is empty.")
+            raise HTTPRequestError("Request body is empty.", code="empty_request_body")
         if length > max_bytes:
-            raise ValueError("Payload too large.")
+            raise HTTPRequestError("Payload too large.", code="payload_too_large", status=413)
         body = self.rfile.read(length)
         if len(body) != length:
-            raise ValueError("Request body was truncated.")
+            raise HTTPRequestError("Request body was truncated.", code="truncated_request_body")
         try:
             payload = json.loads(body)
         except json.JSONDecodeError as exc:
-            raise ValueError(f"Invalid JSON: {exc.msg}.") from exc
+            raise HTTPRequestError(
+                f"Invalid JSON: {exc.msg}.", code="invalid_json"
+            ) from exc
         return payload
 
     def do_GET(self):
         path = self.path.split("?", 1)[0]
-        if path == "/api/health":
+        if path == "/healthz":
+            return self._json(200, {
+                "ok": True,
+                "status": "alive",
+                "application_version": APP_VERSION,
+            })
+        if path in {"/api/health", "/readyz"}:
             get_defaults()
-            ready = bool(_DEFAULTS) and not _DEFAULT_ERRORS
+            ready = EPHEMERIS_AVAILABLE and bool(_DEFAULTS) and not _DEFAULT_ERRORS
             return self._json(200 if ready else 503, {
                 "ok": ready,
                 "ready": ready,
                 "version": APP_VERSION,
                 "build_revision": BUILD_REVISION,
+                "ephemeris_available": EPHEMERIS_AVAILABLE,
                 "reference_count": len(_DEFAULTS),
                 "reference_errors": [{"id": item.get("id"), "error": item.get("error")} for item in _DEFAULT_ERRORS],
             })
+        if path == "/api/version":
+            return self._json(200, _version_payload())
         if path == "/api/defaults":
             return self._json(200, {"identities": default_summaries()})
         if path == "/api/modes":
@@ -649,24 +881,38 @@ class Handler(BaseHTTPRequestHandler):
         if not _allow_analysis(client_ip):
             return self._json(
                 429,
-                {"error": "Too many analysis requests. Please try again shortly."},
+                {"error": "Too many analysis requests. Please try again shortly.",
+                 "message": "Too many analysis requests. Please try again shortly.",
+                 "code": "rate_limited"},
                 {"Retry-After": str(RATE_LIMIT_WINDOW_SECONDS)},
             )
         if not _ANALYSIS_SLOTS.acquire(blocking=False):
-            return self._json(429, {"error": "Analysis service is busy. Please try again shortly."})
+            return self._json(429, {
+                "error": "Analysis service is busy. Please try again shortly.",
+                "message": "Analysis service is busy. Please try again shortly.",
+                "code": "service_busy",
+            })
         try:
             payload = self._read_json_body()
             return self._json(200, analyze(payload))
+        except HTTPRequestError as exc:
+            return self._json(exc.status, _error_payload(exc))
+        except LocationResolutionError as exc:
+            return self._json(400, _error_payload(exc))
         except (
             BirthValidationError,
             ConstellationValidationError,
             ValueError,
             json.JSONDecodeError,
         ) as exc:
-            return self._json(400, {"error": str(exc)})
+            return self._json(400, _error_payload(exc))
         except Exception:
             traceback.print_exc()
-            return self._json(500, {"error": "Analysis failed.", "detail": None})
+            return self._json(500, {
+                "error": "Analysis failed.",
+                "message": "Analysis failed.",
+                "code": "internal_error",
+            })
         finally:
             _ANALYSIS_SLOTS.release()
 
@@ -676,18 +922,26 @@ class Handler(BaseHTTPRequestHandler):
         if not _allow_analysis(client_ip):
             return self._json(
                 429,
-                {"error": "Too many sigil requests. Please try again shortly."},
+                {"error": "Too many sigil requests. Please try again shortly.",
+                 "message": "Too many sigil requests. Please try again shortly.",
+                 "code": "rate_limited"},
                 {"Retry-After": str(RATE_LIMIT_WINDOW_SECONDS)},
             )
         if not _ANALYSIS_SLOTS.acquire(blocking=False):
-            return self._json(429, {"error": "Sigil service is busy. Please try again shortly."})
+            return self._json(429, {
+                "error": "Sigil service is busy. Please try again shortly.",
+                "message": "Sigil service is busy. Please try again shortly.",
+                "code": "service_busy",
+            })
         try:
             payload = self._read_json_body(max_bytes=8 * 1024)
             if not isinstance(payload, dict):
                 raise ValueError("Request body must be a JSON object.")
             return self._json(200, generate_custom_sigil(payload.get("text"), size=payload.get("size", 360)))
+        except HTTPRequestError as exc:
+            return self._json(exc.status, _error_payload(exc))
         except (ValueError, json.JSONDecodeError) as exc:
-            return self._json(400, {"error": str(exc)})
+            return self._json(400, _error_payload(exc))
         finally:
             _ANALYSIS_SLOTS.release()
 
@@ -720,6 +974,10 @@ class BoundedThreadingHTTPServer(ThreadingHTTPServer):
 
 
 def main():
+    if not EPHEMERIS_AVAILABLE:
+        raise SystemExit(
+            "Swiss Ephemeris is required. Install the pinned requirements before starting the server."
+        )
     port = int(os.environ.get("PORT", 8000))
     bind_host = os.environ.get("HME_BIND_HOST", "127.0.0.1")
     print(f"Warming public reference population ({len(PUBLIC_REFERENCE_IDENTITIES)} identities)...")

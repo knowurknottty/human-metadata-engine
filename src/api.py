@@ -122,7 +122,7 @@ class APIHandler(BaseHTTPRequestHandler):
             self._send_json({
                 "status": "ok",
                 "engine": "human-metadata-engine",
-                "version": "0.6.0",
+                "version": "0.7.0",
                 "status_note": "legacy loopback compatibility surface; use webapp/server.py for public traffic",
             })
 

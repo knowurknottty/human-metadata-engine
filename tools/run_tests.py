@@ -15,7 +15,15 @@ def main() -> int:
     parser.add_argument("--quiet", action="store_true")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
-    tests = sorted((root / "tests").glob("test_*.py"))
+    # pytest needs the bridge below because several historical test files are
+    # executable scripts that call sys.exit() during import.  This runner
+    # already executes those scripts directly, so do not run the bridge and
+    # duplicate them here.
+    tests = sorted(
+        path
+        for path in (root / "tests").glob("test_*.py")
+        if path.name != "test_legacy_script_suites.py"
+    )
     env = os.environ.copy()
     env["PYTHONPATH"] = os.pathsep.join([str(root / "src"), str(root / "webapp"), env.get("PYTHONPATH", "")])
     failures = []

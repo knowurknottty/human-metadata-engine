@@ -20,7 +20,7 @@ body::before {
 }
 button, input, select { font:inherit; }
 button { -webkit-tap-highlight-color:transparent; }
-button:focus-visible, input:focus-visible, select:focus-visible { outline:2px solid rgba(251,191,36,.85); outline-offset:3px; }
+button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, a:focus-visible { outline:2px solid rgba(251,191,36,.85); outline-offset:3px; }
 
 .glass {
   position:relative; overflow:hidden;
@@ -145,6 +145,7 @@ fieldset:hover { border-color:rgba(255,255,255,.16)!important;background:rgba(25
   body{background:#fff!important;color:#111!important}body *{visibility:hidden}#report-print-area,#report-print-area *{visibility:visible}
   #report-print-area{position:absolute;inset:0;padding:1cm}.report-body h1,.report-body h2,.report-body h3,.report-body p,.report-body li,.report-body strong{color:#111!important}
   .report-body em{color:#333!important}.report-body code{background:#eee;color:#333}
+  .report-body h1,.report-body h2,.report-body h3{break-after:avoid-page}.report-body p,.report-body li{orphans:3;widows:3}.report-body li{break-inside:avoid-page}
 }
 
 /* Observatory pass: a quieter, authored visual language for the public surface. */

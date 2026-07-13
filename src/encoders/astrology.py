@@ -122,6 +122,9 @@ class AstrologicalChart:
     ascendant: str
     ascendant_longitude: float
     midheaven: str
+    midheaven_longitude: float
+    house_system: str
+    house_cusps: list[float]
 
     # Aspects
     aspects: list[Aspect]
@@ -252,8 +255,9 @@ def compute_chart(
         confidence = 0.95
 
     if not SWE_AVAILABLE:
-        # Return a stub chart when swisseph is not available
-        return _stub_chart(year, month, day, hour, minute, location, lat, lon, time_precision, confidence)
+        raise RuntimeError(
+            "Swiss Ephemeris is required for astronomical chart calculations."
+        )
 
     # Initialize Swiss Ephemeris
     swe.set_ephe_path(None)  # Use built-in Moshier ephemeris
@@ -293,17 +297,29 @@ def compute_chart(
         except Exception:
             continue
 
-    # Compute Ascendant and houses
+    # Compute Ascendant and Placidus house cusps.  Swiss Ephemeris returns
+    # twelve zero-based cusp values followed by the angle tuple.
     try:
-        ascmc = swe.houses(jd, lat, lon, b'P')  # Placidus
-        asc_lon = ascmc[1][0]
-        mc_lon = ascmc[1][1]
+        house_cusps_raw, ascmc = swe.houses(jd, lat, lon, b'P')
+        house_cusps = [float(value) % 360 for value in house_cusps_raw]
+        if len(house_cusps) != 12:
+            raise ValueError("Swiss Ephemeris did not return twelve house cusps.")
+        asc_lon = float(ascmc[0]) % 360
+        mc_lon = float(ascmc[1]) % 360
         asc_sign, _ = longitude_to_sign(asc_lon)
         mc_sign, _ = longitude_to_sign(mc_lon)
-    except Exception:
-        asc_lon = 0
-        asc_sign = "Aries"
-        mc_sign = "Aries"
+    except Exception as exc:
+        raise ValueError(
+            "House calculation failed for the supplied coordinates and birth time."
+        ) from exc
+
+    for position in planet_positions:
+        longitude = position.longitude % 360
+        for index, start in enumerate(house_cusps):
+            end = house_cusps[(index + 1) % 12]
+            if (longitude - start) % 360 < (end - start) % 360:
+                position.house = index + 1
+                break
 
     # Compute aspects
     aspects = compute_aspects(planet_positions)
@@ -362,6 +378,9 @@ def compute_chart(
         ascendant=asc_sign,
         ascendant_longitude=round(asc_lon, 4),
         midheaven=mc_sign,
+        midheaven_longitude=round(mc_lon, 4),
+        house_system="Placidus",
+        house_cusps=[round(value, 4) for value in house_cusps],
         aspects=aspects,
         dominant_element=dominant_element,
         dominant_modality=dominant_modality,
@@ -372,40 +391,6 @@ def compute_chart(
         lunar_phase_degree=round(lunar_degree, 2),
         is_waxing=is_waxing,
         chart_ruler=chart_ruler,
-    )
-
-
-def _stub_chart(year, month, day, hour, minute, location, lat, lon, time_precision, confidence):
-    """Stub chart when swisseph is not available."""
-    # Use approximate sun sign based on date
-    day_of_year = (datetime(year, month, day) - datetime(year, 1, 1)).days
-    sun_sign_idx = int((day_of_year + 10) / 30.44) % 12
-    sun_sign = SIGNS[sun_sign_idx]
-
-    return AstrologicalChart(
-        birth_datetime=f"{year}-{month:02d}-{day:02d}T{hour:02d}:{minute:02d}",
-        birth_location=location,
-        latitude=lat,
-        longitude=lon,
-        time_precision=f"{time_precision}_stub",
-        confidence=confidence * 0.5,
-        calculation_engine="deterministic stub (pyswisseph unavailable)",
-        planets=[PlanetPosition("Sun", 0, sun_sign, 0, None, False)],
-        sun_sign=sun_sign,
-        moon_sign="Unknown",
-        ascendant="Unknown",
-        ascendant_longitude=0,
-        midheaven="Unknown",
-        aspects=[],
-        dominant_element="Unknown",
-        dominant_modality="Unknown",
-        element_counts={},
-        modality_counts={},
-        yin_yang_balance={},
-        lunar_phase="Unknown",
-        lunar_phase_degree=0,
-        is_waxing=False,
-        chart_ruler="Unknown",
     )
 
 
