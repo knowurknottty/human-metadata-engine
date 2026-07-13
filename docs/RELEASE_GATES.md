@@ -1,4 +1,4 @@
-# Identity Resonance Release Gates
+# Human Metadata Engine Release Gates
 
 This document turns the human-usability review into testable release criteria.
 It is the source of truth for what can ship as a local demo, paid beta, or
@@ -11,9 +11,9 @@ deployment, payment boundary, or privacy posture is production-ready.
 | --- | --- | --- |
 | Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 -m pytest -q`; `python3 tools/validate_contracts.py` | Verified locally; CI pending this commit |
 | Structured Know Thyself profile | Adjacent-wing API validation, compatibility tests, status round-trip tests | Verified locally |
-| Browser flow | Local name-only and location-only generation, Data → Magic switching, alias rendering, report actions, console health | Verified locally; physical-device QA remains |
+| Browser flow | Name-only, full Kirk fixture, unknown time, ambiguity selection, multi-error recovery, alias tokens, report focus/actions, and 320 CSS-pixel completion | Verified in the local in-app browser; physical-device QA remains |
 | Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |
-| Plain-English result layer | First-view synthesis, evidence legend, and neutral pattern-index language | Verified locally |
+| Plain-English result layer | Report identity, coverage, overview, information-type labels, explicit tensions, and neutral convergence language | Verified locally |
 | Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
 | Commerce | Checkout, card fields, paywall, and client-side entitlement simulation are absent | Not part of v0.7.0 |
@@ -33,9 +33,10 @@ Release only when every item below is true:
 - [x] The privacy notice names Open-Meteo and explains that the supplied place is sent to it; production availability monitoring remains an operations gate.
 - [x] No checkout, card field, paywall, or simulated entitlement is shipped.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
-- [x] The first result view contains a plain-English synthesis, an evidence legend, and an explicit “what this does not mean” statement (verified in local browser flow and frontend contract test).
+- [x] The first result view contains report identity, plain-English coverage, an interpretive boundary, information-type labels, and explicit disagreement between systems (verified in local browser flow and frontend contract tests).
 - [x] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings (frontend and API tests).
-- [ ] Mobile QA confirms readable explanatory text, expandable technical detail, and no critical meaning encoded only by color.
+- [x] CSS-viewport QA confirms readable explanatory text, stacked controls, expandable technical detail, and zero horizontal overflow at 320, 360, 390, 412, and 768 CSS pixels.
+- [ ] Physical-device QA confirms the same behavior in current iPhone Safari and Android Chrome.
 
 ## Gate B — Optional future paid beta
 
@@ -104,8 +105,9 @@ and observed-user gates above:
 - [x] Public request, report, and static-rendering security regression checks pass.
 - [x] Public report wording and metadata separate calculations, astronomy, self-report, symbolic conventions, heuristics, and synthesis.
 - [ ] Mobile layout has been checked in a real current iPhone Safari and low-end Android Chrome; a 320 CSS-pixel browser check alone is insufficient.
-- [x] Markdown download and browser HTML renderer have structural/escaping tests; print output still requires browser QA per release candidate.
-- [x] README version, dependency, route, geocoding, privacy, and duplicate-contract descriptions match v0.7.0 implementation.
+- [x] Markdown download and browser HTML renderer have structural/escaping tests; the v0.8 interface exposes native download and print actions at the report top and end.
+- [x] Print CSS removes interactive controls, preserves heading order, and applies page-break protections; printer-dialog inspection remains a per-browser physical QA item.
+- [x] README version, dependency, route, geocoding, privacy, and duplicate-contract descriptions match the v0.7 engine and v0.8 interface boundary.
 - [x] Production payment behavior is removed.
 - [x] Public versus legacy analytics/report paths are documented and tested.
 - [ ] Git status is clean after the release commit.

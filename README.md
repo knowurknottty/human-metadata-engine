@@ -2,7 +2,7 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.7.0** — Core encoder suite plus 25 provenance-aware symbolic extensions, explicit Data/Magic reading modes, strict public contracts, historical birth-location resolution, redacted responses, cross-encoder analytics, graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app**. There is no checkout or paid entitlement surface; every generated report is available to download or print.
+**v0.7.0 engine / v0.8 interface** — The stable engine and API contracts remain at v0.7.0. The public interface now uses a plain-language, editorial workflow that separates mathematical calculation, astronomy, user-supplied context, traditional interpretation, and experimental synthesis. There is no checkout or paid entitlement surface; every generated report is available to download or print.
 
 ## Quick Start — Web App
 
@@ -12,7 +12,7 @@ A provenance-aware identity metadata architecture that encodes humans, aliases, 
 python3 -m pip install --require-hashes -r requirements.txt && python3 webapp/server.py
 ```
 
-Open http://localhost:8000 — choose Data or Magic mode and enter a name. Aliases, birth data, and self-reported assessment data are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, an IANA timezone, and the date-specific historical UTC offset. Advanced users may instead provide coordinates and an IANA timezone. Data mode stays measurement/provenance-first; Magic mode adds a clearly labeled symbolic reflection layer. Historical public-reference input can use `subject_type: "reference"`.
+Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The report begins with identity and coverage, then keeps calculations, interpretation, tensions, methods, and limitations distinct. Historical public-reference API input can still use `subject_type: "reference"`.
 
 Place lookup uses Open-Meteo's geocoding endpoint with a bounded timeout, one retry, and an in-process success cache. The place text is sent to that provider. Ambiguous matches return ranked choices; invalid places, provider failures, DST gaps, and DST folds return structured errors rather than guessed chart inputs. Location lookup requires network access. Explicit coordinates plus an IANA timezone work offline; a raw offset is accepted but labeled less reliable for historical calculations.
 
@@ -31,7 +31,7 @@ docker run --rm -p 127.0.0.1:8000:8080 identity-resonance
 human-metadata-engine/
 ├── webapp/
 │   ├── server.py                    # Stdlib HTTP server (API + static)
-│   └── static/                      # Single-page dark-theme app (vendored Tailwind)
+│   └── static/                      # Framework-free editorial HTML/CSS/JavaScript interface
 ├── src/
 │   ├── engine.py                    # Master orchestrator (signature-v2)
 │   ├── analytics.py                 # Legacy/internal analytics compatibility contract
