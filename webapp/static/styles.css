@@ -544,14 +544,13 @@ pre, code { white-space: pre-wrap; overflow-wrap: anywhere; }
   @page { margin: .7in; }
   :root { --surface-page: #fff; --surface-raised: #fff; --surface-subtle: #f3f3f3; }
   body { color: #111; background: #fff; font-size: 11pt; }
-  .site-header, .site-footer, #landing, #form-section, #processing, .report-navigation, .action-group, .end-actions, .button { display: none !important; }
+  .skip-link, .site-header, .site-footer, #landing, #form-section, #processing, .report-navigation, .action-group, .end-actions, .button, .technical-details, .fingerprint-disclosure { display: none !important; }
   .report-shell { width: 100%; padding: 0; }
   .report-header { display: block; padding-top: 0; }
   .report-title { font-size: 30pt; }
-  .report-identity, .coverage, .report-section { break-inside: auto; }
+  .report-identity, .coverage { break-inside: auto; }
+  .report-section { break-inside: avoid-page; }
   h1, h2, h3, h4, dt { break-after: avoid-page; }
   .coverage-item, .value-grid div, .interpretation-note, .limits-note, .omitted-note, table, figure { break-inside: avoid-page; }
-  details > * { display: block !important; }
-  details > summary { list-style: none; }
   a { color: #111; text-decoration: none; }
 }
