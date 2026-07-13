@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Identity Resonance web server: API, validation, and static assets."""
+"""Human Metadata Engine web server: API, validation, and static assets."""
 from __future__ import annotations
 
 import json
@@ -990,7 +990,7 @@ def main():
     print(f"Warming public reference population ({len(PUBLIC_REFERENCE_IDENTITIES)} identities)...")
     get_defaults()
     print(f"Loaded {len(_DEFAULTS)} references; {len(_DEFAULT_ERRORS)} failed.")
-    print(f"Identity Resonance running on http://{bind_host}:{port}")
+    print(f"Human Metadata Engine running on http://{bind_host}:{port}")
     server = BoundedThreadingHTTPServer((bind_host, port), Handler)
     server.daemon_threads = True
     try:
