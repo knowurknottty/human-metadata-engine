@@ -1,52 +1,22 @@
-/* Identity Resonance — client app.
-   Renders the complete dashboard and report returned by /api/analyze. */
+/* Human Metadata Engine — accessible editorial client for the v0.7 public API. */
 
 (function () {
 "use strict";
-
-// ------------------------------------------------------------------
-// Constants
-// ------------------------------------------------------------------
-
-const ACCENT = {
-  pythagorean: "#fbbf24", chaldean: "#f59e0b", ordinal: "#93c5fd",
-  linguistic: "#60a5fa", binary_prime: "#2dd4bf", gematria: "#a78bfa",
-  isopsephy: "#c4b5fd", astrology: "#e879f9", human_design: "#34d399",
-  psychology: "#fb7185",
-};
-
-const NUM_MEANING = {
-  1: "the Initiator", 2: "the Diplomat", 3: "the Communicator",
-  4: "the Builder", 5: "the Freedom-Seeker", 6: "the Guardian",
-  7: "the Analyst", 8: "the Executive", 9: "the Humanitarian",
-  11: "the Illuminator ✦", 22: "the Master Builder ✦", 33: "the Master Teacher ✦",
-};
 
 const MBTI_TYPES = ["INTJ","INTP","ENTJ","ENTP","INFJ","INFP","ENFJ","ENFP",
                     "ISTJ","ISFJ","ESTJ","ESFJ","ISTP","ISFP","ESTP","ESFP"];
 const ENNEAGRAM_WINGS = {
   1:[9,2],2:[1,3],3:[2,4],4:[3,5],5:[4,6],6:[5,7],7:[6,8],8:[7,9],9:[8,1],
 };
-const MBTI_STACK = {
-  INTJ:["Ni","Te","Fi","Se"],INTP:["Ti","Ne","Si","Fe"],ENTJ:["Te","Ni","Se","Fi"],
-  ENTP:["Ne","Ti","Fe","Si"],INFJ:["Ni","Fe","Ti","Se"],INFP:["Fi","Ne","Si","Te"],
-  ENFJ:["Fe","Ni","Se","Ti"],ENFP:["Ne","Fi","Te","Si"],ISTJ:["Si","Te","Fi","Ne"],
-  ISFJ:["Si","Fe","Ti","Ne"],ESTJ:["Te","Si","Ne","Fi"],ESFJ:["Fe","Si","Ne","Ti"],
-  ISTP:["Ti","Se","Ni","Fe"],ISFP:["Fi","Se","Ni","Te"],ESTP:["Se","Ti","Fe","Ni"],
-  ESFP:["Se","Fi","Te","Ni"],
-};
 const B5 = [
   ["openness","Openness"],["conscientiousness","Conscientiousness"],
   ["extraversion","Extraversion"],["agreeableness","Agreeableness"],
   ["neuroticism","Neuroticism"],
 ];
-const ZODIAC = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
-const ZODIAC_GLYPH = {Aries:"♈",Taurus:"♉",Gemini:"♊",Cancer:"♋",Leo:"♌",Virgo:"♍",Libra:"♎",Scorpio:"♏",Sagittarius:"♐",Capricorn:"♑",Aquarius:"♒",Pisces:"♓"};
-const PLANET_GLYPH = {Sun:"☉",Moon:"☽",Mercury:"☿",Venus:"♀",Mars:"♂",Jupiter:"♃",Saturn:"♄",Uranus:"♅",Neptune:"♆",Pluto:"♇"};
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
-let STATE = { result: null, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false };
+let STATE;
 
 function updateWingOptions() {
   const core = parseInt($("p-enne").value, 10);
@@ -56,7 +26,7 @@ function updateWingOptions() {
   if (!core || !ENNEAGRAM_WINGS[core]) {
     wing.innerHTML = '<option value="">Select a core type first</option>';
     wing.disabled = true;
-    if (warning) warning.classList.add("hidden");
+    if (warning) warning.hidden = true;
     return;
   }
   const options = ['<option value="">Not assessed</option>']
@@ -68,7 +38,7 @@ function updateWingOptions() {
     wing.value = "";
     if (warning) {
       warning.textContent = `Wing reset: ${core} can only use ${ENNEAGRAM_WINGS[core].join(" or ")}.`;
-      warning.classList.remove("hidden");
+      warning.hidden = false;
     }
   }
 }
@@ -79,9 +49,9 @@ function updateSecondaryWarning() {
   const warning = $("p-secondary-warning");
   if (warning && core && secondary && secondary !== "unknown" && core === secondary) {
     warning.textContent = "Same as the core type: this adds little additional information.";
-    warning.classList.remove("hidden");
+    warning.hidden = false;
   } else if (warning) {
-    warning.classList.add("hidden");
+    warning.hidden = true;
   }
 }
 
@@ -152,300 +122,9 @@ function fingerprintSVG(fp, size) {
   return `<svg viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="identity fingerprint">${el.join("")}</svg>`;
 }
 
-// Simple decorative glyph for landing (before any analysis)
-function decorativeFP(seed, size) {
-  const rand = mulberry(seed);
-  const spokes = Array.from({length: 7}, (_, i) => ({value: 0.3 + rand() * 0.7, hue: [45,30,200,220,160,280,260][i]}));
-  return fingerprintSVG({symmetry: 3 + Math.floor(rand() * 6), spokes,
-    ring_pattern: Array.from({length: 10 + Math.floor(rand()*8)}, () => rand() > 0.4 ? "1" : "0").join("")}, size);
-}
-function mulberry(a) { return function() { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-
-// ------------------------------------------------------------------
-// Small chart builders (pure SVG)
-// ------------------------------------------------------------------
-
-function gaugeSVG(score) {
-  const r = 84, cx = 100, cy = 100;
-  const arc = Math.PI * 1.5; // 270°
-  const len = r * arc;
-  const filled = len * (score / 100);
-  const hue = 20 + (score / 100) * 120; // red->green sweep via gold
-  return `
-  <svg viewBox="0 0 200 170" class="w-full max-w-[260px] mx-auto">
-    <g transform="rotate(135 ${cx} ${cy})">
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="13"
-        stroke-dasharray="${len} ${2*Math.PI*r}" stroke-linecap="round"/>
-      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="hsl(${hue},85%,60%)" stroke-width="13"
-        class="gauge-arc" stroke-dasharray="${len} ${2*Math.PI*r}" stroke-dashoffset="${len}" stroke-linecap="round"
-        data-target="${(len - filled).toFixed(1)}"/>
-    </g>
-    <text x="100" y="102" text-anchor="middle" font-size="40" font-weight="800" fill="#f8fafc" class="stat-num gauge-num">0</text>
-    <text x="100" y="126" text-anchor="middle" font-size="12" fill="#94a3b8">/ 100 resonance</text>
-  </svg>`;
-}
-
-function animateGauge(container, score) {
-  const arc = container.querySelector(".gauge-arc");
-  const num = container.querySelector(".gauge-num");
-  requestAnimationFrame(() => {
-    arc.style.strokeDashoffset = arc.dataset.target;
-    const t0 = performance.now();
-    (function tick(t) {
-      const p = Math.min(1, (t - t0) / 1500);
-      num.textContent = (score * (1 - Math.pow(1 - p, 3))).toFixed(1);
-      if (p < 1) requestAnimationFrame(tick);
-    })(t0);
-  });
-}
-
-function meter(label, value, max, color, suffix) {
-  const pct = Math.max(0, Math.min(100, (value / max) * 100));
-  return `<div class="mt-2">
-    <div class="flex justify-between text-xs text-slate-400"><span>${esc(label)}</span>
-      <span class="stat-num text-slate-200">${typeof value === "number" ? value.toFixed(2).replace(/\.00$/, "") : value}${suffix || ""}</span></div>
-    <div class="h-1.5 mt-1 rounded-full bg-white/8"><div class="h-full rounded-full" style="width:${pct}%;background:${color}"></div></div>
-  </div>`;
-}
-
-function pieSVG(a, b, colA, colB, labA, labB) {
-  const total = a + b || 1, fa = a / total;
-  const r = 40, c = 2 * Math.PI * r;
-  return `<div class="flex items-center gap-4">
-    <svg viewBox="0 0 100 100" class="w-20 h-20 -rotate-90">
-      <circle cx="50" cy="50" r="${r}" fill="none" stroke="${colB}" stroke-width="16"/>
-      <circle cx="50" cy="50" r="${r}" fill="none" stroke="${colA}" stroke-width="16"
-        stroke-dasharray="${(fa*c).toFixed(1)} ${c}"/>
-    </svg>
-    <div class="text-xs space-y-1">
-      <div><span class="inline-block w-2.5 h-2.5 rounded-sm mr-1.5" style="background:${colA}"></span>${labA}: <b class="stat-num">${a}</b></div>
-      <div><span class="inline-block w-2.5 h-2.5 rounded-sm mr-1.5" style="background:${colB}"></span>${labB}: <b class="stat-num">${b}</b></div>
-    </div></div>`;
-}
-
-function radarSVG(values, labels, color) {
-  const n = values.length, C = 90, R = 62;
-  const pt = (i, v) => {
-    const a = (i / n) * 2 * Math.PI - Math.PI / 2;
-    return [(C + R * v * Math.cos(a)).toFixed(1), (C + R * v * Math.sin(a)).toFixed(1)];
-  };
-  let grid = "";
-  for (const g of [0.33, 0.66, 1]) {
-    grid += `<polygon points="${Array.from({length: n}, (_, i) => pt(i, g).join(",")).join(" ")}" fill="none" stroke="rgba(255,255,255,.09)"/>`;
-  }
-  const poly = values.map((v, i) => pt(i, v).join(",")).join(" ");
-  const lbls = labels.map((l, i) => {
-    const [x, y] = pt(i, 1.24);
-    return `<text x="${x}" y="${y}" text-anchor="middle" font-size="9" fill="#94a3b8">${esc(l)}</text>`;
-  }).join("");
-  return `<svg viewBox="0 0 180 180" class="w-full max-w-[240px] mx-auto">${grid}
-    <polygon points="${poly}" fill="${color}33" stroke="${color}" stroke-width="1.5"/>
-    ${values.map((v,i)=>{const[x,y]=pt(i,v);return `<circle cx="${x}" cy="${y}" r="2.5" fill="${color}"/>`}).join("")}${lbls}</svg>`;
-}
-
-function heatmapHTML(corr) {
-  const encs = corr.digit_encoders;
-  const cells = encs.map(a =>
-    `<tr><th class="text-right pr-2 text-[10px] sm:text-xs text-slate-400 font-normal">${a}</th>` +
-    encs.map(b => {
-      const v = corr.digit_agreement[a][b];
-      const hue = 260 - v * 215; // purple->gold
-      return `<td class="p-0.5"><div class="hm-cell rounded aspect-square flex items-center justify-center text-[9px] sm:text-[11px] font-semibold"
-        style="background:hsla(${hue},75%,55%,${0.15 + v * 0.75});color:${v > 0.5 ? "#0f172a" : "#e2e8f0"}" title="${a} vs ${b}: ${(v*100).toFixed(0)}%">${(v*100).toFixed(0)}</div></td>`;
-    }).join("") + "</tr>").join("");
-  return `<div class="overflow-x-auto"><table class="mx-auto"><thead><tr><th></th>${
-    encs.map(e => `<th class="pb-1 text-[10px] sm:text-xs text-slate-400 font-normal rotate-0">${e.slice(0,6)}</th>`).join("")
-  }</tr></thead><tbody>${cells}</tbody></table></div>
-  <p class="text-xs text-slate-500 mt-3 text-center">% of analyzed identities where each pair of digit systems reduces to the same root (your name included).</p>`;
-}
-
-function natalWheelSVG(astro) {
-  const C = 130, R1 = 122, R2 = 98;
-  let el = [`<circle cx="${C}" cy="${C}" r="${R1}" fill="none" stroke="rgba(232,121,249,.35)"/>`,
-            `<circle cx="${C}" cy="${C}" r="${R2}" fill="none" stroke="rgba(255,255,255,.12)"/>`];
-  for (let i = 0; i < 12; i++) {
-    const a = (i / 12) * 2 * Math.PI - Math.PI / 2;
-    el.push(`<line x1="${C + R2 * Math.cos(a)}" y1="${C + R2 * Math.sin(a)}" x2="${C + R1 * Math.cos(a)}" y2="${C + R1 * Math.sin(a)}" stroke="rgba(255,255,255,.15)"/>`);
-    const am = a + Math.PI / 12;
-    el.push(`<text x="${C + (R1 - 12) * Math.cos(am)}" y="${C + (R1 - 12) * Math.sin(am) + 4}" text-anchor="middle" font-size="12" fill="rgba(232,121,249,.8)">${ZODIAC_GLYPH[ZODIAC[i]]}</text>`);
-  }
-  (astro.planets || []).forEach(p => {
-    const si = ZODIAC.indexOf(p.sign);
-    if (si < 0) return;
-    const lon = si * 30 + p.degree;
-    const a = (lon / 360) * 2 * Math.PI - Math.PI / 2;
-    const r = R2 - 16;
-    el.push(`<text x="${C + r * Math.cos(a)}" y="${C + r * Math.sin(a) + 4}" text-anchor="middle" font-size="13" fill="#f0abfc">${PLANET_GLYPH[p.planet] || "•"}</text>`);
-    el.push(`<line x1="${C + (R2-4) * Math.cos(a)}" y1="${C + (R2-4) * Math.sin(a)}" x2="${C + R2 * Math.cos(a)}" y2="${C + R2 * Math.sin(a)}" stroke="#f0abfc" stroke-width="1.5"/>`);
-  });
-  el.push(`<text x="${C}" y="${C - 4}" text-anchor="middle" font-size="13" fill="#e2e8f0" font-weight="700">${esc(astro.sun_sign)} ☉</text>`);
-  const rising = astro.ascendant ? `${esc(astro.ascendant)} ↑` : "birth time unknown";
-  el.push(`<text x="${C}" y="${C + 14}" text-anchor="middle" font-size="10" fill="#94a3b8">${esc(astro.moon_sign)} ☽ · ${rising}</text>`);
-  return `<svg viewBox="0 0 260 260" class="w-full max-w-[280px] mx-auto">${el.join("")}</svg>`;
-}
-
-// ------------------------------------------------------------------
-// Identity Atlas — a single visual surface built from real encoder output
-// ------------------------------------------------------------------
-
-function extensionBySystem(encoders, system) {
-  return Object.values(encoders).find(entry => entry && entry.system === system) || null;
-}
-
 function compactLabel(value) {
   return String(value || "—").replaceAll("_", " ").replace(/\b\w/g, char => char.toUpperCase());
 }
-
-function atlasStarfield(seed) {
-  const number = Array.from(String(seed || "identity")).reduce((total, char) => (total * 31 + char.charCodeAt(0)) >>> 0, 17);
-  const rand = mulberry(number);
-  return Array.from({length: 76}, () => {
-    const x = (26 + rand() * 668).toFixed(1), y = (26 + rand() * 668).toFixed(1);
-    const r = (0.35 + rand() * 1.15).toFixed(2), opacity = (0.16 + rand() * 0.66).toFixed(2);
-    return `<circle cx="${x}" cy="${y}" r="${r}" fill="#fef3c7" opacity="${opacity}"/>`;
-  }).join("");
-}
-
-function identityAtlasSVG(fp, astro, hd, kabbalah) {
-  const C = 360, dominant = String(kabbalah?.data?.dominant_sephirah || "").toLowerCase();
-  const activeGates = new Set(hd?.gates || []);
-  const tree = [
-    ["Kether", 360, 142], ["Chokmah", 462, 202], ["Binah", 258, 202],
-    ["Chesed", 462, 294], ["Geburah", 258, 294], ["Tiphareth", 360, 352],
-    ["Netzach", 462, 420], ["Hod", 258, 420], ["Yesod", 360, 490], ["Malkuth", 360, 562],
-  ];
-  const links = [[0,1],[0,2],[1,2],[1,3],[2,4],[3,4],[3,5],[4,5],[5,6],[5,7],[6,7],[6,8],[7,8],[8,9]];
-  const treeLines = links.map(([a, b]) => `<line x1="${tree[a][1]}" y1="${tree[a][2]}" x2="${tree[b][1]}" y2="${tree[b][2]}" class="atlas-tree-line"/>`).join("");
-  const nodes = tree.map(([label, x, y], index) => {
-    const hit = dominant && label.toLowerCase().includes(dominant.replace("/identity", ""));
-    return `<g class="atlas-sephirah ${hit ? "is-dominant" : ""}"><title>${esc(label)}${hit ? " — dominant mapping" : ""}</title><circle cx="${x}" cy="${y}" r="${hit ? 24 : 18}"/><text x="${x}" y="${y + 3}" text-anchor="middle">${index + 1}</text><text x="${x}" y="${y + 36}" text-anchor="middle" class="atlas-node-label">${esc(label)}</text></g>`;
-  }).join("");
-  const zodiac = ZODIAC.map((sign, index) => {
-    const a = (index / 12) * Math.PI * 2 - Math.PI / 2, labelA = a + Math.PI / 12;
-    const x1 = C + 289 * Math.cos(a), y1 = C + 289 * Math.sin(a);
-    const x2 = C + 320 * Math.cos(a), y2 = C + 320 * Math.sin(a);
-    const lx = C + 304 * Math.cos(labelA), ly = C + 304 * Math.sin(labelA);
-    return `<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}" class="atlas-zodiac-tick"/><text x="${lx.toFixed(1)}" y="${(ly + 5).toFixed(1)}" class="atlas-zodiac-label" text-anchor="middle"><tspan x="${lx.toFixed(1)}" dy="0">${ZODIAC_GLYPH[sign]}</tspan><tspan x="${lx.toFixed(1)}" dy="12">${sign}</tspan></text>`;
-  }).join("");
-  const gates = Array.from({length: 64}, (_, index) => {
-    const gate = index + 1, a = (index / 64) * Math.PI * 2 - Math.PI / 2;
-    const r1 = 213, r2 = activeGates.has(gate) ? 231 : 220;
-    const x1 = C + r1 * Math.cos(a), y1 = C + r1 * Math.sin(a);
-    const x2 = C + r2 * Math.cos(a), y2 = C + r2 * Math.sin(a);
-    const labelR = 242, lx = C + labelR * Math.cos(a), ly = C + labelR * Math.sin(a);
-    return `<g class="atlas-gate ${activeGates.has(gate) ? "is-active" : ""}"><title>Gate ${gate}${activeGates.has(gate) ? " — active" : ""}</title><line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/><text x="${lx.toFixed(1)}" y="${(ly + 3).toFixed(1)}" text-anchor="middle">${gate}</text></g>`;
-  }).join("");
-  const planetMarks = (astro?.planets || []).map((planet, index) => {
-    const signIndex = ZODIAC.indexOf(planet.sign);
-    if (signIndex < 0) return "";
-    const degree = Number(planet.degree) || 0, a = ((signIndex * 30 + degree) / 360) * Math.PI * 2 - Math.PI / 2;
-    const radius = 177 - (index % 3) * 18, x = C + radius * Math.cos(a), y = C + radius * Math.sin(a);
-    return `<g class="atlas-planet"><title>${esc(planet.planet)} ${esc(planet.sign)} ${degree.toFixed(2)}°</title><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="11"/><text x="${x.toFixed(1)}" y="${(y + 5).toFixed(1)}" text-anchor="middle">${PLANET_GLYPH[planet.planet] || "•"}</text></g>`;
-  }).join("");
-  const fingerprint = fingerprintSVG(fp, 144).replace("<svg ", '<svg x="288" y="288" width="144" height="144" ');
-  const birthLabel = astro?.sun_sign ? `${astro.sun_sign} sun · ${astro.moon_sign} moon` : "name-derived systems";
-  return `<svg class="identity-atlas" viewBox="0 0 720 720" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Identity Atlas: zodiac, Kabbalistic tree, Human Design gates, and deterministic fingerprint">
-    <defs><radialGradient id="atlasGlow"><stop stop-color="#fbbf24" stop-opacity=".14"/><stop offset=".48" stop-color="#b57cff" stop-opacity=".05"/><stop offset="1" stop-color="#07070d" stop-opacity="0"/></radialGradient></defs>
-    <rect width="720" height="720" rx="16" class="atlas-backdrop"/>
-    ${atlasStarfield(fp.hash)}
-    <circle cx="${C}" cy="${C}" r="333" class="atlas-orbit atlas-orbit-outer"/><circle cx="${C}" cy="${C}" r="289" class="atlas-orbit"/><circle cx="${C}" cy="${C}" r="248" class="atlas-orbit atlas-orbit-gates"/><circle cx="${C}" cy="${C}" r="200" class="atlas-orbit atlas-orbit-inner"/>
-    ${zodiac}${gates}${planetMarks}
-    <g class="atlas-tree">${treeLines}${nodes}</g>
-    <circle cx="${C}" cy="${C}" r="92" fill="url(#atlasGlow)"/><circle cx="${C}" cy="${C}" r="84" class="atlas-fingerprint-ring"/>
-    ${fingerprint}
-    <text x="${C}" y="460" text-anchor="middle" class="atlas-caption">IDENTITY FINGERPRINT</text>
-    <text x="${C}" y="478" text-anchor="middle" class="atlas-caption atlas-caption-muted">${esc(birthLabel)}</text>
-  </svg>`;
-}
-
-function bodygraphMiniSVG(hd) {
-  if (!hd || !hd.type) return `<div class="bodygraph-empty">Add birth details to draw the Human Design bodygraph.</div>`;
-  const centers = {Head:[110,28,"triangleUp"],Ajna:[110,76,"triangleDown"],Throat:[110,126,"square"],"G/Identity":[110,174,"diamond"],"Heart/Will":[62,174,"triangleUp"],"Solar Plexus":[158,222,"triangleRight"],Sacral:[110,250,"square"],Splenic:[60,222,"triangleLeft"],Root:[110,294,"square"]};
-  const positions = Object.entries(centers);
-  const defined = new Set((hd.centers || []).filter(center => center.defined).map(center => center.name));
-  const activeChannelKeys = new Set((hd.channels || []).map(channel => (channel.gates || []).map(Number).sort((a, b) => a - b).join("-")));
-  const connector = (from, to, gatePairs) => {
-    const a = centers[from], b = centers[to];
-    if (!a || !b) return "";
-    const live = gatePairs.some(pair => activeChannelKeys.has(pair.slice().sort((a, b) => a - b).join("-")));
-    return `<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" class="bodygraph-channel ${live ? "is-live" : ""}"/>`;
-  };
-  const channels = [
-    ["Head","Ajna",[[64,47],[61,24],[63,4]]], ["Ajna","Throat",[[17,62],[43,23],[11,56]]],
-    ["Throat","G/Identity",[[1,8],[7,31],[13,33]]], ["Throat","Heart/Will",[[45,21]]],
-    ["Throat","Solar Plexus",[[12,22],[35,36]]], ["Throat","Sacral",[[20,34],[20,57]]],
-    ["G/Identity","Sacral",[[15,5],[10,34],[29,46]]], ["G/Identity","Splenic",[[10,57]]],
-    ["Heart/Will","Solar Plexus",[[37,40]]], ["Solar Plexus","Root",[[49,19],[55,39],[30,41]]],
-    ["Solar Plexus","Sacral",[[6,59]]], ["Splenic","Root",[[38,28],[54,32],[58,18]]],
-    ["Splenic","Sacral",[[27,50],[34,57]]], ["Root","Sacral",[[42,53],[3,60]]],
-  ].map(([from, to, pairs]) => connector(from, to, pairs)).join("");
-  const shapes = positions.map(([name, [x, y, shape]]) => {
-    const on = defined.has(name), cls = `bodygraph-center ${on ? "is-defined" : ""}`;
-    let mark = "";
-    if (shape === "square") mark = `<rect x="${x-13}" y="${y-13}" width="26" height="26" rx="3"/>`;
-    if (shape === "diamond") mark = `<polygon points="${x},${y-17} ${x+17},${y} ${x},${y+17} ${x-17},${y}"/>`;
-    if (shape === "triangleUp") mark = `<polygon points="${x},${y-17} ${x-16},${y+13} ${x+16},${y+13}"/>`;
-    if (shape === "triangleDown") mark = `<polygon points="${x-16},${y-13} ${x+16},${y-13} ${x},${y+17}"/>`;
-    if (shape === "triangleRight") mark = `<polygon points="${x-14},${y-16} ${x+17},${y} ${x-14},${y+16}"/>`;
-    if (shape === "triangleLeft") mark = `<polygon points="${x+14},${y-16} ${x-17},${y} ${x+14},${y+16}"/>`;
-    return `<g class="${cls}"><title>${esc(name)}: ${on ? "defined" : "open"}</title>${mark}<text x="${x}" y="${y+3}" text-anchor="middle">${esc(name.replace("/Identity", "").replace("Solar Plexus", "Solar"))}</text></g>`;
-  }).join("");
-  return `<svg viewBox="0 0 220 320" class="bodygraph-mini" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Human Design bodygraph for ${esc(hd.type)}">${channels}${shapes}</svg>`;
-}
-
-function provenanceLedger(extensions) {
-  return `<section class="provenance-ledger fade-up-2" aria-labelledby="ledger-title"><div class="ledger-heading"><div><p class="atlas-kicker">Source-aware registry</p><h3 id="ledger-title">Provenance Ledger</h3></div><p>${extensions.length} symbolic systems · complete values and conventions retained</p></div><div class="ledger-rows">${extensions.map((extension, index) => {
-    const data = esc(JSON.stringify(extension.data, null, 2));
-    const sourceIds = (extension.provenance.source_ids || []).join(", ") || "not supplied";
-    return `<details class="ledger-row"><summary><span class="ledger-index">${String(index + 1).padStart(2, "0")}</span><span class="ledger-system">${esc(compactLabel(extension.system))}</span><span class="ledger-convention">${esc(extension.provenance.convention || "named convention")}</span><span class="ledger-phase">${esc(compactLabel(extension.phase))} · ${esc(compactLabel(extension.interpretation_level))}</span><span class="ledger-disclosure">⌄</span></summary><div class="ledger-detail"><dl><div><dt>Convention</dt><dd>${esc(extension.provenance.convention || "named convention")}</dd></div><div><dt>Source IDs</dt><dd>${esc(sourceIds)}</dd></div></dl><pre>${data}</pre></div></details>`;
-  }).join("")}</div></section>`;
-}
-
-function evidenceLegend({astro, hd, psychology}) {
-  const sources = [
-    ["Computed", "Direct string structure and arithmetic calculated by the engine."],
-    ["Birth data", astro || hd ? "Astronomical or Human Design fields calculated from the supplied birth data." : "Appears only when birth date/time data is supplied."],
-    ["You reported", psychology ? "Optional personality information supplied by you; it is not independently verified." : "Appears only when optional personality information is supplied."],
-    ["Traditional lens", "Named symbolic conventions retained with their provenance and limits."],
-    ["Experimental index", "A configured composite for comparing outputs; not accuracy, diagnosis, worth, or compatibility."],
-  ];
-  return `<section class="evidence-legend" aria-labelledby="evidence-legend-title">
-    <div class="evidence-legend-heading"><div><p class="atlas-kicker">Read the evidence</p><h3 id="evidence-legend-title">What each layer means</h3></div><p>Labels stay attached to the result so technical detail does not look like proof.</p></div>
-    <div class="evidence-legend-grid">${sources.map(([label, description]) => `<div class="evidence-item"><span class="evidence-badge evidence-${label.toLowerCase().replace(/\s+/g, "-")}">${esc(label)}</span><p>${esc(description)}</p></div>`).join("")}</div>
-  </section>`;
-}
-
-function plainEnglishSynthesis(res, astro, hd, psychology) {
-  const components = Object.entries(res?.components || {})
-    .map(([key, value]) => ({key, value: Number(value)}))
-    .filter(item => Number.isFinite(item.value))
-    .sort((a, b) => b.value - a.value);
-  const componentLabels = {
-    numerological_convergence: "numeric agreement across configured ciphers",
-    linguistic_harmony: "language-pattern balance",
-    polarity_balance: "vowel/consonant balance",
-    symbolic_depth: "coverage across registered symbolic conventions",
-  };
-  const strongest = components.slice(0, 2).map(item => componentLabels[item.key] || compactLabel(item.key).toLowerCase());
-  const inputSources = ["the submitted name"];
-  if (astro) inputSources.push("birth data");
-  if (psychology) inputSources.push("optional self-report");
-  const strongestText = strongest.length ? strongest.join(" and ") : "the configured encoder outputs";
-  const birthNote = hd?.type ? " Human Design fields are shown only because a birth time was available for the versioned calculation." : "";
-  return `<section class="plain-english-panel" aria-labelledby="plain-english-title">
-    <div class="plain-english-heading"><div><p class="atlas-kicker">Start here</p><h3 id="plain-english-title">Your result in plain English</h3></div><span class="evidence-badge evidence-experimental-index">Interpretive summary</span></div>
-    <p class="plain-english-lede">This page describes what the configured systems did with ${esc(inputSources.join(", "))}. It does not decide who you are. In this run, the largest configured components were <strong>${esc(strongestText)}</strong>. That is a description of output agreement, not a claim that the result is true about your personality.${esc(birthNote)}</p>
-    <div class="plain-english-columns">
-      <div><h4>What came from this run</h4><ul><li><strong>Direct calculations:</strong> letter counts, totals, ratios, and the deterministic fingerprint.</li><li><strong>Optional context:</strong> ${astro ? "birth-data fields" : "no birth-data fields"}${psychology ? " and self-reported personality fields" : " and no self-reported personality fields"}.</li><li><strong>Symbolic lenses:</strong> named conventions shown with their provenance in the ledger below.</li></ul></div>
-      <div><h4>What this does not mean</h4><ul><li>It is not a diagnosis, psychological assessment, or prediction.</li><li>A higher index is not higher accuracy, ability, worth, or compatibility.</li><li>Agreement with a public reference is mathematical output proximity, not personal similarity.</li></ul></div>
-    </div>
-    <div class="plain-english-reflection"><span>Try this reflection</span><p>Which part matches something you can observe? Which part conflicts? Treat both answers as useful prompts, and test one observation in real life before treating a symbolic phrase as a conclusion.</p></div>
-  </section>`;
-}
-
-// ------------------------------------------------------------------
-// Markdown → HTML (small, safe subset for our own generated report)
-// ------------------------------------------------------------------
 
 function mdToHTML(md) {
   const lines = md.split("\n");
@@ -469,320 +148,6 @@ function mdToHTML(md) {
   return html;
 }
 
-// ------------------------------------------------------------------
-// Dashboard rendering
-// ------------------------------------------------------------------
-
-function card(title, accent, bodyHTML, extraClass) {
-  return `<div class="enc-card ${extraClass || ""}" style="--accent:${accent}">
-    <h3 class="text-sm font-semibold tracking-wide" style="color:${accent}">${esc(title)}</h3>
-    <div class="mt-3">${bodyHTML}</div></div>`;
-}
-
-function bigNum(v, label, meaning) {
-  return `<div class="flex items-baseline gap-3">
-    <span class="text-4xl font-extrabold stat-num text-slate-50">${v}</span>
-    <div><div class="text-xs text-slate-400">${esc(label)}</div>
-    ${meaning ? `<div class="text-xs text-amber-200/90">${esc(meaning)}</div>` : ""}</div></div>`;
-}
-
-function renderDashboard(result) {
-  const sig = result.signature;
-  const e = sig.encoders;
-  const res = sig.resonance;
-  const fp = sig.fingerprint;
-  const name = sig.text;
-  const dataMode = result.analysis_mode === "data";
-  const d = $("dashboard");
-  const extensions = Object.values(e).filter(extension =>
-    extension && extension.system && extension.data && extension.provenance
-  );
-  const astro = e.astrology && !e.astrology.error ? e.astrology : null;
-  const hd = e.human_design && !e.human_design.error && e.human_design.available !== false ? e.human_design : null;
-  const kabbalah = extensionBySystem(e, "kabbalah_tree_of_life");
-  const birthState = astro ? (astro.time_sensitive_fields_withheld ? "date-only birth data resolved" : "birth data resolved") : "name-derived systems";
-  const definedCount = (hd?.centers || []).filter(center => center.defined).length;
-
-  // --- Identity Atlas: the visual overview is driven directly by encoder output. ---
-  let html = `
-  <section class="atlas-shell fade-up" aria-labelledby="atlas-title">
-    <div class="atlas-topline">
-      <div><p class="atlas-kicker">Deterministic symbolic identity map</p><h2 id="atlas-title">Identity Atlas</h2></div>
-      <div class="atlas-stamp"><span>Fingerprint</span><code>${esc(fp.hash)}</code><span>${sig.dimensions} dimensions · ${birthState}</span></div>
-    </div>
-    <div class="atlas-layout">
-      <aside class="atlas-profile" aria-label="Identity profile">
-        <p class="atlas-kicker">Analyzed identity</p>
-        <h3>${esc(name)}</h3>
-        <p class="atlas-profile-subtitle">${fp.symmetry}-fold deterministic fingerprint</p>
-        <div class="atlas-fingerprint">${fingerprintSVG(fp, 220)}</div>
-        <div class="resonance-readout"><span>Pattern convergence index</span><strong class="stat-num">${Number(res.score).toFixed(1)}</strong><small>/ 100 · configured output agreement, not accuracy</small></div>
-        <div class="atlas-component-list">${Object.entries(res.components).map(([key, value]) => `<div><span>${esc(compactLabel(key))}</span><i><b style="width:${Math.max(3, Math.min(100, Number(value) * 100)).toFixed(1)}%"></b></i><em>${(Number(value) * 100).toFixed(0)}</em></div>`).join("")}</div>
-        <div class="atlas-profile-foot"><span>${extensions.length} provenance-aware extensions</span><span>${astro ? (astro.time_sensitive_fields_withheld ? "Swiss Ephemeris date-only chart" : "Swiss Ephemeris chart") : "No chart requested"}</span></div>
-      </aside>
-      <div class="atlas-stage">
-        <div class="atlas-stage-heading"><div><p class="atlas-kicker">Visual correspondence field</p><h3>Systems in conversation</h3></div><p>Every glyph below is an encoder result or an explicit convention; interpretive layers do not alter the composite score.</p></div>
-        ${identityAtlasSVG(fp, astro, hd, kabbalah)}
-        <div class="atlas-legend"><span><i class="legend-tree"></i>Tree of Life path</span><span><i class="legend-gate"></i>Active Human Design gate</span><span><i class="legend-planet"></i>Planetary position</span><span><i class="legend-fingerprint"></i>Fingerprint geometry</span></div>
-        <div class="atlas-totals"><div><strong>10</strong><span>sephiroth</span></div><div><strong>64</strong><span>64-gate activation halo</span></div><div><strong>12</strong><span>zodiac sectors</span></div><div><strong>${extensions.length}</strong><span>named systems</span></div></div>
-      </div>
-      <aside class="atlas-rail" aria-label="Celestial and Human Design detail">
-        <section class="rail-panel celestial-panel"><div class="rail-panel-heading"><p class="atlas-kicker">Celestial profile</p><span>${astro ? esc(astro.calculation_engine || "chart") : "birth details needed"}</span></div>
-          ${astro ? `<div class="celestial-triad"><div><span>☉ Sun</span><b>${esc(astro.sun_sign)}</b></div><div><span>☽ Moon</span><b>${esc(astro.moon_sign)}</b></div><div><span>↑ Rising</span><b>${esc(astro.ascendant || "Time unknown")}</b></div></div><div class="celestial-list">${(astro.planets || []).map(planet => `<div><span>${PLANET_GLYPH[planet.planet] || "•"} ${esc(planet.planet)}</span><b>${esc(planet.sign)} ${Number(planet.degree).toFixed(2)}°${planet.retrograde ? " ℞" : ""}</b></div>`).join("")}</div><p class="rail-note">${esc(astro.lunar_phase || "—")} · ${esc(astro.dominant_element || "—")} element · ${esc(astro.dominant_modality || "—")} modality${astro.time_sensitive_fields_withheld ? " · time-sensitive fields withheld" : ""}</p>` : `<p class="rail-empty">Birth data was not supplied. The atlas retains the name-derived systems and leaves astronomical positions intentionally unclaimed.</p>`}
-        </section>
-        <section class="rail-panel bodygraph-panel"><div class="rail-panel-heading"><p class="atlas-kicker">Human Design</p><span>${hd?.type ? `${definedCount}/9 defined` : "birth details needed"}</span></div>
-          <div class="bodygraph-wrap">${bodygraphMiniSVG(hd)}</div>
-          ${hd?.type ? `<div class="bodygraph-summary"><strong>${esc(hd.type)}</strong><span>profile ${(hd.profile || []).join("/")} · ${esc(hd.authority || "—")} authority</span><span>${(hd.gates || []).length} active gates · ${(hd.channels || []).length} active channels</span></div>` : ""}
-        </section>
-        <section class="rail-panel numerology-panel"><p class="atlas-kicker">Numerology synthesis</p><div class="numerology-row"><div><span>Pythagorean</span><b>${e.pythagorean.master_preserved || e.pythagorean.expression}</b></div><div><span>Chaldean</span><b>${e.chaldean.name_number}</b></div><div><span>Gematria</span><b>${e.gematria.absolute_reduced}</b></div><div><span>Isopsephy</span><b>${(e.isopsephy.digital_root_chain || []).at(-1) || "—"}</b></div></div></section>
-      </aside>
-    </div>
-  </section>`;
-
-  html += plainEnglishSynthesis(res, astro, hd, STATE.psychology);
-  if (Array.isArray(result.aliases) && result.aliases.length) {
-    html += `<section class="glass rounded-2xl p-6 mt-6" aria-labelledby="alias-results-title">
-      <div class="analysis-section-heading"><div><p class="atlas-kicker">Deterministic name variants</p><h3 id="alias-results-title">Alias calculations</h3></div><p>Aliases are calculated independently from the primary name and do not alter the birth chart.</p></div>
-      <div class="grid sm:grid-cols-2 gap-3">${result.aliases.map(alias => `<article class="enc-card">
-        <h4 class="text-slate-100 font-semibold">${esc(alias.name)}</h4>
-        <p class="text-xs text-slate-500 mt-1">Traditional symbolic mappings · deterministic · not empirically validated</p>
-        <dl class="grid grid-cols-3 gap-2 mt-3 text-center"><div><dt class="text-[10px] text-slate-500">Pythagorean</dt><dd class="stat-num text-lg">${alias.calculations.pythagorean_expression}</dd></div><div><dt class="text-[10px] text-slate-500">Chaldean</dt><dd class="stat-num text-lg">${alias.calculations.chaldean_name_number}</dd></div><div><dt class="text-[10px] text-slate-500">Ordinal total</dt><dd class="stat-num text-lg">${alias.calculations.ordinal_total}</dd></div></dl>
-      </article>`).join("")}</div>
-    </section>`;
-  }
-  html += evidenceLegend({astro, hd, psychology: STATE.psychology});
-  html += provenanceLedger(extensions);
-  html += `<div class="analysis-section-heading"><div><p class="atlas-kicker">Complete analytical surface</p><h3>Core encoder detail</h3></div><p>${result.analysis_mode === "data" ? "Measurements and provenance first; interpretation is intentionally constrained." : "Symbolic reflection layer; read every claim as a creative lens, not a measurement."}</p></div>`;
-
-  // --- Detailed encoder panels ---
-  const p = e.pythagorean, c = e.chaldean, o = e.ordinal, l = e.linguistic,
-        b = e.binary_prime, g = e.gematria, iso = e.isopsephy;
-
-  const cards = [];
-  cards.push(card("Pythagorean Numerology", ACCENT.pythagorean, `
-    ${bigNum(p.master_preserved || p.expression, "Expression", NUM_MEANING[p.master_preserved || p.expression])}
-    <div class="grid grid-cols-2 gap-3 mt-4 text-sm">
-      <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Soul urge</div><b class="stat-num text-lg">${p.soul_urge}</b> <span class="text-[11px] text-slate-400">${NUM_MEANING[p.soul_urge]||""}</span></div>
-      <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Personality</div><b class="stat-num text-lg">${p.personality}</b> <span class="text-[11px] text-slate-400">${NUM_MEANING[p.personality]||""}</span></div>
-    </div>
-    <p class="text-xs text-slate-400 mt-3">${dataMode ? "These are configured letter-value outputs. Vowel and consonant totals describe the string, not its bearer." : "The expression is a symbolic lens; soul urge uses vowels and personality uses consonants. Treat the language as reflection, not measurement."}${p.master_preserved ? " Master number preserved as a convention." : ""}</p>
-    ${meter("Raw total", p.total, 200, ACCENT.pythagorean)}`));
-
-  cards.push(card("Chaldean Numerology", ACCENT.chaldean, `
-    ${bigNum(c.name_number, "Name number", NUM_MEANING[c.name_number])}
-    <div class="mt-4 rounded-lg bg-white/5 p-2.5 text-sm"><div class="text-[10px] text-slate-500">Compound (occult) number</div>
-      <b class="stat-num text-lg">${c.compound_number}</b></div>
-    <p class="text-xs text-slate-400 mt-3">${dataMode ? "A named Chaldean mapping with a compound and reduced value; this is a reproducible convention." : "A symbolic Babylonian mapping. Read the compound number as a creative prompt, not a claim about a person."}</p>`));
-
-  cards.push(card("Ordinal Ciphers", ACCENT.ordinal, `
-    <div class="grid grid-cols-3 gap-2 text-center">
-      <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">A1Z26</div><b class="stat-num text-xl">${o.ordinal_total}</b><div class="text-[10px] text-slate-400">→ ${o.ordinal_reduced}</div></div>
-      <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Reverse</div><b class="stat-num text-xl">${o.reverse}</b><div class="text-[10px] text-slate-400">→ ${o.reverse_reduced}</div></div>
-      <div class="rounded-lg bg-white/5 p-2.5"><div class="text-[10px] text-slate-500">Reduced</div><b class="stat-num text-xl">${o.reduced_total}</b><div class="text-[10px] text-slate-400">per-letter</div></div>
-    </div>
-    <p class="text-xs text-slate-400 mt-3">${dataMode ? "Standard and reverse totals are descriptive alphabet positions; the ordinary reduced root is mathematically coupled to the Pythagorean root." : (o.ordinal_total < o.reverse ? "Letters cluster toward the front of the alphabet — a symbolic, label-like prompt." : "Letters cluster toward the back of the alphabet — a symbolic, pressure-bearing prompt.")}</p>`));
-
-  cards.push(card("Linguistic Analysis", ACCENT.linguistic, `
-    ${meter("Shannon entropy", l.shannon_entropy, l.max_possible_entropy || 5, ACCENT.linguistic, " bits")}
-    ${meter("Entropy ratio", l.entropy_ratio * 100, 100, ACCENT.linguistic, "%")}
-    <div class="mt-4">${pieSVG(Math.round(l.vowel_ratio * l.letter_count), l.letter_count - Math.round(l.vowel_ratio * l.letter_count), "#fbbf24", "#60a5fa", "Vowels", "Consonants")}</div>
-    <div class="mt-3 flex flex-wrap gap-2 text-[11px] text-slate-300">
-      <span class="px-2 py-1 rounded bg-white/5">${l.syllable_estimate} syllable${l.syllable_estimate !== 1 ? "s" : ""}</span>
-      <span class="px-2 py-1 rounded bg-white/5">${l.plosive_count} plosives</span>
-      <span class="px-2 py-1 rounded bg-white/5">${l.fricative_count} fricatives</span>
-      <span class="px-2 py-1 rounded bg-white/5">${l.nasal_count} nasals</span>
-      ${l.is_palindrome ? '<span class="px-2 py-1 rounded bg-amber-400/20 text-amber-300">palindrome!</span>' : ""}
-    </div>`));
-
-  const polNorm = (b.vowel_power - b.consonant_power) / ((b.vowel_power + b.consonant_power) || 1);
-  cards.push(card("Binary / Prime Encoding", ACCENT.binary_prime, `
-    <div class="flex flex-wrap gap-1 mb-3">${[...b.binary_string].map(bit =>
-      `<span class="w-5 h-7 rounded flex items-center justify-center text-[11px] font-bold ${bit === "1" ? "bg-teal-400/20 text-teal-300" : "bg-amber-400/25 text-amber-300"}">${bit}</span>`).join("")}</div>
-    <div class="text-[10px] text-slate-500 mb-3">vowel = 0 (gold) · consonant = 1 (teal)</div>
-    <div class="relative h-2 rounded-full bg-gradient-to-r from-amber-400/60 via-white/10 to-teal-400/60">
-      <div class="absolute -top-1 w-4 h-4 rounded-full bg-slate-100 border-2 border-slate-800" style="left:calc(${(50 + polNorm * 50).toFixed(1)}% - 8px)"></div>
-    </div>
-    <div class="flex justify-between text-[10px] text-slate-500 mt-1"><span>vowel pole</span><span>consonant pole</span></div>
-    ${meter("Prime total (A=2…Z=101)", b.prime_total, 1000, ACCENT.binary_prime)}
-    ${meter("Pattern entropy", b.binary_entropy, 1, ACCENT.binary_prime)}`));
-
-  cards.push(card("Hebrew Gematria", ACCENT.gematria, `
-    <div class="flex flex-wrap gap-1.5 mb-3">${(g.letter_values || []).map(lv =>
-      `<span class="px-1.5 py-1 rounded bg-white/5 text-center"><span class="block text-[13px] text-violet-300 font-semibold">${esc(lv.char)}</span><span class="block text-[9px] text-slate-500 stat-num">${lv.absolute ?? lv.value ?? ""}</span></span>`).join("")}</div>
-    <div class="grid grid-cols-3 gap-2 text-center text-sm">
-      <div class="rounded-lg bg-white/5 p-2"><div class="text-[10px] text-slate-500">Absolute</div><b class="stat-num">${g.absolute_total}</b><div class="text-[10px] text-slate-400">→ ${g.absolute_reduced}</div></div>
-      <div class="rounded-lg bg-white/5 p-2"><div class="text-[10px] text-slate-500">Ordinal</div><b class="stat-num">${g.ordinal_total}</b><div class="text-[10px] text-slate-400">→ ${g.ordinal_reduced}</div></div>
-      <div class="rounded-lg bg-white/5 p-2"><div class="text-[10px] text-slate-500">Katan</div><b class="stat-num">${g.reduced_total}</b></div>
-    </div>`));
-
-  const chain = (iso.digital_root_chain || []).map(String);
-  cards.push(card("Greek Isopsephy", ACCENT.isopsephy, `
-    <div class="flex flex-wrap gap-1.5 mb-3">${(iso.greek_correspondence || []).map(gc =>
-      `<span class="px-1.5 py-1 rounded bg-white/5 text-center"><span class="block text-[13px] text-violet-200 font-semibold">${esc(gc.greek)}</span><span class="block text-[9px] text-slate-500">${esc(gc.letter)}·${gc.value}</span></span>`).join("")}</div>
-    <div class="flex items-center gap-2 flex-wrap text-lg font-bold stat-num">
-      ${chain.map((v, i) => `<span class="${i === chain.length - 1 ? "text-amber-300 text-2xl" : "text-slate-300"}">${v}</span>${i < chain.length - 1 ? '<span class="text-slate-600">→</span>' : ""}`).join("")}
-    </div>
-    <p class="text-xs text-slate-400 mt-2">${dataMode ? "The digital-root cascade is shown as a reproducible calculation path." : "The digital-root cascade is a symbolic act of distillation toward a terminal essence."}</p>`));
-
-  // Astrology
-  if (astro && astro.sun_sign) {
-    cards.push(card("Astrology — Natal Chart", ACCENT.astrology, `
-      ${astro.date_only ? `<p class="text-xs text-slate-400 text-center py-6">Date-only solar reference. Moon, rising sign, houses, aspects, and Human Design are withheld until a birth time is supplied.</p>` : natalWheelSVG(astro)}
-      <div class="grid grid-cols-3 gap-2 text-center text-xs mt-3">
-        <div class="rounded-lg bg-white/5 p-2">☉ <b>${esc(astro.sun_sign)}</b><div class="text-[10px] text-slate-500">Sun</div></div>
-        <div class="rounded-lg bg-white/5 p-2">☽ <b>${esc(astro.moon_sign || "—")}</b><div class="text-[10px] text-slate-500">${astro.moon_sign ? "Moon" : "Time unknown"}</div></div>
-        <div class="rounded-lg bg-white/5 p-2">↑ <b>${esc(astro.ascendant || "—")}</b><div class="text-[10px] text-slate-500">${astro.ascendant ? "Rising" : "Time unknown"}</div></div>
-      </div>
-      <div class="mt-3 text-xs text-slate-300 space-y-1">
-        <div>Dominant element: <b style="color:${ACCENT.astrology}">${esc(astro.dominant_element || "—")}</b> · modality: <b>${esc(astro.dominant_modality || "—")}</b></div>
-        <div>Lunar phase: <b>${esc(astro.lunar_phase || "—")}</b>${astro.lunar_phase ? ` (${astro.is_waxing ? "waxing" : "waning"})` : ""} · chart ruler: <b>${esc(astro.chart_ruler || "—")}</b></div>
-      </div>
-      <div class="mt-3 space-y-1">${(astro.aspects || []).map(a =>
-        `<div class="text-[11px] text-slate-400 flex justify-between"><span>${esc(a.planets[0])} <span class="text-fuchsia-300">${esc(a.type)}</span> ${esc(a.planets[1])}</span><span class="stat-num">${a.orb}°${a.exact ? " ✦" : ""}</span></div>`).join("")}</div>
-      <p class="text-[10px] text-slate-500 mt-2">${esc(astro.calculation_engine || "Astrology engine")}, tropical zodiac · confidence ${astro.confidence}</p>`, "md:col-span-2"));
-  }
-
-  // Human Design
-  if (hd && hd.type) {
-    const gateSet = new Set(hd.gates || []);
-    cards.push(card("Human Design", ACCENT.human_design, `
-      <div class="flex items-baseline gap-3"><span class="text-2xl font-extrabold text-emerald-300">${esc(hd.type)}</span>
-        <span class="text-xs text-slate-400">profile ${(hd.profile || []).join("/")}</span></div>
-      <div class="grid grid-cols-2 gap-2 mt-3 text-xs">
-        <div class="rounded-lg bg-white/5 p-2"><div class="text-[10px] text-slate-500">Strategy</div><b>${esc(hd.strategy || "—")}</b></div>
-        <div class="rounded-lg bg-white/5 p-2"><div class="text-[10px] text-slate-500">Authority</div><b>${esc(hd.authority || "—")}</b></div>
-        <div class="rounded-lg bg-white/5 p-2"><div class="text-[10px] text-slate-500">Not-self theme</div><b>${esc(hd.not_self_theme || "—")}</b></div>
-        <div class="rounded-lg bg-white/5 p-2"><div class="text-[10px] text-slate-500">Signature</div><b>${esc(hd.signature || "—")}</b></div>
-      </div>
-      <div class="mt-3"><div class="text-[10px] text-slate-500 mb-1.5">64-gate activation map</div>
-        <div class="grid grid-cols-16 gap-0.5" style="grid-template-columns:repeat(16,minmax(0,1fr))">${Array.from({length: 64}, (_, i) =>
-          `<div class="aspect-square rounded-[3px] flex items-center justify-center text-[7px] ${gateSet.has(i+1) ? "bg-emerald-400/70 text-emerald-950 font-bold" : "bg-white/5 text-[#9aa8aa]"}">${i+1}</div>`).join("")}</div></div>
-      ${(hd.channels || []).length ? `<div class="mt-3 flex flex-wrap gap-1.5">${hd.channels.map(ch =>
-        `<span class="px-2 py-0.5 rounded-full text-[10px] bg-emerald-400/10 text-emerald-300 border border-emerald-400/30">${esc(ch.name)} ${ch.gates[0]}–${ch.gates[1]}</span>`).join("")}</div>` : ""}`, "md:col-span-2"));
-  }
-
-  // Psychology
-  if (STATE.psychology) {
-    const ps = STATE.psychology;
-    const profile = sig.snapshot || {};
-    const serverProfileSections = profile.profile_sections || {};
-    const hasServerProfile = Object.values(serverProfileSections).some(items => Array.isArray(items) && items.length);
-    const profileSections = hasServerProfile ? serverProfileSections : clientProfileSections(ps);
-    const profileSummary = profile.profile_summary?.length
-      ? profile.profile_summary
-      : Object.values(profileSections).flat().map(item => `${item.label}: ${item.value}${item.status !== "unknown" ? ` · ${item.status_label}` : ""}`);
-    const statusBadge = (item) => item.status && item.status !== "unknown"
-      ? `<span class="profile-status-badge">${esc(item.status_label || item.status)}</span>` : "";
-    const profileGroup = (title, key) => {
-      const items = profileSections[key] || [];
-      if (!items.length) return "";
-      return `<div class="profile-output-group"><h4>${title}</h4>${items.map(item =>
-        `<div class="profile-output-row"><span>${esc(item.label)}</span><b>${esc(item.value)}</b>${statusBadge(item)}</div>`).join("")}</div>`;
-    };
-    let body = "";
-    if (ps.big_five) {
-      body += radarSVG(B5.map(([k]) => ps.big_five[k] ?? 0.5), B5.map(([,l]) => l.slice(0,5)), ACCENT.psychology);
-    }
-    if (ps.mbti) {
-      const stack = MBTI_STACK[ps.mbti] || [];
-      body += `<div class="mt-3 text-center"><span class="text-xl font-extrabold text-rose-300">${esc(ps.mbti)}</span>
-        <div class="flex justify-center gap-1.5 mt-1">${stack.map((f, i) =>
-          `<span class="px-2 py-1 rounded bg-white/5 text-[11px] ${i === 0 ? "text-rose-300 font-bold" : "text-slate-400"}">${f}</span>`).join("")}</div></div>`;
-    }
-    body += profileGroup("Core cognition and motivation", "core_cognition_motivation");
-    body += profileGroup("Relational patterns", "relational_patterns");
-    body += profileGroup("Self-regulation", "self_regulation");
-    if (profileSummary.length) {
-      body += `<p class="profile-compact-summary"><span>Compact profile</span>${profileSummary.map(esc).join(" · ")}</p>`;
-    }
-    cards.push(card("Know Thyself profile", ACCENT.psychology, body || "<p class='text-xs text-slate-500'>No assessments supplied.</p>"));
-  }
-
-  html += `<div class="analysis-card-grid fade-up-1">${cards.join("")}</div>`;
-
-  // --- Cross-encoder + narrative row ---
-  html += `<div class="grid lg:grid-cols-2 gap-6 mt-6 fade-up-2">
-    <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-semibold text-amber-300 tracking-wide">Cross-Encoder Agreement Heatmap</h3>
-      <div class="mt-4">${heatmapHTML(result.correlations)}</div>
-    </div>
-    <div class="glass rounded-2xl p-6">
-      <h3 class="text-sm font-semibold text-amber-300 tracking-wide">${result.analysis_mode === "data" ? "Data reading" : "Magic reading"}</h3>
-      <div class="mt-3 text-sm leading-relaxed text-slate-300 space-y-3">${
-        sig.snapshot.narrative.split("\n\n").map(par => `<p>${esc(par)}</p>`).join("")
-      }</div>
-      ${sig.snapshot.highlights.length ? `<div class="mt-3 flex flex-wrap gap-2">${sig.snapshot.highlights.map(h =>
-        `<span class="px-2.5 py-1 rounded-full text-[11px] bg-amber-400/10 text-amber-200 border border-amber-400/25">${esc(h)}</span>`).join("")}</div>` : ""}
-    </div>
-  </div>`;
-
-  // --- Comparison section ---
-  const maxAgreement = Math.max(...result.comparisons.map(cm => cm.agreement), 0.01);
-  html += `<div class="glass rounded-2xl p-6 mt-6 fade-up-2">
-    <h3 class="text-sm font-semibold text-sky-300 tracking-wide">Encoder Agreement With Public Figures</h3>
-    <p class="text-xs text-slate-500 mt-1">Eight reduced-digit outputs must match exactly; six continuous features use fixed tolerances. This is output agreement, not a claim of personal similarity.</p>
-    <div class="mt-4 space-y-2">${result.comparisons.map(cm => `
-      <div class="flex items-center gap-3 text-sm">
-        <span class="w-36 sm:w-48 truncate text-slate-300">${esc(cm.text)}</span>
-        <div class="flex-1 h-2 rounded-full bg-white/5"><div class="h-full rounded-full bg-gradient-to-r from-sky-500 to-fuchsia-400" style="width:${(cm.agreement / maxAgreement * 100).toFixed(1)}%"></div></div>
-        <span class="stat-num text-xs text-slate-400 w-12 text-right">${(cm.agreement * 100).toFixed(1)}%</span>
-      </div>`).join("")}</div>
-  </div>`;
-
-  // --- Complete report section ---
-  html += `<div class="glass rounded-2xl p-6 sm:p-8 mt-6 fade-up-3" id="report-card">
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-      <div>
-        <h3 class="text-lg font-bold text-slate-50">${result.analysis_mode === "data" ? "The Data Report" : "The Magic Report"}</h3>
-        <p class="text-xs text-slate-400 mt-0.5">${result.report.word_count.toLocaleString()} words · ${result.report.sections.length} sections · ${esc(result.analysis_mode)} mode · deterministic</p>
-      </div>
-      <div class="flex flex-col items-stretch sm:items-end gap-2">
-        <div class="flex items-center gap-1.5" role="group" aria-label="Switch report mode">
-          <span class="text-[10px] uppercase tracking-widest text-slate-500 mr-1">View</span>
-          <button type="button" data-report-mode="data" aria-pressed="${result.analysis_mode === "data" ? "true" : "false"}"
-            onclick="app.switchMode('data')" class="min-h-11 px-3 py-2.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "data" ? "bg-sky-400/15 text-sky-200 border-sky-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Data</button>
-          <button type="button" data-report-mode="magic" aria-pressed="${result.analysis_mode === "magic" ? "true" : "false"}"
-            onclick="app.switchMode('magic')" class="min-h-11 px-3 py-2.5 rounded-lg text-xs font-semibold border transition ${result.analysis_mode === "magic" ? "bg-fuchsia-400/15 text-fuchsia-200 border-fuchsia-300/50" : "bg-white/5 text-slate-400 border-white/10 hover:bg-white/10"}">Magic</button>
-          <span id="report-mode-status" class="sr-only" aria-live="polite"></span>
-        </div>
-        <div class="flex gap-2" id="report-actions"></div>
-      </div>
-    </div>
-    <div class="relative mt-5">
-      <div id="report-print-area"><div class="report-body" id="report-body"></div></div>
-    </div>
-  </div>`;
-
-  d.innerHTML = html;
-  d.classList.remove("hidden");
-  renderReport();
-  d.scrollIntoView({behavior: "smooth", block: "start"});
-}
-
-function renderReport() {
-  const r = STATE.result.report;
-  const body = $("report-body");
-  const actions = $("report-actions");
-  body.innerHTML = mdToHTML(r.markdown);
-  body.classList.remove("locked-blur");
-  actions.innerHTML = `
-    <button onclick="app.downloadReport()" class="min-h-11 px-3.5 py-2.5 rounded-lg text-xs font-semibold bg-emerald-400/10 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-400/20 transition">⬇ Download .md</button>
-    <button onclick="window.print()" class="min-h-11 px-3.5 py-2.5 rounded-lg text-xs font-semibold bg-white/5 text-slate-300 border border-white/15 hover:bg-white/10 transition">🖨 Save as PDF</button>`;
-}
-
-// ------------------------------------------------------------------
-// App controller
-// ------------------------------------------------------------------
-
-const PROCESSING_STEPS = [
-  "Normalizing identity string…", "Pythagorean expression, soul urge, personality…",
-  "Chaldean vibration table…", "Ordinal ciphers (A1Z26 / reverse / reduced)…",
-  "Shannon entropy & phonetic profile…", "Prime-index & binary polarity…",
-  "Hebrew Gematria transliteration…", "Greek Isopsephy cascade…",
-  "Swiss Ephemeris planetary positions…", "Checking time-sensitive layers…",
-  "25 provenance-aware symbolic extensions…", "Composite resonance & fingerprint…", "Writing your report…",
-];
-
 function normalizeBirthDateInput(value) {
   const digits = String(value || "").replace(/\D/g, "").slice(0, 8);
   if (digits.length <= 4) return digits;
@@ -799,40 +164,6 @@ function parseBirthDateInput(value) {
   return {year, month, day};
 }
 
-function apiErrorMessage(data, fallback) {
-  const message = data && (data.message || data.error) || fallback;
-  const choices = data?.details?.choices;
-  if (!Array.isArray(choices) || !choices.length) return message;
-  const labels = choices.slice(0, 5).map(choice => choice.display_name).filter(Boolean);
-  return labels.length ? `${message} Try: ${labels.join("; ")}.` : message;
-}
-
-function clearFormErrors() {
-  const errEl = $("form-error");
-  errEl.classList.add("hidden");
-  document.querySelectorAll('[aria-invalid="true"]').forEach(control => {
-    control.removeAttribute("aria-invalid");
-    const describedBy = (control.getAttribute("aria-describedby") || "")
-      .split(/\s+/).filter(value => value && value !== "form-error");
-    if (describedBy.length) control.setAttribute("aria-describedby", describedBy.join(" "));
-    else control.removeAttribute("aria-describedby");
-  });
-}
-
-function showFormError(message, fieldId) {
-  const errEl = $("form-error");
-  errEl.textContent = message;
-  errEl.classList.remove("hidden");
-  const control = fieldId ? $(fieldId) : null;
-  if (control) {
-    control.setAttribute("aria-invalid", "true");
-    const describedBy = new Set((control.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
-    describedBy.add("form-error");
-    control.setAttribute("aria-describedby", Array.from(describedBy).join(" "));
-    control.focus();
-  }
-}
-
 function apiErrorField(data) {
   const code = data?.code || "";
   const message = String(data?.message || data?.error || "").toLowerCase();
@@ -843,285 +174,585 @@ function apiErrorField(data) {
   return null;
 }
 
-const app = {
-  scrollToForm() { $("form-section").scrollIntoView({behavior: "smooth"}); $("name").focus({preventScroll: true}); },
+const app = {};
+window.app = app;
+
+// v0.8 editorial workflow
+// ------------------------------------------------------------------
+
+const TYPE_LABELS = {
+  mathematical: "Mathematical calculation",
+  astronomical: "Astronomical calculation",
+  user_reported: "Supplied by you",
+  traditional_symbolic: "Traditional interpretation",
+  heuristic: "Rule-based estimate",
+  speculative_synthesis: "Interpretive synthesis",
+};
+
+const ERROR_COPY = {
+  invalid_name: "Enter a name using ordinary text, without markup or control characters.",
+  invalid_location_query: "Enter a city, town, or postal code for the birthplace.",
+  location_not_found: "We could not find that birthplace. Add a state, region, or country and try again.",
+  location_provider_unavailable: "The location provider could not be reached. Try again, or use Advanced birth settings if you know the timezone and coordinates.",
+  malformed_location_provider_response: "We found the place, but its timezone information was incomplete. Try a nearby city or enter the timezone in Advanced birth settings.",
+  invalid_timezone: "The timezone information conflicts with the birthplace. Check Advanced birth settings or clear them and try again.",
+  rate_limited: "Too many analyses were requested in a short time. Wait a moment and try again.",
+  service_busy: "The analysis service is busy. Your entries are still here; try again shortly.",
+  payload_too_large: "The submitted information is too long. Shorten the name or optional entries and try again.",
+  internal_error: "The report could not be created because the server encountered an unexpected problem. Your entries are still here.",
+};
+
+const STATUS_FIELDS = [
+  ["mbti", "p-mbti", "Personality type"], ["enneagram", "p-enne", "Enneagram"],
+  ["wing", "p-wing", "Enneagram wing"], ["secondary_enneagram_influence", "p-secondary", "Secondary pattern"],
+  ["instinctual_variant", "p-instinct", "Instinctual pattern"], ["attachment", "p-attach", "Relationship style"],
+  ["conflict_style", "p-conflict", "Conflict style"],
+];
+
+function newEditorialState() {
+  return {
+    result: null, psychology: null, customSigil: null, mode: "magic", requestPayload: null,
+    switchingMode: false, aliases: [], locationChoices: [], selectedLocation: null,
+    submitting: false, generatedAt: null,
+  };
+}
+
+function typeLabel(category) {
+  return TYPE_LABELS[category] || compactLabel(category || "configured method");
+}
+
+function formatDate(parts) {
+  if (!parts) return "Not included";
+  return `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
+}
+
+function setSurface(id, visible) {
+  const element = $(id);
+  if (element) element.hidden = !visible;
+}
+
+function updateReviewSummary() {
+  const target = $("review-summary");
+  if (!target) return;
+  const name = $("name").value.trim() || "Not entered";
+  const birthOn = $("birth-enabled").checked;
+  const unknownTime = birthOn && $("b-time-unknown").checked;
+  const date = birthOn ? ($("b-date").value || "Not entered") : "Not included";
+  const time = !birthOn ? "Not included" : unknownTime ? "Unknown" : ($("b-time").value || "Not entered");
+  const location = birthOn ? ($("b-loc").value.trim() || "Not entered") : "Not included";
+  let contextCount = 0;
+  if ($("psych-enabled").checked) {
+    ["p-mbti", "p-enne", "p-secondary", "p-instinct", "p-attach", "p-conflict"].forEach(id => {
+      if ($(id).value && $(id).value !== "unknown") contextCount += 1;
+    });
+    B5.forEach(([key]) => { if ($(`bf-${key}`)?.dataset.touched === "true") contextCount += 1; });
+  }
+  const rows = [
+    ["Name", name], ["Other names", STATE.aliases.length ? STATE.aliases.join(", ") : "None"],
+    ["Birth date", date], ["Birth time", time], ["Birthplace", location],
+    ["Personal context", contextCount ? `${contextCount} supplied field${contextCount === 1 ? "" : "s"}` : "Not included"],
+  ];
+  target.innerHTML = rows.map(([term, value]) => `<div><dt>${esc(term)}</dt><dd>${esc(value)}</dd></div>`).join("");
+}
+
+function syncAliasField() {
+  $("aliases").value = STATE.aliases.join("\n");
+  $("alias-list").innerHTML = STATE.aliases.map((alias, index) => `<span class="alias-token"><span>${esc(alias)}</span><button type="button" onclick="app.removeAlias(${index})" aria-label="Remove ${esc(alias)}">×</button></span>`).join("");
+  updateReviewSummary();
+}
+
+function addAliasValue(raw) {
+  const alias = String(raw || "").replace(/\s+/g, " ").trim();
+  if (!alias) return false;
+  const normalized = alias.toLocaleLowerCase();
+  const primary = $("name").value.replace(/\s+/g, " ").trim().toLocaleLowerCase();
+  if (alias.length > 120) {
+    showEditorialError("Keep each other name to 120 characters or fewer.", "alias-input", "invalid_alias");
+    return false;
+  }
+  if (normalized === primary) {
+    showEditorialError("An other name must be different from the primary name.", "alias-input", "duplicate_alias");
+    return false;
+  }
+  if (STATE.aliases.some(value => value.toLocaleLowerCase() === normalized)) {
+    showEditorialError("That other name has already been added.", "alias-input", "duplicate_alias");
+    return false;
+  }
+  if (STATE.aliases.length >= 12) {
+    showEditorialError("You can add up to 12 other names.", "alias-input", "too_many_aliases");
+    return false;
+  }
+  STATE.aliases.push(alias);
+  $("alias-input").value = "";
+  $("alias-status").textContent = `${alias} added.`;
+  syncAliasField();
+  return true;
+}
+
+function clearEditorialErrors() {
+  const summary = $("form-error-summary");
+  summary.hidden = true;
+  $("form-error").textContent = "";
+  $("form-error-technical").hidden = true;
+  $("form-error-code").textContent = "";
+  document.querySelectorAll(".generated-inline-error").forEach(error => error.remove());
+  document.querySelectorAll('[aria-invalid="true"]').forEach(control => {
+    control.removeAttribute("aria-invalid");
+    const values = (control.getAttribute("aria-describedby") || "").split(/\s+/).filter(value => value && value !== "form-error" && !value.includes("-inline-error-"));
+    if (values.length) control.setAttribute("aria-describedby", values.join(" "));
+    else control.removeAttribute("aria-describedby");
+  });
+}
+
+function showEditorialErrors(errors, code) {
+  const summary = $("form-error-summary");
+  $("form-error").innerHTML = errors.length === 1
+    ? `<p>${esc(errors[0].message)}</p>`
+    : `<p>Correct these ${errors.length} items:</p><ul>${errors.map(error => `<li>${esc(error.message)}</li>`).join("")}</ul>`;
+  summary.hidden = false;
+  if (code) {
+    $("form-error-code").textContent = code;
+    $("form-error-technical").hidden = false;
+  }
+  errors.forEach((error, index) => {
+    const control = error.fieldId ? $(error.fieldId) : null;
+    if (!control) return;
+    control.setAttribute("aria-invalid", "true");
+    const describedBy = new Set((control.getAttribute("aria-describedby") || "").split(/\s+/).filter(Boolean));
+    describedBy.add("form-error");
+    const inlineId = `${error.fieldId}-inline-error-${index}`;
+    describedBy.add(inlineId);
+    control.setAttribute("aria-describedby", Array.from(describedBy).join(" "));
+    const inline = document.createElement("p");
+    inline.id = inlineId;
+    inline.className = "inline-error generated-inline-error";
+    inline.textContent = error.message;
+    control.insertAdjacentElement("afterend", inline);
+  });
+  const firstControl = errors[0]?.fieldId ? $(errors[0].fieldId) : null;
+  if (firstControl) firstControl.focus();
+  else summary.focus();
+}
+
+function showEditorialError(message, fieldId, code) {
+  showEditorialErrors([{message, fieldId}], code);
+}
+
+function collectEditorialValidationErrors() {
+  const errors = [];
+  const name = $("name").value.replace(/\s+/g, " ").trim();
+  if (!name) errors.push({message: "Enter the full birth or legal name to analyze.", fieldId: "name"});
+  else if (/[<>]/.test(name) || Array.from(name).some(char => /[\u0000-\u001f\u007f]/.test(char))) errors.push({message: ERROR_COPY.invalid_name, fieldId: "name"});
+  if ($("birth-enabled").checked) {
+    const dateParts = parseBirthDateInput($("b-date").value);
+    if (!dateParts) errors.push({message: "Enter a real birth date in YYYY-MM-DD format.", fieldId: "b-date"});
+    else {
+      const enteredDate = new Date(Date.UTC(dateParts.year, dateParts.month - 1, dateParts.day));
+      const today = new Date();
+      if (enteredDate > new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()))) errors.push({message: "Birth date cannot be in the future.", fieldId: "b-date"});
+    }
+    if (!$("b-time-unknown").checked && !$("b-time").value) errors.push({message: "Enter the local birth time, or choose ‘I do not know my exact birth time.’", fieldId: "b-time"});
+    const latitude = $("b-lat").value, longitude = $("b-lon").value;
+    const hasEitherCoordinate = latitude !== "" || longitude !== "";
+    const hasCoordinates = latitude !== "" && longitude !== "";
+    if (hasEitherCoordinate && !hasCoordinates) errors.push({message: "Enter both latitude and longitude, or clear both fields.", fieldId: latitude === "" ? "b-lat" : "b-lon"});
+    const hasManualLocation = hasCoordinates && ($("b-zone").value.trim() || $("b-tz").value !== "");
+    if (!$("b-loc").value.trim() && !hasManualLocation) errors.push({message: "Enter a birthplace. Advanced users may instead supply coordinates and a timezone identifier.", fieldId: "b-loc"});
+  }
+  return errors;
+}
+
+function renderLocationChoices(choices) {
+  STATE.locationChoices = choices.slice(0, 5);
+  $("location-choice-list").innerHTML = STATE.locationChoices.map((choice, index) => `
+    <button type="button" class="location-choice" role="radio" aria-checked="false" onclick="app.selectLocation(${index})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();app.selectLocation(${index})}">
+      <strong>${esc(choice.display_name)}</strong>
+      <span>${esc(choice.timezone_name)} timezone</span>
+      <details onclick="event.stopPropagation()"><summary>Technical location details</summary>${Number(choice.latitude).toFixed(4)}, ${Number(choice.longitude).toFixed(4)}</details>
+    </button>`).join("");
+  $("location-choices").hidden = false;
+  $("location-choices-title").focus();
+}
+
+function readPsychologyPayload() {
+  if (!$("psych-enabled").checked) return null;
+  const psychology = {};
+  const bigFive = {};
+  B5.forEach(([key]) => {
+    const control = $(`bf-${key}`);
+    if (control?.dataset.touched === "true") bigFive[key] = Number(control.value) / 100;
+  });
+  if (Object.keys(bigFive).length) psychology.big_five = bigFive;
+  if ($("p-mbti").value) psychology.mbti = $("p-mbti").value;
+  if ($("p-enne").value) psychology.enneagram = {type: Number($("p-enne").value), wing: $("p-wing").value ? Number($("p-wing").value) : null};
+  if ($("p-secondary").value && $("p-secondary").value !== "unknown") psychology.secondary_enneagram_influence = Number($("p-secondary").value);
+  if ($("p-instinct").value && $("p-instinct").value !== "unknown") psychology.instinctual_variant = $("p-instinct").value;
+  if ($("p-attach").value && $("p-attach").value !== "unknown") psychology.attachment = $("p-attach").value;
+  if ($("p-conflict").value && $("p-conflict").value !== "unknown") psychology.conflict_style = $("p-conflict").value;
+  const assessmentStatus = {};
+  STATUS_FIELDS.forEach(([field, controlId]) => {
+    const value = $(controlId)?.value;
+    const status = $(`p-status-${field}`)?.value;
+    if (value && value !== "unknown" && status) assessmentStatus[field] = {status};
+  });
+  if (Object.keys(assessmentStatus).length) psychology.assessment_status = assessmentStatus;
+  return Object.keys(psychology).length ? psychology : null;
+}
+
+function buildRequestPayload() {
+  const name = $("name").value.replace(/\s+/g, " ").trim();
+  if (!name) throw {message: "Enter the full birth or legal name to analyze.", fieldId: "name", code: "missing_name"};
+  if (/[<>]/.test(name) || Array.from(name).some(char => /[\u0000-\u001f\u007f]/.test(char))) {
+    throw {message: ERROR_COPY.invalid_name, fieldId: "name", code: "invalid_name"};
+  }
+  if ($("alias-input").value.trim() && !addAliasValue($("alias-input").value)) throw {handled: true};
+  const payload = {name, mode: "magic"};
+  if (STATE.aliases.length) payload.aliases = [...STATE.aliases];
+  if ($("birth-enabled").checked) {
+    const dateParts = parseBirthDateInput($("b-date").value);
+    if (!dateParts) throw {message: "Enter a real birth date in YYYY-MM-DD format.", fieldId: "b-date", code: "invalid_birth_date"};
+    const enteredDate = new Date(Date.UTC(dateParts.year, dateParts.month - 1, dateParts.day));
+    const today = new Date();
+    if (enteredDate > new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()))) {
+      throw {message: "Birth date cannot be in the future.", fieldId: "b-date", code: "future_birth_date"};
+    }
+    const unknownTime = $("b-time-unknown").checked;
+    const suppliedTime = $("b-time").value;
+    if (!unknownTime && !suppliedTime) throw {message: "Enter the local birth time, or choose ‘I do not know my exact birth time.’", fieldId: "b-time", code: "missing_birth_time"};
+    const [hour, minute] = (unknownTime ? "12:00" : suppliedTime).split(":").map(Number);
+    const location = $("b-loc").value.trim();
+    const timezoneName = $("b-zone").value.trim();
+    const timezoneOffset = $("b-tz").value;
+    const latitude = $("b-lat").value;
+    const longitude = $("b-lon").value;
+    const hasEitherCoordinate = latitude !== "" || longitude !== "";
+    const hasCoordinates = latitude !== "" && longitude !== "";
+    if (hasEitherCoordinate && !hasCoordinates) throw {message: "Enter both latitude and longitude, or clear both fields.", fieldId: latitude === "" ? "b-lat" : "b-lon", code: "partial_coordinates"};
+    if (!location && !(hasCoordinates && (timezoneName || timezoneOffset !== ""))) {
+      throw {message: "Enter a birthplace. Advanced users may instead supply coordinates and a timezone identifier.", fieldId: "b-loc", code: "missing_birthplace"};
+    }
+    payload.birth = {year: dateParts.year, month: dateParts.month, day: dateParts.day, hour, minute, time_accuracy: unknownTime ? "unknown" : "exact"};
+    if (location) payload.birth.location = location;
+    if (hasCoordinates) { payload.birth.lat = Number(latitude); payload.birth.lon = Number(longitude); }
+    if (timezoneName) payload.birth.timezone_name = timezoneName;
+    if (timezoneOffset !== "") payload.birth.timezone_offset = Number(timezoneOffset);
+  }
+  const psychology = readPsychologyPayload();
+  if (psychology) payload.psychology = psychology;
+  STATE.psychology = psychology;
+  return payload;
+}
+
+function reportActions() {
+  return `<div class="action-group">
+    <button type="button" class="button" onclick="app.downloadReport()">Download Markdown</button>
+    <button type="button" class="button" onclick="window.print()">Print or save as PDF</button>
+    <button type="button" class="button" onclick="app.editInputs()">Edit inputs</button>
+    <button type="button" class="button" onclick="app.startNew()">Start a new analysis</button>
+  </div>`;
+}
+
+function coverageItem(label, status, detail) {
+  return `<div class="coverage-item" data-status="${esc(status)}"><strong>${esc(label)}: ${esc(status === "not-included" ? "not included" : status)}</strong><span>${esc(detail)}</span></div>`;
+}
+
+function valueCell(label, value) {
+  return `<div><span>${esc(label)}</span><strong>${esc(value ?? "—")}</strong></div>`;
+}
+
+function renderEditorialReport(result) {
+  const signature = result.signature;
+  const encoders = signature.encoders;
+  const astrology = encoders.astrology && !encoders.astrology.error ? encoders.astrology : null;
+  const humanDesign = encoders.human_design && encoders.human_design.available !== false && encoders.human_design.type ? encoders.human_design : null;
+  const payload = STATE.requestPayload || {};
+  const birth = payload.birth || null;
+  const aliases = payload.aliases || [];
+  const reportMeta = result.report.metadata || {};
+  const place = STATE.selectedLocation?.display_name || birth?.location || "Not included";
+  const timezone = STATE.selectedLocation?.timezone_name || birth?.timezone_name || (birth ? "Resolved by the server" : "Not included");
+  const timeLabel = !birth ? "Not included" : birth.time_accuracy === "unknown" ? "Unknown" : `${String(birth.hour).padStart(2, "0")}:${String(birth.minute).padStart(2, "0")} local time`;
+  const extensions = Object.values(encoders).filter(item => item?.system && item?.provenance);
+  const sectionTypes = (result.report.section_metadata || []).map(item => `<li><strong>${esc(item.title)}</strong> — ${esc(typeLabel(item.category))}</li>`).join("");
+  const pythagorean = encoders.pythagorean || {};
+  const chaldean = encoders.chaldean || {};
+  const ordinal = encoders.ordinal || {};
+  const gematria = encoders.gematria || {};
+  const isopsephy = encoders.isopsephy || {};
+  const linguistic = encoders.linguistic || {};
+  const convergence = signature.resonance || {};
+  const contextSections = STATE.psychology ? clientProfileSections(STATE.psychology) : null;
+  const contextRows = contextSections ? Object.values(contextSections).flat() : [];
+  const reducedValues = [pythagorean.expression, chaldean.name_number, ordinal.ordinal_reduced, gematria.absolute_reduced, isopsephy.reduced].filter(value => value !== undefined);
+  const distinctValues = [...new Set(reducedValues)];
+
+  $("dashboard").innerHTML = `
+    <header class="report-header">
+      <div><p class="eyebrow">Structured analysis</p><h1 id="report-heading" class="report-title" tabindex="-1">${esc(signature.text)}</h1><p class="report-subtitle">A calculated report with mathematical, astronomical, supplied, and interpretive information labeled separately.</p></div>
+      ${reportActions()}
+    </header>
+
+    <section class="report-identity" aria-labelledby="identity-title">
+      <div><h2 id="identity-title">Report identity</h2><dl class="identity-facts">
+        <div><dt>Analyzed name</dt><dd>${esc(signature.text)}</dd></div>
+        <div><dt>Other names</dt><dd>${aliases.length ? esc(aliases.join(", ")) : "None"}</dd></div>
+        <div><dt>Birth date</dt><dd>${birth ? esc(formatDate(birth)) : "Not included"}</dd></div>
+        <div><dt>Birth time</dt><dd>${esc(timeLabel)}</dd></div>
+        <div><dt>Resolved birthplace</dt><dd>${esc(place)}${birth ? " · confirmed for calculation" : ""}</dd></div>
+        <div><dt>Historical timezone</dt><dd>${esc(timezone)}</dd></div>
+        <div><dt>Generated</dt><dd>${esc(STATE.generatedAt)}</dd></div>
+        <div><dt>Report version</dt><dd>${esc(reportMeta.report_schema_version || "report-v1")} · application ${esc(result.contract_version || "analysis-v1")}</dd></div>
+      </dl></div>
+      <aside><h2>Reproduction details</h2><p>The same normalized input and versioned conventions produce the same calculated values.</p><details class="technical-details"><summary>Show technical identifiers</summary><p><code>Input ${esc(result.input_hash || "not supplied")}</code><br><code>Build ${esc(result.build_revision || reportMeta.build_revision || "not supplied")}</code><br><code>Engine ${esc(result.engine_version || "not supplied")}</code><br><code>Reproduction ${esc(reportMeta.reproducibility_id || "not supplied")}</code></p></details></aside>
+    </section>
+
+    <section class="coverage" aria-labelledby="coverage-title"><h2 id="coverage-title">Data quality and coverage</h2><div class="coverage-list">
+      ${coverageItem("Name calculations", "complete", "All supported name systems were calculated.")}
+      ${coverageItem("Birth-date calculations", birth ? "complete" : "not-included", birth ? "Date-based astronomy was calculated." : "No birth date was supplied.")}
+      ${coverageItem("Time-sensitive calculations", !birth ? "not-included" : birth.time_accuracy === "unknown" ? "limited" : "complete", !birth ? "No birth details were supplied." : birth.time_accuracy === "unknown" ? "Rising sign, houses, and Human Design are withheld." : "An exact local time was supplied.")}
+      ${coverageItem("Location resolution", birth ? "complete" : "not-included", birth ? "Coordinates and historical timezone were resolved or supplied." : "No birthplace was supplied.")}
+      ${coverageItem("Personal context", STATE.psychology ? "complete" : "not-included", STATE.psychology ? "Only fields supplied by you are included." : "No self-reported context was supplied.")}
+    </div></section>
+
+    <nav class="report-navigation" aria-label="Report sections" data-open="false"><button type="button" aria-expanded="false" onclick="app.toggleReportNavigation(this)">Report sections</button><ul>
+      <li><a href="#overview">Overview</a></li><li><a href="#name-calculations">Name calculations</a></li><li><a href="#birth-chart">Birth chart</a></li><li><a href="#human-design">Human Design</a></li><li><a href="#personal-context-report">Personal context</a></li><li><a href="#cross-system">Cross-system synthesis</a></li><li><a href="#tensions">Tensions</a></li><li><a href="#methods">Methods and limitations</a></li>
+    </ul></nav>
+
+    <div class="report-content">
+      <section id="overview" class="report-section"><p class="section-number">01</p><h2>Overview</h2><p class="information-type">Type of information: Interpretive synthesis</p><p class="section-summary">The calculated systems produced several numeric descriptions of the same name. Their agreement and disagreement are shown as project-specific patterns, not facts about personality or fate.</p><div class="interpretation-note"><strong>Interpretive boundary.</strong> This section combines several symbolic frameworks. It is interpretive rather than scientific.</div>
+        <p>The name contains ${esc(linguistic.letter_count ?? "—")} analyzed letters and ${esc(linguistic.unique_letters ?? "—")} unique letters. The supported reduced-number systems produced ${distinctValues.length} distinct result${distinctValues.length === 1 ? "" : "s"}. That variation is expected because each tradition uses different mappings and assumptions.</p>
+        <details class="fingerprint-disclosure"><summary>Calculated identity graphic</summary><div class="fingerprint-layout"><div class="fingerprint-art">${fingerprintSVG(signature.fingerprint, 220)}</div><p>This image is generated deterministically from selected numeric outputs. It is decorative and is not a biometric identifier. Text alternative: a radial geometric pattern with ${esc(signature.fingerprint.symmetry)}-fold symmetry derived from the report values.</p></div></details>
+      </section>
+
+      <section id="name-calculations" class="report-section"><p class="section-number">02</p><h2>Name calculations</h2><p class="information-type">Type of information: Mathematical calculation, followed by traditional interpretation</p><p class="section-summary">Each system maps letters to numbers using its own stated convention.</p><div class="value-grid">
+        ${valueCell("Pythagorean expression", pythagorean.master_preserved || pythagorean.expression)}${valueCell("Pythagorean soul urge", pythagorean.soul_urge)}${valueCell("Chaldean name number", chaldean.name_number)}${valueCell("Ordinal total", ordinal.ordinal_total)}${valueCell("Hebrew gematria reduction", gematria.absolute_reduced)}${valueCell("Greek isopsephy reduction", isopsephy.reduced)}
+        </div><div class="interpretation-note"><strong>Traditional interpretation.</strong> Meanings assigned to these numbers come from their named symbolic traditions. The arithmetic is reproducible; the meanings are not scientific measurements.</div><details class="technical-details"><summary>How these values were calculated</summary><p>Letters are normalized by the public input contract and passed to versioned Pythagorean, Chaldean, ordinal, gematria, and isopsephy mappings. Formula and convention details remain in the complete generated report below.</p></details>
+      </section>
+
+      <section id="birth-chart" class="report-section"><p class="section-number">03</p><h2>Birth chart</h2><p class="information-type">Type of information: Astronomical calculation and traditional interpretation</p>${astrology ? `<p class="section-summary">Planetary positions were calculated with ${esc(astrology.calculation_engine || "the configured ephemeris")} for the supplied date${birth?.time_accuracy === "exact" ? ", local time," : ""} and resolved location.</p><div class="value-grid">${valueCell("Sun", astrology.sun_sign)}${valueCell("Moon", astrology.moon_sign)}${valueCell("Rising sign (Ascendant)", astrology.ascendant || "Unavailable without an exact time")}${valueCell("Lunar phase", astrology.lunar_phase)}${valueCell("Dominant element", astrology.dominant_element)}${valueCell("House system", astrology.time_sensitive_fields_withheld ? "Withheld" : astrology.house_system)}</div><p>The Ascendant, or rising sign, is the zodiac sign on the eastern horizon at the recorded birth time. A house cusp is the calculated boundary between two chart houses.</p>${astrology.time_sensitive_fields_withheld ? `<div class="limits-note"><strong>Limited by unknown time.</strong> The report withholds rising sign, house cusps, aspects, and other time-sensitive fields instead of presenting an estimated noon as exact.</div>` : `<details class="technical-details"><summary>How the chart was calculated</summary><p>${esc((astrology.planets || []).length)} planetary positions and ${esc((astrology.aspects || []).length)} configured aspects were returned. The geographic timezone identifier applies historical daylight-saving rules; the UTC offset is the difference between local time and Coordinated Universal Time at birth.</p></details>`}` : `<div class="omitted-note"><strong>Not included.</strong> No birth details were supplied, so this section makes no astronomical claims.</div>`}</section>
+
+      <section id="human-design" class="report-section"><p class="section-number">04</p><h2>Human Design</h2><p class="information-type">Type of information: Traditional interpretation using calculated astronomical inputs</p>${humanDesign ? `<p class="section-summary">The configured Human Design adapter returned a ${esc(humanDesign.type)} result using the supplied exact birth time.</p><div class="value-grid">${valueCell("Type", humanDesign.type)}${valueCell("Strategy", humanDesign.strategy)}${valueCell("Authority", humanDesign.authority)}${valueCell("Profile", (humanDesign.profile || []).join(" / "))}${valueCell("Active gates", (humanDesign.gates || []).length)}${valueCell("Defined centers", (humanDesign.centers || []).filter(center => center.defined).length)}</div><div class="limits-note"><strong>Limits.</strong> Human Design is a symbolic system. These labels are not psychological or medical measurements.</div>` : `<div class="omitted-note"><strong>Not included.</strong> ${birth?.time_accuracy === "unknown" ? "An exact birth time is required, so this section was withheld." : "No exact birth date, time, and location were supplied."}</div>`}</section>
+
+      <section id="personal-context-report" class="report-section"><p class="section-number">05</p><h2>Personal context</h2><p class="information-type">Type of information: Supplied by you</p>${contextRows.length ? `<p class="section-summary">These entries came directly from the form and were not inferred by the engine.</p><dl class="calculation-list">${contextRows.map(row => `<div><dt>${esc(row.label)}</dt><dd>${esc(row.value)} · ${esc(row.status_label)}</dd></div>`).join("")}</dl>` : `<div class="omitted-note"><strong>Not included.</strong> No optional personal context was supplied. The engine did not infer it from the name or birth data.</div>`}</section>
+
+      <section id="cross-system" class="report-section"><p class="section-number">06</p><h2>Cross-system synthesis</h2><p class="information-type">Type of information: Interpretive synthesis</p><p class="section-summary">The cross-system convergence score is ${Number(convergence.score || 0).toFixed(1)} out of 100.</p><p>A project-specific summary of how often selected symbolic calculations produce similar reduced values. It is not a scientific measure.</p><dl class="calculation-list">${Object.entries(convergence.components || {}).map(([key, value]) => `<div><dt>${esc(compactLabel(key))}</dt><dd>${(Number(value) * 100).toFixed(0)} of 100 within this configured index</dd></div>`).join("")}</dl><div class="limits-note"><strong>Do not read this as confidence.</strong> A higher value does not mean greater accuracy, compatibility, ability, or worth.</div></section>
+
+      <section id="tensions" class="report-section"><p class="section-number">07</p><h2>Where the systems disagree</h2><p class="information-type">Type of information: Interpretive synthesis</p><p class="section-summary">Different symbolic systems use different assumptions and can produce conflicting descriptions. This report does not force them into false agreement.</p><ul class="tension-list"><li>The selected reduced-number systems produced ${distinctValues.length} distinct values: ${esc(distinctValues.join(", ") || "none available")}.</li><li>Name calculations and birth calculations describe different inputs; one cannot validate the other.</li><li>Self-reported context, when present, is evidence of what you supplied—not proof that a symbolic result predicted it.</li></ul><p>Contradiction can be useful as a reflection prompt: ask which description fits an observable situation, which does not, and what evidence would change your view.</p></section>
+
+      <section id="methods" class="report-section"><p class="section-number">08</p><h2>Methods and limitations</h2><p class="information-type">Type of information: Method and source</p><p class="section-summary">The report keeps arithmetic, astronomy, supplied information, traditional interpretation, and experimental synthesis distinct.</p><dl class="method-list">
+        <div><dt>Mathematical</dt><dd>Letter mappings, totals, reductions, ratios, entropy, and the deterministic graphic.</dd></div>
+        <div><dt>Astronomical</dt><dd>${astrology ? esc(astrology.calculation_engine || "Configured ephemeris") : "Not used in this report"}; positions are calculations, while astrological meanings remain traditional.</dd></div>
+        <div><dt>Supplied by you</dt><dd>Name, other names, birth details, and any optional personal context.</dd></div>
+        <div><dt>Interpretive</dt><dd>${extensions.length} configured symbolic extensions and the traditional meanings attached to calculated values.</dd></div>
+        <div><dt>Experimental</dt><dd>The cross-system convergence score and synthesis language. These are project-specific, not scientifically validated.</dd></div>
+        <div><dt>Privacy</dt><dd>${esc(result.privacy?.retention || "Not persisted by the web process")}. ${esc(result.privacy?.warning || "Network and infrastructure logs may still exist.")}</dd></div>
+        <div><dt>Location provider</dt><dd>${birth ? "Open-Meteo geocoding may receive the birthplace text to resolve coordinates and historical timezone." : "Not used because no birthplace was supplied."}</dd></div>
+        <div><dt>Application</dt><dd>${esc(result.contract_version || "analysis-v1")} · engine ${esc(result.engine_version || "not supplied")} · build ${esc(result.build_revision || "not supplied")}</dd></div>
+      </dl><details class="technical-details"><summary>Complete generated report and section labels</summary><p>The backend report contains ${esc(result.report.sections.length)} versioned sections and ${esc(result.report.word_count)} words.</p><ul>${sectionTypes}</ul><div id="report-print-area" class="report-body">${mdToHTML(result.report.markdown)}</div></details></section>
+
+      <div class="end-actions"><h2>Report actions</h2>${reportActions()}<p>Editing an input and creating another analysis produces a new deterministic result for the changed input.</p></div>
+    </div>`;
+
+  setSurface("landing", false);
+  setSurface("form-section", false);
+  setSurface("processing", false);
+  setSurface("dashboard", true);
+  $("report-heading").focus();
+}
+
+Object.assign(app, {
+  scrollToForm() {
+    $("form-section").scrollIntoView({behavior: "smooth", block: "start"});
+    $("name").focus({preventScroll: true});
+  },
 
   toggleSection(which) {
     const on = $(`${which}-enabled`).checked;
-    const el = $(`${which}-fields`);
-    el.classList.toggle("opacity-40", !on);
-    el.classList.toggle("pointer-events-none", !on);
-    el.setAttribute("aria-disabled", String(!on));
-    el.querySelectorAll("input, select, textarea").forEach(control => { control.disabled = !on; });
-    if (which === "birth") {
-      $("b-date").required = on;
-      ["b-tz", "b-lat", "b-lon"].forEach(id => { $(id).required = false; });
+    const fields = $(`${which}-fields`);
+    fields.hidden = !on;
+    fields.setAttribute("aria-disabled", String(!on));
+    fields.querySelectorAll("input, select, textarea").forEach(control => { control.disabled = !on; });
+    if (which === "birth" && on) this.toggleUnknownTime();
+    updateReviewSummary();
+  },
+
+  toggleUnknownTime() {
+    const unknown = $("b-time-unknown").checked;
+    $("birth-time-field").hidden = unknown;
+    $("b-time").disabled = unknown || !$("birth-enabled").checked;
+    if (unknown) $("b-time").value = "";
+    updateReviewSummary();
+  },
+
+  syncPersonalContext() { updateReviewSummary(); },
+
+  handleAliasKeydown(event) {
+    if (event.key === "Enter" || event.key === ",") {
+      event.preventDefault();
+      clearEditorialErrors();
+      addAliasValue(event.currentTarget.value);
+    } else if (event.key === "Backspace" && !event.currentTarget.value && STATE.aliases.length) {
+      this.removeAlias(STATE.aliases.length - 1);
     }
   },
 
-  reset() {
-    STATE = {result: null, psychology: null, customSigil: null, mode: "data", requestPayload: null, switchingMode: false};
-    $("dashboard").classList.add("hidden");
-    $("landing").classList.remove("hidden");
-    $("form-section").classList.remove("hidden");
-    window.scrollTo({top: 0, behavior: "smooth"});
+  handleAliasPaste(event) {
+    const text = event.clipboardData?.getData("text") || "";
+    if (!/[\n,]/.test(text)) return;
+    event.preventDefault();
+    clearEditorialErrors();
+    text.split(/[\n,]+/).map(value => value.trim()).filter(Boolean).forEach(addAliasValue);
   },
 
-  async submit(ev) {
-    ev.preventDefault();
-    clearFormErrors();
-    const mode = document.querySelector('input[name="mode"]:checked')?.value || "data";
-    const payload = {name: $("name").value.trim(), mode};
-    const aliases = $("aliases").value.split(/\r?\n/).map(value => value.trim()).filter(Boolean);
-    if (aliases.length > 12) {
-      showFormError("Enter at most 12 aliases, one per line.", "aliases");
+  removeAlias(index) {
+    const removed = STATE.aliases.splice(index, 1)[0];
+    if (removed) $("alias-status").textContent = `${removed} removed.`;
+    syncAliasField();
+    $("alias-input").focus();
+  },
+
+  selectLocation(index) {
+    const choice = STATE.locationChoices[index];
+    if (!choice) return;
+    STATE.selectedLocation = choice;
+    $("b-loc").value = choice.display_name;
+    $("b-zone").value = choice.timezone_name;
+    $("b-lat").value = choice.latitude;
+    $("b-lon").value = choice.longitude;
+    $("b-tz").value = "";
+    $("location-choices").hidden = true;
+    updateReviewSummary();
+    $("analyze-form").requestSubmit();
+  },
+
+  toggleReportNavigation(button) {
+    const nav = button.closest(".report-navigation");
+    const open = nav.dataset.open !== "true";
+    nav.dataset.open = String(open);
+    button.setAttribute("aria-expanded", String(open));
+  },
+
+  async submit(event) {
+    event.preventDefault();
+    if (STATE.submitting) return;
+    clearEditorialErrors();
+    $("location-choices").hidden = true;
+    const validationErrors = collectEditorialValidationErrors();
+    if (validationErrors.length) {
+      showEditorialErrors(validationErrors, "invalid_form");
       return;
     }
-    if (aliases.length) payload.aliases = aliases;
-    STATE.mode = mode;
-
-    if ($("birth-enabled").checked && $("b-date").value) {
-      const dateParts = parseBirthDateInput($("b-date").value);
-      if (!dateParts) {
-        showFormError("Enter a real birth date in YYYY-MM-DD format.", "b-date");
-        return;
-      }
-      const suppliedTime = $("b-time").value;
-      const t = suppliedTime || "12:00";
-      const [hh, mm] = t.split(":").map(Number);
-      const location = $("b-loc").value.trim();
-      const timezoneName = $("b-zone").value.trim();
-      const timezoneOffset = $("b-tz").value;
-      const latitude = $("b-lat").value;
-      const longitude = $("b-lon").value;
-      const hasCoordinates = latitude !== "" && longitude !== "";
-      const hasManualChartInputs = hasCoordinates && (timezoneName !== "" || timezoneOffset !== "");
-      if (!location && !hasManualChartInputs) {
-        showFormError("Enter a birth location, or provide latitude, longitude, and an IANA timezone in Advanced chart inputs.", "b-loc");
-        return;
-      }
-      payload.birth = {
-        year: dateParts.year, month: dateParts.month, day: dateParts.day, hour: hh, minute: mm,
-        time_accuracy: suppliedTime ? "exact" : "unknown",
-      };
-      if (location) payload.birth.location = location;
-      if (hasCoordinates) {
-        payload.birth.lat = parseFloat(latitude);
-        payload.birth.lon = parseFloat(longitude);
-      }
-      if (timezoneName) payload.birth.timezone_name = timezoneName;
-      if (timezoneOffset !== "") payload.birth.timezone_offset = parseFloat(timezoneOffset);
+    let payload;
+    try {
+      payload = buildRequestPayload();
+    } catch (error) {
+      if (!error.handled) showEditorialError(error.message, error.fieldId, error.code);
+      return;
     }
-    if ($("psych-enabled").checked) {
-      const psych = {};
-      const assessmentStatus = {};
-      const bf = {};
-      let any = false;
-      B5.forEach(([k]) => {
-        const v = $(`bf-${k}`);
-        if (v && v.dataset.touched === "true") { bf[k] = parseInt(v.value, 10) / 100; any = true; }
-      });
-      if (any) psych.big_five = bf;
-      if ($("p-mbti").value) psych.mbti = $("p-mbti").value;
-      if ($("p-enne").value) psych.enneagram = {type: parseInt($("p-enne").value, 10),
-        wing: $("p-wing").value ? parseInt($("p-wing").value, 10) : null};
-      if ($("p-secondary").value && $("p-secondary").value !== "unknown") psych.secondary_enneagram_influence = parseInt($("p-secondary").value, 10);
-      if ($("p-instinct").value && $("p-instinct").value !== "unknown") psych.instinctual_variant = $("p-instinct").value;
-      if ($("p-attach").value) psych.attachment = $("p-attach").value;
-      if ($("p-conflict").value && $("p-conflict").value !== "unknown") psych.conflict_style = $("p-conflict").value;
-      const statusFields = [
-        ["mbti", "p-mbti", "p-status-mbti"], ["enneagram", "p-enne", "p-status-enneagram"], ["wing", "p-wing", "p-status-wing"],
-        ["secondary_enneagram_influence", "p-secondary", "p-status-secondary"], ["instinctual_variant", "p-instinct", "p-status-instinct"],
-        ["attachment", "p-attach", "p-status-attachment"], ["conflict_style", "p-conflict", "p-status-conflict"],
-      ];
-      statusFields.forEach(([field, control, statusControl]) => {
-        const value = $(control).value;
-        if (value && value !== "unknown" && value !== "Not assessed" && $(statusControl)) {
-          assessmentStatus[field] = {status: $(statusControl).value};
-        }
-      });
-      if (Object.keys(assessmentStatus).length) psych.assessment_status = assessmentStatus;
-      if (Object.keys(psych).length) payload.psychology = psych;
-      STATE.psychology = payload.psychology || null;
-    } else {
-      STATE.psychology = null;
-    }
-
-    // Keep the normalized request in memory only so the user can switch
-    // report modes after generation without re-entering private birth data.
     STATE.requestPayload = JSON.parse(JSON.stringify(payload));
-
-    // Processing animation
+    STATE.submitting = true;
     const submitButton = $("submit-btn");
     submitButton.disabled = true;
     submitButton.setAttribute("aria-busy", "true");
-    $("landing").classList.add("hidden");
-    $("form-section").classList.add("hidden");
-    $("dashboard").classList.add("hidden");
-    $("processing").classList.remove("hidden");
-    let step = 0;
-    const stepTimer = setInterval(() => {
-      step = (step + 1) % PROCESSING_STEPS.length;
-      $("processing-step").textContent = PROCESSING_STEPS[step];
-    }, 380);
+    submitButton.textContent = "Creating your analysis…";
+    setSurface("landing", false);
+    setSurface("form-section", false);
+    setSurface("dashboard", false);
+    setSurface("processing", true);
     try {
-      const resp = await fetch("/api/analyze", {
-        method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload),
-      });
-      const data = await resp.json();
-      if (!resp.ok) {
-        const requestError = new Error(apiErrorMessage(data, "Analysis failed"));
-        requestError.fieldId = apiErrorField(data);
-        throw requestError;
+      const response = await fetch("/api/analyze", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)});
+      let data;
+      try { data = await response.json(); }
+      catch (_) { throw {message: "The server returned an unreadable response. Your entries are still here.", code: "malformed_server_response"}; }
+      if (!response.ok) {
+        if (data.code === "ambiguous_location" && Array.isArray(data.details?.choices)) {
+          setSurface("form-section", true);
+          renderLocationChoices(data.details.choices);
+          return;
+        }
+        throw {message: ERROR_COPY[data.code] || data.message || "The report could not be created. Check the highlighted information and try again.", fieldId: apiErrorField(data), code: data.code};
       }
       STATE.result = data;
-      renderDashboard(data);
-    } catch (err) {
-      $("form-section").classList.remove("hidden");
-      showFormError(err.message, err.fieldId);
+      STATE.generatedAt = new Date().toISOString();
+      renderEditorialReport(data);
+    } catch (error) {
+      setSurface("form-section", true);
+      const isNetworkError = error instanceof TypeError;
+      showEditorialError(isNetworkError ? "The server could not be reached. Your entries are still here; check the connection and try again." : error.message, error.fieldId || null, error.code || (isNetworkError ? "server_unavailable" : "unexpected_error"));
     } finally {
-      clearInterval(stepTimer);
+      STATE.submitting = false;
       submitButton.disabled = false;
       submitButton.removeAttribute("aria-busy");
-      $("processing").classList.add("hidden");
+      submitButton.textContent = "Create my analysis";
+      setSurface("processing", false);
     }
   },
 
-  async switchMode(nextMode) {
-    if (!STATE.result || !STATE.requestPayload || !["data", "magic"].includes(nextMode)) return;
-    if (STATE.switchingMode || STATE.result.analysis_mode === nextMode) return;
-    const payload = JSON.parse(JSON.stringify(STATE.requestPayload));
-    payload.mode = nextMode;
-    const controls = Array.from(document.querySelectorAll("[data-report-mode]"));
-    const status = $("report-mode-status");
-    STATE.switchingMode = true;
-    controls.forEach(button => { button.disabled = true; button.setAttribute("aria-busy", "true"); });
-    if (status) status.textContent = `Loading ${nextMode} report`;
-    try {
-      const resp = await fetch("/api/analyze", {
-        method: "POST", headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(payload),
-      });
-      const data = await resp.json();
-      if (!resp.ok) throw new Error(apiErrorMessage(data, "Report mode switch failed"));
-      STATE.result = data;
-      STATE.mode = nextMode;
-      renderDashboard(data);
-      const reportCard = $("report-card");
-      if (reportCard) reportCard.scrollIntoView({behavior: "smooth", block: "start"});
-    } catch (err) {
-      if (status) status.textContent = err.message;
-    } finally {
-      STATE.switchingMode = false;
-      Array.from(document.querySelectorAll("[data-report-mode]")).forEach(button => {
-        button.disabled = false;
-        button.removeAttribute("aria-busy");
-      });
-    }
+  reset() { this.startNew(); },
+
+  editInputs() {
+    setSurface("dashboard", false);
+    setSurface("landing", false);
+    setSurface("processing", false);
+    setSurface("form-section", true);
+    updateReviewSummary();
+    $("form-section").scrollIntoView({behavior: "smooth", block: "start"});
+    $("name").focus({preventScroll: true});
+  },
+
+  startNew() {
+    $("analyze-form").reset();
+    STATE = newEditorialState();
+    clearEditorialErrors();
+    $("location-choices").hidden = true;
+    B5.forEach(([key]) => {
+      const control = $(`bf-${key}`);
+      if (control) { control.dataset.touched = "false"; control.value = "50"; }
+      if ($(`bf-${key}-val`)) $(`bf-${key}-val`).textContent = "Not supplied";
+    });
+    app.toggleSection("birth");
+    app.toggleSection("psych");
+    syncAliasField();
+    updateReviewSummary();
+    setSurface("dashboard", false);
+    setSurface("processing", false);
+    setSurface("landing", true);
+    setSurface("form-section", true);
+    $("form-section").scrollIntoView({behavior: "smooth", block: "start"});
+    $("name").focus({preventScroll: true});
   },
 
   downloadReport() {
-    const r = STATE.result.report;
+    if (!STATE.result) return;
+    const markdown = STATE.result.report.markdown;
     const name = STATE.result.signature.text.replace(/[^a-z0-9]+/gi, "_").toLowerCase();
-    const blob = new Blob([r.markdown], {type: "text/markdown"});
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = `identity_resonance_${name}.md`;
-    a.click();
-    URL.revokeObjectURL(a.href);
-  },
-
-  async generateSigil(ev) {
-    ev.preventDefault();
-    const input = $("custom-sigil-text");
-    const error = $("sigil-error");
-    const output = $("sigil-output");
-    error.classList.add("hidden");
-    output.classList.add("hidden");
-    try {
-      const response = await fetch("/api/sigil", {
-        method: "POST",
-        headers: {"Content-Type": "application/json"},
-        body: JSON.stringify({text: input.value}),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Sigil generation failed");
-      STATE.customSigil = data;
-      output.innerHTML = `
-        <div class="sigil-output-art">${data.svg}</div>
-        <div><h3>${esc(data.name)}</h3>
-          <p class="sigil-output-meta">${esc(data.disclaimer)}<br>Render spec: <code>${esc(data.render_spec)}</code><br>Hash: <code>${esc(data.hash)}</code></p>
-          <div class="sigil-output-actions"><button type="button" onclick="app.downloadCustomSigil()">Download SVG</button><button type="button" onclick="app.copyCustomSigilHash()">Copy hash</button></div>
-        </div>`;
-      output.classList.remove("hidden");
-    } catch (err) {
-      error.textContent = err.message;
-      error.classList.remove("hidden");
-    }
-  },
-
-  downloadCustomSigil() {
-    if (!STATE.customSigil) return;
-    const blob = new Blob([STATE.customSigil.svg], {type: "image/svg+xml"});
+    const blob = new Blob([markdown], {type: "text/markdown"});
     const link = document.createElement("a");
     link.href = URL.createObjectURL(blob);
-    link.download = `sigil_${STATE.customSigil.hash.slice(0, 16)}.svg`;
+    link.download = `human_metadata_${name}.md`;
     link.click();
     URL.revokeObjectURL(link.href);
   },
+});
 
-  async copyCustomSigilHash() {
-    if (!STATE.customSigil) return;
-    try {
-      await navigator.clipboard.writeText(STATE.customSigil.hash);
-    } catch (_) {
-      // Clipboard permissions are optional; the hash remains visible for manual copy.
-    }
-  },
-};
-window.app = app;
-
-// ------------------------------------------------------------------
-// Init
-// ------------------------------------------------------------------
-
-function init() {
-  // Decorative glyphs
-  $("logo-glyph").innerHTML = decorativeFP(7, 60);
-  $("hero-glyph").innerHTML = decorativeFP(42, 240);
-
-  // Big Five sliders
-  $("bigfive-sliders").innerHTML = B5.map(([k, label]) => `
-    <div><div class="flex justify-between text-xs text-slate-400 mb-1"><label for="bf-${k}">${label}</label><span id="bf-${k}-val" class="stat-num">Not answered</span></div>
-    <input type="range" id="bf-${k}" aria-label="${label}" min="0" max="100" value="50" data-touched="false" class="w-full accent-rose-400"
-      oninput="this.dataset.touched='true'; document.getElementById('bf-${k}-val').textContent=this.value"></div>`).join("");
-
-  // MBTI / Enneagram selects
-  $("p-mbti").innerHTML += MBTI_TYPES.map(t => `<option>${t}</option>`).join("");
-  $("p-enne").innerHTML += Array.from({length: 9}, (_, i) => `<option>${i + 1}</option>`).join("");
-  $("p-enne").addEventListener("change", () => { updateWingOptions(); updateSecondaryWarning(); });
-  $("p-secondary").addEventListener("change", updateSecondaryWarning);
-  updateWingOptions();
-  $("b-date").addEventListener("input", (event) => {
-    event.target.value = normalizeBirthDateInput(event.target.value);
-  });
+function initEditorial() {
+  STATE = newEditorialState();
+  $("p-mbti").innerHTML += MBTI_TYPES.map(type => `<option>${type}</option>`).join("");
+  $("p-enne").innerHTML += Array.from({length: 9}, (_, index) => `<option>${index + 1}</option>`).join("");
+  $("p-enne").addEventListener("change", () => { updateWingOptions(); updateSecondaryWarning(); updateReviewSummary(); });
+  $("p-secondary").addEventListener("change", () => { updateSecondaryWarning(); updateReviewSummary(); });
+  $("bigfive-sliders").innerHTML = B5.map(([key, label]) => `<div class="field-group"><label for="bf-${key}">${label}: <span id="bf-${key}-val">Not supplied</span></label><input type="range" id="bf-${key}" min="0" max="100" value="50" data-touched="false" oninput="this.dataset.touched='true'; document.getElementById('bf-${key}-val').textContent=this.value + ' of 100'"></div>`).join("");
+  const statusOptions = `<option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option>`;
+  $("assessment-status-fields").innerHTML = STATUS_FIELDS.map(([field, , label]) => `<div class="field-group"><label for="p-status-${field}">${esc(label)} status</label><select id="p-status-${field}">${statusOptions}</select></div>`).join("");
+  $("b-date").addEventListener("input", event => { event.target.value = normalizeBirthDateInput(event.target.value); updateReviewSummary(); });
+  $("analyze-form").addEventListener("input", updateReviewSummary);
+  $("analyze-form").addEventListener("change", updateReviewSummary);
   app.toggleSection("birth");
   app.toggleSection("psych");
   updateWingOptions();
-
-  // Reference-population gallery
-  fetch("/api/defaults").then(r => r.json()).then(d => {
-    const picks = (d.identities || []).filter(x => x.fingerprint)
-      .sort((a, b) => b.resonance - a.resonance).slice(0, 10);
-    $("gallery").innerHTML = picks.map(p => `
-      <div class="glass rounded-xl p-3 text-center hover:scale-[1.03] transition cursor-default">
-        <div class="w-16 h-16 mx-auto">${fingerprintSVG(p.fingerprint, 100)}</div>
-        <div class="mt-2 text-[11px] text-slate-300 truncate">${esc(p.text)}</div>
-        <div class="text-[10px] text-amber-300/80 stat-num">${p.resonance}</div>
-      </div>`).join("");
-  }).catch(() => {});
+  syncAliasField();
+  updateReviewSummary();
 }
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", initEditorial);
 })();

@@ -112,10 +112,12 @@ class ConvergenceTests(unittest.TestCase):
             _compute_signature({"id": "test:name", "text": "Ada Lovelace"}, mode="magic")
             self.assertEqual(snapshot.call_count, 1)
 
-    def test_landing_stat_labels_extensions_not_total_encoder_count(self):
+    def test_public_interface_does_not_hardcode_encoder_count_as_a_landing_claim(self):
         html = (Path(ROOT) / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
-        self.assertIn("25</strong><span>provenance extensions", html)
-        self.assertNotIn("25</strong><span>named systems", html)
+        script = (Path(ROOT) / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+        self.assertNotIn("25</strong><span>", html)
+        self.assertIn("const extensions = Object.values(encoders)", script)
+        self.assertIn("${extensions.length} configured symbolic extensions", script)
 
     def test_ordinal_does_not_create_a_second_independent_vote(self):
         signature = {

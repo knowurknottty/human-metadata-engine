@@ -1,248 +1,213 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Identity Resonance | Provenance-Aware Name Analysis</title>
-<meta name="description" content="Your name through core encoders and 25 provenance-aware symbolic extensions. Interpretive, deterministic, and explicit about source conventions.">
-<script src="/vendor/tailwind.js"></script>
-<link rel="stylesheet" href="/styles.css?v=0.7.0-truthful-report-1">
+<title>Human Metadata Engine | Structured symbolic analysis</title>
+<meta name="description" content="A structured reflection on your name, birth data, and symbolic systems, with calculations, interpretation, and limits kept distinct.">
+<link rel="stylesheet" href="/styles.css?v=0.8.0-editorial-4">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#10057;</text></svg>">
 </head>
-<body class="text-slate-200 antialiased min-h-screen selection:bg-amber-400/30">
+<body>
+<a class="skip-link" href="#form-section">Skip to the form</a>
 
-<!-- ======================= HEADER ======================= -->
-<header class="sticky top-0 z-40 backdrop-blur-xl bg-[#07070d]/80 border-b border-white/5">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
-    <a href="#" class="flex items-center gap-2.5 group" onclick="app.reset(); return false;">
-      <span class="fp-mini" id="logo-glyph" aria-hidden="true"></span>
-      <span class="font-semibold tracking-wide text-slate-100">Identity <span class="text-amber-300">Resonance</span></span>
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="#" class="wordmark" onclick="app.reset(); return false;" aria-label="Human Metadata Engine home">
+      <span class="wordmark__mark" aria-hidden="true">HME</span>
+      <span>Human Metadata Engine</span>
     </a>
-  <div class="flex items-center gap-3 text-xs sm:text-sm">
-      <span class="hidden sm:inline text-slate-400">Core encoders + 25 symbolic extensions</span>
-      <button onclick="app.scrollToForm()" class="px-3.5 py-1.5 rounded-full bg-amber-400/10 text-amber-300 border border-amber-400/30 hover:bg-amber-400/20 transition">Analyze a name</button>
-    </div>
+    <nav aria-label="Primary navigation">
+      <a href="#method-intro">Method</a>
+      <button type="button" class="button button--small" onclick="app.scrollToForm()">Create an analysis</button>
+    </nav>
   </div>
 </header>
 
-<main class="max-w-6xl mx-auto px-4 sm:px-6">
-
-<!-- ======================= HERO / LANDING ======================= -->
-<section id="landing" class="hero-section pt-14 sm:pt-20 pb-10 text-center">
-  <div class="hero-eyebrow"><span class="hero-eyebrow-mark"></span><span>IDENTITY RESONANCE / FIELD NOTE 01</span><span class="hero-eyebrow-rule"></span></div>
-  <div class="mx-auto w-40 h-40 sm:w-52 sm:h-52 mb-8 float-slow hero-glyph-frame" id="hero-glyph" aria-hidden="true"></div>
-  <h1 class="text-3xl sm:text-5xl font-bold tracking-tight text-slate-50 leading-tight">
-    Your name is a signal.<br class="hidden sm:block">
-    <span class="hero-title-accent">Map the pattern. Keep the provenance.</span>
-  </h1>
-  <p class="mt-5 max-w-2xl mx-auto text-slate-400 text-base sm:text-lg">
-    Two ways to read the same engine: Data mode keeps measurements and provenance in view; Magic mode adds a
-    symbolic reflection layer. Neither mode claims to measure personality, fate, culture, or real-world similarity.
-  </p>
-  <div class="hero-stats" aria-label="Engine properties">
-    <div><strong>25</strong><span>provenance extensions</span></div>
-    <div><strong>0</strong><span>hidden inputs</span></div>
-    <div><strong>1</strong><span>deterministic glyph</span></div>
-  </div>
-  <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-    <button onclick="app.scrollToForm()" class="button-primary px-7 py-3 rounded-xl text-slate-950 font-semibold hover:scale-[1.02] transition">Start your analysis</button>
-    <span class="text-slate-500 text-sm">The complete report is available without checkout</span>
-  </div>
-  <div id="gallery" class="reference-strip mt-14 grid grid-cols-2 sm:grid-cols-5 gap-3 opacity-90"></div>
-  <p class="mt-3 text-xs text-slate-600">Reference fingerprints. Each glyph is generated from the displayed name.</p>
-
-  <section class="sigil-lab glass rounded-2xl p-5 sm:p-7 max-w-3xl mx-auto mt-12 text-left" aria-labelledby="sigil-title">
-    <div class="sigil-lab-heading">
-      <div><p class="atlas-kicker">Custom artifact</p><h2 id="sigil-title">Draw a personal sigil</h2></div>
-      <span class="sigil-lab-index">SIGIL / 01</span>
+<main>
+  <section id="landing" class="intro" aria-labelledby="page-title">
+    <div class="intro__grid">
+      <div>
+        <p class="eyebrow">Structured symbolic analysis · version 0.8 interface</p>
+        <h1 id="page-title">A structured reflection on your name, birth data, and symbolic systems</h1>
+        <p class="intro__lede">This tool calculates established name systems and, when supplied, astronomical birth data. It shows how each result was produced and keeps calculation separate from traditional interpretation.</p>
+        <button type="button" class="button button--primary" onclick="app.scrollToForm()">Create my analysis</button>
+      </div>
+      <div class="intro__boundary" id="method-intro">
+        <section aria-labelledby="is-title">
+          <h2 id="is-title">What this is</h2>
+          <p>A transparent, deterministic report. The same input produces the same calculated result when the engine and convention versions stay the same.</p>
+        </section>
+        <section aria-labelledby="is-not-title">
+          <h2 id="is-not-title">What this is not</h2>
+          <p>It is not a diagnosis, personality test, prediction, or scientific proof of symbolic meaning.</p>
+        </section>
+      </div>
     </div>
-    <p class="text-sm text-slate-400 mt-2 max-w-xl">Enter a name, phrase, or project mark. The engine returns a reproducible SVG built from the public fingerprint projection.</p>
-    <form class="sigil-form mt-5" onsubmit="app.generateSigil(event)">
-      <label class="sr-only" for="custom-sigil-text">Text for custom sigil</label>
-      <input id="custom-sigil-text" class="inp" maxlength="120" placeholder="e.g. North Star / CAPT / your studio name" required>
-      <button class="button-secondary rounded-xl px-5 py-3 font-semibold" type="submit">Generate sigil</button>
-    </form>
-    <p id="sigil-error" class="hidden text-rose-300 text-sm mt-3" role="alert"></p>
-    <div id="sigil-output" class="sigil-output hidden" aria-live="polite"></div>
   </section>
-</section>
 
-<!-- ======================= INPUT FORM ======================= -->
-<section id="form-section" class="py-10">
-  <div class="analysis-console glass rounded-2xl p-6 sm:p-10 max-w-3xl mx-auto">
-    <h2 class="text-2xl font-bold text-slate-50">Begin your analysis</h2>
-    <p class="text-slate-400 mt-1 text-sm">Only a name is required. Choose how you want the result framed; birth and self-report inputs are optional.</p>
+  <section id="form-section" class="workflow" aria-labelledby="form-title">
+    <div class="workflow__heading">
+      <p class="eyebrow">Your inputs</p>
+      <h2 id="form-title">Create your analysis</h2>
+      <p>Start with a name. Birth details and personal context are optional, and the coverage summary will say what could and could not be calculated.</p>
+    </div>
 
-    <form id="analyze-form" class="mt-7 space-y-8" onsubmit="app.submit(event)">
-      <div>
-        <label class="block text-sm font-medium text-amber-300 mb-1.5" for="name">Full name <span class="text-rose-400">*</span></label>
-        <input id="name" name="name" required maxlength="120" placeholder="e.g. Ada Lovelace"
-          class="w-full rounded-xl bg-white/5 border border-white/10 px-4 py-3 text-lg text-slate-100 placeholder-slate-600 focus:border-amber-400/60 focus:ring-2 focus:ring-amber-400/20 outline-none transition">
-      </div>
-      <div>
-        <label class="lbl" for="aliases">Aliases <span class="text-slate-600">(optional)</span></label>
-        <textarea id="aliases" class="inp min-h-24" maxlength="1450" placeholder="One alias, nickname, or pen name per line" aria-describedby="aliases-help"></textarea>
-        <p id="aliases-help" class="field-hint">Up to 12 distinct names. Each alias receives its own deterministic name calculations; it does not change the primary birth chart.</p>
+    <form id="analyze-form" novalidate onsubmit="app.submit(event)">
+      <div id="form-error-summary" class="error-summary" role="alert" aria-live="assertive" tabindex="-1" hidden>
+        <h3>Check the highlighted information</h3>
+        <div id="form-error"></div>
+        <details id="form-error-technical" hidden><summary>Technical details</summary><code id="form-error-code"></code></details>
       </div>
 
-      <fieldset class="border border-white/10 rounded-xl p-5">
-        <legend class="px-2 text-sm font-medium text-sky-300">Reading mode</legend>
-        <div class="grid sm:grid-cols-2 gap-3">
-          <label class="mode-option" for="mode-data"><input id="mode-data" name="mode" type="radio" value="data" checked> <span><b>Data</b><small>Measurements, provenance, and cautious interpretation.</small></span></label>
-          <label class="mode-option" for="mode-magic"><input id="mode-magic" name="mode" type="radio" value="magic"> <span><b>Magic</b><small>Symbolic reflection, clearly labeled as non-measurement.</small></span></label>
-        </div>
-      </fieldset>
-
-      <!-- Birth data -->
-      <fieldset class="border border-white/10 rounded-xl p-5">
-        <legend class="px-2 text-sm font-medium text-fuchsia-300 flex items-center gap-2">
-          <input type="checkbox" id="birth-enabled" class="accent-fuchsia-400" onchange="app.toggleSection('birth')"> Birth data
-          <span class="text-slate-500 font-normal">(adds date-level astronomy; exact time is required for time-sensitive fields)</span>
-        </legend>
-        <div id="birth-fields" class="space-y-4 opacity-40 pointer-events-none transition" aria-disabled="true">
-          <div class="grid sm:grid-cols-2 gap-3">
-            <div><label class="lbl" for="b-date">Date</label><input type="text" id="b-date" class="inp" inputmode="numeric" autocomplete="bday" maxlength="10" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" placeholder="YYYY-MM-DD" aria-describedby="birth-date-help"></div>
-            <div><label class="lbl" for="b-time">Time <span class="text-slate-600">(optional)</span></label><input type="time" id="b-time" class="inp" aria-describedby="birth-date-help"></div>
-            <div class="sm:col-span-2"><label class="lbl" for="b-loc">Birth location</label><input type="text" id="b-loc" maxlength="160" placeholder="Evanston, Wyoming or Chicago, Illinois" class="inp" aria-describedby="birth-date-help"></div>
+      <section class="form-step" aria-labelledby="name-step-title">
+        <div class="step-marker" aria-hidden="true">1</div>
+        <div class="step-content">
+          <h3 id="name-step-title">Your name</h3>
+          <div class="field-group">
+            <label for="name">Full birth or legal name <span aria-hidden="true">*</span></label>
+            <input id="name" name="name" required maxlength="120" autocomplete="name" placeholder="For example, Ada Lovelace" aria-describedby="name-hint">
+            <p class="field-hint" id="name-hint">This is the primary name used for every name calculation.</p>
           </div>
-          <p id="birth-date-help" class="text-xs text-slate-500">Location resolves coordinates and the historical timezone for the exact birth date. The place is sent to Open-Meteo for this lookup. Birth time sets the rising sign, houses, and Human Design; if unknown, leave it blank and those time-sensitive results stay withheld.</p>
-          <details class="profile-status-details">
-            <summary>Advanced chart inputs</summary>
-            <p class="field-hint mt-2">Use these only when you already know the coordinates and timezone. An IANA timezone such as America/Chicago lets the server derive daylight-saving and fractional offsets for the historical date.</p>
-            <div class="grid grid-cols-2 gap-3 mt-3">
-              <div class="col-span-2"><label class="lbl" for="b-zone">IANA timezone</label><input type="text" id="b-zone" maxlength="120" placeholder="America/Chicago" class="inp"></div>
-              <div><label class="lbl" for="b-lat">Latitude</label><input type="number" id="b-lat" step="0.0001" min="-90" max="90" class="inp"></div>
-              <div><label class="lbl" for="b-lon">Longitude</label><input type="number" id="b-lon" step="0.0001" min="-180" max="180" class="inp"></div>
-              <div class="col-span-2"><label class="lbl" for="b-tz">UTC offset <span class="text-slate-600">(less reliable without an IANA timezone)</span></label><input type="number" id="b-tz" step="0.25" min="-14" max="14" placeholder="e.g. -6 or +5.5" class="inp"></div>
+
+          <div class="field-group">
+            <label for="alias-input">Other names <span class="optional">Optional</span></label>
+            <div class="token-input" id="alias-token-field">
+              <div id="alias-list" class="token-list" aria-label="Added other names"></div>
+              <input id="alias-input" maxlength="120" placeholder="Nickname, alias, or pen name" aria-describedby="aliases-help" onkeydown="app.handleAliasKeydown(event)" onpaste="app.handleAliasPaste(event)">
+            </div>
+            <textarea id="aliases" hidden aria-hidden="true" tabindex="-1"></textarea>
+            <p class="field-hint" id="aliases-help">Press Enter or paste comma-separated names to add up to 12. Each name is calculated separately and does not change the birth chart.</p>
+            <div id="alias-status" class="sr-only" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-step" aria-labelledby="birth-step-title">
+        <div class="step-marker" aria-hidden="true">2</div>
+        <div class="step-content">
+          <h3 id="birth-step-title">Birth details</h3>
+          <label class="choice-control" for="birth-enabled">
+            <input type="checkbox" id="birth-enabled" onchange="app.toggleSection('birth')">
+            <span><strong>Add birth information</strong><small>Adds date-based astronomy. Exact time adds the rising sign, chart houses, and Human Design.</small></span>
+          </label>
+
+          <div id="birth-fields" class="optional-fields" aria-disabled="true" hidden>
+            <div class="field-grid field-grid--two">
+              <div class="field-group">
+                <label for="b-date">Birth date</label>
+                <input type="text" id="b-date" inputmode="numeric" autocomplete="bday" maxlength="10" placeholder="YYYY-MM-DD" aria-describedby="birth-date-help">
+                <p class="field-hint" id="birth-date-help">Use year-month-day, for example 1982-02-04.</p>
+              </div>
+              <div class="field-group" id="birth-time-field">
+                <label for="b-time">Local birth time</label>
+                <input type="time" id="b-time" aria-describedby="birth-time-help">
+                <p class="field-hint" id="birth-time-help">Use the time shown on the birth record.</p>
+              </div>
+            </div>
+
+            <label class="choice-control choice-control--compact" for="b-time-unknown">
+              <input type="checkbox" id="b-time-unknown" onchange="app.toggleUnknownTime()">
+              <span><strong>I do not know my exact birth time</strong><small>Time-sensitive results will be unavailable. The report will not present an estimated time as exact.</small></span>
+            </label>
+
+            <div class="field-group">
+              <label for="b-loc">Birthplace</label>
+              <input type="text" id="b-loc" maxlength="160" autocomplete="address-level2" placeholder="City, state or region, country" aria-describedby="birth-location-help">
+              <p class="field-hint" id="birth-location-help">Your birthplace text may be sent to the configured location provider so coordinates and timezone can be resolved.</p>
+            </div>
+
+            <section id="location-choices" class="location-choices" aria-labelledby="location-choices-title" hidden>
+              <h4 id="location-choices-title" tabindex="-1">Which place did you mean?</h4>
+              <p>Choose the correct location. Your other entries will stay in place.</p>
+              <div id="location-choice-list" class="location-choice-list" role="radiogroup" aria-label="Location choices"></div>
+            </section>
+
+            <details id="advanced-birth" class="disclosure">
+              <summary>Advanced birth settings</summary>
+              <p>Most people should leave these fields alone. They are provided for researchers, developers, and users correcting unusual historical location data.</p>
+              <div class="field-grid field-grid--two">
+                <div class="field-group field-grid__full">
+                  <label for="b-zone">Timezone identifier</label>
+                  <input type="text" id="b-zone" maxlength="120" placeholder="America/Chicago" aria-describedby="timezone-help">
+                  <p class="field-hint" id="timezone-help">The geographic timezone identifier used to calculate historical daylight-saving rules.</p>
+                </div>
+                <div class="field-group"><label for="b-lat">Latitude</label><input type="number" id="b-lat" step="0.0001" min="-90" max="90"></div>
+                <div class="field-group"><label for="b-lon">Longitude</label><input type="number" id="b-lon" step="0.0001" min="-180" max="180"></div>
+                <div class="field-group field-grid__full">
+                  <label for="b-tz">UTC offset</label>
+                  <input type="number" id="b-tz" step="0.25" min="-14" max="14" placeholder="For example, -6 or +5.5" aria-describedby="offset-help">
+                  <p class="field-hint" id="offset-help">The difference between local time and Coordinated Universal Time at the moment of birth.</p>
+                </div>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="form-step" aria-labelledby="context-step-title">
+        <div class="step-marker" aria-hidden="true">3</div>
+        <div class="step-content">
+          <h3 id="context-step-title">Optional context</h3>
+          <details id="personal-context" class="disclosure" ontoggle="app.syncPersonalContext()">
+            <summary>Add personal context</summary>
+            <p>These answers are supplied by you. They are not inferred from your name or birth data.</p>
+            <label class="choice-control choice-control--compact" for="psych-enabled">
+              <input type="checkbox" id="psych-enabled" onchange="app.toggleSection('psych')">
+              <span><strong>Include personal context in this report</strong><small>Only completed fields are submitted.</small></span>
+            </label>
+            <div id="psych-fields" class="optional-fields" aria-disabled="true" hidden>
+              <section aria-labelledby="personality-heading">
+                <h4 id="personality-heading">Personality framework</h4>
+                <div id="bigfive-sliders" class="field-grid field-grid--two"></div>
+                <div class="field-grid field-grid--two">
+                  <div class="field-group"><label for="p-mbti">Personality type</label><select id="p-mbti" aria-describedby="p-mbti-help"><option value="">Not supplied</option></select><p id="p-mbti-help" class="field-hint">A four-letter preference profile from an assessment or your own prior result.</p></div>
+                  <div class="field-group"><label for="p-enne">Enneagram</label><select id="p-enne" aria-describedby="p-enne-help"><option value="">Not supplied</option></select><p id="p-enne-help" class="field-hint">A core motivational pattern numbered 1–9.</p></div>
+                  <div class="field-group"><label for="p-wing">Enneagram wing</label><select id="p-wing" aria-describedby="p-wing-help"><option value="">Select a core type first</option></select><p id="p-wing-help" class="field-hint">An adjacent influence used only when you already have a supported result.</p><p id="p-wing-warning" class="inline-warning" role="alert" hidden></p></div>
+                  <div class="field-group"><label for="p-secondary">Secondary pattern</label><select id="p-secondary" aria-describedby="p-secondary-help"><option value="">Not supplied</option><option value="1">Type 1 influence</option><option value="2">Type 2 influence</option><option value="3">Type 3 influence</option><option value="4">Type 4 influence</option><option value="5">Type 5 influence</option><option value="6">Type 6 influence</option><option value="7">Type 7 influence</option><option value="8">Type 8 influence</option><option value="9">Type 9 influence</option><option value="unknown">Unknown</option></select><p id="p-secondary-help" class="field-hint">A recurring secondary Enneagram strategy, if known.</p><p id="p-secondary-warning" class="inline-warning" role="alert" hidden></p></div>
+                </div>
+              </section>
+              <section aria-labelledby="relationship-heading">
+                <h4 id="relationship-heading">Relationship and conflict patterns</h4>
+                <div class="field-grid field-grid--two">
+                  <div class="field-group"><label for="p-attach">Attachment or relationship style</label><select id="p-attach" aria-describedby="p-attach-help"><option value="">Not supplied</option><option value="secure">Secure</option><option value="anxious_preoccupied">Anxious-preoccupied</option><option value="dismissive_avoidant">Dismissive-avoidant</option><option value="fearful_avoidant">Fearful-avoidant</option><option value="mixed_context_dependent">Mixed or context-dependent</option><option value="anxious">Anxious (legacy)</option><option value="avoidant">Avoidant (legacy)</option><option value="disorganized">Disorganized (legacy)</option><option value="unknown">Unknown</option></select><p id="p-attach-help" class="field-hint">A supplied relationship pattern that may vary by context and life stage.</p></div>
+                  <div class="field-group"><label for="p-conflict">Conflict style</label><select id="p-conflict" aria-describedby="p-conflict-help"><option value="">Not supplied</option><option value="direct">Direct</option><option value="collaborative">Collaborative</option><option value="accommodating">Accommodating</option><option value="avoidant">Avoidant</option><option value="competitive">Competitive</option><option value="context_dependent">Context-dependent</option><option value="unknown">Unknown</option></select><p id="p-conflict-help" class="field-hint">How you usually respond during disagreement, as observed by you.</p></div>
+                  <div class="field-group"><label for="p-instinct">Instinctual pattern</label><select id="p-instinct" aria-describedby="p-instinct-help"><option value="">Not supplied</option><option value="self_preservation">Self-preservation</option><option value="social">Social</option><option value="one_to_one">One-to-one</option><option value="sp_so">Self-preservation / social</option><option value="sp_sx">Self-preservation / one-to-one</option><option value="so_sp">Social / self-preservation</option><option value="so_sx">Social / one-to-one</option><option value="sx_sp">One-to-one / self-preservation</option><option value="sx_so">One-to-one / social</option><option value="unknown">Unknown</option></select><p id="p-instinct-help" class="field-hint">The instinctive priority through which an Enneagram pattern is expressed.</p></div>
+                </div>
+              </section>
+              <details class="disclosure disclosure--nested"><summary>How these answers were identified</summary><p>Choose a status only for fields you supplied. This never turns a self-estimate into a validated assessment.</p><div id="assessment-status-fields" class="field-grid field-grid--two"></div></details>
             </div>
           </details>
         </div>
-      </fieldset>
+      </section>
 
-      <!-- Psychology -->
-      <fieldset class="border border-white/10 rounded-xl p-5">
-        <legend class="px-2 text-sm font-medium text-rose-300 flex items-center gap-2">
-          <input type="checkbox" id="psych-enabled" class="accent-rose-400" onchange="app.toggleSection('psych')"> Optional personality information
-          <span class="text-slate-500 font-normal">(self-reported, optional)</span>
-        </legend>
-        <div id="psych-fields" class="space-y-5 opacity-40 pointer-events-none transition" aria-disabled="true">
-          <p class="text-xs text-slate-400 leading-relaxed">These frameworks describe different dimensions of self-understanding. They are reflective tools, not clinical diagnoses.</p>
-          <div class="grid sm:grid-cols-2 gap-x-8 gap-y-3" id="bigfive-sliders"></div>
-          <section aria-labelledby="core-profile-heading">
-            <h3 id="core-profile-heading" class="profile-subheading">Core cognition and motivation</h3>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div>
-                <label class="lbl" for="p-mbti">MBTI type</label>
-                <select id="p-mbti" class="inp" aria-describedby="p-mbti-help"><option value="">Select</option></select>
-                <p id="p-mbti-help" class="field-hint">Four-letter cognitive preference profile. Use a validated MBTI® or comparable assessment result; leave blank if unknown.</p>
-              </div>
-              <div>
-                <label class="lbl" for="p-enne">Enneagram</label>
-                <select id="p-enne" class="inp" aria-describedby="p-enne-help"><option value="">Select</option></select>
-                <p id="p-enne-help" class="field-hint">Core motivational pattern, numbered 1–9. Use the type identified by an Enneagram assessment or sustained self-observation; leave blank if uncertain.</p>
-              </div>
-              <div>
-                <label class="lbl" for="p-wing">Wing</label>
-                <select id="p-wing" class="inp" aria-describedby="p-wing-help"><option value="">Select a core type first</option></select>
-                <p id="p-wing-help" class="field-hint">Adjacent Enneagram influence. Use only when an assessment or sustained self-observation supports a wing.</p>
-                <p id="p-wing-warning" class="hidden field-warning" role="alert"></p>
-              </div>
-              <div>
-                <label class="lbl" for="p-secondary">Secondary pattern</label>
-                <select id="p-secondary" class="inp" aria-describedby="p-secondary-help">
-                  <option value="">Not assessed</option><option value="1">Type 1 influence</option><option value="2">Type 2 influence</option>
-                  <option value="3">Type 3 influence</option><option value="4">Type 4 influence</option><option value="5">Type 5 influence</option>
-                  <option value="6">Type 6 influence</option><option value="7">Type 7 influence</option><option value="8">Type 8 influence</option>
-                  <option value="9">Type 9 influence</option><option value="unknown">Unknown / not assessed</option>
-                </select>
-                <p id="p-secondary-help" class="field-hint">A recurring secondary Enneagram strategy that shapes how the core type responds. Sometimes called a fix in trifix or tritype systems; terminology varies by school. It is not a standardized second core type.</p>
-                <p id="p-secondary-warning" class="hidden field-warning" role="alert"></p>
-              </div>
-              <div>
-                <label class="lbl" for="p-instinct">Instinctual variant</label>
-                <select id="p-instinct" class="inp" aria-describedby="p-instinct-help">
-                  <option value="">Not assessed</option><option value="self_preservation">Self-preservation</option><option value="social">Social</option><option value="one_to_one">One-to-one</option>
-                  <option value="sp_so">sp/so</option><option value="sp_sx">sp/sx</option><option value="so_sp">so/sp</option><option value="so_sx">so/sx</option><option value="sx_sp">sx/sp</option><option value="sx_so">sx/so</option><option value="unknown">Unknown / not assessed</option>
-                </select>
-                <p id="p-instinct-help" class="field-hint">The instinctive priority through which Enneagram patterns are most often expressed. Stacked variants are supported when known.</p>
-              </div>
-            </div>
-          </section>
+      <section class="review" aria-labelledby="review-title">
+        <p class="eyebrow">Review</p>
+        <h3 id="review-title">Before creating your analysis</h3>
+        <dl id="review-summary" class="review-summary"></dl>
+      </section>
 
-          <section aria-labelledby="relational-profile-heading">
-            <h3 id="relational-profile-heading" class="profile-subheading">Relational patterns</h3>
-            <div class="max-w-sm">
-              <label class="lbl" for="p-attach">Attachment style</label>
-              <select id="p-attach" class="inp" aria-describedby="p-attach-help">
-                <option value="">Not assessed</option><option value="secure">Secure</option><option value="anxious_preoccupied">Anxious-preoccupied</option>
-                <option value="dismissive_avoidant">Dismissive-avoidant</option><option value="fearful_avoidant">Fearful-avoidant</option><option value="mixed_context_dependent">Mixed / context-dependent</option>
-                <option value="anxious">Anxious (legacy)</option><option value="avoidant">Avoidant (legacy)</option><option value="disorganized">Disorganized (legacy)</option><option value="unknown">Unknown / not assessed</option>
-              </select>
-              <p id="p-attach-help" class="field-hint">A self-reported or professionally assessed relationship pattern. It is distinct from personality type and may vary by relationship, context, and life stage.</p>
-            </div>
-          </section>
-
-          <section aria-labelledby="self-regulation-heading">
-            <h3 id="self-regulation-heading" class="profile-subheading">Self-regulation <span class="text-slate-500 font-normal">(optional self-observation)</span></h3>
-            <div class="max-w-sm">
-              <label class="lbl" for="p-conflict">Conflict style</label>
-              <select id="p-conflict" class="inp" aria-describedby="p-conflict-help">
-                <option value="">Not assessed</option><option value="direct">Direct</option><option value="collaborative">Collaborative</option><option value="accommodating">Accommodating</option><option value="avoidant">Avoidant</option><option value="competitive">Competitive</option><option value="context_dependent">Context-dependent</option><option value="unknown">Unknown</option>
-              </select>
-              <p id="p-conflict-help" class="field-hint">A self-observed way of responding during disagreement. This is not a diagnosis and can vary by context.</p>
-            </div>
-          </section>
-
-          <details class="profile-status-details">
-            <summary>Assessment status (optional)</summary>
-            <p class="field-hint mt-2">Choose how you know each value. This never upgrades a self-estimate into a validated result.</p>
-            <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mt-3">
-              <div><label class="lbl" for="p-status-mbti">MBTI status</label><select id="p-status-mbti" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
-              <div><label class="lbl" for="p-status-enneagram">Enneagram status</label><select id="p-status-enneagram" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
-              <div><label class="lbl" for="p-status-wing">Wing status</label><select id="p-status-wing" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
-              <div><label class="lbl" for="p-status-secondary">Secondary pattern status</label><select id="p-status-secondary" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
-              <div><label class="lbl" for="p-status-instinct">Instinct status</label><select id="p-status-instinct" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
-              <div><label class="lbl" for="p-status-attachment">Attachment status</label><select id="p-status-attachment" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
-              <div><label class="lbl" for="p-status-conflict">Conflict status</label><select id="p-status-conflict" class="inp profile-status"><option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option></select></div>
-            </div>
-          </details>
-        </div>
-      </fieldset>
-
-      <div class="flex flex-col sm:flex-row items-center gap-4">
-        <button type="submit" id="submit-btn"
-          class="button-primary w-full sm:w-auto px-8 py-3.5 rounded-xl text-slate-950 font-bold text-lg hover:scale-[1.02] transition">
-          Run the engine
-        </button>
-        <p class="text-xs text-slate-500">Submitted data is processed to generate this report and is not intentionally retained by the web process. A supplied birth place is sent to a geocoding service to resolve chart inputs. Network and infrastructure logs may still exist; do not enter sensitive information.</p>
+      <div class="submit-area">
+        <button type="submit" id="submit-btn" class="button button--primary">Create my analysis</button>
+        <p>Your entries are used to create the report. The application does not intentionally include your name, exact birth time, or coordinates in normal server logs.</p>
       </div>
-      <p id="form-error" class="hidden text-rose-400 text-sm" role="alert" aria-live="assertive"></p>
     </form>
-  </div>
-</section>
+  </section>
 
-<!-- ======================= PROCESSING ======================= -->
-<section id="processing" class="hidden py-24 text-center">
-  <div class="mx-auto w-36 h-36 relative">
-    <div class="absolute inset-0 rounded-full border-2 border-amber-400/20 spin-slow"></div>
-    <div class="absolute inset-3 rounded-full border-2 border-fuchsia-400/20 spin-rev"></div>
-    <div class="absolute inset-6 rounded-full border-2 border-emerald-400/20 spin-slow"></div>
-    <div class="absolute inset-0 flex items-center justify-center text-3xl">&#10057;</div>
-  </div>
-  <p class="mt-8 text-lg text-slate-300 font-medium" id="processing-step" role="status" aria-live="polite">Normalizing identity string…</p>
-  <p class="mt-2 text-sm text-slate-500">Running core encoders + 25 provenance-aware symbolic extensions</p>
-</section>
+  <section id="processing" class="processing" hidden aria-labelledby="processing-title">
+    <div class="processing__mark" aria-hidden="true"></div>
+    <h2 id="processing-title">Creating your analysis…</h2>
+    <p id="processing-step" role="status" aria-live="polite">Your entries are being calculated and organized into a report.</p>
+  </section>
 
-<!-- ======================= DASHBOARD ======================= -->
-<section id="dashboard" class="hidden py-10 space-y-6"></section>
-
+  <section id="dashboard" class="report-shell" hidden></section>
 </main>
 
-<footer class="border-t border-white/5 mt-16 py-8 text-center text-xs text-slate-600 px-4">
-  <p>Symbolic systems (numerology, gematria, astrology, Human Design) are interpretive lenses, not empirical claims.</p>
-  <p class="mt-1">Deterministic computation: identical normalized inputs and convention versions produce identical results. &copy; Inversion Labs.</p>
+<footer class="site-footer">
+  <p>Calculations can be reproducible while their symbolic interpretations remain traditional or experimental.</p>
+  <p>Human Metadata Engine · Inversion Labs</p>
 </footer>
 
-<script src="/app.js?v=date-input-1-location-contract-2-no-demo-checkout-1-field-errors-1"></script>
+<script src="/app.js?v=0.8.0-editorial-4"></script>
 </body>
 </html>
