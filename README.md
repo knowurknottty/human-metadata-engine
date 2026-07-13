@@ -2,7 +2,7 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.7.0 engine / v0.8 interface** — The stable engine and API contracts remain at v0.7.0. The public interface now uses a plain-language, editorial workflow that separates mathematical calculation, astronomy, user-supplied context, traditional interpretation, and experimental synthesis. There is no checkout or paid entitlement surface; every generated report is available to download or print.
+**v0.8.0 application and interface** — The public workflow now uses a plain-language, editorial presentation that separates mathematical calculation, astronomy, user-supplied context, traditional interpretation, and experimental synthesis. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`. There is no checkout or paid entitlement surface; every generated report is available to download or print.
 
 ## Quick Start — Web App
 

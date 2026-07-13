@@ -1,8 +1,9 @@
 # v0.8 Interface Architecture
 
-The v0.8 interface is a presentation-layer release over the unchanged v0.7
-engine and API contracts. It does not move calculations into JavaScript or
-change stable error codes.
+The v0.8.0 application and interface are a presentation-layer release over the
+unchanged `analysis-v1` API, `signature-v2` engine, and `report-v1` report
+contracts. It does not move calculations into JavaScript or change stable error
+codes.
 
 ## Design principles
 

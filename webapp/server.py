@@ -83,7 +83,7 @@ _DEFAULTS = None
 _DEFAULT_ERRORS = []
 _DEFAULTS_LOCK = Lock()
 PUBLIC_REFERENCE_IDENTITIES = famous_reference_identities()
-APP_VERSION = "0.7.0"
+APP_VERSION = "0.8.0"
 SCHEMA_VERSION = "analysis-v1"
 ENGINE_VERSION = "signature-v2"
 
