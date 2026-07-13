@@ -2,7 +2,7 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.6.0** — Core encoder suite plus 25 provenance-aware symbolic extensions across four phases, explicit Data/Magic reading modes, strict public contracts, redacted responses, cross-encoder analytics, graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app**. The payment flow remains a demo stub by design.
+**v0.7.0** — Core encoder suite plus 25 provenance-aware symbolic extensions, explicit Data/Magic reading modes, strict public contracts, historical birth-location resolution, redacted responses, cross-encoder analytics, graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app**. There is no checkout or paid entitlement surface; every generated report is available to download or print.
 
 ## Quick Start — Web App
 
@@ -12,7 +12,9 @@ A provenance-aware identity metadata architecture that encodes humans, aliases, 
 python3 -m pip install --require-hashes -r requirements.txt && python3 webapp/server.py
 ```
 
-Open http://localhost:8000 — choose Data or Magic mode, enter a name, and optionally add birth or self-reported assessment data. Data mode stays measurement/provenance-first; Magic mode adds a clearly labeled symbolic reflection layer. Historical public-reference input can use `subject_type: "reference"`.
+Open http://localhost:8000 — choose Data or Magic mode and enter a name. Aliases, birth data, and self-reported assessment data are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, an IANA timezone, and the date-specific historical UTC offset. Advanced users may instead provide coordinates and an IANA timezone. Data mode stays measurement/provenance-first; Magic mode adds a clearly labeled symbolic reflection layer. Historical public-reference input can use `subject_type: "reference"`.
+
+Place lookup uses Open-Meteo's geocoding endpoint with a bounded timeout, one retry, and an in-process success cache. The place text is sent to that provider. Ambiguous matches return ranked choices; invalid places, provider failures, DST gaps, and DST folds return structured errors rather than guessed chart inputs. Location lookup requires network access. Explicit coordinates plus an IANA timezone work offline; a raw offset is accepted but labeled less reliable for historical calculations.
 
 **Deploying anywhere:** the app is a single Python process with one mandatory native dependency: the pinned `pyswisseph` Swiss Ephemeris extension for exact natal calculations. Use the repository Dockerfile or run `python3 -m pip install -r requirements.txt` before starting `python3 webapp/server.py`.
 
@@ -32,10 +34,14 @@ human-metadata-engine/
 │   └── static/                      # Single-page dark-theme app (vendored Tailwind)
 ├── src/
 │   ├── engine.py                    # Master orchestrator (signature-v2)
-│   ├── analytics.py                 # Resonance score, fingerprints, correlations, feature agreement
+│   ├── analytics.py                 # Legacy/internal analytics compatibility contract
+│   ├── analytics_v2.py              # Public chance-corrected resonance contract
 │   ├── snapshot.py                  # Personality snapshot narratives
-│   ├── report.py                    # Magic-mode long-form report generator
-│   ├── public_contract.py            # Strict public validation and two-mode contract
+│   ├── report.py                    # Legacy/internal long-form compatibility formatter
+│   ├── report_safe.py               # Public truth-bounded Data/Magic report formatter
+│   ├── public_contract.py           # Strict public validation and two-mode contract
+│   ├── birth_validation.py          # Canonical natal input validation
+│   ├── location_resolution.py       # Geocoding and historical timezone boundary
 │   ├── encoders/
 │   │   ├── pythagorean.py           # Pythagorean numerology (expression, soul urge, personality)
 │   │   ├── chaldean.py              # Chaldean numerology (ancient Babylonian, no master numbers)
@@ -54,11 +60,7 @@ human-metadata-engine/
 │   │   ├── analysis.py              # Centrality, communities, resonance
 │   │   └── algorithms.py            # PageRank, spectral clustering, HITS
 │   └── knowledge_bubble.py          # Knowledge Bubble export format
-├── tests/
-│   ├── test_pythagorean.py          # 17 tests
-│   ├── test_extended.py             # 24 tests
-│   ├── test_final.py                # 34 tests
-│   └── test_analytics.py            # 46 tests (v0.4.0 analytics)
+├── tests/                            # Unit, API, location, browser-contract, replay, and packaging checks
 ├── output/
 │   ├── unified_signatures.json      # generated signatures + analytics
 │   ├── encoder_correlations.json    # Pearson + digit-agreement matrices
@@ -67,7 +69,8 @@ human-metadata-engine/
 │   └── graph_analysis.json          # PageRank, spectral, HITS
 └── schemas/
     ├── identity-signature.schema.json
-    └── identity-graph.schema.json
+    ├── identity-graph.schema.json
+    └── analysis-v1.{request,response}.json
 ```
 
 ## Core Encoder Suite
@@ -81,7 +84,7 @@ human-metadata-engine/
 | **Binary/Prime** | Encoding | 9 | Vowel/consonant binary string, prime-index mapping |
 | **Gematria** | Hebrew | 7 | Absolute + ordinal totals, Latin-to-Hebrew mapping |
 | **Isopsephy** | Greek | 5 | Digital root chain, Latin-to-Greek correspondence |
-| **Astrology** | Tropical | 20+ | Sun/Moon/Ascendant, 10 planets, aspects, houses |
+| **Astrology** | Tropical | 20+ | Sun/Moon/Ascendant, 10 planets, aspects, and Placidus house cusps/assignments |
 | **Human Design** | Gene Keys | 15+ | Type, strategy, 64 gates, channels, centers, profile |
 | **Psychology** | User-supplied | 20+ | Big Five, MBTI, Enneagram, attachment style |
 
@@ -146,7 +149,7 @@ Second-order analysis computed on top of the unified signatures:
 | **Feature Agreement** | 14-feature comparison: eight independent reduced-digit categories match exactly and six continuous features use fixed tolerances; it is not person-level similarity |
 | **Batch Reports** | Comparative ranking of any identity set (markdown + JSON) |
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
-| **Long-Form Reports** | 10-section, 3,000+ word written analysis per identity (`src/report.py`) |
+| **Public Reports** | Concise Data mode or a ten-section truth-bounded Magic report with per-section epistemic metadata (`src/report_safe.py`) |
 
 Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
 
@@ -274,21 +277,18 @@ python3 -m src.api
 
 ## Test Coverage
 
-```
-test_pythagorean.py:  17 tests (Pythagorean numerology)
-test_extended.py:     24 tests (Chaldean, Ordinal, Linguistic, Binary/Prime)
-test_final.py:        34 tests (Gematria, Isopsephy, exact astrology, HD, Psychology, Graph)
-test_analytics.py:    46 tests (Resonance, fingerprints, correlations, reports)
-test_symbolic_*.py:   16 tests (roadmap, Unicode, provenance, detail surface)
-test_ephemeris_packaging.py: 1 test (Docker/deploy/CI contract)
-─────────────────────────────────────────────────────────────────
-The canonical runner discovers every `tests/test_*.py` file and reports its exact count; avoid hardcoding a stale total in product copy.
-```
+The repository contains unit, API contract, frontend contract, golden-vector,
+security regression, report-structure, location-fixture, packaging, and
+deterministic replay tests. The canonical runner discovers every
+`tests/test_*.py` file and reports its current file count; product copy does not
+hardcode a stale test total. Standard pytest is also supported through a bridge
+that executes the historical script suites in isolated processes.
 
 ## Dependencies
 
-- Python 3.9+
+- Python 3.12 (matches CI and the container image)
 - `pyswisseph==2.10.3.2` *(mandatory)* — Swiss Ephemeris for exact astrology and Human Design; see [third-party notice](THIRD_PARTY_NOTICES.md)
+- Development/test dependencies are pinned with hashes in `requirements-dev.txt`.
 
 ## Usage
 
@@ -297,7 +297,11 @@ The canonical runner discovers every `tests/test_*.py` file and reports its exac
 python3 src/engine.py
 
 # Run all tests
-python3 tools/run_tests.py
+python3 -m pip install --require-hashes -r requirements-dev.txt
+python3 tools/run_tests.py --quiet
+python3 -m pytest -q
+python3 tools/validate_contracts.py
+node --check webapp/static/app.js
 
 # Run graph algorithms
 python3 src/graph/algorithms.py output/identity_graph.json
@@ -308,6 +312,47 @@ python3 src/knowledge_bubble.py
 # Serve the web app
 python3 webapp/server.py       # or ./deploy.sh
 ```
+
+## Public API and operations
+
+`POST /api/analyze` accepts the canonical `analysis-v1` request. Unknown fields
+are rejected. JSON must use `Content-Type: application/json`, bodies are capped
+at 64 KiB, and errors contain a stable `code` plus a human-readable `message`.
+Names and aliases are bounded and markup/control characters are rejected.
+
+```bash
+curl -sS http://127.0.0.1:8000/api/analyze \
+  -H 'Content-Type: application/json' \
+  --data '{"name":"Ada Lovelace","aliases":["Ada King"],"mode":"data"}'
+
+curl -sS http://127.0.0.1:8000/healthz
+curl -sS http://127.0.0.1:8000/readyz
+curl -sS http://127.0.0.1:8000/api/version
+```
+
+`/healthz` proves that the process is alive. `/readyz` and the backward-compatible
+`/api/health` prove that Swiss Ephemeris and the reference population loaded.
+`/api/version` reports application, schema, engine, build, ephemeris, and feature
+versions without exposing host details.
+
+The public web process does not intentionally persist profile requests and
+redacts raw birth location, coordinates, and observation text from public
+outputs. The normalized date/time is returned so the user can verify what was
+calculated. Browser, network, reverse-proxy, and infrastructure logs
+remain outside that guarantee. Request logs contain method/path/status only, not
+request bodies. See [DEPLOYMENT.md](DEPLOYMENT.md) and
+[docs/RELEASE_GATES.md](docs/RELEASE_GATES.md) for deployment and release truth.
+
+## Reproducibility and provenance
+
+Each analysis returns an input-derived reproducibility ID, build revision,
+engine version, schema version, convention-set version, evidence model, and
+machine-readable metadata for every public report section. Same normalized
+inputs, as-of year, engine version, and convention set produce the same
+deterministic calculations. This establishes reproducibility, not scientific
+validation of symbolic interpretation. The public server deliberately uses
+`analytics_v2.py` and `report_safe.py`; `analytics.py` and `report.py` remain
+documented compatibility contracts for internal/legacy callers.
 
 ## Disclaimer
 

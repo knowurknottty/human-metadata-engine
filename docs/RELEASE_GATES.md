@@ -9,14 +9,15 @@ deployment, payment boundary, or privacy posture is production-ready.
 
 | Area | Evidence | Status |
 | --- | --- | --- |
-| Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 tools/validate_contracts.py` | Verified locally |
+| Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 -m pytest -q`; `python3 tools/validate_contracts.py` | Verified locally; CI pending this commit |
 | Structured Know Thyself profile | Adjacent-wing API validation, compatibility tests, status round-trip tests | Verified locally |
-| Browser flow | Local Data → Magic profile rendering, dynamic wings, secondary-pattern warning, console health | Verified locally |
+| Browser flow | Local name-only and location-only generation, Data → Magic switching, alias rendering, report actions, console health | Verified locally; physical-device QA remains |
 | Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |
 | Plain-English result layer | First-view synthesis, evidence legend, and neutral pattern-index language | Verified locally |
 | Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
-| Commerce | Current checkout is explicitly a simulated demo and client-side unlock | Not production-ready |
+| Commerce | Checkout, card fields, paywall, and client-side entitlement simulation are absent | Not part of v0.7.0 |
+| Report truth boundary | Ten ordered public sections carry controlled machine-readable epistemic metadata and reproduction fields | Verified by public-contract tests |
 | Persistence | Public web process does not intentionally retain profile inputs; infrastructure logs require separate policy | Process-local only |
 
 ## Gate A — Public demo
@@ -25,18 +26,18 @@ Release only when every item below is true:
 
 - [ ] A stable domain serves the app over HTTPS with a valid certificate.
 - [ ] `/api/health` (or an equivalent public health endpoint) is reachable from an independent network.
-- [ ] The process is supervised with restart policy, bounded timeouts, and structured error IDs.
+- [ ] The deployed process is supervised with restart policy. Application request timeouts and structured error codes are implemented locally.
 - [ ] Security headers are present at the actual ingress, including HSTS, CSP, Referrer-Policy, Permissions-Policy, and X-Content-Type-Options.
 - [ ] The UI says that inputs are processed for the report, are not intentionally retained by the web process, and may still appear in infrastructure logs.
 - [x] A regular user can provide a birth place without calculating latitude, longitude, or UTC offset; the server resolves those values for the requested date (verified by API and browser tests).
-- [ ] The privacy notice names the geocoding provider and explains that the supplied place is sent to that external service; availability and rate limits are monitored.
-- [ ] The page clearly labels checkout as a demo and does not imply that a test card creates a real purchase.
+- [x] The privacy notice names Open-Meteo and explains that the supplied place is sent to it; production availability monitoring remains an operations gate.
+- [x] No checkout, card field, paywall, or simulated entitlement is shipped.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
 - [x] The first result view contains a plain-English synthesis, an evidence legend, and an explicit “what this does not mean” statement (verified in local browser flow and frontend contract test).
-- [ ] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings.
+- [x] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings (frontend and API tests).
 - [ ] Mobile QA confirms readable explanatory text, expandable technical detail, and no critical meaning encoded only by color.
 
-## Gate B — Paid beta
+## Gate B — Optional future paid beta
 
 Gate A must be green, plus:
 
@@ -45,7 +46,7 @@ Gate A must be green, plus:
 - [ ] A server-verified webhook creates a signed, expiring entitlement.
 - [ ] The paid endpoint checks entitlement before returning the full report.
 - [ ] Receipts, refunds, support contact, and deletion/retention terms exist.
-- [ ] Report exports include engine version, report schema version, convention-set version, build revision, and reproducibility ID.
+- [x] Report exports include engine version, report schema version, convention-set version, build revision, and reproducibility ID.
 - [ ] At least 20–30 observed-user sessions complete the core flow without assistance.
 - [ ] Accessibility review covers focus management, form errors, chart summaries, keyboard use, reduced motion, contrast, and print output.
 
@@ -89,3 +90,22 @@ product has an established self-observation model for them. More symbolic
 encoders are also deferred: increasing breadth before improving comprehension,
 trust, payment boundaries, and actionability would increase apparent complexity
 without improving the user outcome.
+
+## Repository release checklist
+
+These gates apply to each candidate commit and are distinct from deployment
+and observed-user gates above:
+
+- [x] Canonical runner and standard pytest pass locally.
+- [x] Server starts with the pinned Swiss Ephemeris dependency.
+- [x] `/healthz`, `/readyz`, and `/api/version` return their documented contracts locally.
+- [x] Historical timezone fixtures cover Evanston, Chicago summer/winter, Arizona, Newfoundland, and India.
+- [x] The Kirk Evan Brown fixture preserves 1982-02-04 01:42 America/Denver and its UTC conversion.
+- [x] Public request, report, and static-rendering security regression checks pass.
+- [x] Public report wording and metadata separate calculations, astronomy, self-report, symbolic conventions, heuristics, and synthesis.
+- [ ] Mobile layout has been checked in a real current iPhone Safari and low-end Android Chrome; a 320 CSS-pixel browser check alone is insufficient.
+- [x] Markdown download and browser HTML renderer have structural/escaping tests; print output still requires browser QA per release candidate.
+- [x] README version, dependency, route, geocoding, privacy, and duplicate-contract descriptions match v0.7.0 implementation.
+- [x] Production payment behavior is removed.
+- [x] Public versus legacy analytics/report paths are documented and tested.
+- [ ] Git status is clean after the release commit.

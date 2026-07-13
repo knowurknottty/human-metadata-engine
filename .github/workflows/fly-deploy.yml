@@ -21,12 +21,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install mandatory ephemeris dependency
-        run: pip install --require-hashes -r requirements.txt
+      - name: Install pinned runtime and test dependencies
+        run: pip install --require-hashes -r requirements-dev.txt
 
       - name: Run core test suite
         run: |
           python3 tools/run_tests.py --quiet
+          python3 -m pytest -q
+          python3 tools/validate_contracts.py
 
       - name: Set up Flyctl
         uses: superfly/flyctl-actions/setup-flyctl@ed8efb33836e8b2096c7fd3ba1c8afe303ebbff1 # master reviewed 2026-07-11

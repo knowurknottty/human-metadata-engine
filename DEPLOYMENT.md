@@ -24,10 +24,13 @@ The host must provide an HTTPS origin and pass its assigned port through `PORT`.
 Verify:
 
 ```text
-https://YOUR-PYTHON-HOST/api/health
+https://YOUR-PYTHON-HOST/healthz
+https://YOUR-PYTHON-HOST/readyz
+https://YOUR-PYTHON-HOST/api/version
 ```
 
-The response should contain `"ok":true`.
+Liveness should return `"status":"alive"`; readiness should contain
+`"ready":true`. The legacy `/api/health` route remains a readiness alias.
 
 ## 2. Configure Netlify
 
