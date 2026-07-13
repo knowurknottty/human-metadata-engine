@@ -16,7 +16,7 @@ deployment, payment boundary, or privacy posture is production-ready.
 | Plain-English result layer | Report identity, coverage, overview, information-type labels, explicit tensions, and neutral convergence language | Verified locally |
 | Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
-| Commerce | Checkout, card fields, paywall, and client-side entitlement simulation are absent | Not part of v0.7.0 |
+| Commerce | Checkout, card fields, paywall, and client-side entitlement simulation are absent | Not part of v0.8.0 |
 | Report truth boundary | Ten ordered public sections carry controlled machine-readable epistemic metadata and reproduction fields | Verified by public-contract tests |
 | Persistence | Public web process does not intentionally retain profile inputs; infrastructure logs require separate policy | Process-local only |
 
@@ -106,8 +106,8 @@ and observed-user gates above:
 - [x] Public report wording and metadata separate calculations, astronomy, self-report, symbolic conventions, heuristics, and synthesis.
 - [ ] Mobile layout has been checked in a real current iPhone Safari and low-end Android Chrome; a 320 CSS-pixel browser check alone is insufficient.
 - [x] Markdown download and browser HTML renderer have structural/escaping tests; the v0.8 interface exposes native download and print actions at the report top and end.
-- [x] Print CSS removes interactive controls, preserves heading order, and applies page-break protections; printer-dialog inspection remains a per-browser physical QA item.
-- [x] README version, dependency, route, geocoding, privacy, and duplicate-contract descriptions match the v0.7 engine and v0.8 interface boundary.
+- [x] Print CSS removes interactive controls, preserves heading order, and applies page-break protections; Chrome 149 print-preview and saved-PDF inspection passed locally with browser headers and footers disabled.
+- [x] README version, dependency, route, geocoding, privacy, and duplicate-contract descriptions distinguish the v0.8.0 application from the `analysis-v1` API, `signature-v2` engine, and `report-v1` report contracts.
 - [x] Production payment behavior is removed.
 - [x] Public versus legacy analytics/report paths are documented and tested.
 - [ ] Git status is clean after the release commit.

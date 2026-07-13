@@ -89,6 +89,9 @@ class EditorialFrontendContractTests(unittest.TestCase):
         ):
             self.assertIn(label, SCRIPT)
         self.assertIn("Data quality and coverage", SCRIPT)
+        self.assertIn('· API ${esc(result.contract_version || "analysis-v1")}', SCRIPT)
+        self.assertIn('result.application_version || "not supplied"', SCRIPT)
+        self.assertNotIn("· application ${esc(result.contract_version", SCRIPT)
 
     def test_advanced_settings_translate_timezone_terms(self):
         self.assertIn("Advanced birth settings", HTML)

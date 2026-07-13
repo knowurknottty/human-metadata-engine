@@ -88,20 +88,34 @@ def _common_metadata() -> list[dict[str, Any]]:
     ]
 
 
-def _data_report(sig: dict, psychology: dict | None = None, comparisons: list[dict] | None = None) -> dict:
+def _alias_line(aliases: list[str] | None) -> str:
+    """Render a bounded, Markdown-safe alias summary for public exports."""
+    if not aliases:
+        return "- Other names: none supplied."
+    return "- Other names: " + ", ".join(f"**{_md(alias)}**" for alias in aliases) + "."
+
+
+def _data_report(
+    sig: dict,
+    psychology: dict | None = None,
+    comparisons: list[dict] | None = None,
+    aliases: list[str] | None = None,
+) -> dict:
     """Build a compact evidence-first report without interpretive prose."""
     encoders = sig.get("encoders", {})
     pyth = encoders.get("pythagorean", {})
     ling = encoders.get("linguistic", {})
     resonance = sig.get("resonance", {})
     lines = [
-        f"# Identity Resonance Data Report — {_md(sig.get('text', 'Unknown'))}",
+        f"# Human Metadata Engine Data Report — {_md(sig.get('text', 'Unknown'))}",
         "",
         "> **How to read this report**",
         "> Data mode reports reproducible string measurements, provenance, and configured comparison outputs. It does not infer personality, fate, cultural origin, or real-world similarity from a name.",
         "",
         "## 1. Input and method",
         "",
+        f"- Analyzed identity: **{_md(sig.get('text', 'Unknown'))}**.",
+        _alias_line(aliases),
         f"- Contract: `{_md(sig.get('contract_version', 'signature-v2'))}`",
         "- Analysis mode: `data`",
         f"- Encoder outputs available: `{len(available_encoder_names(sig))}`",
@@ -172,7 +186,12 @@ def _psychology_summary(psychology: dict | None) -> list[str]:
     return lines or ["Psychology metadata was supplied, but no supported scored field was answered."]
 
 
-def _magic_report(sig: dict, psychology: dict | None, comparisons: list[dict] | None) -> dict:
+def _magic_report(
+    sig: dict,
+    psychology: dict | None,
+    comparisons: list[dict] | None,
+    aliases: list[str] | None = None,
+) -> dict:
     encoders = sig.get("encoders", {})
     pyth = encoders.get("pythagorean", {})
     chaldean = encoders.get("chaldean", {})
@@ -222,7 +241,7 @@ def _magic_report(sig: dict, psychology: dict | None, comparisons: list[dict] | 
             hd_lines.append(f"- User-reported type: **{_md(human_design['user_reported_type'])}** (self-report only).")
 
     lines = [
-        f"# Identity Resonance Report — {_md(sig.get('text', 'Unknown'))}",
+        f"# Human Metadata Engine Report — {_md(sig.get('text', 'Unknown'))}",
         "",
         "> **How to read this report**",
         "> Direct calculations, astronomy, self-report, traditional symbolic interpretation, and synthesis are labeled separately. The pattern convergence index is not a percentage of accuracy. This report is not diagnosis, prediction, destiny, or an empirical personality assessment.",
@@ -230,6 +249,7 @@ def _magic_report(sig: dict, psychology: dict | None, comparisons: list[dict] | 
         "## 1. Identity and input summary",
         "",
         f"- Analyzed identity: **{_md(sig.get('text', 'Unknown'))}**.",
+        _alias_line(aliases),
         f"- Analysis mode: `magic`; contract: `{_md(sig.get('contract_version', 'signature-v2'))}`.",
         f"- Birth-derived calculation present: `{'yes' if has_astrology else 'no'}`; psychology supplied: `{'yes' if psychology else 'no'}`.",
         "- Exact birth location, coordinates, and time are omitted from this export.",
@@ -309,13 +329,14 @@ def generate_report(
     comparisons: list[dict] | None = None,
     *,
     mode: str = "magic",
+    aliases: list[str] | None = None,
 ) -> dict:
     """Generate the public Data or Magic report contract."""
     if mode == "data":
-        return _data_report(sig, psychology=psychology, comparisons=comparisons)
+        return _data_report(sig, psychology=psychology, comparisons=comparisons, aliases=aliases)
     if mode != "magic":
         raise ValueError("report mode must be either 'data' or 'magic'.")
-    return _magic_report(sig, psychology=psychology, comparisons=comparisons)
+    return _magic_report(sig, psychology=psychology, comparisons=comparisons, aliases=aliases)
 
 
 __all__ = ["EVIDENCE_MODEL", "generate_report"]

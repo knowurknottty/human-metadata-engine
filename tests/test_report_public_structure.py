@@ -66,6 +66,15 @@ class PublicReportStructureTests(unittest.TestCase):
             "convention_set_version", "build_revision", "reproducibility_id",
         ):
             self.assertIn(field, first["report"]["metadata"])
+        self.assertEqual(first["application_version"], "0.8.0")
+        self.assertIn("# Human Metadata Engine Report — Ada Lovelace", first["report"]["markdown"])
+        self.assertIn("Other names: **Ada King**", first["report"]["markdown"])
+
+    def test_aliases_are_markdown_escaped_in_export(self):
+        result = analyze({"name": "Ada Lovelace", "aliases": ["Ada *King*"], "mode": "data"})
+        markdown = result["report"]["markdown"]
+        self.assertIn("# Human Metadata Engine Data Report — Ada Lovelace", markdown)
+        self.assertIn(r"Other names: **Ada \*King\***", markdown)
 
     def test_browser_markdown_renderer_escapes_before_formatting(self):
         script = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")

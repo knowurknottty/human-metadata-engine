@@ -501,7 +501,7 @@ function renderEditorialReport(result) {
         <div><dt>Resolved birthplace</dt><dd>${esc(place)}${birth ? " · confirmed for calculation" : ""}</dd></div>
         <div><dt>Historical timezone</dt><dd>${esc(timezone)}</dd></div>
         <div><dt>Generated</dt><dd>${esc(STATE.generatedAt)}</dd></div>
-        <div><dt>Report version</dt><dd>${esc(reportMeta.report_schema_version || "report-v1")} · application ${esc(result.contract_version || "analysis-v1")}</dd></div>
+        <div><dt>Report version</dt><dd>${esc(reportMeta.report_schema_version || "report-v1")} · API ${esc(result.contract_version || "analysis-v1")}</dd></div>
       </dl></div>
       <aside><h2>Reproduction details</h2><p>The same normalized input and versioned conventions produce the same calculated values.</p><details class="technical-details"><summary>Show technical identifiers</summary><p><code>Input ${esc(result.input_hash || "not supplied")}</code><br><code>Build ${esc(result.build_revision || reportMeta.build_revision || "not supplied")}</code><br><code>Engine ${esc(result.engine_version || "not supplied")}</code><br><code>Reproduction ${esc(reportMeta.reproducibility_id || "not supplied")}</code></p></details></aside>
     </section>
@@ -547,7 +547,7 @@ function renderEditorialReport(result) {
         <div><dt>Experimental</dt><dd>The cross-system convergence score and synthesis language. These are project-specific, not scientifically validated.</dd></div>
         <div><dt>Privacy</dt><dd>${esc(result.privacy?.retention || "Not persisted by the web process")}. ${esc(result.privacy?.warning || "Network and infrastructure logs may still exist.")}</dd></div>
         <div><dt>Location provider</dt><dd>${birth ? "Open-Meteo geocoding may receive the birthplace text to resolve coordinates and historical timezone." : "Not used because no birthplace was supplied."}</dd></div>
-        <div><dt>Application</dt><dd>${esc(result.contract_version || "analysis-v1")} · engine ${esc(result.engine_version || "not supplied")} · build ${esc(result.build_revision || "not supplied")}</dd></div>
+        <div><dt>Application</dt><dd>${esc(result.application_version || "not supplied")} · API ${esc(result.contract_version || "analysis-v1")} · engine ${esc(result.engine_version || "not supplied")} · build ${esc(result.build_revision || "not supplied")}</dd></div>
       </dl><details class="technical-details"><summary>Complete generated report and section labels</summary><p>The backend report contains ${esc(result.report.sections.length)} versioned sections and ${esc(result.report.word_count)} words.</p><ul>${sectionTypes}</ul><div id="report-print-area" class="report-body">${mdToHTML(result.report.markdown)}</div></details></section>
 
       <div class="end-actions"><h2>Report actions</h2>${reportActions()}<p>Editing an input and creating another analysis produces a new deterministic result for the changed input.</p></div>

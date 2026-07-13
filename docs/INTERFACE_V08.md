@@ -79,7 +79,7 @@ the same request without clearing other entries.
 The form states that entries create the report and that the normal application
 logs do not intentionally include the name, exact birth time, or coordinates.
 It also states that birthplace text may be sent to the configured provider.
-Methods identify Open-Meteo and preserve the narrower v0.7 warning that browser,
+Methods identify Open-Meteo and preserve the existing warning that browser,
 network, reverse-proxy, or infrastructure logs may still exist.
 
 ## Screenshots and QA boundary

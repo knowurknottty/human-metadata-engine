@@ -725,7 +725,13 @@ def analyze(payload):
         "observations": observations,
         "constellation": constellation,
     })
-    report = generate_report(sig, psychology=psychology, comparisons=comps, mode=mode)
+    report = generate_report(
+        sig,
+        psychology=psychology,
+        comparisons=comps,
+        mode=mode,
+        aliases=aliases,
+    )
     report["metadata"] = {
         "report_schema_version": "report-v1",
         "analysis_schema_version": SCHEMA_VERSION,
@@ -745,6 +751,7 @@ def analyze(payload):
     )
     report["word_count"] = len(report["markdown"].split())
     response = {
+        "application_version": APP_VERSION,
         "contract_version": SCHEMA_VERSION,
         "build_revision": BUILD_REVISION,
         "engine_version": ENGINE_VERSION,
