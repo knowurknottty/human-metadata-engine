@@ -66,7 +66,7 @@ class PublicReportStructureTests(unittest.TestCase):
             "convention_set_version", "build_revision", "reproducibility_id",
         ):
             self.assertIn(field, first["report"]["metadata"])
-        self.assertEqual(first["application_version"], "0.8.0")
+        self.assertEqual(first["application_version"], "1.0.0")
         self.assertIn("# Human Metadata Engine Report — Ada Lovelace", first["report"]["markdown"])
         self.assertIn("Other names: **Ada King**", first["report"]["markdown"])
 

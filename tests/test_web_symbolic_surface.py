@@ -10,9 +10,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class WebSymbolicSurfaceTests(unittest.TestCase):
-    def test_report_subordinates_the_deterministic_graphic_to_comprehension(self):
+    def test_atlas_promotes_deterministic_graphic_without_biometric_claims(self):
         with open(os.path.join(ROOT, "webapp", "static", "app.js"), encoding="utf-8") as handle:
             source = handle.read()
+        with open(os.path.join(ROOT, "webapp", "static", "atlas.js"), encoding="utf-8") as handle:
+            atlas = handle.read()
         with open(os.path.join(ROOT, "webapp", "static", "styles.css"), encoding="utf-8") as handle:
             styles = handle.read()
         self.assertIn("Calculated identity graphic", source)
@@ -20,7 +22,9 @@ class WebSymbolicSurfaceTests(unittest.TestCase):
         self.assertIn("fingerprintSVG", source)
         self.assertIn("fingerprint-disclosure", styles)
         self.assertIn("report-content", styles)
-        self.assertNotIn("Identity Atlas", source)
+        self.assertIn("Identity fingerprint", atlas)
+        self.assertIn("not authentication", atlas)
+        self.assertIn("biometric uniqueness", atlas)
 
     def test_report_renders_method_and_source_without_dumping_raw_extension_json(self):
         with open(os.path.join(ROOT, "webapp", "static", "app.js"), encoding="utf-8") as handle:
@@ -35,8 +39,8 @@ class WebSymbolicSurfaceTests(unittest.TestCase):
     def test_landing_copy_describes_the_expansion_without_empirical_claims(self):
         with open(os.path.join(ROOT, "webapp", "static", "index.html"), encoding="utf-8") as handle:
             source = handle.read()
-        self.assertIn("A structured reflection on your name, birth data, and symbolic systems", source)
-        self.assertIn("keeps calculation separate from traditional interpretation", source)
+        self.assertIn("Explore the systems. Trace every result.", source)
+        self.assertIn("Every active mark traces back to structured engine output", source)
         self.assertIn("not a diagnosis, personality test, prediction, or scientific proof", source)
 
     def test_fake_checkout_is_removed_and_full_report_actions_are_available(self):

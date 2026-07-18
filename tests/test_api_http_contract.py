@@ -60,9 +60,10 @@ class APIHTTPContractTests(unittest.TestCase):
         self.assertEqual(ready_status, 200)
         self.assertTrue(ready["ready"])
         self.assertEqual(version_status, 200)
-        self.assertEqual(version["application_version"], "0.8.0")
+        self.assertEqual(version["application_version"], "1.0.0")
         self.assertEqual(version["schema_version"], "analysis-v1")
         self.assertEqual(version["engine_version"], "signature-v2")
+        self.assertEqual(version["report_schema_version"], "report-v1")
         self.assertTrue(version["ephemeris"]["available"])
         self.assertIn("location_resolution", version["feature_flags"])
 

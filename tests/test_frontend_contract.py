@@ -1,4 +1,4 @@
-"""Static and semantic contracts for the public v0.8 interface."""
+"""Static and semantic contracts for the public v1.0 visual interface."""
 
 from pathlib import Path
 import re
@@ -8,17 +8,18 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 HTML = (ROOT / "webapp" / "static" / "index.html").read_text(encoding="utf-8")
 SCRIPT = (ROOT / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
+ATLAS = (ROOT / "webapp" / "static" / "atlas.js").read_text(encoding="utf-8")
 STYLES = (ROOT / "webapp" / "static" / "styles.css").read_text(encoding="utf-8")
 
 
 class EditorialFrontendContractTests(unittest.TestCase):
     def test_primary_heading_and_truthful_product_boundary_are_exact(self):
         self.assertIn(
-            "A structured reflection on your name, birth data, and symbolic systems",
+            "Explore the systems. Trace every result.",
             HTML,
         )
-        self.assertIn("What this is", HTML)
-        self.assertIn("What this is not", HTML)
+        self.assertIn("A visual knowledge system", HTML)
+        self.assertIn("The boundary", HTML)
         self.assertIn("not a diagnosis, personality test, prediction, or scientific proof", HTML)
 
     def test_banned_oracle_and_checkout_copy_is_absent(self):
@@ -71,11 +72,11 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertIn("Correct these", SCRIPT)
 
     def test_loading_is_honest_live_and_duplicate_submits_are_blocked(self):
-        self.assertIn("Creating your analysis…", HTML)
+        self.assertIn("Calculating your atlas…", HTML)
         self.assertIn('role="status" aria-live="polite"', HTML)
         self.assertIn("if (STATE.submitting) return", SCRIPT)
         self.assertIn("submitButton.disabled = true", SCRIPT)
-        self.assertNotIn("PROCESSING_STEPS[step]", SCRIPT[SCRIPT.index("v0.8 editorial workflow"):])
+        self.assertNotIn("PROCESSING_STEPS[step]", SCRIPT[SCRIPT.index("v1.0 atlas workflow"):])
 
     def test_report_has_navigation_coverage_and_information_types(self):
         for label in (
@@ -116,11 +117,13 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertIn('dataset.touched === "true"', SCRIPT)
         self.assertIn("Not supplied", SCRIPT)
 
-    def test_fingerprint_is_explained_as_non_biometric_and_subordinate(self):
+    def test_fingerprint_is_primary_but_explained_as_non_biometric(self):
         self.assertIn("Calculated identity graphic", SCRIPT)
         self.assertIn("is not a biometric identifier", SCRIPT)
         self.assertIn("fingerprint-disclosure", SCRIPT)
-        self.assertGreater(SCRIPT.index("id=\"overview\""), SCRIPT.index("report-header"))
+        self.assertIn("Identity fingerprint", ATLAS)
+        self.assertIn("not authentication", ATLAS)
+        self.assertIn("Algorithm and parameters", ATLAS)
 
     def test_privacy_copy_is_bounded_and_names_provider(self):
         self.assertIn("does not intentionally include your name, exact birth time, or coordinates", HTML)

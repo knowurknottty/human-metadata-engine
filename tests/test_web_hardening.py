@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import os
 import sys
+from contextlib import redirect_stderr
+from io import StringIO
 import unittest
 
 
@@ -11,6 +13,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "webapp"))
 
 from server import (  # noqa: E402
+    Handler,
     RATE_LIMIT_REQUESTS,
     RATE_LIMIT_WINDOW_SECONDS,
     SECURITY_HEADERS,
@@ -53,6 +56,13 @@ class WebHardeningTests(unittest.TestCase):
         line = _safe_request_log("GET", "/api/version?name=Private%20Name", 200)
         self.assertEqual(line, "[web] GET /api/version 200")
         self.assertNotIn("Private", line)
+
+    def test_request_timeout_can_log_before_http_command_is_parsed(self):
+        handler = object.__new__(Handler)
+        output = StringIO()
+        with redirect_stderr(output):
+            handler.log_message("Request timed out: %r", TimeoutError())
+        self.assertEqual(output.getvalue(), "[web] OTHER / -\n")
 
 
 if __name__ == "__main__":
