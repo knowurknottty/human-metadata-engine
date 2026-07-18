@@ -30,7 +30,8 @@ Synthesis is in-process, deterministic, and not persisted. No remote model is
 called, no provider key exists, and no raw profile is added to logs. Markdown
 downloads use a random, short-lived, process-memory token. The visible browser
 action submits a same-origin form, receives a `303` redirect, and follows that
-redirect to a GET attachment without losing the physical tap's user activation.
+redirect to a GET attachment in the same user-initiated navigation instead of
+waiting on an asynchronous handoff.
 The JSON POST variant remains available for bounded API clients. Both paths
 queue the generated report for at most 120 seconds and serve it with
 `Cache-Control: no-store`. The bounded queue holds at most 32 reports and writes

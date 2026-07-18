@@ -9,7 +9,7 @@ deployment, payment boundary, or privacy posture is production-ready.
 
 | Area | Evidence | Status |
 | --- | --- | --- |
-| Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 -m pytest -q`; `python3 tools/validate_contracts.py` | Verified locally; CI pending this commit |
+| Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 -m pytest -q`; `python3 tools/validate_contracts.py` | Verified locally; the latest pushed commit must also pass CI |
 | Structured Know Thyself profile | Adjacent-wing API validation, compatibility tests, status round-trip tests | Verified locally |
 | Browser flow | Name-only, full Kirk fixture, unknown time, ambiguity selection, multi-error recovery, alias tokens, report focus/actions, and 320 CSS-pixel completion | Verified in the local in-app browser; physical-device QA remains |
 | Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |

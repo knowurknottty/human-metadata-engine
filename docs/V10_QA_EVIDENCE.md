@@ -11,9 +11,10 @@ Date: 2026-07-18 (America/Chicago)
 | iPhone Safari | `devicectl` restored the paired physical iPhone 17 Pro `WiFightIt`, iOS 26.5.2 build `23F84`; tunnel connected, developer mode enabled, and Safari launched the LAN test URL. | **PARTIAL.** Connection/launch only. The required Safari flows were not completed. |
 | VoiceOver | VoiceOver was not enabled. | **UNVERIFIED.** No VoiceOver completion is claimed; it must not be enabled without explicit user approval. |
 
-Physical connections now exist, but neither platform completed the entire
-mandatory matrix and neither screen reader was tested. Browser automation below
-does not substitute for the remaining physical flows.
+Both physical connections were established during this QA run, but neither
+platform completed the entire mandatory matrix and neither screen reader was
+tested. Browser automation below does not substitute for the remaining physical
+flows. The Android USB/ADB connection was absent at the end of the run.
 
 ### Final automated release-gate rerun
 
@@ -43,9 +44,10 @@ patches, the exact candidate checkout produced:
 - Blob, direct attachment POST, and asynchronous token handoff paths were not
   reliable in Android Chrome when “Ask where to save files” was enabled. The
   current user-initiated form POST → `303` → short-lived GET attachment path
-  preserves the tap activation and is covered by HTTP tests. The physical
-  save/open retest was interrupted when the USB/ADB connection dropped, so it
-  remains an open release defect until a real `.md` file is saved and opened.
+  avoids the known asynchronous handoff and is covered by HTTP tests. Its
+  physical result is not yet proven: the save/open retest was interrupted when
+  the USB/ADB connection dropped, so it remains an open release defect until a
+  real `.md` file is saved and opened.
 - Android portrait viewport was 411×766 CSS pixels with no document overflow;
   landscape was 822×331 with no document overflow. All six panels remained
   available in the exact-birth fixture.
