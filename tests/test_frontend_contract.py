@@ -46,6 +46,10 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertIn('placeholder="YYYY-MM-DD"', HTML)
         self.assertIn("function normalizeBirthDateInput", SCRIPT)
         self.assertIn("function parseBirthDateInput", SCRIPT)
+        self.assertIn(r"^(\d{4})-(\d{1,2})-(\d{1,2})$", SCRIPT)
+        self.assertIn("function canonicalBirthDateInput", SCRIPT)
+        self.assertIn('padStart(2, "0")', SCRIPT)
+        self.assertIn("One-digit months and days are padded automatically.", HTML)
         self.assertIn('id="b-time-unknown"', HTML)
         self.assertIn("I do not know my exact birth time", HTML)
         self.assertIn('time_accuracy: unknownTime ? "unknown" : "exact"', SCRIPT)
@@ -124,6 +128,11 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertIn("Identity fingerprint", ATLAS)
         self.assertIn("not authentication", ATLAS)
         self.assertIn("Algorithm and parameters", ATLAS)
+
+    def test_report_download_uses_a_real_same_origin_attachment(self):
+        self.assertIn('form.action = "/api/report-download"', SCRIPT)
+        self.assertIn('form.method = "POST"', SCRIPT)
+        self.assertNotIn("URL.revokeObjectURL(link.href)", SCRIPT)
 
     def test_privacy_copy_is_bounded_and_names_provider(self):
         self.assertIn("does not intentionally include your name, exact birth time, or coordinates", HTML)

@@ -17,6 +17,27 @@ contracts.
 The visualization layer does not calculate symbolic results or infer missing
 relationships. Unavailable subsystems render an explicit unavailable state.
 
+## Human Metadata Narrative: The Living Pattern
+
+The concise Living Pattern card appears after analysis/coverage identity and
+before the six-surface rail. It does not replace or recalculate any surface.
+The backend supplies `synthesis-evidence-v1`, `synthesis-plan-v1`, and three
+`narrative-v1` realizations. Plain, Mythic, and Research buttons change only the
+visible realization; claim IDs, evidence IDs, confidence, motif ranking, and
+contradictions are identical.
+
+Every narrative sentence is a native button with its confidence, evidence
+count, and contradiction state in the accessible name. Activation highlights
+the exact `atlas_targets` carried by its evidence and fills the shared inspector
+with source paths, values, epistemic class, mapping provenance, report link, and
+limits. Selecting an Atlas entity marks all narrative sentences whose evidence
+targets that entity. Border width/text labels supplement color.
+
+The evidence ledger, text seal description, tension summary, Markdown ledger,
+print rules, narrow-screen reflow, and reduced-motion rules provide nonvisual
+and noninteractive fallbacks. See `NARRATIVE_SYNTHESIS_V1.md` for algorithms and
+`NARRATIVE_EPISTEMIC_BOUNDARIES.md` for claim limits.
+
 ## Atlas surfaces
 
 1. **Identity constellation** — inventories available systems. Every system is

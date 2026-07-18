@@ -14,6 +14,7 @@ deployment, payment boundary, or privacy posture is production-ready.
 | Browser flow | Name-only, full Kirk fixture, unknown time, ambiguity selection, multi-error recovery, alias tokens, report focus/actions, and 320 CSS-pixel completion | Verified in the local in-app browser; physical-device QA remains |
 | Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |
 | Visual knowledge layer | Six computed visual surfaces, a shared provenance inspector, Explorer/Research modes, and text/print equivalents | Verified locally in headless Chrome; physical-device QA remains |
+| Narrative synthesis layer | Versioned evidence/plan/narrative contracts, explicit ontology, deterministic realization, verifier, and sentence-level Atlas links | Automated contracts verified locally; complete physical-device interaction QA remains |
 | Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
 | Commerce | Checkout, card fields, paywall, and client-side entitlement simulation are absent | Not part of v1.0.0 |
@@ -34,6 +35,7 @@ Release only when every item below is true:
 - [x] No checkout, card field, paywall, or simulated entitlement is shipped.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
 - [x] The first result view contains analysis identity, coverage, six computed visual surfaces, and a provenance/limitations inspector. The complete report remains the Research-mode reference layer (verified by frontend contracts; browser interaction verification is release-candidate evidence).
+- [x] Magic mode exposes the Living Pattern from a deterministic evidence/claim plan; Plain, Mythic, and Research wording preserves identical claims, confidence, contradictions, and evidence links. Data mode keeps narrative disabled.
 - [x] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings (frontend and API tests).
 - [x] CSS-viewport QA confirms readable explanatory text, stacked controls, expandable technical detail, and zero horizontal overflow at 320, 360, 390, 412, and 768 CSS pixels.
 - [ ] Physical-device QA confirms the same behavior in current iPhone Safari and Android Chrome.
@@ -104,6 +106,7 @@ and observed-user gates above:
 - [x] The Kirk Evan Brown fixture preserves 1982-02-04 01:42 America/Denver and its UTC conversion.
 - [x] Public request, report, and static-rendering security regression checks pass.
 - [x] Public report wording and metadata separate calculations, astronomy, self-report, symbolic conventions, heuristics, and synthesis.
+- [x] Narrative evidence paths resolve to returned values; all deterministic sentences pass the claim/evidence, prohibited-language, and prohibited-topic verifier; sparse profiles fail closed.
 - [ ] Mobile layout has been checked in a real current iPhone Safari and low-end Android Chrome; a 320 CSS-pixel browser check alone is insufficient.
 - [x] Markdown download and browser HTML renderer have structural/escaping tests; the v1.0 Atlas exposes native download and print actions while preserving the reference report actions.
 - [x] Print CSS removes interactive controls, preserves heading order, and applies page-break protections; Chrome 149 print-preview and saved-PDF inspection passed locally with browser headers and footers disabled.

@@ -2,7 +2,7 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v1.0.0 visual knowledge interface** — The primary result is now the Human Metadata Atlas: a linked workspace for the computed cross-system graph, astrology wheel, Human Design bodygraph, Tree-of-Life mapping, numerology matrix, deterministic identity fingerprint, and a shared provenance inspector. Explorer and Research modes change presentation only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; the complete report is retained as the reference layer. No checkout or paid entitlement surface is present.
+**v1.0.0 visual knowledge interface** — The primary result is the Human Metadata Atlas: a linked workspace for six calculated surfaces, a shared provenance inspector, and the evidence-linked **Human Metadata Narrative** shown as **The Living Pattern**. Plain, Mythic, and Research narrative modes share one deterministic claim/evidence plan and change wording only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; the new `synthesis-evidence-v1`, `synthesis-plan-v1`, and `narrative-v1` contracts version independently. No remote model, checkout, or paid entitlement surface is present.
 
 ## Quick Start — Web App
 
@@ -42,6 +42,7 @@ human-metadata-engine/
 │   ├── snapshot.py                  # Personality snapshot narratives
 │   ├── report.py                    # Legacy/internal long-form compatibility formatter
 │   ├── report_safe.py               # Public truth-bounded Data/Magic report formatter
+│   ├── synthesis/                   # Evidence, ontology, motifs, plan, realization, verifier
 │   ├── public_contract.py           # Strict public validation and two-mode contract
 │   ├── birth_validation.py          # Canonical natal input validation
 │   ├── location_resolution.py       # Geocoding and historical timezone boundary
@@ -153,6 +154,7 @@ Second-order analysis computed on top of the unified signatures:
 | **Batch Reports** | Comparative ranking of any identity set (markdown + JSON) |
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
 | **Public Reports** | Concise Data mode or a ten-section truth-bounded Magic report with per-section epistemic metadata (`src/report_safe.py`) |
+| **Human Metadata Narrative** | Deterministic evidence extraction, project-authored motif normalization, independent-group agreement, preserved contradictions, and evidence-linked Plain/Mythic/Research realization (`src/synthesis/`) |
 
 Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
 

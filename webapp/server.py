@@ -6,6 +6,7 @@ import json
 import math
 import os
 import re
+import secrets
 import subprocess
 import sys
 import traceback
@@ -17,6 +18,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from ipaddress import ip_address
 from threading import BoundedSemaphore, Lock
 from time import monotonic
+from urllib.parse import parse_qs, urlsplit
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(ROOT)
@@ -36,6 +38,12 @@ from analytics import (  # noqa: E402
 )
 from analytics_v2 import composite_resonance as accuracy_composite_resonance  # noqa: E402
 from report_safe import generate_report  # noqa: E402
+from synthesis import build_synthesis, narrative_markdown  # noqa: E402
+from synthesis.contracts import (  # noqa: E402
+    EVIDENCE_SCHEMA_VERSION,
+    NARRATIVE_SCHEMA_VERSION,
+    PLAN_SCHEMA_VERSION,
+)
 from reference_population import famous_reference_identities  # noqa: E402
 from birth_validation import (  # noqa: E402
     BirthValidationError,
@@ -127,6 +135,10 @@ if min(RATE_LIMIT_WINDOW_SECONDS, RATE_LIMIT_REQUESTS, RATE_LIMIT_MAX_TRACKED_IP
 _RATE_LIMIT_LOCK = Lock()
 _RECENT_ANALYSES: dict[str, deque[float]] = {}
 _ANALYSIS_SLOTS = BoundedSemaphore(MAX_CONCURRENT_ANALYSES)
+DOWNLOAD_TTL_SECONDS = 120
+MAX_PENDING_DOWNLOADS = 32
+_DOWNLOAD_LOCK = Lock()
+_PENDING_DOWNLOADS: dict[str, tuple[float, str, bytes]] = {}
 SECURITY_HEADERS = {
     "Content-Security-Policy": (
         "default-src 'self'; base-uri 'self'; form-action 'self'; "
@@ -183,6 +195,9 @@ def _version_payload() -> dict:
         "schema_version": SCHEMA_VERSION,
         "engine_version": ENGINE_VERSION,
         "report_schema_version": REPORT_SCHEMA_VERSION,
+        "synthesis_evidence_schema_version": EVIDENCE_SCHEMA_VERSION,
+        "synthesis_plan_schema_version": PLAN_SCHEMA_VERSION,
+        "narrative_schema_version": NARRATIVE_SCHEMA_VERSION,
         "git_commit": BUILD_REVISION,
         "ephemeris": {
             "available": EPHEMERIS_AVAILABLE,
@@ -194,6 +209,8 @@ def _version_payload() -> dict:
             "historical_timezone": True,
             "demo_checkout": False,
             "persistence": False,
+            "deterministic_narrative": True,
+            "remote_narrative_model": False,
         },
     }
 
@@ -399,6 +416,36 @@ def _rate_limit_client_ip(peer_ip: str, headers, trust_proxy: bool = TRUST_PROXY
             except ValueError:
                 continue
     return peer_ip
+
+
+def _queue_report_download(filename: str, markdown: str, now: float | None = None) -> str:
+    current = monotonic() if now is None else now
+    with _DOWNLOAD_LOCK:
+        for token, item in list(_PENDING_DOWNLOADS.items()):
+            if item[0] <= current:
+                del _PENDING_DOWNLOADS[token]
+        if len(_PENDING_DOWNLOADS) >= MAX_PENDING_DOWNLOADS:
+            raise HTTPRequestError(
+                "Too many reports are waiting to download. Please try again shortly.",
+                code="download_queue_full",
+                status=503,
+            )
+        token = secrets.token_urlsafe(24)
+        _PENDING_DOWNLOADS[token] = (
+            current + DOWNLOAD_TTL_SECONDS,
+            filename,
+            markdown.encode("utf-8"),
+        )
+        return token
+
+
+def _pending_report_download(token: str, now: float | None = None):
+    current = monotonic() if now is None else now
+    with _DOWNLOAD_LOCK:
+        for queued_token, item in list(_PENDING_DOWNLOADS.items()):
+            if item[0] <= current:
+                del _PENDING_DOWNLOADS[queued_token]
+        return _PENDING_DOWNLOADS.get(token)
 
 
 def _normalized_reference(identity):
@@ -751,6 +798,19 @@ def analyze(payload):
         ),
         1,
     )
+    if mode == "magic":
+        synthesis = build_synthesis(sig, psychology, request_fingerprint)
+        report["markdown"] += "\n" + narrative_markdown(synthesis, "plain")
+    else:
+        synthesis = {
+            "available": False,
+            "reason": "Narrative synthesis is disabled in Data mode.",
+            "versions": {
+                "evidence_schema": EVIDENCE_SCHEMA_VERSION,
+                "plan_schema": PLAN_SCHEMA_VERSION,
+                "narrative_schema": NARRATIVE_SCHEMA_VERSION,
+            },
+        }
     report["word_count"] = len(report["markdown"].split())
     response = {
         "application_version": APP_VERSION,
@@ -770,6 +830,7 @@ def analyze(payload):
         "comparisons": comps[:10],
         "correlations": corr,
         "report": report,
+        "synthesis": synthesis,
         "psychology": psychology,
         "aliases": _alias_summaries(aliases, requested_year),
         "normalized_input": sig["normalized_input"],
@@ -842,8 +903,58 @@ class Handler(BaseHTTPRequestHandler):
             ) from exc
         return payload
 
+    def _read_download_form(self):
+        content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+        if content_type != "application/x-www-form-urlencoded":
+            raise HTTPRequestError(
+                "Content-Type must be application/x-www-form-urlencoded.",
+                code="invalid_content_type",
+                status=415,
+            )
+        raw_length = self.headers.get("Content-Length")
+        try:
+            length = int(raw_length or 0)
+        except ValueError as exc:
+            raise HTTPRequestError("Content-Length must be an integer.", code="invalid_content_length") from exc
+        if length <= 0:
+            raise HTTPRequestError("Request body is empty.", code="empty_request_body")
+        if length > MAX_REQUEST_BYTES:
+            raise HTTPRequestError("Payload too large.", code="payload_too_large", status=413)
+        body = self.rfile.read(length)
+        if len(body) != length:
+            raise HTTPRequestError("Request body was truncated.", code="truncated_request_body")
+        try:
+            fields = parse_qs(body.decode("utf-8"), strict_parsing=True, max_num_fields=2)
+        except (UnicodeDecodeError, ValueError) as exc:
+            raise HTTPRequestError("Download request is invalid.", code="invalid_download_request") from exc
+        if set(fields) != {"filename", "markdown"} or any(len(values) != 1 for values in fields.values()):
+            raise HTTPRequestError("Download request is invalid.", code="invalid_download_request")
+        return {key: values[0] for key, values in fields.items()}
+
+    def _markdown_attachment(self, body: bytes, filename: str):
+        self.send_response(200)
+        self.send_header("Content-Type", "text/markdown; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Disposition", f'attachment; filename="{filename}"')
+        for name, value in SECURITY_HEADERS.items():
+            self.send_header(name, value)
+        self.end_headers()
+        self.wfile.write(body)
+
     def do_GET(self):
         path = self.path.split("?", 1)[0]
+        if path == "/api/report-download":
+            token = (parse_qs(urlsplit(self.path).query).get("token") or [""])[0]
+            item = _pending_report_download(token)
+            if not item:
+                return self._json(404, {
+                    "error": "The download link is invalid or expired.",
+                    "message": "The download link is invalid or expired.",
+                    "code": "download_not_found",
+                })
+            _, filename, body = item
+            return self._markdown_attachment(body, filename)
         if path == "/healthz":
             return self._json(200, {
                 "ok": True,
@@ -886,6 +997,8 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split("?", 1)[0]
         if path == "/api/sigil":
             return self._post_sigil()
+        if path == "/api/report-download":
+            return self._post_report_download()
         if path != "/api/analyze":
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
         client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
@@ -926,6 +1039,36 @@ class Handler(BaseHTTPRequestHandler):
             })
         finally:
             _ANALYSIS_SLOTS.release()
+
+    def _post_report_download(self):
+        """Queue browser-generated Markdown for a bounded, retryable GET."""
+        try:
+            content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+            payload = self._read_json_body() if content_type == "application/json" else self._read_download_form()
+            if not isinstance(payload, dict) or set(payload) != {"filename", "markdown"}:
+                raise HTTPRequestError("Download request is invalid.", code="invalid_download_request")
+            filename = payload.get("filename")
+            markdown = payload.get("markdown")
+            if not isinstance(filename, str) or not re.fullmatch(r"human_metadata_[a-z0-9_]{1,120}\.md", filename):
+                raise HTTPRequestError("Download filename is invalid.", code="invalid_download_filename")
+            if not isinstance(markdown, str) or not markdown.strip():
+                raise HTTPRequestError("Download report is empty.", code="empty_download_report")
+            token = _queue_report_download(filename, markdown)
+            if content_type == "application/x-www-form-urlencoded":
+                self.send_response(303)
+                self.send_header("Location", f"/api/report-download?token={token}")
+                self.send_header("Content-Length", "0")
+                self.send_header("Cache-Control", "no-store")
+                for name, value in SECURITY_HEADERS.items():
+                    self.send_header(name, value)
+                self.end_headers()
+                return None
+            return self._json(201, {
+                "download_url": f"/api/report-download?token={token}",
+                "expires_in_seconds": DOWNLOAD_TTL_SECONDS,
+            })
+        except HTTPRequestError as exc:
+            return self._json(exc.status, _error_payload(exc))
 
     def _post_sigil(self):
         """Render one bounded public sigil without exposing the full signature."""

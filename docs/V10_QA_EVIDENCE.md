@@ -6,15 +6,76 @@ Date: 2026-07-18 (America/Chicago)
 
 | Target | Detection evidence | Result |
 | --- | --- | --- |
-| Android / preferred Moto G Power 2022 | `adb devices -l` returned an empty device list; `adb mdns services` found no service. | **UNVERIFIED.** No physical Android Chrome flows or hardware-keyboard checks were possible. |
-| TalkBack | Requires a connected Android device; none was available. | **UNVERIFIED.** No TalkBack interaction is claimed. |
-| iPhone Safari | `devicectl` identified paired physical iPhone 17 Pro `WiFightIt`, iOS 26.5.2, but reported `tunnelState: unavailable`, `ddiServicesAvailable: false`, and “A connection to this device could not be established.” `xctrace` listed it offline. | **UNVERIFIED.** Registration/pairing is not a usable physical test connection. |
-| VoiceOver | The paired iPhone could not be connected or controlled. | **UNVERIFIED.** No VoiceOver interaction is claimed. |
+| Android / Moto G Power (2022) | `adb devices -l` returned authorized serial `ZY22FSQQKZ`, model `moto_g_power_2022`; Android 12 / SDK 31 / build `S3RQS32.20-42-10-9-12`; Chrome `150.0.7871.124`. | **PARTIAL PASS.** Exact birth, name-only, unknown-time, ambiguity, all six surfaces, portrait/landscape, Explorer/Research, selection/cross-highlighting, fallback/native fullscreen entry/exit, unavailable states, reset, 44px controls, Living Pattern interactions, and Android print preview passed. A real saved/opened Markdown file and the share flow remain open. |
+| TalkBack | TalkBack was briefly enabled only to inspect device state, then disabled at the user's direction. Final settings: `enabled_accessibility_services=null`, `accessibility_enabled=0`, no bound service. | **UNVERIFIED.** No TalkBack completion is claimed; it must not be re-enabled without explicit user approval. |
+| iPhone Safari | `devicectl` restored the paired physical iPhone 17 Pro `WiFightIt`, iOS 26.5.2 build `23F84`; tunnel connected, developer mode enabled, and Safari launched the LAN test URL. | **PARTIAL.** Connection/launch only. The required Safari flows were not completed. |
+| VoiceOver | VoiceOver was not enabled. | **UNVERIFIED.** No VoiceOver completion is claimed; it must not be enabled without explicit user approval. |
 
-Because no usable physical device was connected, model, OS, browser version,
-orientation, touch, virtual-keyboard, share-sheet, print destination, hardware
-keyboard, TalkBack, and VoiceOver results remain release gates. Desktop/mobile
-Chrome automation below is not counted as physical testing.
+Physical connections now exist, but neither platform completed the entire
+mandatory matrix and neither screen reader was tested. Browser automation below
+does not substitute for the remaining physical flows.
+
+### Final automated release-gate rerun
+
+After the last provenance, verifier, narrative wording, and stale-highlight
+patches, the exact candidate checkout produced:
+
+- `.venv/bin/python -m pytest -q` — **294 passed, 95 subtests passed**.
+- `.venv/bin/python -m pytest --collect-only -q` — **294 tests collected**.
+- `.venv/bin/python tools/run_tests.py --quiet` — **42 test files; 0 failures;
+  `ALL_TESTS_PASS`**.
+- `.venv/bin/python tools/validate_contracts.py` —
+  **`PUBLIC_CONTRACTS_VALID`**.
+- `.venv/bin/python -m compileall -q src webapp` — exit 0, no output.
+- `node --check webapp/static/app.js` and `node --check
+  webapp/static/atlas.js` — exit 0, no output.
+- `git diff --check` — exit 0, no output.
+- Dedicated synthesis/narrative suite — **32 passed**.
+
+### Physical Android defect evidence
+
+- The user-provided `1982-2-4` value was reproducibly collapsed to `1982-24` by
+  input normalization. The client now preserves typed separators, accepts one-
+  or two-digit month/day input, and canonicalizes to `1982-02-04` on blur.
+- Several mode/panel/fingerprint controls measured 33–40 CSS pixels. The focused
+  CSS patch raises these interactive targets to at least 44 CSS pixels; physical
+  retest measured a 44-pixel minimum.
+- Blob, direct attachment POST, and asynchronous token handoff paths were not
+  reliable in Android Chrome when “Ask where to save files” was enabled. The
+  current user-initiated form POST → `303` → short-lived GET attachment path
+  preserves the tap activation and is covered by HTTP tests. The physical
+  save/open retest was interrupted when the USB/ADB connection dropped, so it
+  remains an open release defect until a real `.md` file is saved and opened.
+- Android portrait viewport was 411×766 CSS pixels with no document overflow;
+  landscape was 822×331 with no document overflow. All six panels remained
+  available in the exact-birth fixture.
+
+### Physical Living Pattern evidence
+
+- Exact fixture: `1982-02-04`, `01:42`, Evanston, Wyoming. The six Atlas
+  surfaces and the central **Initiation–Analysis Pattern** rendered without
+  document overflow in portrait or landscape.
+- Plain, Mythic, and Research modes retained the same sentence, claim, and
+  evidence identifiers. Only wording and disclosure changed.
+- On the physically tested build, sentence → Atlas exposed five evidence
+  references, six target identifiers, and 44 linked marks; Atlas → sentence
+  highlighted 21 narrative sentences for the astrology surface. Review then
+  found that the two-part central title cited only the primary motif. The claim
+  now cites both named motifs (10 evidence and 10 target identifiers in the exact
+  fixture), and automated provenance tests pass. That expanded physical
+  cross-highlight count remains pending because the USB/ADB connection dropped.
+- The Android accessibility tree exposed 18 narrative buttons with meaningful
+  sentence, confidence, and evidence names. This verifies platform semantics,
+  not TalkBack speech or focus behavior.
+- Name-only produced an explicitly partial 15-sentence narrative; unknown-time
+  produced an explicitly partial 16-sentence narrative with Human Design
+  unavailable. Both retained 44px-or-larger visible controls and zero document
+  overflow.
+- `Start a new analysis` removed the prior dashboard DOM rather than leaving
+  stale narrative or Atlas marks.
+- Physical screenshots were captured only as local QA artifacts because the
+  exact fixture contains user-supplied personal data; they are intentionally not
+  included in the repository's sanitized public screenshot set.
 
 ## Automated browser matrix
 
@@ -68,5 +129,6 @@ unavailable physical Android/iPhone targets.
 Automated and static evidence is green, but the explicit physical Android,
 TalkBack, iPhone Safari, and VoiceOver release gates in `RELEASE_GATES.md` are
 open. The defensible public-release status is **NOT READY** until those required
-device gates pass. The local implementation is otherwise a release candidate
-with the documented v1.1 topology boundary.
+device gates pass. The deterministic Narrative Synthesis layer also requires
+its live physical/mobile interaction rerun. The local implementation remains a
+release candidate with the documented v1.1 topology boundary.

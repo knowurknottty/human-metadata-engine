@@ -151,19 +151,33 @@ function mdToHTML(md) {
 }
 
 function normalizeBirthDateInput(value) {
-  const digits = String(value || "").replace(/\D/g, "").slice(0, 8);
+  const raw = String(value || "").replace(/[^\d-]/g, "").slice(0, 10);
+  if (raw.includes("-")) {
+    const parts = raw.split("-").slice(0, 3);
+    parts[0] = parts[0].slice(0, 4);
+    if (parts.length > 1) parts[1] = parts[1].slice(0, 2);
+    if (parts.length > 2) parts[2] = parts[2].slice(0, 2);
+    return parts.join("-");
+  }
+  const digits = raw.slice(0, 8);
   if (digits.length <= 4) return digits;
   if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
   return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
 }
 
 function parseBirthDateInput(value) {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(value || "").trim());
+  const match = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(String(value || "").trim());
   if (!match) return null;
   const year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
   const check = new Date(Date.UTC(year, month - 1, day));
   if (check.getUTCFullYear() !== year || check.getUTCMonth() !== month - 1 || check.getUTCDate() !== day) return null;
   return {year, month, day};
+}
+
+function canonicalBirthDateInput(value) {
+  const parts = parseBirthDateInput(value);
+  if (!parts) return value;
+  return `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
 }
 
 function apiErrorField(data) {
@@ -216,6 +230,7 @@ function newEditorialState() {
     result: null, psychology: null, requestPayload: null,
     aliases: [], locationChoices: [], selectedLocation: null,
     submitting: false, generatedAt: null, atlasMode: "explorer", atlasSelections: new Map(),
+    narrativeMode: "plain", synthesisEvidence: new Map(),
   };
 }
 
@@ -500,6 +515,8 @@ function renderEditorialReport(result) {
   const atlas = window.HMEAtlas.buildAtlas(result, {requestPayload: payload, psychology: STATE.psychology});
   STATE.atlasMode = "explorer";
   STATE.atlasSelections = atlas.selections;
+  STATE.narrativeMode = "plain";
+  STATE.synthesisEvidence = new Map((result.synthesis?.evidence?.evidence_items || []).map(item => [item.evidence_id, item]));
 
   $("dashboard").innerHTML = `
     ${atlas.html}
@@ -593,6 +610,39 @@ Object.assign(app, {
     if (mode === "research") $("report-reference-title")?.focus({preventScroll: true});
   },
 
+  setNarrativeMode(mode) {
+    if (!STATE.result || !["plain", "mythic", "research"].includes(mode)) return;
+    STATE.narrativeMode = mode;
+    document.querySelectorAll("[data-narrative-mode]").forEach(button => {
+      button.setAttribute("aria-pressed", String(button.dataset.narrativeMode === mode));
+    });
+    document.querySelectorAll("[data-narrative-panel]").forEach(panel => {
+      panel.hidden = panel.dataset.narrativePanel !== mode;
+    });
+    document.querySelector(`[data-narrative-panel="${mode}"] h3`)?.focus({preventScroll: true});
+  },
+
+  selectNarrativeSentence(button) {
+    if (!button) return;
+    const evidenceIds = (button.dataset.evidenceIds || "").split(/\s+/).filter(Boolean);
+    const targets = (button.dataset.atlasTargets || "").split(/\s+/).filter(Boolean);
+    const evidence = evidenceIds.map(id => STATE.synthesisEvidence.get(id)).filter(Boolean);
+    document.querySelectorAll("[data-narrative-sentence]").forEach(sentence => {
+      sentence.classList.toggle("is-selected", sentence === button);
+      sentence.classList.remove("narrative-linked");
+    });
+    document.querySelectorAll("[data-link-keys]").forEach(element => {
+      const keys = [element.dataset.atlasSelect, ...(element.dataset.linkKeys || "").split(/\s+/)].filter(Boolean);
+      element.classList.toggle("atlas-linked", targets.some(target => keys.includes(target)));
+      element.classList.remove("is-selected");
+    });
+    $("inspector-title").textContent = "Narrative evidence";
+    const rows = evidence.map(item => `<article class="narrative-evidence-item"><h3>${esc(item.system.replaceAll("_", " "))}: ${esc(typeof item.source_value === "object" ? JSON.stringify(item.source_value) : item.source_value)}</h3><dl><div><dt>Source field</dt><dd><code>${esc(item.source_path)}</code></dd></div><div><dt>Epistemic class</dt><dd>${esc(item.epistemic_class)}</dd></div><div><dt>Mapping</dt><dd>${esc(item.mapping_provenance || "No interpretive mapping")}</dd></div><div><dt>Limits</dt><dd>${esc((item.limitations || []).join(" ") || "No interpretive claim attached")}</dd></div></dl>${item.report_target ? `<button type="button" class="inspector-report-link" data-report-target="${esc(item.report_target)}">Open supporting report section</button>` : ""}</article>`).join("");
+    $("atlas-inspector-content").innerHTML = `<p class="inspector-summary">${evidence.length} evidence references support this sentence. Highlighted Atlas objects are linked by returned entity IDs.</p>${rows}`;
+    $("atlas-selection-status").textContent = `Narrative sentence selected. ${evidence.length} evidence references and ${targets.length} Atlas targets are highlighted.`;
+    if (window.matchMedia("(max-width: 980px)").matches) document.querySelector(".atlas-inspector")?.scrollIntoView({behavior:"smooth", block:"nearest"});
+  },
+
   selectAtlas(id) {
     const item = STATE.atlasSelections?.get(id);
     if (!item) return;
@@ -605,7 +655,15 @@ Object.assign(app, {
       element.classList.toggle("is-selected", element.dataset.atlasSelect === id);
       element.classList.toggle("atlas-linked", item.links.some(link => keys.includes(link)));
     });
-    $("atlas-selection-status").textContent = `${item.title} selected. Supporting method and provenance are now shown.`;
+    let relatedSentences = 0;
+    document.querySelectorAll("[data-narrative-sentence]").forEach(sentence => {
+      const targets = (sentence.dataset.atlasTargets || "").split(/\s+/).filter(Boolean);
+      const related = targets.includes(id);
+      sentence.classList.toggle("narrative-linked", related);
+      sentence.classList.remove("is-selected");
+      if (related) relatedSentences += 1;
+    });
+    $("atlas-selection-status").textContent = `${item.title} selected. Supporting method and provenance are now shown. ${relatedSentences} related narrative sentences highlighted.`;
     if (window.matchMedia("(max-width: 980px)").matches) document.querySelector(".atlas-inspector")?.scrollIntoView({behavior:"smooth", block:"nearest"});
   },
 
@@ -767,6 +825,7 @@ Object.assign(app, {
 
   startNew() {
     $("analyze-form").reset();
+    $("dashboard").replaceChildren();
     STATE = newEditorialState();
     clearEditorialErrors();
     $("location-choices").hidden = true;
@@ -790,13 +849,21 @@ Object.assign(app, {
   downloadReport() {
     if (!STATE.result) return;
     const markdown = STATE.result.report.markdown;
-    const name = STATE.result.signature.text.replace(/[^a-z0-9]+/gi, "_").toLowerCase();
-    const blob = new Blob([markdown], {type: "text/markdown"});
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = `human_metadata_${name}.md`;
-    link.click();
-    URL.revokeObjectURL(link.href);
+    const name = STATE.result.signature.text.replace(/[^a-z0-9]+/gi, "_").replace(/^_+|_+$/g, "").toLowerCase() || "report";
+    const form = document.createElement("form");
+    form.method = "POST";
+    form.action = "/api/report-download";
+    form.hidden = true;
+    [["filename", `human_metadata_${name}.md`], ["markdown", markdown]].forEach(([fieldName, value]) => {
+      const input = document.createElement("input");
+      input.type = "hidden";
+      input.name = fieldName;
+      input.value = value;
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
+    window.setTimeout(() => form.remove(), 1000);
   },
 });
 
@@ -810,6 +877,7 @@ function initEditorial() {
   const statusOptions = `<option value="provisional">Provisional</option><option value="validated">Validated assessment</option><option value="structured">Comparable structured assessment</option><option value="self_identified">Self-identified</option><option value="unknown">Unknown</option>`;
   $("assessment-status-fields").innerHTML = STATUS_FIELDS.map(([field, , label]) => `<div class="field-group"><label for="p-status-${field}">${esc(label)} status</label><select id="p-status-${field}">${statusOptions}</select></div>`).join("");
   $("b-date").addEventListener("input", event => { event.target.value = normalizeBirthDateInput(event.target.value); updateReviewSummary(); });
+  $("b-date").addEventListener("blur", event => { event.target.value = canonicalBirthDateInput(event.target.value); updateReviewSummary(); });
   $("analyze-form").addEventListener("input", updateReviewSummary);
   $("analyze-form").addEventListener("change", updateReviewSummary);
   app.toggleSection("birth");
@@ -822,6 +890,10 @@ function initEditorial() {
     if (expand) app.toggleAtlasFullscreen(expand.dataset.atlasExpand);
     const mode = event.target.closest("[data-atlas-mode-button]");
     if (mode) app.setAtlasMode(mode.dataset.atlasModeButton);
+    const narrativeMode = event.target.closest("[data-narrative-mode]");
+    if (narrativeMode) app.setNarrativeMode(narrativeMode.dataset.narrativeMode);
+    const narrativeSentence = event.target.closest("[data-narrative-sentence]");
+    if (narrativeSentence) app.selectNarrativeSentence(narrativeSentence);
     const selectable = event.target.closest("[data-atlas-select]");
     if (selectable) app.selectAtlas(selectable.dataset.atlasSelect);
     const reportLink = event.target.closest("[data-report-target]");

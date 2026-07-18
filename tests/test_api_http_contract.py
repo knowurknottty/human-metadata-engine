@@ -9,6 +9,7 @@ import os
 import sys
 from threading import Thread
 import unittest
+from urllib.parse import urlencode
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "webapp"))
@@ -34,6 +35,8 @@ class APIHTTPContractTests(unittest.TestCase):
     def setUp(self):
         with server_module._RATE_LIMIT_LOCK:
             server_module._RECENT_ANALYSES.clear()
+        with server_module._DOWNLOAD_LOCK:
+            server_module._PENDING_DOWNLOADS.clear()
 
     def request(self, method: str, path: str, body: bytes | None = None, content_type: str | None = None):
         connection = HTTPConnection("127.0.0.1", self.server.server_port, timeout=30)
@@ -87,6 +90,51 @@ class APIHTTPContractTests(unittest.TestCase):
         )
         self.assertEqual(status, 415)
         self.assertEqual(payload["code"], "invalid_content_type")
+
+    def test_markdown_download_is_a_no_store_attachment(self):
+        markdown = "# Human Metadata Atlas\n\nCalculated test report.\n"
+        body = json.dumps({
+            "filename": "human_metadata_example.md",
+            "markdown": markdown,
+        }).encode()
+        status, _, queued = self.request(
+            "POST", "/api/report-download", body, "application/json"
+        )
+        self.assertEqual(status, 201)
+        self.assertEqual(queued["expires_in_seconds"], server_module.DOWNLOAD_TTL_SECONDS)
+        status, headers, payload = self.request("GET", queued["download_url"])
+        self.assertEqual(status, 200)
+        self.assertEqual(headers["Content-Type"], "text/markdown; charset=utf-8")
+        self.assertEqual(headers["Content-Disposition"], 'attachment; filename="human_metadata_example.md"')
+        self.assertEqual(headers["Cache-Control"], "no-store")
+        self.assertEqual(payload, markdown.encode())
+
+    def test_user_initiated_form_download_redirects_to_retryable_get(self):
+        markdown = "# Physical browser report\n"
+        body = urlencode({"filename": "human_metadata_physical.md", "markdown": markdown}).encode()
+        status, headers, payload = self.request(
+            "POST", "/api/report-download", body, "application/x-www-form-urlencoded"
+        )
+        self.assertEqual(status, 303)
+        self.assertEqual(payload, b"")
+        self.assertTrue(headers["Location"].startswith("/api/report-download?token="))
+        status, headers, payload = self.request("GET", headers["Location"])
+        self.assertEqual(status, 200)
+        self.assertEqual(headers["Content-Disposition"], 'attachment; filename="human_metadata_physical.md"')
+        self.assertEqual(payload, markdown.encode())
+
+    def test_markdown_download_rejects_unsafe_filenames(self):
+        body = json.dumps({"filename": "../private.md", "markdown": "# Report"}).encode()
+        status, _, payload = self.request(
+            "POST", "/api/report-download", body, "application/json"
+        )
+        self.assertEqual(status, 400)
+        self.assertEqual(payload["code"], "invalid_download_filename")
+
+    def test_markdown_download_rejects_unknown_or_expired_tokens(self):
+        status, _, payload = self.request("GET", "/api/report-download?token=unknown")
+        self.assertEqual(status, 404)
+        self.assertEqual(payload["code"], "download_not_found")
 
     def test_oversized_body_is_rejected_with_413(self):
         body = b'{"name":"' + (b"x" * (server_module.MAX_REQUEST_BYTES + 1)) + b'"}'

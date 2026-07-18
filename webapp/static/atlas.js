@@ -402,6 +402,45 @@ function unavailablePanel(id, title, explanation) {
   return panel(id, title, "Not calculated for this request", `<div class="atlas-unavailable"><span aria-hidden="true">∅</span><p>${esc(explanation)}</p></div>`, "");
 }
 
+function livingPattern(result) {
+  const synthesis = result.synthesis;
+  if (!synthesis?.plan || !synthesis?.narratives) {
+    return `<section class="living-pattern living-pattern--unavailable" aria-labelledby="living-pattern-title"><p class="eyebrow">Human Metadata Narrative</p><h2 id="living-pattern-title">The Living Pattern</h2><p>Narrative synthesis is unavailable for this analysis.</p></section>`;
+  }
+  const evidenceById = new Map((synthesis.evidence?.evidence_items || []).map(item => [item.evidence_id, item]));
+  const plan = synthesis.plan;
+  const central = plan.central_archetype;
+  const sentenceHTML = sentence => {
+    const items = sentence.evidence_ids.map(id => evidenceById.get(id)).filter(Boolean);
+    const targets = [...new Set(items.flatMap(item => item.atlas_targets || []))];
+    const contradiction = sentence.contradiction ? `<span class="contradiction-mark">Contradiction retained</span>` : "";
+    return `<button type="button" class="narrative-sentence" data-narrative-sentence="${esc(sentence.sentence_id)}" data-evidence-ids="${esc(sentence.evidence_ids.join(" "))}" data-atlas-targets="${esc(targets.join(" "))}" aria-label="${esc(sentence.text)} Confidence ${esc(sentence.strength)}. ${items.length} evidence references.${sentence.contradiction ? " Contradiction retained." : ""}"><span>${esc(sentence.text)}</span><small>${esc(sentence.strength)} confidence · ${items.length} evidence ${contradiction}</small></button>`;
+  };
+  const modes = ["plain", "mythic", "research"];
+  const panels = modes.map(mode => {
+    const narrative = synthesis.narratives[mode];
+    const sections = narrative.sections.map(section => `<section class="narrative-section"><h3 tabindex="-1">${esc(section.heading)}</h3>${section.paragraphs.flatMap(paragraph => paragraph.sentences).map(sentenceHTML).join("")}</section>`).join("");
+    return `<div class="narrative-mode-panel" data-narrative-panel="${mode}"${mode === "plain" ? "" : " hidden"}>${sections}<p class="narrative-disclaimer">${esc(narrative.disclaimer)}</p></div>`;
+  }).join("");
+  const tension = plan.originating_tension;
+  const tensionHTML = tension ? `<div class="tension-axis" role="group" aria-label="Unresolved tension between ${esc(tension.pole_a)} and ${esc(tension.pole_b)}"><strong>${esc(tension.pole_a)}</strong><span aria-hidden="true">←──────→</span><strong>${esc(tension.pole_b)}</strong><p>Unresolved ${esc(tension.type.replaceAll("_", " "))}; ${esc(tension.uncertainty)} confidence.</p></div>` : `<p class="tension-empty">No sufficiently supported polarity was detected.</p>`;
+  const ledgerClaims = plan.narrative_sections.filter(section => section.section_id !== "evidence_ledger").flatMap(section => section.claims);
+  const ledger = ledgerClaims.map(claim => {
+    const items = claim.evidence_ids.map(id => evidenceById.get(id)).filter(Boolean);
+    const systems = [...new Set(items.map(item => item.system))];
+    const sources = items.map(item => `${item.source_path} = ${typeof item.source_value === "object" ? JSON.stringify(item.source_value) : item.source_value}`).join("; ");
+    return `<tr><th scope="row">${esc(claim.claim_type.replaceAll("_", " "))}: ${esc(claim.motif.replace("|", " / "))}</th><td>${esc(systems.join(", "))}</td><td>${items.length}</td><td>${esc(claim.strength)}</td><td>${claim.contradicting_evidence_ids.length ? "Retained" : "None linked"}</td><td><details><summary>Sources and limits</summary><p>${esc(sources)}</p><p>${esc(claim.limitation)}</p></details></td></tr>`;
+  }).join("");
+  return `<section class="living-pattern" aria-labelledby="living-pattern-title">
+    <header class="living-pattern-header"><div><p class="eyebrow">Human Metadata Narrative</p><h2 id="living-pattern-title">The Living Pattern</h2><p>Evidence-linked symbolic synthesis. The six Atlas surfaces remain the calculation record.</p></div><div class="narrative-mode-switch" role="group" aria-label="Narrative mode">${modes.map(mode => `<button type="button" data-narrative-mode="${mode}" aria-pressed="${mode === "plain"}">${esc(mode)}</button>`).join("")}</div></header>
+    <div class="central-pattern-card"><div class="archetype-seal" role="img" aria-label="Deterministic text seal for ${esc(central.title)}"><span>${esc(central.motif_ids.map(id => id.replace("motif_", "").slice(0, 2).toUpperCase()).join(" · ") || "—")}</span></div><div><p class="panel-index">Central pattern</p><h3>${esc(central.title)}</h3><p>${esc(central.definition)}</p><p><strong>${esc(central.confidence)} confidence</strong> · ${central.systems.length} participating systems</p></div></div>
+    ${tensionHTML}
+    <div class="living-pattern-narratives">${panels}</div>
+    <details class="narrative-ledger"><summary>Open the sentence-level evidence ledger</summary><div class="table-scroll"><table><caption>Claims, source systems, evidence count, confidence, contradictions, and limits</caption><thead><tr><th>Claim</th><th>Systems</th><th>Evidence</th><th>Confidence</th><th>Contradiction</th><th>Trace</th></tr></thead><tbody>${ledger}</tbody></table></div></details>
+    <p class="living-pattern-limits"><strong>Coverage:</strong> ${esc(plan.missing_or_uncertain_dimensions.join("; ") || "all requested dimensions available")}. Default realization is local and deterministic; no remote model is used.</p>
+  </section>`;
+}
+
 function buildAtlas(result, options = {}) {
   const signature = result.signature || {};
   const encoders = signature.encoders || {};
@@ -444,6 +483,7 @@ function buildAtlas(result, options = {}) {
       <div class="atlas-header-actions"><div class="mode-switch" role="group" aria-label="Atlas presentation mode"><button type="button" data-atlas-mode-button="explorer" aria-pressed="true">Explorer</button><button type="button" data-atlas-mode-button="research" aria-pressed="false">Research</button></div><div class="action-group"><button type="button" class="button" onclick="app.downloadReport()">Download report</button><button type="button" class="button" onclick="window.print()">Print</button><button type="button" class="button" onclick="app.editInputs()">Edit inputs</button></div></div>
     </header>
     <section class="atlas-summary" aria-label="Analysis identity and coverage"><div><span>Analysis</span><strong>${esc(result.input_hash?.slice(0, 12) || "not supplied")}</strong></div><div><span>Engine</span><strong>${esc(result.engine_version || "signature-v2")}</strong></div><div><span>Report</span><strong>${esc(reportMeta.report_schema_version || "report-v1")}</strong></div><div><span>Birth data</span><strong>${payload.birth ? (payload.birth.time_accuracy === "unknown" ? "Date only" : "Exact time") : "Not supplied"}</strong></div>${coverage.map(([label,status]) => `<div data-status="${esc(status)}"><span>${esc(label)}</span><strong>${esc(status)}</strong></div>`).join("")}</section>
+    ${livingPattern(result)}
     <nav class="atlas-rail" aria-label="Visual systems">${[["constellation","Constellation"],["astrology","Astrology"],["human-design","Bodygraph"],["tree-of-life","Tree of Life"],["numerology","Numerology"],["fingerprint","Fingerprint"]].map(([id,label]) => `<a href="#atlas-${id}"><span>${esc(label.slice(0,2).toUpperCase())}</span>${esc(label)}</a>`).join("")}</nav>
     <div class="atlas-workspace"><div class="atlas-panels">${panels.join("")}</div><aside class="atlas-inspector" aria-labelledby="inspector-title"><div class="inspector-sticky"><p class="panel-index">Trace</p><h2 id="inspector-title">Select a visual object</h2><div id="atlas-inspector-content"><p>Choose a planet, aspect, gate, center, Sephirah, number system, or network node. Its supporting calculation and provenance will appear here.</p></div><div id="atlas-selection-status" class="sr-only" aria-live="polite"></div></div></aside></div>
     <div class="atlas-text-equivalent research-only"><h2>Text equivalent</h2><p>The atlas contains six views. The identity constellation inventories available systems; the astrology wheel plots returned longitudes and aspects; the bodygraph shows returned centers, channels, and all gates; the Tree of Life highlights the calculated Sephirah; the numerology matrix shows exact reductions; and the fingerprint renders the returned deterministic visual-hash parameters.</p></div>
