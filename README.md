@@ -2,7 +2,7 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.8.0 application and interface** — The public workflow now uses a plain-language, editorial presentation that separates mathematical calculation, astronomy, user-supplied context, traditional interpretation, and experimental synthesis. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`. There is no checkout or paid entitlement surface; every generated report is available to download or print.
+**v1.0.0 visual knowledge interface** — The primary result is now the Human Metadata Atlas: a linked workspace for the computed cross-system graph, astrology wheel, Human Design bodygraph, Tree-of-Life mapping, numerology matrix, deterministic identity fingerprint, and a shared provenance inspector. Explorer and Research modes change presentation only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; the complete report is retained as the reference layer. No checkout or paid entitlement surface is present.
 
 ## Quick Start — Web App
 
@@ -12,7 +12,7 @@ A provenance-aware identity metadata architecture that encodes humans, aliases, 
 python3 -m pip install --require-hashes -r requirements.txt && python3 webapp/server.py
 ```
 
-Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The report begins with identity and coverage, then keeps calculations, interpretation, tensions, methods, and limitations distinct. Historical public-reference API input can still use `subject_type: "reference"`.
+Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The result opens in the Atlas; every selectable mark exposes supporting values, method, source, confidence category, interpretation type, limitations, and a report link. Historical public-reference API input can still use `subject_type: "reference"`.
 
 Place lookup uses Open-Meteo's geocoding endpoint with a bounded timeout, one retry, and an in-process success cache. The place text is sent to that provider. Ambiguous matches return ranked choices; invalid places, provider failures, DST gaps, and DST folds return structured errors rather than guessed chart inputs. Location lookup requires network access. Explicit coordinates plus an IANA timezone work offline; a raw offset is accepted but labeled less reliable for historical calculations.
 
@@ -21,8 +21,8 @@ Place lookup uses Open-Meteo's geocoding endpoint with a bounded timeout, one re
 ```bash
 # The repository Dockerfile builds pyswisseph in a GCC-enabled builder stage
 # and copies only the resulting wheel into the Python 3.12 runtime image.
-docker build -t identity-resonance .
-docker run --rm -p 127.0.0.1:8000:8080 identity-resonance
+docker build -t human-metadata-engine .
+docker run --rm -p 127.0.0.1:8000:8080 human-metadata-engine
 ```
 
 ## Architecture
@@ -31,7 +31,10 @@ docker run --rm -p 127.0.0.1:8000:8080 identity-resonance
 human-metadata-engine/
 ├── webapp/
 │   ├── server.py                    # Stdlib HTTP server (API + static)
-│   └── static/                      # Framework-free editorial HTML/CSS/JavaScript interface
+│   └── static/                      # Framework-free visual knowledge interface
+│       ├── atlas.js                 # Visualization model and SVG renderers
+│       ├── app.js                   # Input, interaction, mode, and report controller
+│       └── styles.css               # Responsive/accessible presentation layer
 ├── src/
 │   ├── engine.py                    # Master orchestrator (signature-v2)
 │   ├── analytics.py                 # Legacy/internal analytics compatibility contract
