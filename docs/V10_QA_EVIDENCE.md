@@ -66,6 +66,7 @@ unavailable physical Android/iPhone targets.
 ## Release implication
 
 Automated and static evidence is green, but the explicit physical Android,
-TalkBack, iPhone Safari, and VoiceOver release gates are open. The defensible
-status is **READY WITH DOCUMENTED LIMITATIONS**, not a fully device-verified
-release.
+TalkBack, iPhone Safari, and VoiceOver release gates in `RELEASE_GATES.md` are
+open. The defensible public-release status is **NOT READY** until those required
+device gates pass. The local implementation is otherwise a release candidate
+with the documented v1.1 topology boundary.
