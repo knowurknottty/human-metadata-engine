@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Human Metadata Engine | Structured symbolic analysis</title>
-<meta name="description" content="A structured reflection on your name, birth data, and symbolic systems, with calculations, interpretation, and limits kept distinct.">
-<link rel="stylesheet" href="/styles.css?v=0.8.0">
+<title>Human Metadata Atlas | Visual symbolic analysis</title>
+<meta name="description" content="Explore calculated astrology, Human Design, numerology, Tree-of-Life mappings, and provenance through one linked visual workspace.">
+<link rel="stylesheet" href="/styles.css?v=1.0.0">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#10057;</text></svg>">
 </head>
 <body>
@@ -19,7 +19,7 @@
     </a>
     <nav aria-label="Primary navigation">
       <a href="#method-intro">Method</a>
-      <button type="button" class="button button--small" onclick="app.scrollToForm()">Create an analysis</button>
+      <button type="button" class="button button--small" onclick="app.scrollToForm()">Build an atlas</button>
     </nav>
   </div>
 </header>
@@ -28,18 +28,18 @@
   <section id="landing" class="intro" aria-labelledby="page-title">
     <div class="intro__grid">
       <div>
-        <p class="eyebrow">Structured symbolic analysis · version 0.8 interface</p>
-        <h1 id="page-title">A structured reflection on your name, birth data, and symbolic systems</h1>
-        <p class="intro__lede">This tool calculates established name systems and, when supplied, astronomical birth data. It shows how each result was produced and keeps calculation separate from traditional interpretation.</p>
-        <button type="button" class="button button--primary" onclick="app.scrollToForm()">Create my analysis</button>
+        <p class="eyebrow">Human Metadata Atlas · visual system v1.0</p>
+        <h1 id="page-title">Explore the systems. Trace every result.</h1>
+        <p class="intro__lede">A linked visual workspace for calculated name systems, astronomy, Human Design, and symbolic correspondences. Every active mark traces back to structured engine output, method, and provenance.</p>
+        <button type="button" class="button button--primary" onclick="app.scrollToForm()">Build my atlas</button>
       </div>
       <div class="intro__boundary" id="method-intro">
         <section aria-labelledby="is-title">
-          <h2 id="is-title">What this is</h2>
-          <p>A transparent, deterministic report. The same input produces the same calculated result when the engine and convention versions stay the same.</p>
+          <h2 id="is-title">A visual knowledge system</h2>
+          <p>The same validated input produces the same calculated result when the engine and convention versions stay the same. Visuals expose those results; they do not invent new ones.</p>
         </section>
         <section aria-labelledby="is-not-title">
-          <h2 id="is-not-title">What this is not</h2>
+          <h2 id="is-not-title">The boundary</h2>
           <p>It is not a diagnosis, personality test, prediction, or scientific proof of symbolic meaning.</p>
         </section>
       </div>
@@ -49,8 +49,8 @@
   <section id="form-section" class="workflow" aria-labelledby="form-title">
     <div class="workflow__heading">
       <p class="eyebrow">Your inputs</p>
-      <h2 id="form-title">Create your analysis</h2>
-      <p>Start with a name. Birth details and personal context are optional, and the coverage summary will say what could and could not be calculated.</p>
+      <h2 id="form-title">Build your atlas</h2>
+      <p>Start with a name. Birth details unlock the astronomy wheel and, with an exact time, the bodygraph. Missing inputs remain visibly missing.</p>
     </div>
 
     <form id="analyze-form" novalidate onsubmit="app.submit(event)">
@@ -188,7 +188,7 @@
       </section>
 
       <div class="submit-area">
-        <button type="submit" id="submit-btn" class="button button--primary">Create my analysis</button>
+        <button type="submit" id="submit-btn" class="button button--primary">Build my atlas</button>
         <p>Your entries are used to create the report. The application does not intentionally include your name, exact birth time, or coordinates in normal server logs.</p>
       </div>
     </form>
@@ -196,8 +196,8 @@
 
   <section id="processing" class="processing" hidden aria-labelledby="processing-title">
     <div class="processing__mark" aria-hidden="true"></div>
-    <h2 id="processing-title">Creating your analysis…</h2>
-    <p id="processing-step" role="status" aria-live="polite">Your entries are being calculated and organized into a report.</p>
+    <h2 id="processing-title">Calculating your atlas…</h2>
+    <p id="processing-step" role="status" aria-live="polite">Your entries are being calculated and organized into linked visual systems.</p>
   </section>
 
   <section id="dashboard" class="report-shell" hidden></section>
@@ -208,6 +208,7 @@
   <p>Human Metadata Engine · Inversion Labs</p>
 </footer>
 
-<script src="/app.js?v=0.8.0"></script>
+<script src="/atlas.js?v=1.0.0"></script>
+<script src="/app.js?v=1.0.0"></script>
 </body>
 </html>

@@ -83,9 +83,10 @@ _DEFAULTS = None
 _DEFAULT_ERRORS = []
 _DEFAULTS_LOCK = Lock()
 PUBLIC_REFERENCE_IDENTITIES = famous_reference_identities()
-APP_VERSION = "0.8.0"
+APP_VERSION = "1.0.0"
 SCHEMA_VERSION = "analysis-v1"
 ENGINE_VERSION = "signature-v2"
+REPORT_SCHEMA_VERSION = "report-v1"
 
 
 def _build_revision() -> str:
@@ -181,6 +182,7 @@ def _version_payload() -> dict:
         "application_version": APP_VERSION,
         "schema_version": SCHEMA_VERSION,
         "engine_version": ENGINE_VERSION,
+        "report_schema_version": REPORT_SCHEMA_VERSION,
         "git_commit": BUILD_REVISION,
         "ephemeris": {
             "available": EPHEMERIS_AVAILABLE,
@@ -733,7 +735,7 @@ def analyze(payload):
         aliases=aliases,
     )
     report["metadata"] = {
-        "report_schema_version": "report-v1",
+        "report_schema_version": REPORT_SCHEMA_VERSION,
         "analysis_schema_version": SCHEMA_VERSION,
         "engine_version": ENGINE_VERSION,
         "convention_set_version": CONVENTION_SET_VERSION,
@@ -743,7 +745,7 @@ def analyze(payload):
     report["markdown"] = report["markdown"].replace(
         "\n",
         (
-            f"\n\n> Report schema `report-v1` · engine `{ENGINE_VERSION}` · "
+            f"\n\n> Report schema `{REPORT_SCHEMA_VERSION}` · engine `{ENGINE_VERSION}` · "
             f"conventions `{CONVENTION_SET_VERSION}` · build `{BUILD_REVISION}` · "
             f"reproduction `{request_fingerprint}`\n"
         ),
@@ -780,7 +782,7 @@ def analyze(payload):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = f"IdentityResonance/{APP_VERSION}"
+    server_version = f"HumanMetadataEngine/{APP_VERSION}"
     sys_version = ""
 
     def setup(self):
@@ -789,7 +791,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         status = args[1] if len(args) > 1 else "-"
-        sys.stderr.write(_safe_request_log(self.command, self.path, status) + "\n")
+        method = getattr(self, "command", "UNKNOWN")
+        target = getattr(self, "path", "/")
+        sys.stderr.write(_safe_request_log(method, target, status) + "\n")
 
     def version_string(self):
         return self.server_version

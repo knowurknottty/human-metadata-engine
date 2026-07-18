@@ -1,21 +1,21 @@
 :root {
-  --font-body: "Avenir Next", Avenir, "Segoe UI", Helvetica, sans-serif;
-  --font-display: Iowan Old Style, Baskerville, "Times New Roman", serif;
+  --font-body: Optima, "Avenir Next", Avenir, sans-serif;
+  --font-display: "Bodoni 72", Didot, Iowan Old Style, Baskerville, serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-  --text-primary: #252722;
-  --text-secondary: #565a51;
-  --text-muted: #74796e;
-  --surface-page: #f3f0e8;
-  --surface-raised: #fffdf8;
-  --surface-subtle: #e9e5da;
-  --border-default: #d5d0c3;
-  --border-strong: #9b9b8d;
-  --accent: #8a3f2d;
-  --accent-hover: #6f3022;
-  --focus-ring: #176d83;
-  --danger: #9e2f2f;
-  --warning: #8a5a14;
-  --success: #356342;
+  --text-primary: #eee9dc;
+  --text-secondary: #bbb8ac;
+  --text-muted: #8f9388;
+  --surface-page: #10120f;
+  --surface-raised: #171a16;
+  --surface-subtle: #21251f;
+  --border-default: #343a31;
+  --border-strong: #62695b;
+  --accent: #d2ad68;
+  --accent-hover: #efd394;
+  --focus-ring: #72b4aa;
+  --danger: #e47c78;
+  --warning: #deb66d;
+  --success: #7eae85;
   --space-1: .25rem;
   --space-2: .5rem;
   --space-3: .75rem;
@@ -29,7 +29,7 @@
   --content-width: 74rem;
   --form-width: 52rem;
   --reading-width: 70ch;
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 * { box-sizing: border-box; }
@@ -42,6 +42,8 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   text-rendering: optimizeLegibility;
+  background-image: linear-gradient(rgba(210, 173, 104, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(210, 173, 104, .018) 1px, transparent 1px);
+  background-size: 4rem 4rem;
 }
 body::before {
   content: "";
@@ -88,7 +90,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   top: 0;
   z-index: 50;
   border-bottom: 1px solid var(--border-default);
-  background: rgba(243, 240, 232, .96);
+  background: rgba(16, 18, 15, .96);
 }
 .site-header__inner {
   width: min(calc(100% - 2rem), var(--content-width));
@@ -429,7 +431,7 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
   z-index: 20;
   margin: 0 0 var(--space-7);
   border-block: 1px solid var(--border-default);
-  background: rgba(243, 240, 232, .97);
+  background: rgba(16, 18, 15, .97);
 }
 .report-navigation > button { display: none; }
 .report-navigation ul { display: flex; flex-wrap: wrap; gap: .2rem 1.2rem; margin: 0; padding: .8rem 0; list-style: none; }
@@ -553,4 +555,390 @@ pre, code { white-space: pre-wrap; overflow-wrap: anywhere; }
   h1, h2, h3, h4, dt { break-after: avoid-page; }
   .coverage-item, .value-grid div, .interpretation-note, .limits-note, .omitted-note, table, figure { break-inside: avoid-page; }
   a { color: #111; text-decoration: none; }
+}
+
+/* ------------------------------------------------------------------
+   Human Metadata Atlas v1.0
+   Etched cartography: dense, quiet, and explicit about what marks encode.
+   ------------------------------------------------------------------ */
+
+.report-shell {
+  width: min(calc(100% - 2rem), 96rem);
+  padding-top: var(--space-5);
+}
+.atlas { position: relative; }
+.atlas-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-6);
+  align-items: end;
+  min-height: 14rem;
+  padding: var(--space-7) clamp(1rem, 3vw, 3rem);
+  border: 1px solid var(--border-default);
+  background: var(--surface-raised);
+}
+.atlas-heading h1 {
+  max-width: none;
+  margin: 0;
+  font-size: clamp(3.2rem, 8vw, 7.2rem);
+  line-height: .82;
+  letter-spacing: -.055em;
+}
+.atlas-heading > p:last-child { max-width: 62ch; margin: var(--space-5) 0 0; color: var(--text-secondary); }
+.atlas-header-actions { display: grid; gap: var(--space-4); justify-items: end; }
+.atlas-header-actions .action-group { max-width: 31rem; justify-content: flex-end; }
+.mode-switch { display: inline-grid; grid-template-columns: 1fr 1fr; padding: .2rem; border: 1px solid var(--border-default); background: var(--surface-page); }
+.mode-switch button {
+  min-width: 7rem;
+  min-height: 2.5rem;
+  padding: .45rem .8rem;
+  border: 0;
+  color: var(--text-muted);
+  background: transparent;
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.mode-switch button[aria-pressed="true"] { color: #16140f; background: var(--accent); }
+.atlas-summary {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  border: 1px solid var(--border-default);
+  border-top: 0;
+  background: var(--border-default);
+  gap: 1px;
+}
+.atlas-summary > div { min-width: 0; padding: .8rem 1rem; background: var(--surface-page); }
+.atlas-summary span, .atlas-summary strong { display: block; overflow-wrap: anywhere; }
+.atlas-summary span { color: var(--text-muted); font-size: .67rem; letter-spacing: .07em; text-transform: uppercase; }
+.atlas-summary strong { margin-top: .2rem; font-size: .78rem; font-weight: 600; }
+.atlas-summary [data-status="complete"] strong, .atlas-summary [data-status="supplied"] strong { color: var(--success); }
+.atlas-summary [data-status="not included"] strong { color: var(--text-muted); }
+
+.atlas-rail {
+  position: sticky;
+  top: 4.25rem;
+  z-index: 25;
+  display: flex;
+  margin: var(--space-4) 0;
+  border: 1px solid var(--border-default);
+  background: rgba(16, 18, 15, .96);
+}
+.atlas-rail a {
+  flex: 1 1 0;
+  display: flex;
+  min-width: 7.5rem;
+  min-height: 3.6rem;
+  padding: .6rem .8rem;
+  align-items: center;
+  gap: .65rem;
+  border-right: 1px solid var(--border-default);
+  color: var(--text-secondary);
+  font-size: .76rem;
+  letter-spacing: .03em;
+  text-decoration: none;
+}
+.atlas-rail a:last-child { border-right: 0; }
+.atlas-rail a:hover { color: var(--accent-hover); background: var(--surface-subtle); }
+.atlas-rail span {
+  display: grid;
+  flex: 0 0 auto;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  color: var(--accent);
+  font: 600 .58rem var(--font-mono);
+}
+
+.atlas-workspace { display: grid; grid-template-columns: minmax(0, 1fr) 19rem; gap: var(--space-4); align-items: start; }
+.atlas-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+.atlas-panel {
+  min-width: 0;
+  border: 1px solid var(--border-default);
+  background: var(--surface-raised);
+  scroll-margin-top: 9rem;
+}
+.atlas-panel--featured { grid-column: 1 / -1; }
+.atlas-panel > header {
+  display: flex;
+  min-height: 7.5rem;
+  padding: var(--space-5);
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  border-bottom: 1px solid var(--border-default);
+}
+.panel-index {
+  margin: 0 0 .35rem;
+  color: var(--accent);
+  font: 650 .64rem var(--font-mono);
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.atlas-panel > header h2, .atlas-inspector h2, .reference-header h2, .atlas-text-equivalent h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 400;
+  line-height: 1;
+}
+.atlas-panel > header p:last-child { margin: .55rem 0 0; color: var(--text-muted); font-size: .84rem; }
+.panel-inspect {
+  flex: 0 0 auto;
+  padding: .45rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  background: transparent;
+  font-size: .7rem;
+  cursor: pointer;
+}
+.panel-controls { display: flex; flex: 0 0 auto; gap: .8rem; align-items: flex-start; }
+.panel-expand {
+  padding: .45rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  background: transparent;
+  font-size: .7rem;
+  cursor: pointer;
+}
+.panel-expand:hover { color: var(--accent-hover); border-color: var(--accent); }
+.atlas-panel:fullscreen, .atlas-panel.is-expanded {
+  padding: clamp(.5rem, 2vw, 1.5rem);
+  color: var(--text-primary);
+  background: var(--surface-page);
+  overflow: auto;
+}
+.atlas-panel:fullscreen .atlas-canvas, .atlas-panel.is-expanded .atlas-canvas { min-height: calc(100vh - 9rem); display: grid; place-items: center; }
+.atlas-panel:fullscreen .atlas-canvas svg, .atlas-panel.is-expanded .atlas-canvas svg { max-height: calc(100vh - 12rem); }
+.atlas-panel.is-expanded { position: fixed; inset: 0; z-index: 200; }
+.panel-inspect:hover { color: var(--accent-hover); border-color: var(--accent); }
+.atlas-canvas { min-height: 20rem; padding: clamp(.8rem, 2.4vw, 2rem); overflow: hidden; }
+.atlas-canvas svg { display: block; width: 100%; max-height: 43rem; margin-inline: auto; overflow: visible; }
+.atlas-select, [data-atlas-select] { transition: opacity .16s ease, color .16s ease, stroke .16s ease, fill .16s ease, transform .16s ease; }
+button.atlas-select { font: inherit; }
+[data-atlas-select]:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 3px; }
+svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3px var(--focus-ring)); }
+.atlas-panels:has(.is-selected) [data-link-keys]:not(.is-selected):not(.atlas-linked) { opacity: .35; }
+.is-selected { --selection-color: var(--accent-hover); }
+.atlas-linked { --selection-color: var(--focus-ring); opacity: 1 !important; }
+
+.atlas-inspector { min-width: 0; border: 1px solid var(--border-default); background: var(--surface-page); }
+.inspector-sticky { position: sticky; top: 9rem; max-height: calc(100vh - 10rem); padding: var(--space-5); overflow: auto; }
+.atlas-inspector h2 { font-size: 1.9rem; }
+#atlas-inspector-content > p:first-child { color: var(--text-secondary); }
+.inspector-category { margin: var(--space-5) 0 .35rem !important; color: var(--accent) !important; font: 650 .65rem var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+#atlas-inspector-content h3 { margin: 0; font-family: var(--font-display); font-size: 1.65rem; font-weight: 400; line-height: 1.1; }
+.inspector-summary { color: var(--text-secondary); font-size: .9rem; }
+#atlas-inspector-content dl { margin: var(--space-5) 0; border-top: 1px solid var(--border-default); }
+#atlas-inspector-content dl div { padding: .7rem 0; border-bottom: 1px solid var(--border-default); }
+#atlas-inspector-content dt { color: var(--text-muted); font-size: .65rem; letter-spacing: .08em; text-transform: uppercase; }
+#atlas-inspector-content dd { margin: .25rem 0 0; color: var(--text-secondary); font-size: .78rem; line-height: 1.55; overflow-wrap: anywhere; }
+.inspector-report-link {
+  width: 100%;
+  min-height: 2.8rem;
+  padding: .6rem;
+  border: 1px solid var(--accent);
+  color: var(--accent-hover);
+  background: transparent;
+  cursor: pointer;
+}
+.inspector-report-link:hover { color: #15130e; background: var(--accent); }
+
+/* Cross-system constellation */
+.system-graph { max-width: 46rem; }
+.system-edge { stroke: var(--border-strong); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.system-node circle { fill: var(--surface-page); stroke: var(--border-strong); stroke-width: 1.3; vector-effect: non-scaling-stroke; }
+.system-node text { fill: var(--text-secondary); font: 600 11px var(--font-body); text-anchor: middle; }
+.system-node .node-count { fill: var(--text-primary); font: 600 9px var(--font-mono); }
+.system-node--astronomical circle { stroke: #7aa9a6; }
+.system-node--numeric circle { stroke: #caa565; }
+.system-node--correspondence circle { stroke: #9c87a9; }
+.system-node--language circle { stroke: #879a72; }
+.system-node--geometry circle { stroke: #b88368; }
+.system-node--reported circle { stroke: #8098ad; }
+.system-node--identity circle { fill: var(--accent); stroke: var(--accent-hover); }
+.system-node--identity text { fill: #17140f; font: 700 11px var(--font-mono); letter-spacing: .08em; }
+.system-node.is-selected circle, .system-node.atlas-linked circle { fill: var(--selection-color); stroke: var(--selection-color); }
+.system-node.is-selected text, .system-node.atlas-linked text { fill: var(--text-primary); }
+.graph-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem 1.2rem; color: var(--text-muted); font-size: .7rem; }
+.graph-legend span { display: inline-flex; align-items: center; gap: .4rem; }
+.legend-line { display: inline-block; width: 1.8rem; border-top: 1px solid var(--border-strong); }
+.bridge-record { display: block; min-height: 2.75rem; margin: var(--space-4) auto 0; padding: .55rem .8rem; border: 1px solid var(--border-default); color: var(--text-secondary); background: var(--surface-page); cursor: pointer; }
+.bridge-record:hover, .bridge-record.is-selected { border-color: var(--accent); color: var(--accent-hover); }
+
+/* Astrology wheel */
+.astrology-wheel { max-width: 37rem; }
+.astro-boundary, .astro-ring { fill: none; stroke: var(--border-strong); stroke-width: 1.1; }
+.astro-ring { stroke: var(--border-default); }
+.astro-sector, .astro-house { stroke: var(--border-default); stroke-width: .8; }
+.astro-house { stroke-dasharray: 2 5; }
+.astro-house { cursor: pointer; }
+.astro-house.is-selected, .astro-house.atlas-linked { stroke: var(--selection-color); stroke-width: 2.4; opacity: 1; }
+.astro-sign { fill: var(--text-muted); font: 21px "Times New Roman", serif; font-variant-emoji: text; text-anchor: middle; dominant-baseline: central; }
+.astro-house-label { fill: var(--text-muted); font: 8px var(--font-mono); text-anchor: middle; }
+.astro-aspect { stroke: #819b92; stroke-width: .8; opacity: .46; cursor: pointer; vector-effect: non-scaling-stroke; }
+.astro-aspect--square, .astro-aspect--opposition { stroke: #c77e70; }
+.astro-aspect--trine, .astro-aspect--sextile { stroke: #78a795; }
+.astro-aspect.is-selected, .astro-aspect.atlas-linked { stroke: var(--selection-color); stroke-width: 2.4; opacity: 1; }
+.astro-planet { cursor: pointer; }
+.astro-planet circle { fill: var(--surface-page); stroke: var(--accent); stroke-width: 1.2; }
+.astro-planet text { fill: var(--text-primary); font: 16px var(--font-display); text-anchor: middle; dominant-baseline: central; }
+.astro-planet.is-selected circle, .astro-planet.atlas-linked circle { fill: var(--selection-color); stroke: var(--selection-color); }
+.astro-planet.is-selected text, .astro-planet.atlas-linked text { fill: #111; }
+
+/* Human Design */
+.bodygraph-layout { display: grid; grid-template-columns: minmax(15rem, 1fr) minmax(9rem, .55fr); gap: var(--space-4); align-items: center; }
+.bodygraph { max-width: 22rem; }
+.bodygraph-channel { stroke: var(--accent); stroke-width: 4; opacity: .72; cursor: pointer; vector-effect: non-scaling-stroke; }
+.bodygraph-channel.is-selected, .bodygraph-channel.atlas-linked { stroke: var(--selection-color); stroke-width: 7; opacity: 1; }
+.bodygraph-center { cursor: pointer; }
+.bodygraph-center rect { stroke: var(--border-strong); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.bodygraph-center.is-defined rect { fill: #9d7947; }
+.bodygraph-center.is-open rect { fill: var(--surface-page); }
+.bodygraph-center text { fill: var(--text-primary); font: 9px var(--font-body); text-anchor: middle; }
+.bodygraph-center.is-selected rect, .bodygraph-center.atlas-linked rect { fill: var(--selection-color); stroke: var(--selection-color); }
+.bodygraph-center.is-selected text, .bodygraph-center.atlas-linked text { fill: #111; }
+.bodygraph-summary { border-block: 1px solid var(--border-default); }
+.bodygraph-summary span { display: block; padding: .7rem 0; border-bottom: 1px solid var(--border-default); color: var(--text-secondary); font-size: .8rem; }
+.bodygraph-summary span:last-child { border: 0; }
+.gate-index-title { margin: var(--space-5) 0 0; color: var(--text-secondary); font: 500 1rem var(--font-display); }
+.gate-grid { display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px; margin-top: var(--space-5); }
+.gate-chip { aspect-ratio: 1; min-width: 0; min-height: 2.75rem; padding: 0; border: 1px solid var(--border-default); color: var(--text-muted); background: var(--surface-page); font: 600 .63rem var(--font-mono); cursor: pointer; }
+.gate-chip.is-active { border-color: #9f7b49; color: var(--accent-hover); background: #2b251b; }
+.gate-chip.is-selected, .gate-chip.atlas-linked { border-color: var(--selection-color); color: #111; background: var(--selection-color); }
+
+/* Tree of Life */
+.tree-layout { display: grid; grid-template-columns: minmax(13rem, 1fr) minmax(8rem, .55fr); gap: var(--space-4); align-items: center; }
+.tree-of-life { max-width: 22rem; }
+.tree-path { stroke: var(--border-strong); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.tree-node { cursor: pointer; }
+.tree-node circle { fill: var(--surface-page); stroke: var(--border-strong); stroke-width: 1.2; }
+.tree-node text { fill: var(--text-secondary); font: 9px var(--font-body); text-anchor: middle; }
+.tree-node .tree-index { fill: var(--text-muted); font: 7px var(--font-mono); }
+.tree-node.is-active circle { fill: #9f7b49; stroke: var(--accent-hover); }
+.tree-node.is-active text { fill: #15130f; }
+.tree-node.is-selected circle, .tree-node.atlas-linked circle { fill: var(--selection-color); stroke: var(--selection-color); }
+.tree-node.is-selected text, .tree-node.atlas-linked text { fill: #111; }
+.tree-metrics { margin: 0; }
+.tree-metrics div { padding: .65rem 0; border-top: 1px solid var(--border-default); }
+.tree-metrics dt { color: var(--text-muted); font-size: .65rem; text-transform: uppercase; }
+.tree-metrics dd { margin: .2rem 0 0; font-family: var(--font-display); font-size: 1.5rem; }
+
+/* Numerology and fingerprint */
+.numerology-matrix { border-top: 1px solid var(--border-default); }
+.numerology-row {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, 1.2fr) minmax(3rem, .55fr) 1.5rem minmax(3rem, .5fr);
+  width: 100%;
+  min-height: 4.4rem;
+  padding: .55rem .7rem;
+  align-items: center;
+  border: 0;
+  border-bottom: 1px solid var(--border-default);
+  color: var(--text-primary);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.numerology-row:hover { background: var(--surface-subtle); }
+.numerology-name { font-size: .82rem; }
+.numerology-input { color: var(--text-muted); font: .85rem var(--font-mono); }
+.numerology-operation { color: var(--border-strong); }
+.numerology-result { color: var(--accent-hover); font: 2rem var(--font-display); }
+.numerology-row small { grid-column: 1 / -1; color: var(--text-muted); font-size: .62rem; letter-spacing: .06em; text-transform: uppercase; }
+.numerology-row.is-selected, .numerology-row.atlas-linked { box-shadow: inset 3px 0 var(--selection-color); background: var(--surface-subtle); }
+.visual-footnote { margin: var(--space-4) 0 0; color: var(--text-muted); font-size: .75rem; }
+.fingerprint-atlas { display: grid; grid-template-columns: minmax(11rem, .9fr) minmax(12rem, 1fr); gap: var(--space-5); align-items: center; }
+.fingerprint-stage { padding: 0; border: 0; background: transparent; cursor: pointer; }
+.fingerprint-stage svg { width: 100%; }
+.fingerprint-stage.is-selected svg { filter: drop-shadow(0 0 6px var(--accent)); }
+.fingerprint-params { margin: 0; }
+.fingerprint-params div { padding: .45rem 0; border-bottom: 1px solid var(--border-default); }
+.fingerprint-params dt { color: var(--text-muted); font-size: .65rem; text-transform: uppercase; }
+.fingerprint-params dd { margin: .15rem 0 0; overflow-wrap: anywhere; }
+.fingerprint-atlas h3 { margin: var(--space-5) 0 .5rem; font-family: var(--font-display); font-weight: 400; }
+.fingerprint-spokes { margin: 0; padding: 0; list-style: none; }
+.fingerprint-spokes button { display: flex; width: 100%; padding: .4rem 0; justify-content: space-between; border: 0; color: var(--text-secondary); background: transparent; font-size: .73rem; cursor: pointer; }
+.fingerprint-spokes button:hover, .fingerprint-spokes button.atlas-linked { color: var(--accent-hover); }
+.algorithm-note { margin-top: var(--space-5); border-top: 1px solid var(--border-default); }
+.algorithm-note summary { padding: .75rem 0; color: var(--accent); cursor: pointer; }
+.algorithm-note p { color: var(--text-secondary); font-size: .8rem; }
+
+.atlas-unavailable { min-height: 21rem; display: grid; place-content: center; text-align: center; }
+.atlas-unavailable span { color: var(--border-strong); font: 4rem var(--font-display); }
+.atlas-unavailable p { max-width: 30ch; color: var(--text-muted); }
+.atlas-text-equivalent { margin-top: var(--space-4); padding: var(--space-6); border: 1px solid var(--border-default); background: var(--surface-raised); }
+.atlas-text-equivalent p { max-width: 80ch; color: var(--text-secondary); }
+
+.report-reference { margin-top: var(--space-7); border-top: 1px solid var(--border-strong); }
+.reference-header { max-width: 62rem; margin: 0 auto; padding: var(--space-8) var(--space-4); text-align: center; }
+.reference-header h2 { font-size: clamp(2.5rem, 5vw, 4.8rem); }
+.reference-header > p:not(.eyebrow) { max-width: 58ch; margin: var(--space-4) auto var(--space-5); color: var(--text-secondary); }
+.report-shell[data-atlas-mode="explorer"] .report-reference > :not(.reference-header) { display: none; }
+.report-shell[data-atlas-mode="research"] .reference-header .button { display: none; }
+.atlas[data-atlas-mode="explorer"] .research-only { display: none !important; }
+.report-reference .report-content { width: min(100%, var(--reading-width)); }
+
+@media (max-width: 1180px) {
+  .atlas-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .atlas-workspace { grid-template-columns: minmax(0, 1fr) 17rem; }
+}
+
+@media (max-width: 980px) {
+  .atlas-header { grid-template-columns: 1fr; align-items: start; }
+  .atlas-header-actions { justify-items: start; }
+  .atlas-header-actions .action-group { justify-content: flex-start; }
+  .atlas-rail { overflow-x: auto; }
+  .atlas-rail a { flex: 0 0 auto; }
+  .atlas-workspace { grid-template-columns: 1fr; }
+  .atlas-inspector { order: -1; }
+  .inspector-sticky { position: static; max-height: none; }
+}
+
+@media (max-width: 720px) {
+  .report-shell { width: min(calc(100% - 1rem), 96rem); }
+  .atlas-header { min-height: 0; padding: var(--space-6) var(--space-4); }
+  .atlas-heading h1 { font-size: clamp(3rem, 15vw, 5.2rem); }
+  .atlas-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .atlas-panels { grid-template-columns: 1fr; }
+  .atlas-panel--featured { grid-column: auto; }
+  .atlas-panel > header { min-height: 0; }
+  .bodygraph-layout, .tree-layout, .fingerprint-atlas { grid-template-columns: 1fr; }
+  .bodygraph-summary { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .bodygraph-summary span { padding: .6rem; border: 1px solid var(--border-default); }
+  .gate-grid { grid-template-columns: repeat(8, 1fr); }
+}
+
+@media (max-width: 460px) {
+  .atlas-header-actions, .atlas-header-actions .action-group, .mode-switch { width: 100%; }
+  .mode-switch button { min-width: 0; }
+  .atlas-header-actions .action-group { display: grid; grid-template-columns: 1fr; }
+  .atlas-panel > header { display: block; }
+  .panel-controls { margin-top: var(--space-4); }
+  .atlas-canvas { padding: .6rem; }
+  .system-graph, .astrology-wheel { min-width: 0; transform: none; }
+  .gate-grid { grid-template-columns: repeat(6, 1fr); gap: 1px; }
+}
+
+@media print {
+  :root { --text-primary: #111; --text-secondary: #333; --text-muted: #555; --border-default: #bbb; --border-strong: #777; --accent: #6f4f1f; --accent-hover: #513711; }
+  body { background-image: none; }
+  .atlas-header-actions, .atlas-rail, .atlas-inspector, .panel-inspect, .inspector-report-link, .reference-header .button { display: none !important; }
+  .atlas-header, .atlas-summary, .atlas-panel, .atlas-text-equivalent { background: #fff; }
+  .atlas-header { display: block; min-height: 0; padding: 0 0 .25in; }
+  .atlas-heading h1 { font-size: 38pt; }
+  .atlas-summary { grid-template-columns: repeat(4, 1fr); }
+  .atlas-workspace, .atlas-panels { display: block; }
+  .atlas-panel { margin: 0 0 .25in; break-inside: avoid-page; }
+  .atlas-panel > header { min-height: 0; padding: .12in; }
+  .atlas-canvas { min-height: 0; padding: .12in; }
+  .atlas-canvas svg { max-height: 5.8in; }
+  .atlas[data-atlas-mode="explorer"] .research-only, .report-shell[data-atlas-mode="explorer"] .report-reference > :not(.reference-header) { display: block !important; }
+  .reference-header { padding: .35in 0; }
 }

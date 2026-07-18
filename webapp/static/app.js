@@ -1,4 +1,4 @@
-/* Human Metadata Engine — accessible editorial client for the v0.7 public API. */
+/* Human Metadata Engine — accessible v1.0 visual knowledge client. */
 
 (function () {
 "use strict";
@@ -122,6 +122,8 @@ function fingerprintSVG(fp, size) {
   return `<svg viewBox="0 0 ${S} ${S}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="identity fingerprint">${el.join("")}</svg>`;
 }
 
+window.HMEFingerprintSVG = fingerprintSVG;
+
 function compactLabel(value) {
   return String(value || "—").replaceAll("_", " ").replace(/\b\w/g, char => char.toUpperCase());
 }
@@ -177,7 +179,7 @@ function apiErrorField(data) {
 const app = {};
 window.app = app;
 
-// v0.8 editorial workflow
+// v1.0 atlas workflow
 // ------------------------------------------------------------------
 
 const TYPE_LABELS = {
@@ -211,9 +213,9 @@ const STATUS_FIELDS = [
 
 function newEditorialState() {
   return {
-    result: null, psychology: null, customSigil: null, mode: "magic", requestPayload: null,
-    switchingMode: false, aliases: [], locationChoices: [], selectedLocation: null,
-    submitting: false, generatedAt: null,
+    result: null, psychology: null, requestPayload: null,
+    aliases: [], locationChoices: [], selectedLocation: null,
+    submitting: false, generatedAt: null, atlasMode: "explorer", atlasSelections: new Map(),
   };
 }
 
@@ -229,6 +231,16 @@ function formatDate(parts) {
 function setSurface(id, visible) {
   const element = $(id);
   if (element) element.hidden = !visible;
+}
+
+function setAtlasFallback(panel, active) {
+  if (!panel) return;
+  panel.classList.toggle("is-expanded", active);
+  const button = panel.querySelector("[data-atlas-expand]");
+  if (button) {
+    button.setAttribute("aria-pressed", String(active));
+    button.textContent = active ? "Close" : "Fullscreen";
+  }
 }
 
 function updateReviewSummary() {
@@ -485,8 +497,14 @@ function renderEditorialReport(result) {
   const contextRows = contextSections ? Object.values(contextSections).flat() : [];
   const reducedValues = [pythagorean.expression, chaldean.name_number, ordinal.ordinal_reduced, gematria.absolute_reduced, isopsephy.reduced].filter(value => value !== undefined);
   const distinctValues = [...new Set(reducedValues)];
+  const atlas = window.HMEAtlas.buildAtlas(result, {requestPayload: payload, psychology: STATE.psychology});
+  STATE.atlasMode = "explorer";
+  STATE.atlasSelections = atlas.selections;
 
   $("dashboard").innerHTML = `
+    ${atlas.html}
+    <section class="report-reference" aria-labelledby="report-reference-title">
+    <header class="reference-header"><p class="eyebrow">Reference layer</p><h2 id="report-reference-title" tabindex="-1">Detailed analysis, methods, and downloads</h2><p>The complete report remains available beneath the visual workspace. Explorer mode keeps it folded; Research mode opens the derivations.</p><button type="button" class="button" onclick="app.setAtlasMode('research')">Open research mode</button></header>
     <header class="report-header">
       <div><p class="eyebrow">Structured analysis</p><h1 id="report-heading" class="report-title" tabindex="-1">${esc(signature.text)}</h1><p class="report-subtitle">A calculated report with mathematical, astronomical, supplied, and interpretive information labeled separately.</p></div>
       ${reportActions()}
@@ -551,16 +569,63 @@ function renderEditorialReport(result) {
       </dl><details class="technical-details"><summary>Complete generated report and section labels</summary><p>The backend report contains ${esc(result.report.sections.length)} versioned sections and ${esc(result.report.word_count)} words.</p><ul>${sectionTypes}</ul><div id="report-print-area" class="report-body">${mdToHTML(result.report.markdown)}</div></details></section>
 
       <div class="end-actions"><h2>Report actions</h2>${reportActions()}<p>Editing an input and creating another analysis produces a new deterministic result for the changed input.</p></div>
-    </div>`;
+    </div></section>`;
+
+  $("dashboard").dataset.atlasMode = "explorer";
 
   setSurface("landing", false);
   setSurface("form-section", false);
   setSurface("processing", false);
   setSurface("dashboard", true);
-  $("report-heading").focus();
+  $("atlas-title").focus();
 }
 
 Object.assign(app, {
+  setAtlasMode(mode) {
+    if (!STATE.result || !["explorer", "research"].includes(mode)) return;
+    STATE.atlasMode = mode;
+    $("dashboard").dataset.atlasMode = mode;
+    const atlas = document.querySelector(".atlas");
+    if (atlas) atlas.dataset.atlasMode = mode;
+    document.querySelectorAll("[data-atlas-mode-button]").forEach(button => {
+      button.setAttribute("aria-pressed", String(button.dataset.atlasModeButton === mode));
+    });
+    if (mode === "research") $("report-reference-title")?.focus({preventScroll: true});
+  },
+
+  selectAtlas(id) {
+    const item = STATE.atlasSelections?.get(id);
+    if (!item) return;
+    $("inspector-title").textContent = "Trace detail";
+    const target = $("atlas-inspector-content");
+    const row = (label, value) => value ? `<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>` : "";
+    target.innerHTML = `<p class="inspector-category">${esc(item.category)}</p><h3>${esc(item.title)}</h3><p class="inspector-summary">${esc(item.summary)}</p><dl>${row("Source", item.source)}${row("Method", item.method)}${row("Inputs", item.inputs)}${row("Confidence category", item.confidence)}${row("Interpretation type", item.interpretation)}${row("Limitations", item.limitations)}</dl>${item.reportTarget ? `<button type="button" class="inspector-report-link" data-report-target="${esc(item.reportTarget)}">Open supporting report section</button>` : ""}`;
+    document.querySelectorAll("[data-link-keys]").forEach(element => {
+      const keys = (element.dataset.linkKeys || "").split(/\s+/).filter(Boolean);
+      element.classList.toggle("is-selected", element.dataset.atlasSelect === id);
+      element.classList.toggle("atlas-linked", item.links.some(link => keys.includes(link)));
+    });
+    $("atlas-selection-status").textContent = `${item.title} selected. Supporting method and provenance are now shown.`;
+    if (window.matchMedia("(max-width: 980px)").matches) document.querySelector(".atlas-inspector")?.scrollIntoView({behavior:"smooth", block:"nearest"});
+  },
+
+  toggleAtlasFullscreen(id) {
+    const panel = $(`atlas-${id}`);
+    if (!panel) return;
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+      return;
+    }
+    if (panel.classList.contains("is-expanded")) {
+      setAtlasFallback(panel, false);
+      return;
+    }
+    if (panel.requestFullscreen && (!navigator.userActivation || navigator.userActivation.isActive)) {
+      panel.requestFullscreen().catch(() => setAtlasFallback(panel, true));
+    }
+    else setAtlasFallback(panel, true);
+  },
+
   scrollToForm() {
     $("form-section").scrollIntoView({behavior: "smooth", block: "start"});
     $("name").focus({preventScroll: true});
@@ -654,7 +719,7 @@ Object.assign(app, {
     const submitButton = $("submit-btn");
     submitButton.disabled = true;
     submitButton.setAttribute("aria-busy", "true");
-    submitButton.textContent = "Creating your analysis…";
+    submitButton.textContent = "Calculating your atlas…";
     setSurface("landing", false);
     setSurface("form-section", false);
     setSurface("dashboard", false);
@@ -683,7 +748,7 @@ Object.assign(app, {
       STATE.submitting = false;
       submitButton.disabled = false;
       submitButton.removeAttribute("aria-busy");
-      submitButton.textContent = "Create my analysis";
+      submitButton.textContent = "Build my atlas";
       setSurface("processing", false);
     }
   },
@@ -752,6 +817,45 @@ function initEditorial() {
   updateWingOptions();
   syncAliasField();
   updateReviewSummary();
+  document.addEventListener("click", event => {
+    const expand = event.target.closest("[data-atlas-expand]");
+    if (expand) app.toggleAtlasFullscreen(expand.dataset.atlasExpand);
+    const mode = event.target.closest("[data-atlas-mode-button]");
+    if (mode) app.setAtlasMode(mode.dataset.atlasModeButton);
+    const selectable = event.target.closest("[data-atlas-select]");
+    if (selectable) app.selectAtlas(selectable.dataset.atlasSelect);
+    const reportLink = event.target.closest("[data-report-target]");
+    if (reportLink) {
+      app.setAtlasMode("research");
+      const section = $(reportLink.dataset.reportTarget);
+      section?.scrollIntoView({behavior:"smooth", block:"start"});
+      section?.querySelector("h2")?.setAttribute("tabindex", "-1");
+      section?.querySelector("h2")?.focus({preventScroll:true});
+    }
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      const expanded = document.querySelector(".atlas-panel.is-expanded");
+      if (expanded) {
+        event.preventDefault();
+        setAtlasFallback(expanded, false);
+        expanded.querySelector("[data-atlas-expand]")?.focus();
+        return;
+      }
+    }
+    const selectable = event.target.closest?.("[data-atlas-select]");
+    if (selectable && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
+      app.selectAtlas(selectable.dataset.atlasSelect);
+    }
+  });
+  document.addEventListener("fullscreenchange", () => {
+    document.querySelectorAll("[data-atlas-expand]").forEach(button => {
+      const active = document.fullscreenElement === button.closest(".atlas-panel");
+      button.setAttribute("aria-pressed", String(active));
+      button.textContent = active ? "Close" : "Fullscreen";
+    });
+  });
 }
 
 document.addEventListener("DOMContentLoaded", initEditorial);
