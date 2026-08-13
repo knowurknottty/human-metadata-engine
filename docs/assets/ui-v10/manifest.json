@@ -1,0 +1,157 @@
+{
+  "fixture": {
+    "exactBirth": {
+      "name": "Atlas Verification Fixture",
+      "date": "1985-06-15",
+      "time": "10:30",
+      "timezone": "America/Chicago",
+      "latitude": 41.8781,
+      "longitude": -87.6298
+    },
+    "nameOnly": {
+      "name": "Atlas Name-Only Fixture"
+    }
+  },
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+  "command": "HME_RUN_NETWORK_QA=1 node tools/capture_atlas_baselines.mjs",
+  "captures": [
+    {
+      "file": "desktop-overview.png",
+      "sha256": "0e05fc0eb502a501391605cf985450efbb3f47eae2418de34775ab07ef028908",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 77
+    },
+    {
+      "file": "desktop-astrology.png",
+      "sha256": "c231f8e7463ca288d6f1c4612f519005df07545cd1d02cb333a72c1bbf4be601",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 80
+    },
+    {
+      "file": "desktop-bodygraph.png",
+      "sha256": "9785a4211f152dbbb1268be54b6336e2fbaeac52395d150f379678f27dfaf9f7",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 66
+    },
+    {
+      "file": "desktop-constellation.png",
+      "sha256": "875b09313d9104691bce2f9b865b765486f15878a8aef459b24d10289c87dbaf",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 52
+    },
+    {
+      "file": "mobile-overview.png",
+      "sha256": "40b919fc89bd515f6a26f8346e8951ce332db9b7c3084857656a466c4e92367f",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 71
+    },
+    {
+      "file": "mobile-astrology.png",
+      "sha256": "00cf9e8acc7079c5e3b3a57174f67ec0d5df5e876acdc118fb5d25deb85163c4",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 31
+    },
+    {
+      "file": "mobile-bodygraph.png",
+      "sha256": "9f4d7bb9b7c4ef5286286bc596f0decf2866245af86cd787a9d3a7eda9bacd45",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 15
+    },
+    {
+      "file": "desktop-research.png",
+      "sha256": "db22e2e318d7990899ec51b121c6c6c09dce34d67c8fa9b76fa3aa769de02b7b",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 77
+    },
+    {
+      "file": "desktop-unavailable-name-only.png",
+      "sha256": "c150c9ff04741d25adde0b5302d5087e02514ed0aa1ef445c1ef70d1f83f642a",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 551
+    }
+  ],
+  "checks": {
+    "sixSurfaces": true,
+    "uniqueIds": true,
+    "selectionMatrix": [
+      {
+        "selector": ".system-node[data-atlas-select]",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".astro-planet",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".bodygraph-center",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".gate-chip.is-active",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".tree-node",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".numerology-row",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".fingerprint-stage",
+        "ok": true,
+        "selected": 1
+      }
+    ],
+    "accessibilityTree": {
+      "namedButtons": 169,
+      "calculatedRoot": true,
+      "gate": true,
+      "center": true,
+      "planet": true
+    },
+    "modeSwitch": true,
+    "fullscreenEscape": true,
+    "noHorizontalOverflow": {
+      "320": true,
+      "360": true,
+      "390": true,
+      "412": true,
+      "768": true
+    },
+    "print": true,
+    "printAction": true,
+    "markdownDownload": true,
+    "repeatedDeterminism": true,
+    "unavailableReplacement": true,
+    "unknownTime": true,
+    "startNewHidesCharts": true,
+    "hostileName": true,
+    "ambiguousLocation": true
+  }
+}

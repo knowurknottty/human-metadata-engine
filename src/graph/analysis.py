@@ -262,9 +262,9 @@ def score_identity_coherence(
             if all_exprs[i] == all_exprs[j]:
                 matches += 1
 
-    # Count soul/personality alignment
-    alias_souls_match = sum(1 for _ in alias_exprs if True)  # placeholder
-    project_souls_match = sum(1 for _ in project_exprs if True)
+    # The current graph contract supplies only alias/project expression values.
+    # Keep the historical birth soul/personality parameters for API
+    # compatibility, but do not invent matching values for the other nodes.
 
     if total_pairs == 0:
         return 0.0

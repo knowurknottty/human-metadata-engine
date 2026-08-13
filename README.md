@@ -2,25 +2,27 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v0.5.0** — Core encoder suite plus 25 provenance-aware symbolic extensions across four phases, cross-encoder analytics (composite resonance score, identity fingerprints, correlation matrices), graph algorithms, Knowledge Bubble export, and the **Identity Resonance web app** ($10-product storefront over the engine).
+**v1.0.0 visual knowledge interface** — The primary result is the Human Metadata Atlas: a linked workspace for six calculated surfaces, a shared provenance inspector, and the evidence-linked **Human Metadata Narrative** shown as **The Living Pattern**. Plain, Mythic, and Research narrative modes share one deterministic claim/evidence plan and change wording only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; the new `synthesis-evidence-v1`, `synthesis-plan-v1`, and `narrative-v1` contracts version independently. No remote model, checkout, or paid entitlement surface is present.
 
 ## Quick Start — Web App
 
 ```bash
-./deploy.sh                 # installs Swiss Ephemeris, runs 138 tests, serves :8000
+./deploy.sh                 # installs Swiss Ephemeris, runs the canonical test runner, serves :8000
 # or directly:
-python3 -m pip install -r requirements.txt && python3 webapp/server.py
+python3 -m pip install --require-hashes -r requirements.txt && python3 webapp/server.py
 ```
 
-Open http://localhost:8000 — enter a name (birth data unlocks astrology + Human Design; sliders/pickers unlock the psychology layer), get the free dashboard preview, and the simulated $10 Stripe checkout unlocks the full 3,000+ word ten-section report (downloadable as Markdown, printable to PDF).
+Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The result opens in the Atlas; every selectable mark exposes supporting values, method, source, confidence category, interpretation type, limitations, and a report link. Historical public-reference API input can still use `subject_type: "reference"`.
+
+Place lookup uses Open-Meteo's geocoding endpoint with a bounded timeout, one retry, and an in-process success cache. The place text is sent to that provider. Ambiguous matches return ranked choices; invalid places, provider failures, DST gaps, and DST folds return structured errors rather than guessed chart inputs. Location lookup requires network access. Explicit coordinates plus an IANA timezone work offline; a raw offset is accepted but labeled less reliable for historical calculations.
 
 **Deploying anywhere:** the app is a single Python process with one mandatory native dependency: the pinned `pyswisseph` Swiss Ephemeris extension for exact natal calculations. Use the repository Dockerfile or run `python3 -m pip install -r requirements.txt` before starting `python3 webapp/server.py`.
 
 ```bash
 # The repository Dockerfile builds pyswisseph in a GCC-enabled builder stage
 # and copies only the resulting wheel into the Python 3.12 runtime image.
-docker build -t identity-resonance .
-docker run --rm -p 8000:8080 identity-resonance
+docker build -t human-metadata-engine .
+docker run --rm -p 127.0.0.1:8000:8080 human-metadata-engine
 ```
 
 ## Architecture
@@ -29,12 +31,21 @@ docker run --rm -p 8000:8080 identity-resonance
 human-metadata-engine/
 ├── webapp/
 │   ├── server.py                    # Stdlib HTTP server (API + static)
-│   └── static/                      # Single-page dark-theme app (vendored Tailwind)
+│   └── static/                      # Framework-free visual knowledge interface
+│       ├── atlas.js                 # Visualization model and SVG renderers
+│       ├── app.js                   # Input, interaction, mode, and report controller
+│       └── styles.css               # Responsive/accessible presentation layer
 ├── src/
-│   ├── engine.py                    # Master orchestrator (v0.4.0)
-│   ├── analytics.py                 # Resonance score, fingerprints, correlations, similarity
+│   ├── engine.py                    # Master orchestrator (signature-v2)
+│   ├── analytics.py                 # Legacy/internal analytics compatibility contract
+│   ├── analytics_v2.py              # Public chance-corrected resonance contract
 │   ├── snapshot.py                  # Personality snapshot narratives
-│   ├── report.py                    # 10-section long-form report generator (3,000+ words)
+│   ├── report.py                    # Legacy/internal long-form compatibility formatter
+│   ├── report_safe.py               # Public truth-bounded Data/Magic report formatter
+│   ├── synthesis/                   # Evidence, ontology, motifs, plan, realization, verifier
+│   ├── public_contract.py           # Strict public validation and two-mode contract
+│   ├── birth_validation.py          # Canonical natal input validation
+│   ├── location_resolution.py       # Geocoding and historical timezone boundary
 │   ├── encoders/
 │   │   ├── pythagorean.py           # Pythagorean numerology (expression, soul urge, personality)
 │   │   ├── chaldean.py              # Chaldean numerology (ancient Babylonian, no master numbers)
@@ -53,20 +64,17 @@ human-metadata-engine/
 │   │   ├── analysis.py              # Centrality, communities, resonance
 │   │   └── algorithms.py            # PageRank, spectral clustering, HITS
 │   └── knowledge_bubble.py          # Knowledge Bubble export format
-├── tests/
-│   ├── test_pythagorean.py          # 17 tests
-│   ├── test_extended.py             # 24 tests
-│   ├── test_final.py                # 34 tests
-│   └── test_analytics.py            # 46 tests (v0.4.0 analytics)
+├── tests/                            # Unit, API, location, browser-contract, replay, and packaging checks
 ├── output/
 │   ├── unified_signatures.json      # generated signatures + analytics
 │   ├── encoder_correlations.json    # Pearson + digit-agreement matrices
-│   ├── comparative_report.{json,md} # Batch ranking + similarity report
+│   ├── comparative_report.{json,md} # Batch ranking + feature-agreement report
 │   ├── identity_graph.json          # 19 nodes, 25 edges
 │   └── graph_analysis.json          # PageRank, spectral, HITS
 └── schemas/
     ├── identity-signature.schema.json
-    └── identity-graph.schema.json
+    ├── identity-graph.schema.json
+    └── analysis-v1.{request,response}.json
 ```
 
 ## Core Encoder Suite
@@ -80,9 +88,36 @@ human-metadata-engine/
 | **Binary/Prime** | Encoding | 9 | Vowel/consonant binary string, prime-index mapping |
 | **Gematria** | Hebrew | 7 | Absolute + ordinal totals, Latin-to-Hebrew mapping |
 | **Isopsephy** | Greek | 5 | Digital root chain, Latin-to-Greek correspondence |
-| **Astrology** | Tropical | 20+ | Sun/Moon/Ascendant, 10 planets, aspects, houses |
+| **Astrology** | Tropical | 20+ | Sun/Moon/Ascendant, 10 planets, aspects, and Placidus house cusps/assignments |
 | **Human Design** | Gene Keys | 15+ | Type, strategy, 64 gates, channels, centers, profile |
 | **Psychology** | User-supplied | 20+ | Big Five, MBTI, Enneagram, attachment style |
+
+### Know Thyself profile model
+
+The public psychology form separates different kinds of self-report rather than
+presenting them as one equivalent personality score:
+
+- **Core cognition and motivation:** MBTI, Enneagram core type, adjacent wing,
+  optional secondary pattern, and instinctual variant.
+- **Relational patterns:** attachment style, preserved under the legacy
+  `attachment` field and also exposed as `relational_patterns.attachment_style`.
+- **Self-regulation:** optional conflict-style self-observation.
+
+Secondary Enneagram patterns are displayed as `Type N influence`; they are not a
+second core type. “Fix,” “trifix,” and “tritype” terminology is not standardized
+across schools. Assessment metadata uses `validated`, `structured`,
+`self_identified`, `provisional`, or `unknown` and never upgrades an unknown
+value into a validated result. Legacy attachment values continue to load without
+destructive migration because the public API is process-local and does not persist
+profile records; compatibility is handled at validation and serialization time.
+The canonical attachment path is `relational_patterns.attachment_style`. A
+legacy-only payload is copied into that path; a canonical-only payload receives
+the deprecated top-level alias for older consumers; if both are supplied they
+must match exactly, otherwise the request is rejected rather than resolved by
+silent precedence.
+
+These frameworks describe different dimensions of self-understanding. They are
+reflective tools, not clinical diagnoses.
 
 ## Quick Start
 
@@ -106,7 +141,7 @@ print(f"Dimensions: {sig['dimensions']}")
 print(f"Encoders: {list(sig['encoders'].keys())}")
 ```
 
-## Cross-Encoder Analytics (v0.4.0)
+## Cross-Encoder Analytics
 
 Second-order analysis computed on top of the unified signatures:
 
@@ -114,11 +149,12 @@ Second-order analysis computed on top of the unified signatures:
 |---------|-------------|
 | **Composite Resonance Score** | 0–100 metric: 35% numerological convergence + 25% linguistic harmony + 20% polarity balance + 20% symbolic depth (formula documented in `src/analytics.py`) |
 | **Identity Fingerprint** | Deterministic visual hash: SHA-256-derived seed, n-fold symmetry from the expression number, one spoke per encoder, vowel/consonant binary ring |
-| **Correlation Matrices** | Pearson over raw magnitudes + digit-agreement rates between the five digit-producing systems |
-| **Similarity Space** | 14-dimensional normalized feature vectors, cosine similarity, nearest neighbors |
+| **Correlation Matrices** | Pearson over raw magnitudes + digit-agreement rates with the mathematically coupled ordinal root excluded |
+| **Feature Agreement** | 14-feature comparison: eight independent reduced-digit categories match exactly and six continuous features use fixed tolerances; it is not person-level similarity |
 | **Batch Reports** | Comparative ranking of any identity set (markdown + JSON) |
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
-| **Long-Form Reports** | 10-section, 3,000+ word written analysis per identity (`src/report.py`) |
+| **Public Reports** | Concise Data mode or a ten-section truth-bounded Magic report with per-section epistemic metadata (`src/report_safe.py`) |
+| **Human Metadata Narrative** | Deterministic evidence extraction, project-authored motif normalization, independent-group agreement, preserved contradictions, and evidence-linked Plain/Mythic/Research realization (`src/synthesis/`) |
 
 Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
 
@@ -204,7 +240,7 @@ The engine ships with 20 self-contained invention modules:
 9. **Human Design** — Type, strategy, authority (requires birth data)
 
 ### Analytics & Search (3)
-10. **Identity Search** — Cosine similarity search across all signatures
+10. **Identity Search** — Feature-agreement search across the declared 14-feature schema
 11. **Signature Diff** — Dimension-by-dimension comparison of two identities
 12. **Clustering** — Unsupervised hierarchical grouping of identities
 
@@ -240,27 +276,24 @@ python3 -m src.cli anomaly
 python3 -m src.cli export --format csv
 python3 -m src.cli stats
 
-# Start API server
+# Start the legacy API only for loopback compatibility work; it is not the public surface.
 python3 -m src.api
 ```
 
 ## Test Coverage
 
-```
-test_pythagorean.py:  17 tests (Pythagorean numerology)
-test_extended.py:     24 tests (Chaldean, Ordinal, Linguistic, Binary/Prime)
-test_final.py:        34 tests (Gematria, Isopsephy, exact astrology, HD, Psychology, Graph)
-test_analytics.py:    46 tests (Resonance, fingerprints, correlations, reports)
-test_symbolic_*.py:   16 tests (roadmap, Unicode, provenance, detail surface)
-test_ephemeris_packaging.py: 1 test (Docker/deploy/CI contract)
-─────────────────────────────────────────────────────────────────
-Total:               138 tests, 100% passing
-```
+The repository contains unit, API contract, frontend contract, golden-vector,
+security regression, report-structure, location-fixture, packaging, and
+deterministic replay tests. The canonical runner discovers every
+`tests/test_*.py` file and reports its current file count; product copy does not
+hardcode a stale test total. Standard pytest is also supported through a bridge
+that executes the historical script suites in isolated processes.
 
 ## Dependencies
 
-- Python 3.9+
+- Python 3.12 (matches CI and the container image)
 - `pyswisseph==2.10.3.2` *(mandatory)* — Swiss Ephemeris for exact astrology and Human Design; see [third-party notice](THIRD_PARTY_NOTICES.md)
+- Development/test dependencies are pinned with hashes in `requirements-dev.txt`.
 
 ## Usage
 
@@ -269,10 +302,11 @@ Total:               138 tests, 100% passing
 python3 src/engine.py
 
 # Run all tests
-python3 tests/test_pythagorean.py
-python3 tests/test_extended.py
-python3 tests/test_final.py
-python3 tests/test_analytics.py
+python3 -m pip install --require-hashes -r requirements-dev.txt
+python3 tools/run_tests.py --quiet
+python3 -m pytest -q
+python3 tools/validate_contracts.py
+node --check webapp/static/app.js
 
 # Run graph algorithms
 python3 src/graph/algorithms.py output/identity_graph.json
@@ -283,6 +317,47 @@ python3 src/knowledge_bubble.py
 # Serve the web app
 python3 webapp/server.py       # or ./deploy.sh
 ```
+
+## Public API and operations
+
+`POST /api/analyze` accepts the canonical `analysis-v1` request. Unknown fields
+are rejected. JSON must use `Content-Type: application/json`, bodies are capped
+at 64 KiB, and errors contain a stable `code` plus a human-readable `message`.
+Names and aliases are bounded and markup/control characters are rejected.
+
+```bash
+curl -sS http://127.0.0.1:8000/api/analyze \
+  -H 'Content-Type: application/json' \
+  --data '{"name":"Ada Lovelace","aliases":["Ada King"],"mode":"data"}'
+
+curl -sS http://127.0.0.1:8000/healthz
+curl -sS http://127.0.0.1:8000/readyz
+curl -sS http://127.0.0.1:8000/api/version
+```
+
+`/healthz` proves that the process is alive. `/readyz` and the backward-compatible
+`/api/health` prove that Swiss Ephemeris and the reference population loaded.
+`/api/version` reports application, schema, engine, build, ephemeris, and feature
+versions without exposing host details.
+
+The public web process does not intentionally persist profile requests and
+redacts raw birth location, coordinates, and observation text from public
+outputs. The normalized date/time is returned so the user can verify what was
+calculated. Browser, network, reverse-proxy, and infrastructure logs
+remain outside that guarantee. Request logs contain method/path/status only, not
+request bodies. See [DEPLOYMENT.md](DEPLOYMENT.md) and
+[docs/RELEASE_GATES.md](docs/RELEASE_GATES.md) for deployment and release truth.
+
+## Reproducibility and provenance
+
+Each analysis returns an input-derived reproducibility ID, build revision,
+engine version, schema version, convention-set version, evidence model, and
+machine-readable metadata for every public report section. Same normalized
+inputs, as-of year, engine version, and convention set produce the same
+deterministic calculations. This establishes reproducibility, not scientific
+validation of symbolic interpretation. The public server deliberately uses
+`analytics_v2.py` and `report_safe.py`; `analytics.py` and `report.py` remain
+documented compatibility contracts for internal/legacy callers.
 
 ## Disclaimer
 

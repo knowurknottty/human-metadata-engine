@@ -29,7 +29,6 @@ New in v0.4.0 (second-order analytics on top of the encoders):
 import sys
 import os
 import json
-from datetime import datetime, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -163,10 +162,78 @@ IDENTITIES = [
 ]
 
 
-def compute_unified_signature(identity: dict) -> dict:
-    """Run all encoders and produce a unified multi-dimensional signature."""
+def _encoder_is_available(value: object) -> bool:
+    """Return whether an encoder record contributes public measurements."""
+    return (
+        isinstance(value, dict)
+        and not value.get("error")
+        and value.get("available", True) is not False
+    )
+
+
+def available_encoder_names(signature: dict) -> list[str]:
+    """Return encoder keys that contain usable output, excluding explicit stubs."""
+    encoders = signature.get("encoders", {})
+    return [
+        key for key, value in encoders.items()
+        if _encoder_is_available(value)
+    ]
+
+
+def count_signature_dimensions(signature: dict, *, include_unavailable: bool = False) -> int:
+    """Count dimensions from the final signature shape.
+
+    This is deliberately computed after public overrides (for example the
+    chance-corrected resonance object and an unavailable Human Design record)
+    so the displayed count cannot describe an intermediate result. By default
+    unavailable layers are excluded; the public response can opt into the
+    serialized-surface count so its displayed total matches the returned keys.
+    """
+    total = 0
+    for name, encoder in signature.get("encoders", {}).items():
+        if not isinstance(encoder, dict) or encoder.get("error"):
+            continue
+        if not include_unavailable and not _encoder_is_available(encoder):
+            continue
+        if name == "astrology":
+            # Astrology historically exposes 20 contract dimensions even though
+            # its serialized dictionary has 19 keys.
+            total += 20
+        elif isinstance(encoder, dict) and isinstance(encoder.get("data"), dict):
+            total += len(encoder["data"])
+        elif isinstance(encoder, dict):
+            total += len(encoder)
+        elif hasattr(encoder, "__len__"):
+            total += len(encoder)
+
+    resonance = signature.get("resonance") or {}
+    components = resonance.get("components") if isinstance(resonance, dict) else None
+    total += (len(components) if isinstance(components, dict) else 0) + 1
+    fingerprint = signature.get("fingerprint") or {}
+    spokes = fingerprint.get("spokes") if isinstance(fingerprint, dict) else None
+    total += (len(spokes) if isinstance(spokes, list) else 0) + 2
+    return total
+
+
+def compute_unified_signature(
+    identity: dict,
+    *,
+    resonance_fn=None,
+    snapshot_fn=personality_snapshot,
+    human_design_fn=None,
+) -> dict:
+    """Run all encoders and produce a unified multi-dimensional signature.
+
+    ``resonance_fn``, ``snapshot_fn``, and ``human_design_fn`` are injectable so the public API can
+    use its corrected resonance contract and build exactly one final snapshot
+    after public sanitization. Defaults preserve the legacy engine behavior
+    for CLI and library callers.
+    """
     text = identity["text"]
     birth = identity.get("birth")
+    birth_time_known = bool(
+        birth and birth.get("time_accuracy", "provided") in {"provided", "exact"}
+    )
 
     # Core 7 encoders (always available)
     pyth = pythagorean_signature(text)
@@ -180,7 +247,8 @@ def compute_unified_signature(identity: dict) -> dict:
     result = {
         "id": identity["id"],
         "text": text,
-        "computed_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+        "contract_version": "signature-v2",
+        "determinism": "canonical-result-v1",
         "dimensions": 0,
         "encoders": {
             "pythagorean": {
@@ -271,15 +339,6 @@ def compute_unified_signature(identity: dict) -> dict:
         as_of_year=identity.get("as_of_year"),
     ))
 
-    # Count dimensions
-    dim_count = 0
-    for enc in result["encoders"].values():
-        if isinstance(enc, dict) and isinstance(enc.get("data"), dict):
-            dim_count += len(enc["data"])
-        else:
-            dim_count += len(enc)
-    result["dimensions"] = dim_count
-
     # Optional: Astrology (requires birth data)
     if birth and HAS_Astrology:
         try:
@@ -291,86 +350,115 @@ def compute_unified_signature(identity: dict) -> dict:
             )
             result["encoders"]["astrology"] = {
                 "sun_sign": chart.sun_sign,
-                "moon_sign": chart.moon_sign,
-                "ascendant": chart.ascendant,
-                "midheaven": chart.midheaven,
-                "chart_ruler": chart.chart_ruler,
-                "dominant_element": chart.dominant_element,
-                "dominant_modality": chart.dominant_modality,
-                "element_counts": chart.element_counts,
-                "modality_counts": chart.modality_counts,
-                "yin_yang_balance": chart.yin_yang_balance,
-                "lunar_phase": chart.lunar_phase,
-                "is_waxing": chart.is_waxing,
+                # A date does not establish a reliable Moon placement, houses,
+                # aspects, element balance, or any angle.  The noon calculation
+                # is used only to obtain a date-level solar reference.
+                "moon_sign": chart.moon_sign if birth_time_known else None,
+                "ascendant": chart.ascendant if birth_time_known else None,
+                "ascendant_longitude": chart.ascendant_longitude if birth_time_known else None,
+                "midheaven": chart.midheaven if birth_time_known else None,
+                "midheaven_longitude": chart.midheaven_longitude if birth_time_known else None,
+                "house_system": chart.house_system if birth_time_known else None,
+                "house_cusps": chart.house_cusps if birth_time_known else [],
+                "chart_ruler": chart.chart_ruler if birth_time_known else None,
+                "dominant_element": chart.dominant_element if birth_time_known else None,
+                "dominant_modality": chart.dominant_modality if birth_time_known else None,
+                "element_counts": chart.element_counts if birth_time_known else {},
+                "modality_counts": chart.modality_counts if birth_time_known else {},
+                "yin_yang_balance": chart.yin_yang_balance if birth_time_known else {},
+                "lunar_phase": chart.lunar_phase if birth_time_known else None,
+                "is_waxing": chart.is_waxing if birth_time_known else None,
                 "planets": [
                     {"planet": p.planet, "sign": p.sign, "degree": round(p.sign_degree, 2),
+                     "house": p.house if birth_time_known else None,
                      "retrograde": p.is_retrograde}
                     for p in chart.planets
+                    if birth_time_known or p.planet == "Sun"
                 ],
                 "aspects": [
                     {"planets": (a.planet1, a.planet2), "type": a.aspect_name,
                      "exact": a.exact, "orb": round(a.orb, 2)}
                     for a in chart.aspects[:15]
-                ],
-                "confidence": chart.confidence,
+                ] if birth_time_known else [],
+                "confidence": chart.confidence if birth_time_known else min(chart.confidence, 0.4),
                 "calculation_engine": chart.calculation_engine,
+                "time_accuracy": birth.get("time_accuracy", "provided"),
+                "time_sensitive_fields_withheld": not birth_time_known,
+                "date_only": not birth_time_known,
             }
-            dim_count += 20
         except Exception as e:
             result["encoders"]["astrology"] = {"error": str(e)}
 
     # Optional: Human Design (requires birth data)
-    if birth and HAS_HumanDesign:
+    if birth and HAS_HumanDesign and birth_time_known:
         try:
-            hd = compute_human_design(
-                birth["year"], birth["month"], birth["day"],
-                birth["hour"], birth["minute"],
-                birth["timezone_offset"], birth["location"],
-                lat=birth.get("lat"), lon=birth.get("lon"),
-            )
-            result["encoders"]["human_design"] = {
-                "type": hd.hd_type,
-                "strategy": hd.strategy,
-                "authority": hd.authority,
-                "profile": list(hd.profile_number),
-                "profile_description": hd.profile_description,
-                "not_self_theme": hd.not_self_theme,
-                "signature": hd.signature,
-                "definition": hd.definition_type,
-                "incarnation_cross": hd.incarnation_cross,
-                "personality_gates": [
-                    {"gate": g.gate, "line": g.line, "planet": g.planet, "sign": g.sign}
-                    for g in hd.personality_gates
-                ],
-                "design_gates": [
-                    {"gate": g.gate, "line": g.line, "planet": g.planet}
-                    for g in hd.design_gates
-                ],
-                "channels": hd.channels,
-                "centers": [
-                    {"name": c.name, "defined": c.defined}
-                    for c in hd.centers
-                ],
-                "gates": hd.all_gates,
-                "confidence": hd.confidence,
-            }
-            dim_count += 15
+            if human_design_fn is not None:
+                result["encoders"]["human_design"] = human_design_fn(
+                    birth,
+                    subject_id=identity.get("id"),
+                )
+            else:
+                hd = compute_human_design(
+                    birth["year"], birth["month"], birth["day"],
+                    birth["hour"], birth["minute"],
+                    birth["timezone_offset"], birth["location"],
+                    lat=birth.get("lat"), lon=birth.get("lon"),
+                )
+                result["encoders"]["human_design"] = {
+                    "type": hd.hd_type,
+                    "strategy": hd.strategy,
+                    "authority": hd.authority,
+                    "profile": list(hd.profile_number),
+                    "profile_description": hd.profile_description,
+                    "not_self_theme": hd.not_self_theme,
+                    "signature": hd.signature,
+                    "definition": hd.definition_type,
+                    "incarnation_cross": hd.incarnation_cross,
+                    "personality_gates": [
+                        {"gate": g.gate, "line": g.line, "planet": g.planet, "sign": g.sign}
+                        for g in hd.personality_gates
+                    ],
+                    "design_gates": [
+                        {"gate": g.gate, "line": g.line, "planet": g.planet}
+                        for g in hd.design_gates
+                    ],
+                    "channels": hd.channels,
+                    "centers": [
+                        {"name": c.name, "defined": c.defined}
+                        for c in hd.centers
+                    ],
+                    "gates": hd.all_gates,
+                    "confidence": hd.confidence,
+                }
         except Exception as e:
             result["encoders"]["human_design"] = {"error": str(e)}
+    elif birth and HAS_HumanDesign:
+        if human_design_fn is not None:
+            result["encoders"]["human_design"] = {
+                "available": False,
+                "status": "unavailable_uncertain_birth_time",
+                "unavailable": "A known birth time with precise time_accuracy is required for Human Design output.",
+                "time_accuracy": birth.get("time_accuracy", "unknown"),
+                "epistemic_class": "symbolic-unavailable",
+            }
+        else:
+            result["encoders"]["human_design"] = {
+                "unavailable": "A known birth time is required for Human Design output.",
+                "time_accuracy": birth.get("time_accuracy", "unknown"),
+            }
 
     # Second-order analytics (v0.4.0)
-    result["resonance"] = composite_resonance(result)
+    result["resonance"] = (resonance_fn or composite_resonance)(result)
     result["fingerprint"] = identity_fingerprint(result)
-    result["snapshot"] = personality_snapshot(
-        text,
-        astrology=result["encoders"].get("astrology"),
-        human_design=result["encoders"].get("human_design"),
-        psychology=identity.get("psychology"),
-    )
-    dim_count += len(result["resonance"]["components"]) + 1  # score + components
-    dim_count += len(result["fingerprint"]["spokes"]) + 2    # spokes + hash + symmetry
+    if snapshot_fn is not None:
+        result["snapshot"] = snapshot_fn(
+            text,
+            astrology=result["encoders"].get("astrology"),
+            human_design=result["encoders"].get("human_design"),
+            psychology=identity.get("psychology"),
+        )
 
-    result["dimensions"] = dim_count
+    result["dimensions"] = count_signature_dimensions(result)
     return result
 
 

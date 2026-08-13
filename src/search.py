@@ -2,20 +2,21 @@
 Identity Similarity Search
 ==========================
 
-Find identities most similar to a given one using precomputed
-cosine similarity vectors.
+Find identities with the most agreement on the declared feature schema.
 
 Usage:
     from src.search import IdentitySearch
     search = IdentitySearch.from_signatures("output/unified_signatures.json")
     results = search.find_similar("Captain", top_n=5)
 """
+from __future__ import annotations
 
 import json
-import math
 import os
 from dataclasses import dataclass, field
 from typing import Optional
+
+from analytics import FEATURE_ORDER, feature_agreement, feature_vector
 
 
 @dataclass
@@ -29,10 +30,12 @@ class SearchResult:
 class IdentitySearch:
     """Precomputed identity similarity index for fast lookup."""
 
-    def __init__(self, feature_vectors: dict, feature_keys: list):
+    def __init__(self, feature_vectors: dict, feature_keys: list,
+                 pattern_vectors: dict | None = None):
         self.feature_keys = feature_keys
         self.vectors = {}
         self.identities = list(feature_vectors.keys())
+        self.pattern_vectors = pattern_vectors or {}
         for identity, vec in feature_vectors.items():
             self.vectors[identity] = vec
 
@@ -48,16 +51,15 @@ class IdentitySearch:
         else:
             sigs = data
 
-        # Extract feature vectors
-        feature_keys = set()
+        # Comparison uses the same 14 explicit features as the web product.
+        # Keep the older flattened values only for range-pattern search.
         feature_vectors = {}
+        pattern_vectors = {}
         for identity, sig in sigs.items():
-            vec = _extract_vector(sig)
-            feature_vectors[identity] = vec
-            feature_keys.update(vec.keys())
+            feature_vectors[identity] = feature_vector(sig)
+            pattern_vectors[identity] = _extract_vector(sig)
 
-        feature_keys = sorted(feature_keys)
-        return cls(feature_vectors, feature_keys)
+        return cls(feature_vectors, FEATURE_ORDER, pattern_vectors)
 
     def find_similar(self, identity: str, top_n: int = 5) -> list:
         """Find top-N most similar identities."""
@@ -69,7 +71,7 @@ class IdentitySearch:
         for other_id, other_vec in self.vectors.items():
             if other_id == identity:
                 continue
-            score = _cosine_similarity(query_vec, other_vec)
+            score = feature_agreement(query_vec, other_vec)
             scores.append((other_id, score))
 
         scores.sort(key=lambda x: x[1], reverse=True)
@@ -83,11 +85,11 @@ class IdentitySearch:
         return results
 
     def find_twins(self, threshold: float = 0.90) -> list:
-        """Find all identity pairs above similarity threshold."""
+        """Find pairs above an encoder-output agreement threshold."""
         pairs = []
         for i, id_a in enumerate(self.identities):
             for id_b in self.identities[i + 1:]:
-                score = _cosine_similarity(self.vectors[id_a], self.vectors[id_b])
+                score = feature_agreement(self.vectors[id_a], self.vectors[id_b])
                 if score >= threshold:
                     pairs.append((id_a, id_b, round(score, 6)))
         pairs.sort(key=lambda x: x[2], reverse=True)
@@ -99,7 +101,7 @@ class IdentitySearch:
         pattern: {"pythagorean_expression": (1, 9), "linguistic_syllables": (2, 4)}
         """
         results = []
-        for identity, vec in self.vectors.items():
+        for identity, vec in self.pattern_vectors.items():
             match = True
             for key, (low, high) in pattern.items():
                 val = vec.get(key, 0)
@@ -130,16 +132,3 @@ def _extract_vector(sig: dict) -> dict:
         if isinstance(val, (int, float)):
             vec[f"analytics_{key}"] = float(val)
     return vec
-
-
-def _cosine_similarity(a: dict, b: dict) -> float:
-    """Cosine similarity between two sparse vectors."""
-    keys = set(a.keys()) & set(b.keys())
-    if not keys:
-        return 0.0
-    dot = sum(a[k] * b[k] for k in keys)
-    mag_a = math.sqrt(sum(a[k] ** 2 for k in keys))
-    mag_b = math.sqrt(sum(b[k] ** 2 for k in keys))
-    if mag_a == 0 or mag_b == 0:
-        return 0.0
-    return dot / (mag_a * mag_b)

@@ -60,6 +60,20 @@ class IdentityDB:
                 method TEXT,
                 created_at REAL DEFAULT (strftime('%s','now'))
             );
+            CREATE TABLE IF NOT EXISTS reference_figures (
+                qid TEXT PRIMARY KEY,
+                name TEXT NOT NULL,
+                metadata TEXT NOT NULL,
+                source_revision INTEGER,
+                refreshed_at REAL DEFAULT (strftime('%s','now'))
+            );
+            CREATE TABLE IF NOT EXISTS reference_signatures (
+                qid TEXT PRIMARY KEY REFERENCES reference_figures(qid),
+                signature TEXT NOT NULL,
+                feature_vector TEXT NOT NULL,
+                engine_revision TEXT NOT NULL,
+                created_at REAL DEFAULT (strftime('%s','now'))
+            );
         """)
         self.conn.commit()
 
@@ -83,6 +97,49 @@ class IdentityDB:
             (name, json.dumps(sig, default=self._json_default), score, fp_hash),
         )
         self.conn.commit()
+
+    def store_reference_signature(self, record: dict, sig: dict,
+                                  vector: list[float], engine_revision: str,
+                                  *, commit: bool = True):
+        """Persist source metadata and the exact signature used for comparison."""
+        self.conn.execute(
+            """INSERT OR REPLACE INTO reference_figures
+               (qid, name, metadata, source_revision, refreshed_at)
+               VALUES (?, ?, ?, ?, strftime('%s','now'))""",
+            (
+                record["qid"], record["text"],
+                json.dumps(record, sort_keys=True, default=self._json_default),
+                record.get("provenance", {}).get("wikidata_revision"),
+            ),
+        )
+        self.conn.execute(
+            """INSERT OR REPLACE INTO reference_signatures
+               (qid, signature, feature_vector, engine_revision, created_at)
+               VALUES (?, ?, ?, ?, strftime('%s','now'))""",
+            (
+                record["qid"], json.dumps(sig, default=self._json_default),
+                json.dumps(vector), engine_revision,
+            ),
+        )
+        if commit:
+            self.conn.commit()
+
+    def prune_reference_population(self, qids: list[str], *, commit: bool = True):
+        """Remove records no longer present in the current catalog refresh."""
+        if not qids:
+            self.conn.execute("DELETE FROM reference_signatures")
+            self.conn.execute("DELETE FROM reference_figures")
+        else:
+            placeholders = ",".join("?" for _ in qids)
+            self.conn.execute(f"DELETE FROM reference_signatures WHERE qid NOT IN ({placeholders})", qids)
+            self.conn.execute(f"DELETE FROM reference_figures WHERE qid NOT IN ({placeholders})", qids)
+        if commit:
+            self.conn.commit()
+
+    def reference_stats(self) -> dict:
+        figures = self.conn.execute("SELECT COUNT(*) FROM reference_figures").fetchone()[0]
+        signatures = self.conn.execute("SELECT COUNT(*) FROM reference_signatures").fetchone()[0]
+        return {"reference_figures": figures, "reference_signatures": signatures}
 
     def get_signature(self, name: str) -> Optional[dict]:
         row = self.conn.execute("SELECT signature FROM signatures WHERE name = ?", (name,)).fetchone()

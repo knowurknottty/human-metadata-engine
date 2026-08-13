@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Identity Resonance AnalysisRequest v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name"],
+  "properties": {
+    "name": {"type": "string", "minLength": 1, "maxLength": 120},
+    "aliases": {"type": "array", "maxItems": 12, "uniqueItems": true, "items": {"type": "string", "minLength": 1, "maxLength": 120}},
+    "mode": {"type": "string", "enum": ["data", "magic"], "default": "data"},
+    "subject_type": {"type": "string", "enum": ["self", "reference"], "default": "self"},
+    "as_of_year": {"type": "integer", "minimum": 1},
+    "birth": {"$ref": "#/$defs/birth"},
+    "psychology": {"$ref": "#/$defs/psychology"},
+    "user_reported_human_design_type": {"type": "string", "enum": ["Manifestor", "Generator", "Manifesting Generator", "Projector", "Reflector"]},
+    "lineage_surnames": {"type": "array", "maxItems": 12, "items": {"type": "string", "minLength": 1, "maxLength": 120}},
+    "observations": {"type": "array", "maxItems": 40, "items": {"$ref": "#/$defs/observation"}},
+    "constellation": {"type": "object"}
+  },
+  "$defs": {
+    "birth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["year", "month", "day"],
+      "anyOf": [
+        {"required": ["location"]},
+        {"required": ["lat", "lon", "timezone_name"]},
+        {"required": ["lat", "lon", "timezone_offset"]}
+      ],
+      "properties": {
+        "year": {"type": "integer"}, "month": {"type": "integer", "minimum": 1, "maximum": 12},
+        "day": {"type": "integer", "minimum": 1, "maximum": 31},
+        "hour": {"type": "integer", "minimum": 0, "maximum": 23},
+        "minute": {"type": "integer", "minimum": 0, "maximum": 59},
+        "timezone_offset": {"type": "number", "minimum": -14, "maximum": 14},
+        "time_accuracy": {"type": "string", "enum": ["unknown", "hour_only", "approximate", "exact"]},
+        "location": {"type": "string", "minLength": 2, "maxLength": 160},
+        "lat": {"type": "number", "minimum": -90, "maximum": 90},
+        "lon": {"type": "number", "minimum": -180, "maximum": 180},
+        "timezone_name": {"type": "string", "minLength": 1, "maxLength": 120}
+      }
+    },
+    "psychology": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "big_five": {"type": "object", "minProperties": 1, "additionalProperties": false, "properties": {
+          "openness": {"type": "number", "minimum": 0, "maximum": 1},
+          "conscientiousness": {"type": "number", "minimum": 0, "maximum": 1},
+          "extraversion": {"type": "number", "minimum": 0, "maximum": 1},
+          "agreeableness": {"type": "number", "minimum": 0, "maximum": 1},
+          "neuroticism": {"type": "number", "minimum": 0, "maximum": 1}
+        }},
+        "mbti": {"type": "string", "pattern": "^[EI][NS][TF][JP]$"},
+        "enneagram": {"type": "object", "additionalProperties": false, "properties": {"type": {"type": "integer", "minimum": 1, "maximum": 9}, "wing": {"type": ["integer", "null"], "minimum": 1, "maximum": 9}}},
+        "attachment": {"$ref": "#/$defs/attachment"},
+        "relational_patterns": {"type": "object", "additionalProperties": false, "properties": {"attachment_style": {"$ref": "#/$defs/attachment"}}},
+        "secondary_enneagram_influence": {"anyOf": [{"type": "integer", "minimum": 1, "maximum": 9}, {"type": "null"}, {"const": "unknown"}]},
+        "secondaryEnneagramInfluence": {"anyOf": [{"type": "integer", "minimum": 1, "maximum": 9}, {"type": "null"}, {"const": "unknown"}]},
+        "instinctual_variant": {"type": "string", "enum": ["self_preservation", "social", "one_to_one", "sp_so", "sp_sx", "so_sp", "so_sx", "sx_sp", "sx_so", "unknown"]},
+        "instinctualVariant": {"type": "string", "enum": ["self_preservation", "social", "one_to_one", "sp_so", "sp_sx", "so_sp", "so_sx", "sx_sp", "sx_so", "unknown"]},
+        "conflict_style": {"type": "string", "enum": ["direct", "collaborative", "accommodating", "avoidant", "competitive", "context_dependent", "unknown"]},
+        "conflictStyle": {"type": "string", "enum": ["direct", "collaborative", "accommodating", "avoidant", "competitive", "context_dependent", "unknown"]},
+        "assessment_status": {"$ref": "#/$defs/assessment_status_map"},
+        "assessmentStatus": {"$ref": "#/$defs/assessment_status_map"}
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["text"],
+      "properties": {
+        "text": {"type": "string", "minLength": 1, "maxLength": 500},
+        "source": {"type": "string", "maxLength": 80},
+        "confidence": {"type": "string", "enum": ["unrated", "low", "medium", "high"]},
+        "occurred_at": {"type": ["string", "null"], "maxLength": 40}
+      }
+    },
+    "attachment": {
+      "type": "string",
+      "enum": ["secure", "anxious", "avoidant", "disorganized", "fearful_avoidant", "anxious_preoccupied", "dismissive_avoidant", "mixed_context_dependent", "unknown"]
+    },
+    "assessment_status": {
+      "type": "object",
+      "propertyNames": {"enum": ["big_five", "mbti", "enneagram", "wing", "secondary_enneagram_influence", "instinctual_variant", "attachment", "conflict_style", "secondaryEnneagramInfluence", "instinctualVariant", "attachmentStyle", "conflictStyle"]},
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {"type": "string", "enum": ["validated", "structured", "self_identified", "provisional", "unknown"]},
+          "assessed_at": {"type": ["string", "null"], "maxLength": 40},
+          "source": {"type": ["string", "null"], "maxLength": 120},
+          "notes": {"type": ["string", "null"], "maxLength": 500}
+        }
+      }
+    }
+  }
+}

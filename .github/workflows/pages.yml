@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Build static Pages artifact
         env:
@@ -34,11 +34,12 @@ jobs:
 
           # Project Pages is hosted below /human-metadata-engine/, so root-absolute
           # asset URLs must become document-relative.
-          sed -i 's|src="/vendor/|src="./vendor/|g; s|href="/styles.css"|href="./styles.css"|g; s|src="/app.js"|src="./app.js"|g' dist/index.html
+          sed -i 's|src="/vendor/|src="./vendor/|g; s|href="/styles.css"|href="./styles.css"|g; s|src="/app.js|src="./app.js|g' dist/index.html
 
           python3 - <<'PY'
           import json
           import os
+          import re
           from pathlib import Path
 
           origin = os.environ.get("HME_API_ORIGIN", "").rstrip("/")
@@ -68,20 +69,28 @@ jobs:
             }};
           }})();
           </script>'''
-          html = html.replace('<script src="./app.js"></script>', bridge + '\n<script src="./app.js"></script>')
+          script_pattern = r'<script src="(\./app\.js(?:\?[^\"]*)?)"></script>'
+          html, replacements = re.subn(
+              script_pattern,
+              lambda match: bridge + f'\n<script src="{match.group(1)}"></script>',
+              html,
+              count=1,
+          )
+          if replacements != 1:
+              raise SystemExit("Expected exactly one document-relative app.js script tag.")
           path.write_text(html, encoding="utf-8")
           PY
 
           touch dist/.nojekyll
 
       - name: Configure Pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: dist
 
       - name: Deploy
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

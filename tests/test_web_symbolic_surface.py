@@ -1,4 +1,4 @@
-"""Guard the public dashboard copy and extension-summary surface."""
+"""Guard the public editorial report and symbolic-method surface."""
 
 from __future__ import annotations
 
@@ -10,20 +10,50 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class WebSymbolicSurfaceTests(unittest.TestCase):
-    def test_dashboard_renders_provenanced_extension_summary(self):
+    def test_atlas_promotes_deterministic_graphic_without_biometric_claims(self):
         with open(os.path.join(ROOT, "webapp", "static", "app.js"), encoding="utf-8") as handle:
             source = handle.read()
-        self.assertIn("Expanded Symbolic Systems", source)
-        self.assertIn("extension.provenance.convention", source)
-        self.assertIn("extension.interpretation_level", source)
-        self.assertNotIn(".slice(0, 3)", source)
-        self.assertNotIn("max-h-96", source)
+        with open(os.path.join(ROOT, "webapp", "static", "atlas.js"), encoding="utf-8") as handle:
+            atlas = handle.read()
+        with open(os.path.join(ROOT, "webapp", "static", "styles.css"), encoding="utf-8") as handle:
+            styles = handle.read()
+        self.assertIn("Calculated identity graphic", source)
+        self.assertIn("is not a biometric identifier", source)
+        self.assertIn("fingerprintSVG", source)
+        self.assertIn("fingerprint-disclosure", styles)
+        self.assertIn("report-content", styles)
+        self.assertIn("Identity fingerprint", atlas)
+        self.assertIn("not authentication", atlas)
+        self.assertIn("biometric uniqueness", atlas)
+
+    def test_report_renders_method_and_source_without_dumping_raw_extension_json(self):
+        with open(os.path.join(ROOT, "webapp", "static", "app.js"), encoding="utf-8") as handle:
+            source = handle.read()
+        self.assertIn("Methods and limitations", source)
+        self.assertIn("Method and source", source)
+        self.assertIn("const extensions = Object.values(encoders)", source)
+        self.assertIn("${extensions.length} configured symbolic extensions", source)
+        self.assertIn("Complete generated report and section labels", source)
+        self.assertNotIn("JSON.stringify(extension.data", source)
 
     def test_landing_copy_describes_the_expansion_without_empirical_claims(self):
         with open(os.path.join(ROOT, "webapp", "static", "index.html"), encoding="utf-8") as handle:
             source = handle.read()
-        self.assertIn("25 provenance-aware symbolic extensions", source)
-        self.assertIn("interpretive lenses, not empirical claims", source)
+        self.assertIn("Explore the systems. Trace every result.", source)
+        self.assertIn("Every active mark traces back to structured engine output", source)
+        self.assertIn("not a diagnosis, personality test, prediction, or scientific proof", source)
+
+    def test_fake_checkout_is_removed_and_full_report_actions_are_available(self):
+        with open(os.path.join(ROOT, "webapp", "static", "index.html"), encoding="utf-8") as handle:
+            markup = handle.read()
+        with open(os.path.join(ROOT, "webapp", "static", "app.js"), encoding="utf-8") as handle:
+            source = handle.read()
+        self.assertNotIn('id="cc-num"', markup)
+        self.assertNotIn('id="paywall"', markup)
+        self.assertNotIn("BONUS_CODE", source)
+        self.assertNotIn("openPaywall", source)
+        self.assertIn("app.downloadReport()", source)
+        self.assertIn("window.print()", source)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,3611 @@
+{
+  "schema_version": 1,
+  "scope": {
+    "operational_definition": "Wikidata items directly typed as human (Q5) with an English Wikipedia biography.",
+    "coverage_note": "This is an expandable, internationally broad seed corpus. It is not a false claim that any finite catalog contains every famous person.",
+    "birth_policy": "Store Wikidata birth facts and precision, but compute only name-derived systems until a separately sourced birth time is available."
+  },
+  "generated_at": "2026-07-11T08:27:40.843719Z",
+  "seed_count": 129,
+  "record_count": 129,
+  "records": [
+    {
+      "id": "figure:wikidata:q91",
+      "qid": "Q91",
+      "text": "Abraham Lincoln",
+      "description": "president of the United States from 1861 to 1865 (1809-1865)",
+      "birth": {
+        "raw": "+1809-02-12T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q547313",
+        "label": "Hodgenville",
+        "coordinates": {
+          "lat": 37.571111111111,
+          "lon": -85.738611111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q91",
+        "wikidata_revision": 2515821646,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Abraham_Lincoln",
+        "retrieved_at": "2026-07-11T08:27:40.842607Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7259",
+      "qid": "Q7259",
+      "text": "Ada Lovelace",
+      "description": "English mathematician (1815–1852)",
+      "birth": {
+        "raw": "+1815-12-10T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q84",
+        "label": "London",
+        "coordinates": {
+          "lat": 51.507222222222,
+          "lon": -0.1275
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7259",
+        "wikidata_revision": 2514654974,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Ada_Lovelace",
+        "retrieved_at": "2026-07-11T08:27:40.842083Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q352",
+      "qid": "Q352",
+      "text": "Adolf Hitler",
+      "description": "dictator of Germany from 1933 to 1945, main instigator of World War II (1889–1945)",
+      "birth": {
+        "raw": "+1889-04-20T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q360607",
+        "label": "Adolf Hitler's birth house",
+        "coordinates": {
+          "lat": 48.256388888889,
+          "lon": 13.036111111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q352",
+        "wikidata_revision": 2515596677,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Adolf_Hitler",
+        "retrieved_at": "2026-07-11T08:27:40.842116Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8597",
+      "qid": "Q8597",
+      "text": "Akbar",
+      "description": "the third and greatest Mughal emperor from 1556 to 1605",
+      "birth": {
+        "raw": "+1542-10-15T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q7881165",
+        "label": "Umarkot Fort",
+        "coordinates": {
+          "lat": 25.36361111,
+          "lon": 69.73388889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8597",
+        "wikidata_revision": 2515929410,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Akbar",
+        "retrieved_at": "2026-07-11T08:27:40.843067Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7251",
+      "qid": "Q7251",
+      "text": "Alan Turing",
+      "description": "English computer scientist (1912–1954)",
+      "birth": {
+        "raw": "+1912-06-23T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q122744",
+        "label": "Maida Vale",
+        "coordinates": {
+          "lat": 51.5274,
+          "lon": -0.1899
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7251",
+        "wikidata_revision": 2515826470,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Alan_Turing",
+        "retrieved_at": "2026-07-11T08:27:40.842095Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q937",
+      "qid": "Q937",
+      "text": "Albert Einstein",
+      "description": "German-born theoretical physicist (1879–1955)",
+      "birth": {
+        "raw": "+1879-03-14T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q3012",
+        "label": "Ulm",
+        "coordinates": {
+          "lat": 48.39861111111111,
+          "lon": 9.991111111111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q937",
+        "wikidata_revision": 2515823244,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Albert_Einstein",
+        "retrieved_at": "2026-07-11T08:27:40.842061Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8409",
+      "qid": "Q8409",
+      "text": "Alexander the Great",
+      "description": "king of Macedonia and conqueror of Achaemenid Persia (356–323 BC)",
+      "birth": {
+        "raw": "-0356-07-20T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q213679",
+        "label": "Pella",
+        "coordinates": {
+          "lat": 40.76,
+          "lon": 22.519167
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8409",
+        "wikidata_revision": 2515827113,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Alexander_the_Great",
+        "retrieved_at": "2026-07-11T08:27:40.841948Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q3355",
+      "qid": "Q3355",
+      "text": "Amelia Earhart",
+      "description": "American aviation pioneer and author (1897–1939)",
+      "birth": {
+        "raw": "+1897-07-24T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q753949",
+        "label": "Atchison",
+        "coordinates": {
+          "lat": 39.5625,
+          "lon": -95.1283
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q3355",
+        "wikidata_revision": 2514600575,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Amelia_Earhart",
+        "retrieved_at": "2026-07-11T08:27:40.842896Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q567",
+      "qid": "Q567",
+      "text": "Angela Merkel",
+      "description": "chancellor of Germany from 2005 to 2021 (born 1954)",
+      "birth": {
+        "raw": "+1954-07-17T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1611",
+        "label": "Eimsbüttel",
+        "coordinates": {
+          "lat": 53.57583333,
+          "lon": 9.95194444
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q567",
+        "wikidata_revision": 2515828788,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Angela_Merkel",
+        "retrieved_at": "2026-07-11T08:27:40.843569Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8739",
+      "qid": "Q8739",
+      "text": "Archimedes",
+      "description": "Greek mathematician and physicist (c. 287 – c. 212 BC)",
+      "birth": {
+        "raw": "-0287-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q4420718",
+        "label": "Syracuse",
+        "coordinates": {
+          "lat": 37.083333333333,
+          "lon": 15.283333333333
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8739",
+        "wikidata_revision": 2514427412,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Archimedes",
+        "retrieved_at": "2026-07-11T08:27:40.842281Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q868",
+      "qid": "Q868",
+      "text": "Aristotle",
+      "description": "4th-century BCE Classical Greek philosopher and polymath",
+      "birth": {
+        "raw": "-0384-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q846127",
+        "label": "Stageira",
+        "coordinates": {
+          "lat": 40.59083333,
+          "lon": 23.79416667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q868",
+        "wikidata_revision": 2515919194,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Aristotle",
+        "retrieved_at": "2026-07-11T08:27:40.842258Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8589",
+      "qid": "Q8589",
+      "text": "Ashoka",
+      "description": "Mauryan emperor from 268 to 232 BCE",
+      "birth": {
+        "raw": "-0304-01-01T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q80484",
+        "label": "Patna",
+        "coordinates": {
+          "lat": 25.61,
+          "lon": 85.141388888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8589",
+        "wikidata_revision": 2515911136,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Ashoka",
+        "retrieved_at": "2026-07-11T08:27:40.842288Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q42786",
+      "qid": "Q42786",
+      "text": "Audrey Hepburn",
+      "description": "British actress (1929–1993)",
+      "birth": {
+        "raw": "+1929-05-04T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q80336784",
+        "label": "Rue Keyenveld - Keienveldstraat",
+        "coordinates": {
+          "lat": 50.83436,
+          "lon": 4.361803
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q42786",
+        "wikidata_revision": 2515833222,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Audrey_Hepburn",
+        "retrieved_at": "2026-07-11T08:27:40.843145Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8011",
+      "qid": "Q8011",
+      "text": "Avicenna",
+      "description": "Persian polymath, physician and philosopher (c. 980–1037)",
+      "birth": {
+        "raw": "+0980-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q4072887",
+        "label": "Afshona",
+        "coordinates": {
+          "lat": 39.994444444444,
+          "lon": 64.379166666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8011",
+        "wikidata_revision": 2515919340,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Avicenna",
+        "retrieved_at": "2026-07-11T08:27:40.842339Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q76",
+      "qid": "Q76",
+      "text": "Barack Obama",
+      "description": "president of the United States from 2009 to 2017 (born 1961)",
+      "birth": {
+        "raw": "+1961-08-04T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q6366688",
+        "label": "Kapiolani Medical Center for Women and Children",
+        "coordinates": {
+          "lat": 21.2998428,
+          "lon": -157.8334591
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q76",
+        "wikidata_revision": 2515815249,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Barack_Obama",
+        "retrieved_at": "2026-07-11T08:27:40.843474Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q36153",
+      "qid": "Q36153",
+      "text": "Beyoncé",
+      "description": "American singer, songwriter, record producer, and dancer (born 1981)",
+      "birth": {
+        "raw": "+1981-09-04T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q16555",
+        "label": "Houston",
+        "coordinates": {
+          "lat": 29.762777777778,
+          "lon": -95.383055555556
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q36153",
+        "wikidata_revision": 2515931496,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Beyonc%C3%A9",
+        "retrieved_at": "2026-07-11T08:27:40.843330Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5284",
+      "qid": "Q5284",
+      "text": "Bill Gates",
+      "description": "American businessman, investor, and philanthropist (born 1955)",
+      "birth": {
+        "raw": "+1955-10-28T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q5083",
+        "label": "Seattle",
+        "coordinates": {
+          "lat": 47.605,
+          "lon": -122.33
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5284",
+        "wikidata_revision": 2514603537,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Bill_Gates",
+        "retrieved_at": "2026-07-11T08:27:40.843434Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q392",
+      "qid": "Q392",
+      "text": "Bob Dylan",
+      "description": "American singer-songwriter (born 1941)",
+      "birth": {
+        "raw": "+1941-05-24T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q485708",
+        "label": "Duluth",
+        "coordinates": {
+          "lat": 46.784444444444446,
+          "lon": -92.10527777777777
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q392",
+        "wikidata_revision": 2515619227,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Bob_Dylan",
+        "retrieved_at": "2026-07-11T08:27:40.843395Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q16397",
+      "qid": "Q16397",
+      "text": "Bruce Lee",
+      "description": "Hong Kong–American martial artist and actor (1940–1973)",
+      "birth": {
+        "raw": "+1940-11-27T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q7413971",
+        "label": "San Francisco Chinese Hospital",
+        "coordinates": {
+          "lat": 37.79556,
+          "lon": -122.4092
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q16397",
+        "wikidata_revision": 2515829358,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Bruce_Lee",
+        "retrieved_at": "2026-07-11T08:27:40.843201Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q41532",
+      "qid": "Q41532",
+      "text": "Carl Jung",
+      "description": "Swiss psychiatrist and psychotherapist (1875–1961)",
+      "birth": {
+        "raw": "+1875-07-26T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q69413",
+        "label": "Kesswil",
+        "coordinates": {
+          "lat": 47.58756,
+          "lon": 9.3129
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q41532",
+        "wikidata_revision": 2515939422,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Carl_Jung",
+        "retrieved_at": "2026-07-11T08:27:40.842715Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q36450",
+      "qid": "Q36450",
+      "text": "Catherine II of Russia",
+      "description": "eighth Emperor of Russia, called the Great, r. 1762–1796 (lived 1729-1796)",
+      "birth": {
+        "raw": "+1729-04-21T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q393",
+        "label": "Szczecin",
+        "coordinates": {
+          "lat": 53.424722222222,
+          "lon": 14.555277777778
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q36450",
+        "wikidata_revision": 2515832030,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Catherine_the_Great",
+        "retrieved_at": "2026-07-11T08:27:40.842481Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q1035",
+      "qid": "Q1035",
+      "text": "Charles Darwin",
+      "description": "English naturalist and biologist (1809–1882)",
+      "birth": {
+        "raw": "+1809-02-12T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q2412935",
+        "label": "The Mount",
+        "coordinates": {
+          "lat": 52.7128,
+          "lon": -2.76334
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q1035",
+        "wikidata_revision": 2515946002,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Charles_Darwin",
+        "retrieved_at": "2026-07-11T08:27:40.842668Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5686",
+      "qid": "Q5686",
+      "text": "Charles Dickens",
+      "description": "English novelist and social critic (1812–1870)",
+      "birth": {
+        "raw": "+1812-02-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1803681",
+        "label": "Landport",
+        "coordinates": {
+          "lat": 50.803,
+          "lon": -1.087
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5686",
+        "wikidata_revision": 2515825904,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Charles_Dickens",
+        "retrieved_at": "2026-07-11T08:27:40.842578Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q882",
+      "qid": "Q882",
+      "text": "Charlie Chaplin",
+      "description": "English comic actor and filmmaker (1889–1977)",
+      "birth": {
+        "raw": "+1889-04-16T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1231883",
+        "label": "Walworth",
+        "coordinates": {
+          "lat": 51.4898,
+          "lon": -0.0905
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q882",
+        "wikidata_revision": 2515823110,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Charlie_Chaplin",
+        "retrieved_at": "2026-07-11T08:27:40.843130Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5809",
+      "qid": "Q5809",
+      "text": "Che Guevara",
+      "description": "Argentine Marxist revolutionary (1928–1967)",
+      "birth": {
+        "raw": "+1928-06-14T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q52535",
+        "label": "Rosario",
+        "coordinates": {
+          "lat": -32.9575,
+          "lon": -60.639444444444
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5809",
+        "wikidata_revision": 2515825939,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Che_Guevara",
+        "retrieved_at": "2026-07-11T08:27:40.842852Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q635",
+      "qid": "Q635",
+      "text": "Cleopatra",
+      "description": "queen of the Ptolemaic Kingdom of Egypt from 51 to 30 BCE",
+      "birth": {
+        "raw": "-0069-01-13T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q87",
+        "label": "Alexandria",
+        "coordinates": {
+          "lat": 31.1975,
+          "lon": 29.8925
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q635",
+        "wikidata_revision": 2515822470,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Cleopatra",
+        "retrieved_at": "2026-07-11T08:27:40.841975Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q4604",
+      "qid": "Q4604",
+      "text": "Confucius",
+      "description": "5th-century BCE Chinese philosopher and politician",
+      "birth": {
+        "raw": "-0552-10-09T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q210287",
+        "label": "Qufu",
+        "coordinates": {
+          "lat": 35.6,
+          "lon": 116.98333333333
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q4604",
+        "wikidata_revision": 2515825426,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Confucius",
+        "retrieved_at": "2026-07-11T08:27:40.842204Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5383",
+      "qid": "Q5383",
+      "text": "David Bowie",
+      "description": "English musician and actor (1947–2016)",
+      "birth": {
+        "raw": "+1947-01-08T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q146690",
+        "label": "Brixton",
+        "coordinates": {
+          "lat": 51.4575,
+          "lon": -0.1175
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5383",
+        "wikidata_revision": 2514717444,
+        "enwiki_url": "https://en.wikipedia.org/wiki/David_Bowie",
+        "retrieved_at": "2026-07-11T08:27:40.842157Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q9685",
+      "qid": "Q9685",
+      "text": "Diana, Princess of Wales",
+      "description": "member of the British royal family and Princess of Wales (1961–1997)",
+      "birth": {
+        "raw": "+1961-07-01T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q935116",
+        "label": "Sandringham House",
+        "coordinates": {
+          "lat": 52.829722222222,
+          "lon": 0.51388888888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q9685",
+        "wikidata_revision": 2511737281,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Diana%2C_Princess_of_Wales",
+        "retrieved_at": "2026-07-11T08:27:40.842180Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q22686",
+      "qid": "Q22686",
+      "text": "Donald Trump",
+      "description": "American businessman and politician (born 1946), President of the United States (2017–2021; since 2025)",
+      "birth": {
+        "raw": "+1946-06-14T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q60",
+        "label": "New York City",
+        "coordinates": {
+          "lat": 40.71277777777778,
+          "lon": -74.00611111111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q22686",
+        "wikidata_revision": 2515952220,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Donald_Trump",
+        "retrieved_at": "2026-07-11T08:27:40.843497Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7207",
+      "qid": "Q7207",
+      "text": "Elizabeth I of England",
+      "description": "Queen of England and Ireland from 1558 to 1603",
+      "birth": {
+        "raw": "+1533-09-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q1424839",
+        "label": "Palace of Placentia",
+        "coordinates": {
+          "lat": 51.482222222222,
+          "lon": -0.0066666666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7207",
+        "wikidata_revision": 2515826369,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Elizabeth_I",
+        "retrieved_at": "2026-07-11T08:27:40.842033Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q317521",
+      "qid": "Q317521",
+      "text": "Elon Musk",
+      "description": "American businessman (born 1971)",
+      "birth": {
+        "raw": "+1971-06-28T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q3926",
+        "label": "Pretoria",
+        "coordinates": {
+          "lat": -25.746388888889,
+          "lon": 28.188055555556
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q317521",
+        "wikidata_revision": 2514572328,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Elon_Musk",
+        "retrieved_at": "2026-07-11T08:27:40.843645Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q303",
+      "qid": "Q303",
+      "text": "Elvis Presley",
+      "description": "American singer and actor (1935–1977)",
+      "birth": {
+        "raw": "+1935-01-08T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q667727",
+        "label": "Tupelo",
+        "coordinates": {
+          "lat": 34.25761111111111,
+          "lon": -88.7033888888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q303",
+        "wikidata_revision": 2515822053,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Elvis_Presley",
+        "retrieved_at": "2026-07-11T08:27:40.843102Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q37103",
+      "qid": "Q37103",
+      "text": "Florence Nightingale",
+      "description": "English social reformer, statistician, and founder of modern nursing (1820–1910)",
+      "birth": {
+        "raw": "+1820-05-12T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q2044",
+        "label": "Florence",
+        "coordinates": {
+          "lat": 43.771388888889,
+          "lon": 11.254166666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q37103",
+        "wikidata_revision": 2515832198,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Florence_Nightingale",
+        "retrieved_at": "2026-07-11T08:27:40.842593Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8007",
+      "qid": "Q8007",
+      "text": "Franklin Delano Roosevelt",
+      "description": "president of the United States from 1933 to 1945 (1882–1945)",
+      "birth": {
+        "raw": "+1882-01-30T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q988554",
+        "label": "Hyde Park",
+        "coordinates": {
+          "lat": 41.78472222222222,
+          "lon": -73.93333333333334
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8007",
+        "wikidata_revision": 2515826967,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Franklin_D._Roosevelt",
+        "retrieved_at": "2026-07-11T08:27:40.842773Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q15869",
+      "qid": "Q15869",
+      "text": "Freddie Mercury",
+      "description": "British singer, songwriter and musician, frontman of the rock band Queen (1946–1991)",
+      "birth": {
+        "raw": "+1946-09-05T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q2222874",
+        "label": "Zanzibar City",
+        "coordinates": {
+          "lat": -6.1666666666667,
+          "lon": 39.2
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q15869",
+        "wikidata_revision": 2515832349,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Freddie_Mercury",
+        "retrieved_at": "2026-07-11T08:27:40.843377Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q215562",
+      "qid": "Q215562",
+      "text": "Frederick Douglass",
+      "description": "African-American social reformer, writer, and abolitionist (c. 1818–1895)",
+      "birth": {
+        "raw": "+1817-02-00T00:00:00Z",
+        "precision": 10,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q511084",
+        "label": "Talbot County",
+        "coordinates": {
+          "lat": 38.75,
+          "lon": -76.18
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q215562",
+        "wikidata_revision": 2513573995,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Frederick_Douglass",
+        "retrieved_at": "2026-07-11T08:27:40.842630Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q991",
+      "qid": "Q991",
+      "text": "Fyodor Dostoyevsky",
+      "description": "Russian novelist (1821–1881)",
+      "birth": {
+        "raw": "+1821-11-11T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q4281399",
+        "label": "Mariinsky Hospital for the Poor",
+        "coordinates": {
+          "lat": 55.783611111111,
+          "lon": 37.611944444444
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q991",
+        "wikidata_revision": 2516193000,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Fyodor_Dostoevsky",
+        "retrieved_at": "2026-07-11T08:27:40.842696Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q307",
+      "qid": "Q307",
+      "text": "Galileo Galilei",
+      "description": "Italian polymath (1564–1642)",
+      "birth": {
+        "raw": "+1564-02-15T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q13375",
+        "label": "Pisa",
+        "coordinates": {
+          "lat": 43.716666666667,
+          "lon": 10.4
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q307",
+        "wikidata_revision": 2515936803,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Galileo_Galilei",
+        "retrieved_at": "2026-07-11T08:27:40.842409Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q720",
+      "qid": "Q720",
+      "text": "Genghis Khan",
+      "description": "founder and first khan of the Mongol Empire (1162–1227)",
+      "birth": {
+        "raw": "+1162-05-31T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q2068087",
+        "label": "Delüün Boldog",
+        "coordinates": {
+          "lat": 50.51666667,
+          "lon": 115.03333333
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q720",
+        "wikidata_revision": 2515822681,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Genghis_Khan",
+        "retrieved_at": "2026-07-11T08:27:40.841918Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q3335",
+      "qid": "Q3335",
+      "text": "George Orwell",
+      "description": "British writer and journalist (1903–1950)",
+      "birth": {
+        "raw": "+1903-06-25T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1774606",
+        "label": "Motihari",
+        "coordinates": {
+          "lat": 26.65,
+          "lon": 84.916666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q3335",
+        "wikidata_revision": 2515825027,
+        "enwiki_url": "https://en.wikipedia.org/wiki/George_Orwell",
+        "retrieved_at": "2026-07-11T08:27:40.842990Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q23",
+      "qid": "Q23",
+      "text": "George Washington",
+      "description": "Founding Father and first U.S. president; soldier and slave owner (1732–1799)",
+      "birth": {
+        "raw": "+1732-02-22T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q494413",
+        "label": "Westmoreland County",
+        "coordinates": {
+          "lat": 38.11,
+          "lon": -76.8
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q23",
+        "wikidata_revision": 2515815088,
+        "enwiki_url": "https://en.wikipedia.org/wiki/George_Washington",
+        "retrieved_at": "2026-07-11T08:27:40.842510Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q56434717",
+      "qid": "Q56434717",
+      "text": "Greta Thunberg",
+      "description": "Swedish climate protection activist (born 2003)",
+      "birth": {
+        "raw": "+2003-01-03T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1754",
+        "label": "Stockholm",
+        "coordinates": {
+          "lat": 59.329444444444,
+          "lon": 18.068611111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q56434717",
+        "wikidata_revision": 2511928999,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Greta_Thunberg",
+        "retrieved_at": "2026-07-11T08:27:40.843552Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q83322",
+      "qid": "Q83322",
+      "text": "Guru Nanak",
+      "description": "First Sikh Guru and founder of Sikhism",
+      "birth": {
+        "raw": "+1469-04-15T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q2353077",
+        "label": "Nankana Sahib",
+        "coordinates": {
+          "lat": 31.449187,
+          "lon": 73.712437
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q83322",
+        "wikidata_revision": 2505654415,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Guru_Nanak",
+        "retrieved_at": "2026-07-11T08:27:40.843080Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q36456",
+      "qid": "Q36456",
+      "text": "Hannibal",
+      "description": "Carthaginian general (247–183/181 BC)",
+      "birth": {
+        "raw": "-0247-01-01T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q6343",
+        "label": "Carthage",
+        "coordinates": {
+          "lat": 36.852558,
+          "lon": 10.323461
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q36456",
+        "wikidata_revision": 2515832035,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Hannibal",
+        "retrieved_at": "2026-07-11T08:27:40.842321Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q102870",
+      "qid": "Q102870",
+      "text": "Harriet Tubman",
+      "description": "African-American abolitionist (1822–1913)",
+      "birth": {
+        "raw": "+1821-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q501263",
+        "label": "Dorchester County",
+        "coordinates": {
+          "lat": 38.42,
+          "lon": -76.08
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q102870",
+        "wikidata_revision": 2515838500,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Harriet_Tubman",
+        "retrieved_at": "2026-07-11T08:27:40.842617Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q531599",
+      "qid": "Q531599",
+      "text": "Harvey Weinstein",
+      "description": "American film producer and sex offender (born 1952)",
+      "birth": {
+        "raw": "+1952-03-19T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q60",
+        "label": "New York City",
+        "coordinates": {
+          "lat": 40.71277777777778,
+          "lon": -74.00611111111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q531599",
+        "wikidata_revision": 2507311903,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Harvey_Weinstein",
+        "retrieved_at": "2026-07-11T08:27:40.843611Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q6294",
+      "qid": "Q6294",
+      "text": "Hillary Clinton",
+      "description": "American politician and diplomat (born 1947)",
+      "birth": {
+        "raw": "+1947-10-26T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q27787813",
+        "label": "Edgewater Hospital",
+        "coordinates": {
+          "lat": 41.8822,
+          "lon": -87.6302
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q6294",
+        "wikidata_revision": 2513923898,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Hillary_Clinton",
+        "retrieved_at": "2026-07-11T08:27:40.843512Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q6691",
+      "qid": "Q6691",
+      "text": "Homer",
+      "description": "reputed author of the Iliad and the Odyssey",
+      "birth": {
+        "raw": "-0900-00-00T00:00:00Z",
+        "precision": 7,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q160483",
+        "label": "Chios",
+        "coordinates": {
+          "lat": 38.4,
+          "lon": 26.016666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q6691",
+        "wikidata_revision": 2515918217,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Homer",
+        "retrieved_at": "2026-07-11T08:27:40.842274Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q11903",
+      "qid": "Q11903",
+      "text": "Hypatia",
+      "description": "Greek Neoplatonist philosopher",
+      "birth": {
+        "raw": "+0360-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q87",
+        "label": "Alexandria",
+        "coordinates": {
+          "lat": 31.1975,
+          "lon": 29.8925
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q11903",
+        "wikidata_revision": 2515828771,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Hypatia",
+        "retrieved_at": "2026-07-11T08:27:40.842327Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q935",
+      "qid": "Q935",
+      "text": "Isaac Newton",
+      "description": "English mathematician and physicist (1642–1727)",
+      "birth": {
+        "raw": "+1642-12-25T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q3316008",
+        "label": "Woolsthorpe Manor",
+        "coordinates": {
+          "lat": 52.809167,
+          "lon": -0.630556
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q935",
+        "wikidata_revision": 2516193266,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Isaac_Newton",
+        "retrieved_at": "2026-07-11T08:27:40.842443Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q34660",
+      "qid": "Q34660",
+      "text": "J. K. Rowling",
+      "description": "British author and philanthropist (born 1965)",
+      "birth": {
+        "raw": "+1965-07-31T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1025095",
+        "label": "Yate",
+        "coordinates": {
+          "lat": 51.540833333333,
+          "lon": -2.4186111111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q34660",
+        "wikidata_revision": 2514164747,
+        "enwiki_url": "https://en.wikipedia.org/wiki/J._K._Rowling",
+        "retrieved_at": "2026-07-11T08:27:40.843016Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q892",
+      "qid": "Q892",
+      "text": "J. R. R. Tolkien",
+      "description": "English writer and philologist (1892–1973)",
+      "birth": {
+        "raw": "+1892-01-03T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q37701",
+        "label": "Bloemfontein",
+        "coordinates": {
+          "lat": -29.1,
+          "lon": 26.216666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q892",
+        "wikidata_revision": 2515823132,
+        "enwiki_url": "https://en.wikipedia.org/wiki/J._R._R._Tolkien",
+        "retrieved_at": "2026-07-11T08:27:40.843003Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q36970",
+      "qid": "Q36970",
+      "text": "Jackie Chan",
+      "description": "Hong Kong actor and martial artist (born 1954)",
+      "birth": {
+        "raw": "+1954-04-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q17541",
+        "label": "Victoria Peak",
+        "coordinates": {
+          "lat": 22.275469444444,
+          "lon": 114.14382777778
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q36970",
+        "wikidata_revision": 2515832145,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Jackie_Chan",
+        "retrieved_at": "2026-07-11T08:27:40.843216Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q36322",
+      "qid": "Q36322",
+      "text": "Jane Austen",
+      "description": "English novelist (1775–1817)",
+      "birth": {
+        "raw": "+1775-12-16T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1231836",
+        "label": "Steventon",
+        "coordinates": {
+          "lat": 51.230278,
+          "lon": -1.218889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q36322",
+        "wikidata_revision": 2513900753,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Jane_Austen",
+        "retrieved_at": "2026-07-11T08:27:40.842569Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q184746",
+      "qid": "Q184746",
+      "text": "Jane Goodall",
+      "description": "English primatologist and anthropologist (1934–2025)",
+      "birth": {
+        "raw": "+1934-04-03T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q25610",
+        "label": "Hampstead",
+        "coordinates": {
+          "lat": 51.5541,
+          "lon": -0.1744
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q184746",
+        "wikidata_revision": 2515848176,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Jane_Goodall",
+        "retrieved_at": "2026-07-11T08:27:40.842922Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q2904131",
+      "qid": "Q2904131",
+      "text": "Jeffrey Epstein",
+      "description": "American sex offender and financier (1953–2019)",
+      "birth": {
+        "raw": "+1953-01-20T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q18419",
+        "label": "Brooklyn",
+        "coordinates": {
+          "lat": 40.65083333333333,
+          "lon": -73.94972222222222
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q2904131",
+        "wikidata_revision": 2513153720,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Jeffrey_Epstein",
+        "retrieved_at": "2026-07-11T08:27:40.841934Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q302",
+      "qid": "Q302",
+      "text": "Jesus Christ",
+      "description": "central figure of Christianity (c. 6 or 4 BC – AD 30 or 33)",
+      "birth": {
+        "raw": "-0007-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q5776",
+        "label": "Bethlehem",
+        "coordinates": {
+          "lat": 31.704444444444,
+          "lon": 35.206111111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q302",
+        "wikidata_revision": 2516193193,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Jesus",
+        "retrieved_at": "2026-07-11T08:27:40.841880Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7226",
+      "qid": "Q7226",
+      "text": "Joan of Arc",
+      "description": "French folk heroine (1412–1431), military leader who crowned Charles VII and Roman Catholic saint, canonized 500 years after her death",
+      "birth": {
+        "raw": "+1412-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q209069",
+        "label": "Domrémy-la-Pucelle",
+        "coordinates": {
+          "lat": 48.4425,
+          "lon": 5.675
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7226",
+        "wikidata_revision": 2515178405,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Joan_of_Arc",
+        "retrieved_at": "2026-07-11T08:27:40.842384Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q1339",
+      "qid": "Q1339",
+      "text": "Johann Sebastian Bach",
+      "description": "German composer (1685–1750)",
+      "birth": {
+        "raw": "+1685-03-21T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q7070",
+        "label": "Eisenach",
+        "coordinates": {
+          "lat": 50.974722222222,
+          "lon": 10.324444444444
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q1339",
+        "wikidata_revision": 2515936720,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Johann_Sebastian_Bach",
+        "retrieved_at": "2026-07-11T08:27:40.842453Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q855",
+      "qid": "Q855",
+      "text": "Joseph Stalin",
+      "description": "leader of the Soviet Union from 1924 to 1953",
+      "birth": {
+        "raw": "+1878-12-18T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q19583",
+        "label": "Gori",
+        "coordinates": {
+          "lat": 41.98168611111111,
+          "lon": 44.11241666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q855",
+        "wikidata_revision": 2516193271,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Joseph_Stalin",
+        "retrieved_at": "2026-07-11T08:27:40.842787Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q1048",
+      "qid": "Q1048",
+      "text": "Julius Caesar",
+      "description": "Roman general and dictator",
+      "birth": {
+        "raw": "-0100-07-12T00:00:00Z",
+        "precision": 10,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q220",
+        "label": "Rome",
+        "coordinates": {
+          "lat": 41.893055555556,
+          "lon": 12.482777777778
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q1048",
+        "wikidata_revision": 2514966055,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Julius_Caesar",
+        "retrieved_at": "2026-07-11T08:27:40.841966Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q9061",
+      "qid": "Q9061",
+      "text": "Karl Marx",
+      "description": "German-born philosopher (1818–1883)",
+      "birth": {
+        "raw": "+1818-05-05T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q3138",
+        "label": "Trier",
+        "coordinates": {
+          "lat": 49.75565,
+          "lon": 6.63935
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q9061",
+        "wikidata_revision": 2515910907,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Karl_Marx",
+        "retrieved_at": "2026-07-11T08:27:40.842658Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q11740",
+      "qid": "Q11740",
+      "text": "Katherine Johnson",
+      "description": "African-American mathematician",
+      "birth": {
+        "raw": "+1918-08-26T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q2035099",
+        "label": "White Sulphur Springs",
+        "coordinates": {
+          "lat": 37.793888888889,
+          "lon": -80.303611111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q11740",
+        "wikidata_revision": 2506476383,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Katherine_Johnson",
+        "retrieved_at": "2026-07-11T08:27:40.842910Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5586",
+      "qid": "Q5586",
+      "text": "Katsushika Hokusai",
+      "description": "Japanese artist (1760-1849)",
+      "birth": {
+        "raw": "+1760-10-31T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q129278253",
+        "label": "Honjo",
+        "coordinates": null
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5586",
+        "wikidata_revision": 2515825806,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Hokusai",
+        "retrieved_at": "2026-07-11T08:27:40.842105Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q56226",
+      "qid": "Q56226",
+      "text": "Kim Jong-un",
+      "description": "Supreme Leader of North Korea since 2011",
+      "birth": {
+        "raw": "+1984-01-08T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q700618",
+        "label": "Samjiyon",
+        "coordinates": {
+          "lat": 41.8,
+          "lon": 128.31666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q56226",
+        "wikidata_revision": 2511932376,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Kim_Jong_Un",
+        "retrieved_at": "2026-07-11T08:27:40.843595Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q9333",
+      "qid": "Q9333",
+      "text": "Laozi",
+      "description": "6th-century BC semi-legendary Chinese philosopher, founder of Taoism",
+      "birth": {
+        "raw": "-0604-01-01T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q504759",
+        "label": "Chu",
+        "coordinates": {
+          "lat": 30.422777777777778,
+          "lon": 112.17333333333333
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q9333",
+        "wikidata_revision": 2515827793,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Laozi",
+        "retrieved_at": "2026-07-11T08:27:40.842220Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7243",
+      "qid": "Q7243",
+      "text": "Leo Tolstoy",
+      "description": "Russian author (1828–1910)",
+      "birth": {
+        "raw": "+1828-08-28T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q749556",
+        "label": "Yasnaya Polyana",
+        "coordinates": {
+          "lat": 54.075127,
+          "lon": 37.526385
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7243",
+        "wikidata_revision": 2515826454,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Leo_Tolstoy",
+        "retrieved_at": "2026-07-11T08:27:40.842685Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q762",
+      "qid": "Q762",
+      "text": "Leonardo da Vinci",
+      "description": "Italian Renaissance polymath (1452−1519)",
+      "birth": {
+        "raw": "+1452-04-15T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q154184",
+        "label": "Anchiano",
+        "coordinates": {
+          "lat": 43.799166666667,
+          "lon": 10.938133333333
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q762",
+        "wikidata_revision": 2515937647,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Leonardo_da_Vinci",
+        "retrieved_at": "2026-07-11T08:27:40.842023Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q255",
+      "qid": "Q255",
+      "text": "Ludwig van Beethoven",
+      "description": "German composer (1770-1827)",
+      "birth": {
+        "raw": "+1770-12-16T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q586",
+        "label": "Bonn",
+        "coordinates": {
+          "lat": 50.735277777777775,
+          "lon": 7.102222222222222
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q255",
+        "wikidata_revision": 2515821975,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Ludwig_van_Beethoven",
+        "retrieved_at": "2026-07-11T08:27:40.842558Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q1744",
+      "qid": "Q1744",
+      "text": "Madonna",
+      "description": "American singer, songwriter, and actress (born 1958)",
+      "birth": {
+        "raw": "+1958-08-16T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q746820",
+        "label": "Bay City",
+        "coordinates": {
+          "lat": 43.59505,
+          "lon": -83.888639
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q1744",
+        "wikidata_revision": 2513670781,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Madonna",
+        "retrieved_at": "2026-07-11T08:27:40.843310Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q1001",
+      "qid": "Q1001",
+      "text": "Mahatma Gandhi",
+      "description": "Indian independence activist (1869–1948)",
+      "birth": {
+        "raw": "+1869-10-02T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q6419912",
+        "label": "Porbandar",
+        "coordinates": {
+          "lat": 21.6425,
+          "lon": 69.604722222222
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q1001",
+        "wikidata_revision": 2515940218,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Mahatma_Gandhi",
+        "retrieved_at": "2026-07-11T08:27:40.842754Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q32732",
+      "qid": "Q32732",
+      "text": "Malala Yousafzai",
+      "description": "Pakistani children's education activist",
+      "birth": {
+        "raw": "+1997-07-12T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q31356",
+        "label": "Mingora",
+        "coordinates": {
+          "lat": 34.77166666666667,
+          "lon": 72.36
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q32732",
+        "wikidata_revision": 2511769576,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Malala_Yousafzai",
+        "retrieved_at": "2026-07-11T08:27:40.843539Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q43303",
+      "qid": "Q43303",
+      "text": "Malcolm X",
+      "description": "American Black rights activist (1925–1965)",
+      "birth": {
+        "raw": "+1925-05-19T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q43199",
+        "label": "Omaha",
+        "coordinates": {
+          "lat": 41.25861111111111,
+          "lon": -95.9375
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q43303",
+        "wikidata_revision": 2515928264,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Malcolm_X",
+        "retrieved_at": "2026-07-11T08:27:40.842837Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q309333",
+      "qid": "Q309333",
+      "text": "Mansa Musa",
+      "description": "14th-century emperor (mansa) of the Mali Empire",
+      "birth": {
+        "raw": "+1280-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q184536",
+        "label": "Mali Empire",
+        "coordinates": null
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q309333",
+        "wikidata_revision": 2513805862,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Mansa_Musa",
+        "retrieved_at": "2026-07-11T08:27:40.842371Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5816",
+      "qid": "Q5816",
+      "text": "Mao Zedong",
+      "description": "1st chairman of the Chinese Communist Party and founder of the People's Republic of China (1893–1976)",
+      "birth": {
+        "raw": "+1893-12-26T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q838542",
+        "label": "Shaoshan",
+        "coordinates": {
+          "lat": 27.91,
+          "lon": 112.48
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5816",
+        "wikidata_revision": 2515921642,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Mao_Zedong",
+        "retrieved_at": "2026-07-11T08:27:40.842123Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7186",
+      "qid": "Q7186",
+      "text": "Marie Curie",
+      "description": "Polish-French physicist and chemist (1867–1934)",
+      "birth": {
+        "raw": "+1867-11-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q270",
+        "label": "Warsaw",
+        "coordinates": {
+          "lat": 52.23,
+          "lon": 21.011111111111113
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7186",
+        "wikidata_revision": 2515826332,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Marie_Curie",
+        "retrieved_at": "2026-07-11T08:27:40.842048Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q4616",
+      "qid": "Q4616",
+      "text": "Marilyn Monroe",
+      "description": "American actress and model (1926–1962)",
+      "birth": {
+        "raw": "+1926-06-01T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q65",
+        "label": "Los Angeles",
+        "coordinates": {
+          "lat": 34.05223,
+          "lon": -118.24368
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q4616",
+        "wikidata_revision": 2515825433,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Marilyn_Monroe",
+        "retrieved_at": "2026-07-11T08:27:40.843119Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8027",
+      "qid": "Q8027",
+      "text": "Martin Luther King Jr.",
+      "description": "American Baptist minister and civil rights leader (1929–1968)",
+      "birth": {
+        "raw": "+1929-01-15T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q23556",
+        "label": "Atlanta",
+        "coordinates": {
+          "lat": 33.754444444444445,
+          "lon": -84.38972222222222
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8027",
+        "wikidata_revision": 2515937917,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.",
+        "retrieved_at": "2026-07-11T08:27:40.842814Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q2831",
+      "qid": "Q2831",
+      "text": "Michael Jackson",
+      "description": "American singer, songwriter, record producer, and dancer (1958–2009)",
+      "birth": {
+        "raw": "+1958-08-29T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q184116",
+        "label": "Gary",
+        "coordinates": {
+          "lat": 41.580833333333,
+          "lon": -87.345555555556
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q2831",
+        "wikidata_revision": 2515824843,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Michael_Jackson",
+        "retrieved_at": "2026-07-11T08:27:40.843297Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q41421",
+      "qid": "Q41421",
+      "text": "Michael Jordan",
+      "description": "American basketball player and businessman (born 1963)",
+      "birth": {
+        "raw": "+1963-02-17T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q18419",
+        "label": "Brooklyn",
+        "coordinates": {
+          "lat": 40.65083333333333,
+          "lon": -73.94972222222222
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q41421",
+        "wikidata_revision": 2515832894,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Michael_Jordan",
+        "retrieved_at": "2026-07-11T08:27:40.843268Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5592",
+      "qid": "Q5592",
+      "text": "Michelangelo",
+      "description": "Italian artist and architect (1475-1564)",
+      "birth": {
+        "raw": "+1475-03-06T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q52069",
+        "label": "Caprese Michelangelo",
+        "coordinates": {
+          "lat": 43.640833333333,
+          "lon": 11.985833333333
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5592",
+        "wikidata_revision": 2515825819,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Michelangelo",
+        "retrieved_at": "2026-07-11T08:27:40.842398Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q30547",
+      "qid": "Q30547",
+      "text": "Mother Teresa",
+      "description": "Albanian-Indian Catholic nun and missionary (1910–1997)",
+      "birth": {
+        "raw": "+1910-08-26T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q384",
+        "label": "Skopje",
+        "coordinates": {
+          "lat": 41.99611111111111,
+          "lon": 21.431666666666665
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q30547",
+        "wikidata_revision": 2515831120,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Mother_Teresa",
+        "retrieved_at": "2026-07-11T08:27:40.842886Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q9458",
+      "qid": "Q9458",
+      "text": "Muhammad",
+      "description": "Arabian political leader and the founder of Islam (c. 570–632)",
+      "birth": {
+        "raw": "+0571-04-20T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q5806",
+        "label": "Mecca",
+        "coordinates": {
+          "lat": 21.4225,
+          "lon": 39.826111111111
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q9458",
+        "wikidata_revision": 2515620925,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Muhammad",
+        "retrieved_at": "2026-07-11T08:27:40.842008Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q36107",
+      "qid": "Q36107",
+      "text": "Muhammad Ali",
+      "description": "American boxer (1942–2016)",
+      "birth": {
+        "raw": "+1942-01-17T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q43668",
+        "label": "Louisville",
+        "coordinates": {
+          "lat": 38.25611111111111,
+          "lon": -85.75138888888888
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q36107",
+        "wikidata_revision": 2515976030,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Muhammad_Ali",
+        "retrieved_at": "2026-07-11T08:27:40.843235Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q81731",
+      "qid": "Q81731",
+      "text": "Murasaki Shikibu",
+      "description": "Japanese novelist and poet (c.973–c.1014)",
+      "birth": {
+        "raw": "+0978-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q751907",
+        "label": "Heian-kyō",
+        "coordinates": {
+          "lat": 35,
+          "lon": 135.76666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q81731",
+        "wikidata_revision": 2515837508,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Murasaki_Shikibu",
+        "retrieved_at": "2026-07-11T08:27:40.843038Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q517",
+      "qid": "Q517",
+      "text": "Napoleon",
+      "description": "French military leader, French Emperor 1804–1814 and again in 1815 (1769–1821)",
+      "birth": {
+        "raw": "+1769-08-15T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q40104",
+        "label": "Ajaccio",
+        "coordinates": {
+          "lat": 41.925555555556,
+          "lon": 8.7363888888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q517",
+        "wikidata_revision": 2516193174,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Napoleon",
+        "retrieved_at": "2026-07-11T08:27:40.842497Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8023",
+      "qid": "Q8023",
+      "text": "Nelson Mandela",
+      "description": "President of South Africa and anti-apartheid activist (1918–2013)",
+      "birth": {
+        "raw": "+1918-07-18T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1020378",
+        "label": "Mvezo",
+        "coordinates": {
+          "lat": -31.95,
+          "lon": 28.516
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8023",
+        "wikidata_revision": 2515037455,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Nelson_Mandela",
+        "retrieved_at": "2026-07-11T08:27:40.842799Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q619",
+      "qid": "Q619",
+      "text": "Nicolaus Copernicus",
+      "description": "Polish mathematician and astronomer (1473-1543)",
+      "birth": {
+        "raw": "+1473-02-19T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q47554",
+        "label": "Toruń",
+        "coordinates": {
+          "lat": 53.016666666667,
+          "lon": 18.616666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q619",
+        "wikidata_revision": 2515822434,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Nicolaus_Copernicus",
+        "retrieved_at": "2026-07-11T08:27:40.842420Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7085",
+      "qid": "Q7085",
+      "text": "Niels Bohr",
+      "description": "Danish physicist (1885–1962)",
+      "birth": {
+        "raw": "+1885-10-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1748",
+        "label": "Copenhagen",
+        "coordinates": {
+          "lat": 55.676111111111,
+          "lon": 12.568888888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7085",
+        "wikidata_revision": 2515876558,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Niels_Bohr",
+        "retrieved_at": "2026-07-11T08:27:40.842731Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q9036",
+      "qid": "Q9036",
+      "text": "Nikola Tesla",
+      "description": "Serbian-American engineer and inventor (1856–1943)",
+      "birth": {
+        "raw": "+1856-07-10T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q367211",
+        "label": "Smiljan",
+        "coordinates": {
+          "lat": 44.5643,
+          "lon": 15.3181
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q9036",
+        "wikidata_revision": 2515827461,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Nikola_Tesla",
+        "retrieved_at": "2026-07-11T08:27:40.842075Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q467650",
+      "qid": "Q467650",
+      "text": "Nzingha Mbande",
+      "description": "Ambundu queen in Angola (c. 1583–1663)",
+      "birth": {
+        "raw": "+1582-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q1796232",
+        "label": "Kingdom of Ndongo",
+        "coordinates": null
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q467650",
+        "wikidata_revision": 2515868745,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Nzinga_of_Ndongo_and_Matamba",
+        "retrieved_at": "2026-07-11T08:27:40.842146Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q171411",
+      "qid": "Q171411",
+      "text": "Oda Nobunaga",
+      "description": "Japanese samurai and warlord (1534–1582)",
+      "birth": {
+        "raw": "+1534-06-23T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q10855963",
+        "label": "Nagoya Castle (16th century)",
+        "coordinates": null
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q171411",
+        "wikidata_revision": 2516004505,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Oda_Nobunaga",
+        "retrieved_at": "2026-07-11T08:27:40.843047Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q55800",
+      "qid": "Q55800",
+      "text": "Oprah Winfrey",
+      "description": "American talk show host, actress, producer, and author (born 1954)",
+      "birth": {
+        "raw": "+1954-01-29T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q2005238",
+        "label": "Kosciusko",
+        "coordinates": {
+          "lat": 33.0581,
+          "lon": -89.5883
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q55800",
+        "wikidata_revision": 2515835193,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Oprah_Winfrey",
+        "retrieved_at": "2026-07-11T08:27:40.843448Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q1317",
+      "qid": "Q1317",
+      "text": "Osama bin Laden",
+      "description": "Saudi terrorist and co-founder of al-Qaeda (1957–2011)",
+      "birth": {
+        "raw": "+1957-03-10T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q3692",
+        "label": "Riyadh",
+        "coordinates": {
+          "lat": 24.65,
+          "lon": 46.71
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q1317",
+        "wikidata_revision": 2515925305,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Osama_bin_Laden",
+        "retrieved_at": "2026-07-11T08:27:40.842193Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5593",
+      "qid": "Q5593",
+      "text": "Pablo Picasso",
+      "description": "Spanish painter and sculptor (1881–1973)",
+      "birth": {
+        "raw": "+1881-10-25T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q8851",
+        "label": "Málaga",
+        "coordinates": {
+          "lat": 36.716666666667,
+          "lon": -4.4166666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5593",
+        "wikidata_revision": 2515640506,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Pablo_Picasso",
+        "retrieved_at": "2026-07-11T08:27:40.842740Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q12897",
+      "qid": "Q12897",
+      "text": "Pelé",
+      "description": "Brazilian footballer (1940–2022)",
+      "birth": {
+        "raw": "+1940-10-23T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1439211",
+        "label": "Três Corações",
+        "coordinates": {
+          "lat": -21.694722222222,
+          "lon": -45.255277777778
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q12897",
+        "wikidata_revision": 2515828994,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Pel%C3%A9",
+        "retrieved_at": "2026-07-11T08:27:40.843256Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q859",
+      "qid": "Q859",
+      "text": "Plato",
+      "description": "4th-century BCE Greek philosopher",
+      "birth": {
+        "raw": "-0427-05-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q1524",
+        "label": "Athens",
+        "coordinates": {
+          "lat": 37.98416666666667,
+          "lon": 23.728055555555557
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q859",
+        "wikidata_revision": 2515922853,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Plato",
+        "retrieved_at": "2026-07-11T08:27:40.842251Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q450675",
+      "qid": "Q450675",
+      "text": "Pope Francis",
+      "description": "266th pope of the Catholic Church from 2013 to 2025 (1936–2025)",
+      "birth": {
+        "raw": "+1936-12-17T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q643907",
+        "label": "Flores",
+        "coordinates": {
+          "lat": -34.633333333333,
+          "lon": -58.466666666667
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q450675",
+        "wikidata_revision": 2515915640,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Pope_Francis",
+        "retrieved_at": "2026-07-11T08:27:40.843525Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7192",
+      "qid": "Q7192",
+      "text": "Qin Shi Huang",
+      "description": "first emperor of Qin Dynasty",
+      "birth": {
+        "raw": "-0259-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q58570",
+        "label": "Handan",
+        "coordinates": {
+          "lat": 36.61161,
+          "lon": 114.48937
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7192",
+        "wikidata_revision": 2515826343,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Qin_Shi_Huang",
+        "retrieved_at": "2026-07-11T08:27:40.841990Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7241",
+      "qid": "Q7241",
+      "text": "Rabindranath Tagore",
+      "description": "Bengali poet, philosopher and polymath (1861–1941)",
+      "birth": {
+        "raw": "+1861-05-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1348",
+        "label": "Kolkata",
+        "coordinates": {
+          "lat": 22.5675,
+          "lon": 88.37
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7241",
+        "wikidata_revision": 2515921948,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Rabindranath_Tagore",
+        "retrieved_at": "2026-07-11T08:27:40.843028Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q100948",
+      "qid": "Q100948",
+      "text": "Rachel Carson",
+      "description": "American marine biologist and conservationist (1907–1964)",
+      "birth": {
+        "raw": "+1907-05-27T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q7279187",
+        "label": "Rachel Carson Homestead",
+        "coordinates": {
+          "lat": 40.546431,
+          "lon": -79.783353
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q100948",
+        "wikidata_revision": 2513414950,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Rachel_Carson",
+        "retrieved_at": "2026-07-11T08:27:40.842959Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q39246",
+      "qid": "Q39246",
+      "text": "Richard Feynman",
+      "description": "American theoretical physicist (1918–1988)",
+      "birth": {
+        "raw": "+1918-05-11T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q18424",
+        "label": "Queens",
+        "coordinates": {
+          "lat": 40.71361111111111,
+          "lon": -73.82805555555555
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q39246",
+        "wikidata_revision": 2511654653,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Richard_Feynman",
+        "retrieved_at": "2026-07-11T08:27:40.842950Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q41921",
+      "qid": "Q41921",
+      "text": "Rosa Parks",
+      "description": "civil rights activist",
+      "birth": {
+        "raw": "+1913-02-04T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q79718",
+        "label": "Tuskegee",
+        "coordinates": {
+          "lat": 32.431506,
+          "lon": -85.706781
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q41921",
+        "wikidata_revision": 2514624238,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Rosa_Parks",
+        "retrieved_at": "2026-07-11T08:27:40.842823Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q43347",
+      "qid": "Q43347",
+      "text": "Rumi",
+      "description": "Iranian poet",
+      "birth": {
+        "raw": "+1207-09-30T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q182159",
+        "label": "Balkh",
+        "coordinates": {
+          "lat": 36.758055555556,
+          "lon": 66.898888888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q43347",
+        "wikidata_revision": 2515833417,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Rumi",
+        "retrieved_at": "2026-07-11T08:27:40.842350Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8581",
+      "qid": "Q8581",
+      "text": "Saladin",
+      "description": "Sultan of Egypt and founder of the Ayyubid dynasty (1137–1193)",
+      "birth": {
+        "raw": "+1138-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q109260815",
+        "label": "Tikrit Castle",
+        "coordinates": {
+          "lat": 34.601684,
+          "lon": 43.693905
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8581",
+        "wikidata_revision": 2515827205,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Saladin",
+        "retrieved_at": "2026-07-11T08:27:40.842359Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q11459",
+      "qid": "Q11459",
+      "text": "Serena Williams",
+      "description": "American tennis player (1981)",
+      "birth": {
+        "raw": "+1981-09-26T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q719",
+        "label": "Saginaw",
+        "coordinates": {
+          "lat": 43.4199247,
+          "lon": -83.9500261
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q11459",
+        "wikidata_revision": 2515828602,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Serena_Williams",
+        "retrieved_at": "2026-07-11T08:27:40.843279Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q27695",
+      "qid": "Q27695",
+      "text": "Shaka Zulu",
+      "description": "leader of the Zulu Kingdom",
+      "birth": {
+        "raw": "+1787-07-00T00:00:00Z",
+        "precision": 10,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q600562",
+        "label": "Mthethwa Paramountcy",
+        "coordinates": {
+          "lat": -28.515,
+          "lon": 31.8486
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q27695",
+        "wikidata_revision": 2504840580,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Shaka",
+        "retrieved_at": "2026-07-11T08:27:40.843093Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q9215",
+      "qid": "Q9215",
+      "text": "Sigmund Freud",
+      "description": "Austrian psychiatrist and founder of psychoanalysis (1856–1939)",
+      "birth": {
+        "raw": "+1856-05-06T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q654019",
+        "label": "Příbor",
+        "coordinates": {
+          "lat": 49.640926771377,
+          "lon": 18.145022037352
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q9215",
+        "wikidata_revision": 2515930621,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Sigmund_Freud",
+        "retrieved_at": "2026-07-11T08:27:40.842704Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8605",
+      "qid": "Q8605",
+      "text": "Simón Bolívar",
+      "description": "Venezuelan statesman and military officer (1783–1830)",
+      "birth": {
+        "raw": "+1783-07-24T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q5754450",
+        "label": "Birthplace of Simón Bolívar",
+        "coordinates": {
+          "lat": 10.495277777778,
+          "lon": -66.916944444444
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8605",
+        "wikidata_revision": 2515448594,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Sim%C3%B3n_Bol%C3%ADvar",
+        "retrieved_at": "2026-07-11T08:27:40.842870Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q913",
+      "qid": "Q913",
+      "text": "Socrates",
+      "description": "5th-century BCE Greek philosopher",
+      "birth": {
+        "raw": "-0470-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q2839314",
+        "label": "Alopeke",
+        "coordinates": {
+          "lat": 37.95,
+          "lon": 23.75
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q913",
+        "wikidata_revision": 2516193130,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Socrates",
+        "retrieved_at": "2026-07-11T08:27:40.842238Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q17714",
+      "qid": "Q17714",
+      "text": "Stephen Hawking",
+      "description": "British theoretical physicist, cosmologist and author (1942–2018)",
+      "birth": {
+        "raw": "+1942-01-08T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q34217",
+        "label": "Oxford",
+        "coordinates": {
+          "lat": 51.751944444444,
+          "lon": -1.2577777777778
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q17714",
+        "wikidata_revision": 2515936066,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Stephen_Hawking",
+        "retrieved_at": "2026-07-11T08:27:40.842936Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q19837",
+      "qid": "Q19837",
+      "text": "Steve Jobs",
+      "description": "American entrepreneur; co-founder of Apple Inc. (1955–2011)",
+      "birth": {
+        "raw": "+1955-02-24T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q62",
+        "label": "San Francisco",
+        "coordinates": {
+          "lat": 37.775,
+          "lon": -122.41944444444445
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q19837",
+        "wikidata_revision": 2511754467,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Steve_Jobs",
+        "retrieved_at": "2026-07-11T08:27:40.843414Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q37151",
+      "qid": "Q37151",
+      "text": "Sun Tzu",
+      "description": "6th century BCE Chinese general and military strategist",
+      "birth": {
+        "raw": "-0544-00-00T00:00:00Z",
+        "precision": 9,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q837855",
+        "label": "Qi",
+        "coordinates": {
+          "lat": 36.865,
+          "lon": 118.34
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q37151",
+        "wikidata_revision": 2515832222,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Sun_Tzu",
+        "retrieved_at": "2026-07-11T08:27:40.842229Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q192245",
+      "qid": "Q192245",
+      "text": "Susan B. Anthony",
+      "description": "American women's rights activist (1820–1906)",
+      "birth": {
+        "raw": "+1820-02-15T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q351740",
+        "label": "Adams",
+        "coordinates": {
+          "lat": 42.624166666667,
+          "lon": -73.118055555556
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q192245",
+        "wikidata_revision": 2515849932,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Susan_B._Anthony",
+        "retrieved_at": "2026-07-11T08:27:40.842643Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q26876",
+      "qid": "Q26876",
+      "text": "Taylor Swift",
+      "description": "American singer-songwriter (born 1989)",
+      "birth": {
+        "raw": "+1989-12-13T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q528626",
+        "label": "West Reading",
+        "coordinates": {
+          "lat": 40.3342,
+          "lon": -75.9467
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q26876",
+        "wikidata_revision": 2515864870,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Taylor_Swift",
+        "retrieved_at": "2026-07-11T08:27:40.843346Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q17293",
+      "qid": "Q17293",
+      "text": "Tenzin Gyatso",
+      "description": "14th Dalai Lama, the spiritual and temporal leader of Tibetans",
+      "birth": {
+        "raw": "+1935-07-06T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q426534",
+        "label": "Taktser",
+        "coordinates": {
+          "lat": 36.378083333333,
+          "lon": 101.86588888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q17293",
+        "wikidata_revision": 2514370015,
+        "enwiki_url": "https://en.wikipedia.org/wiki/14th_Dalai_Lama",
+        "retrieved_at": "2026-07-11T08:27:40.842136Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q9441",
+      "qid": "Q9441",
+      "text": "The Buddha",
+      "description": "Indian philosopher and the founder of Buddhism (623 or 563 BCE – 543 or 483 BCE)",
+      "birth": {
+        "raw": "-0563-04-08T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q9213",
+        "label": "Lumbini",
+        "coordinates": {
+          "lat": 27.4814,
+          "lon": 83.275829
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q9441",
+        "wikidata_revision": 2515933096,
+        "enwiki_url": "https://en.wikipedia.org/wiki/The_Buddha",
+        "retrieved_at": "2026-07-11T08:27:40.841901Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q11812",
+      "qid": "Q11812",
+      "text": "Thomas Jefferson",
+      "description": "Founding Father, U.S. president from 1801 to 1809 (1743–1826)",
+      "birth": {
+        "raw": "+1743-04-13T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q4179352",
+        "label": "Shadwell",
+        "coordinates": {
+          "lat": 38.0131,
+          "lon": -78.3956
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q11812",
+        "wikidata_revision": 2514279962,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Thomas_Jefferson",
+        "retrieved_at": "2026-07-11T08:27:40.842534Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q171977",
+      "qid": "Q171977",
+      "text": "Tokugawa Ieyasu",
+      "description": "founder and first shogun of the Tokugawa shogunate of Japan (1543–1616)",
+      "birth": {
+        "raw": "+1543-01-31T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q1013445",
+        "label": "Okazaki Castle",
+        "coordinates": {
+          "lat": 34.956388888889,
+          "lon": 137.15888888889
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q171977",
+        "wikidata_revision": 2515846072,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Tokugawa_Ieyasu",
+        "retrieved_at": "2026-07-11T08:27:40.843058Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q6107",
+      "qid": "Q6107",
+      "text": "Tupac Shakur",
+      "description": "American rapper and actor (1971–1996)",
+      "birth": {
+        "raw": "+1971-06-16T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1069687",
+        "label": "East Harlem",
+        "coordinates": {
+          "lat": 40.798611111111114,
+          "lon": -73.94166666666666
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q6107",
+        "wikidata_revision": 2514952900,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Tupac_Shakur",
+        "retrieved_at": "2026-07-11T08:27:40.843361Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q5582",
+      "qid": "Q5582",
+      "text": "Vincent van Gogh",
+      "description": "Dutch painter (1853–1890)",
+      "birth": {
+        "raw": "+1853-03-30T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q9883",
+        "label": "Zundert",
+        "coordinates": {
+          "lat": 51.4703,
+          "lon": 4.66
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q5582",
+        "wikidata_revision": 2511584589,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Vincent_van_Gogh",
+        "retrieved_at": "2026-07-11T08:27:40.842676Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q40909",
+      "qid": "Q40909",
+      "text": "Virginia Woolf",
+      "description": "English modernist writer (1882–1941)",
+      "birth": {
+        "raw": "+1882-01-25T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q5953682",
+        "label": "Hyde Park Gate",
+        "coordinates": {
+          "lat": 51.5004,
+          "lon": -0.182722
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q40909",
+        "wikidata_revision": 2515832739,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Virginia_Woolf",
+        "retrieved_at": "2026-07-11T08:27:40.842978Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q7747",
+      "qid": "Q7747",
+      "text": "Vladimir Putin",
+      "description": "2nd and 4th President of Russia (2000–2008, 2012–present), 7th and 11th Prime Minister of Russia (1999–2000, 2008–2012)",
+      "birth": {
+        "raw": "+1952-10-07T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q28133957",
+        "label": "V.F. Snegiryov Maternity Hospital No.6",
+        "coordinates": null
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q7747",
+        "wikidata_revision": 2516187850,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Vladimir_Putin",
+        "retrieved_at": "2026-07-11T08:27:40.843583Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q158060",
+      "qid": "Q158060",
+      "text": "W. E. B. Du Bois",
+      "description": "American sociologist and activist (1868–1963)",
+      "birth": {
+        "raw": "+1868-02-23T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1144518",
+        "label": "Great Barrington",
+        "coordinates": {
+          "lat": 42.1958,
+          "lon": -73.3625
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q158060",
+        "wikidata_revision": 2515844082,
+        "enwiki_url": "https://en.wikipedia.org/wiki/W._E._B._Du_Bois",
+        "retrieved_at": "2026-07-11T08:27:40.842969Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8704",
+      "qid": "Q8704",
+      "text": "Walt Disney",
+      "description": "American animator, producer, director, screenwriter, voice actor and entrepreneur, founder of The Walt Disney Company (1901–1966)",
+      "birth": {
+        "raw": "+1901-12-05T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q1297",
+        "label": "Chicago",
+        "coordinates": {
+          "lat": 41.88194444444444,
+          "lon": -87.62777777777778
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8704",
+        "wikidata_revision": 2515827276,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Walt_Disney",
+        "retrieved_at": "2026-07-11T08:27:40.843190Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q692",
+      "qid": "Q692",
+      "text": "William Shakespeare",
+      "description": "English playwright and poet (1564–1616)",
+      "birth": {
+        "raw": "+1564-04-00T00:00:00Z",
+        "precision": 10,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985786"
+      },
+      "birth_place": {
+        "qid": "Q189288",
+        "label": "Stratford-upon-Avon",
+        "coordinates": {
+          "lat": 52.19277777777778,
+          "lon": -1.7063888888888887
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q692",
+        "wikidata_revision": 2515822621,
+        "enwiki_url": "https://en.wikipedia.org/wiki/William_Shakespeare",
+        "retrieved_at": "2026-07-11T08:27:40.842433Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q8016",
+      "qid": "Q8016",
+      "text": "Winston Churchill",
+      "description": "British statesman, soldier and writer (1874–1965)",
+      "birth": {
+        "raw": "+1874-11-30T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q208181",
+        "label": "Blenheim Palace",
+        "coordinates": {
+          "lat": 51.8413626656391,
+          "lon": -1.36094830755894
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q8016",
+        "wikidata_revision": 2515931721,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Winston_Churchill",
+        "retrieved_at": "2026-07-11T08:27:40.842764Z"
+      }
+    },
+    {
+      "id": "figure:wikidata:q254",
+      "qid": "Q254",
+      "text": "Wolfgang Amadeus Mozart",
+      "description": "Austrian composer of the Classical period (1756-1791)",
+      "birth": {
+        "raw": "+1756-01-27T00:00:00Z",
+        "precision": 11,
+        "calendar_model": "http://www.wikidata.org/entity/Q1985727"
+      },
+      "birth_place": {
+        "qid": "Q34713",
+        "label": "Salzburg",
+        "coordinates": {
+          "lat": 47.8,
+          "lon": 13.045
+        }
+      },
+      "calculation_status": "core_only",
+      "calculation_note": "Birth time is not established by this catalog import; time-sensitive encoders are withheld.",
+      "provenance": {
+        "notability_rule": "Wikidata human with an English Wikipedia biography",
+        "wikidata_url": "https://www.wikidata.org/wiki/Q254",
+        "wikidata_revision": 2515291348,
+        "enwiki_url": "https://en.wikipedia.org/wiki/Wolfgang_Amadeus_Mozart",
+        "retrieved_at": "2026-07-11T08:27:40.842466Z"
+      }
+    }
+  ],
+  "exclusions": []
+}

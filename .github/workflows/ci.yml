@@ -1,0 +1,30 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned runtime and test dependencies
+        run: pip install --require-hashes -r requirements-dev.txt
+      - name: Run complete test suite
+        run: |
+          python3 tools/run_tests.py --quiet
+      - name: Run standard pytest suite
+        run: python3 -m pytest -q
+      - name: Parse client script
+        run: node --check webapp/static/app.js
+      - name: Validate generated public contracts
+        run: python3 tools/validate_contracts.py
+      - name: Build container
+        run: docker build --build-arg HME_BUILD_REVISION="$GITHUB_SHA" -t human-metadata-engine:ci .

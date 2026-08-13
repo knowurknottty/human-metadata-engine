@@ -17,6 +17,7 @@ New:
 
 import hashlib
 import hmac
+import html
 import json
 import math
 import os
@@ -26,6 +27,7 @@ import os
 # ---------------------------------------------------------------------------
 
 _PUBLIC_EXCLUDED = frozenset({
+    "computed_at",
     "birth", "lat", "lon", "location", "coordinates",
     "health", "neuro", "neurodata",
     "contacts", "relationships", "relationship",
@@ -135,6 +137,7 @@ def render_sigil_svg(manifest: dict, size: int = 300,
     """Layered SVG sigil. All geometry from manifest digest bytes only."""
     raw  = bytes.fromhex(manifest["digest"])
     name = identity_name or "unknown"
+    display_name = html.escape(str(name), quote=True)
     cx = cy = size / 2
     R  = size * 0.46
 
@@ -225,7 +228,7 @@ def render_sigil_svg(manifest: dict, size: int = 300,
         a     = (2 * math.pi * i) / num_glyphs
         gx    = cx + glyph_r * math.cos(a)
         gy    = cy + glyph_r * math.sin(a)
-        ch    = chars[raw[(24 + i) % 32] % len(chars)]
+        ch    = html.escape(chars[raw[(24 + i) % 32] % len(chars)])
         hue_s = _hue(raw[(24 + i) % 32], raw[(25 + i) % 32])
         p.append(
             f'    <text x="{gx:.2f}" y="{gy:.2f}" '
@@ -242,7 +245,7 @@ def render_sigil_svg(manifest: dict, size: int = 300,
     p.append(
         f'  <text x="{cx:.2f}" y="{size - 10}" text-anchor="middle" '
         f'fill="#444444" font-size="7" font-family="monospace">'
-        f'{name} | {manifest["render_spec"]} | {manifest["digest"][:8]}</text>'
+        f'{display_name} | {manifest["render_spec"]} | {manifest["digest"][:8]}</text>'
     )
     p.append("  </g>")
     p.append("</svg>")
@@ -299,7 +302,7 @@ def export_manual_html(profiles: list, outpath: str, size: int = 200) -> str:
     """
     sections = []
     for sig in profiles:
-        name       = sig.get("id", "unknown")
+        name       = html.escape(str(sig.get("id", "unknown")), quote=True)
         projection = build_public_projection(sig)
         manifest   = build_manifest(projection, mode="public")
         svg        = render_sigil_svg(manifest, size=size, identity_name=name)
@@ -324,7 +327,7 @@ def export_manual_html(profiles: list, outpath: str, size: int = 200) -> str:
   </table>
 </div>""")
 
-    html = f"""<!DOCTYPE html>
+    document = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -343,5 +346,5 @@ def export_manual_html(profiles: list, outpath: str, size: int = 200) -> str:
 
     os.makedirs(os.path.dirname(os.path.abspath(outpath)), exist_ok=True)
     with open(outpath, "w", encoding="utf-8") as fh:
-        fh.write(html)
+        fh.write(document)
     return os.path.abspath(outpath)

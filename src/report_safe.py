@@ -1,111 +1,342 @@
-"""Public-report hardening layer.
+"""Truth-bounded public reports.
 
-The legacy report remains available for compatibility. This wrapper corrects
-claims that overstate independence or empirical meaning without altering the
-underlying symbolic calculations.
+``report.py`` is retained as the legacy long-form compatibility formatter.
+This module is the only formatter used by the public server.  It builds a
+shorter report from structured engine output instead of repairing legacy prose
+with string replacements.
 """
 
 from __future__ import annotations
 
-import re
+from typing import Any
 
-from report import generate_report as generate_legacy_report
-
-
-EVIDENCE_NOTICE = """> **How to read this report**
-> Name arithmetic and linguistic counts are computed. Psychology is self-reported. Numerology, astrology, Human Design, and cross-tradition correspondences are symbolic reflection systems rather than validated personality measurements. The resonance value is an interpretive engine index, not a percentage of accuracy.
-
-"""
+from engine import available_encoder_names
 
 
-def _harden_language(markdown: str) -> str:
-    text = markdown
-    text = text.replace(
-        "This is a high reading: several independent systems arrive at compatible readings.",
-        "This is a higher value within this engine's interpretive index: several configured outputs coincide.",
-    )
-    text = text.replace(
-        "the independent symbolic systems converge on this name far more often than chance would suggest",
-        "the configured symbolic outputs coincide more strongly within this engine",
-    )
-    text = text.replace(
-        "several independent systems arrive at compatible readings",
-        "several configured symbolic outputs coincide",
-    )
-    text = text.replace(
-        "five independent digit systems",
-        "five configured digit outputs",
-    )
-    text = text.replace(
-        "The reduced total",
-        "The mathematically related reduced total",
-    )
-    text = text.replace(
-        "gives a third, independent digit-vote that feeds the convergence analysis below.",
-        "is retained as a consistency check, but is excluded as an independent convergence vote because it is mathematically coupled to the Pythagorean root.",
-    )
-    text = text.replace(
-        "The deepest question this engine can ask is: *where do the independently specified core systems agree?*",
-        "A useful question for this engine is: *where do separately configured mapping families agree, after dependent outputs are removed?*",
-    )
-    text = re.sub(
-        r"(\d+) of (\d+) independent systems reduce this name",
-        r"\1 of \2 configured outputs reduce this name",
-        text,
-    )
-    text = re.sub(
-        r"(\d+) of (\d+) digit-producing systems converge",
-        r"\1 of \2 configured digit outputs coincide",
-        text,
-    )
-    text = text.replace(
-        "despite using unrelated letter-value tables.",
-        "under their configured mappings; mathematically dependent mappings must not be counted as separate confirmation.",
-    )
-    text = text.replace(
-        "quantifies exactly this: convergence weighted at 35%",
-        "summarizes a related four-family interpretive index: convergence weighted at 35%",
-    )
-    text = text.replace(
-        "The convergent themes of this analysis point to reliable capacities — the qualities multiple systems agree on are the ones to build strategy around rather than treat as accidents.",
-        "Repeated symbolic themes can be useful reflection prompts, but they are not evidence of reliable capacities until confirmed by behavior, history, or validated assessment.",
-    )
-    text = text.replace(
-        "**How others likely perceive this identity.**",
-        "**One possible first impression of the name.**",
-    )
-    text = text.replace(
-        "against a theoretical maximum of",
-        "against the 26-letter alphabet ceiling of",
-    )
-    text = text.replace(
-        "for its length — an entropy ratio",
-        "— an alphabet-normalized entropy ratio",
-    )
-    text = text.replace(
-        "a chain of 3 steps means the name holds three orders of magnitude of numeric structure before yielding its essence — a deep name in the Pythagorean-mystical sense",
-        "a three-step reduction chain is recorded; any claim that this implies greater personal depth is symbolic interpretation rather than measurement",
-    )
-    text = text.replace(
-        "Everything below is deterministic: run the engine again on the same inputs and you will get the same result, character for character.",
-        "Everything below is deterministic for the same normalized inputs and convention versions. Reproducibility does not establish empirical validity.",
-    )
+EVIDENCE_MODEL = "computed-self_report-symbolic-experimental-v2"
+
+
+def _md(value: Any) -> str:
+    """Escape user-controlled text for the report's supported Markdown subset."""
+    text = str(value)
+    for marker in ("\\", "`", "*", "_", "[", "]", "#"):
+        text = text.replace(marker, "\\" + marker)
     return text
 
 
-def generate_report(sig: dict, psychology: dict | None = None, comparisons: list[dict] | None = None) -> dict:
-    report = generate_legacy_report(sig, psychology=psychology, comparisons=comparisons)
-    markdown = _harden_language(report["markdown"])
-    first_break = markdown.find("\n\n")
-    if first_break >= 0:
-        markdown = markdown[: first_break + 2] + EVIDENCE_NOTICE + markdown[first_break + 2 :]
+def _meta(
+    section: int,
+    title: str,
+    category: str,
+    *,
+    validation: str,
+    provenance: list[str],
+    limitations: list[str],
+) -> dict[str, Any]:
+    return {
+        "section": section,
+        "title": title,
+        "category": category,
+        "evidence_level": {
+            "mathematical": "direct_calculation",
+            "astronomical": "ephemeris_calculation",
+            "user_reported": "supplied_by_user",
+            "traditional_symbolic": "traditional_framework",
+            "heuristic": "configured_method",
+            "speculative_synthesis": "interpretive_synthesis",
+        }[category],
+        "confidence": None,
+        "deterministic": True,
+        "scientific_validation": validation,
+        "provenance": provenance,
+        "limitations": limitations,
+    }
+
+
+def _common_metadata() -> list[dict[str, Any]]:
+    return [
+        _meta(1, "Identity and input summary", "user_reported", validation="not_applicable",
+              provenance=["analysis-v1 normalized input"],
+              limitations=["Exact birth location, coordinates, and time are omitted from the export."]),
+        _meta(2, "Data quality and calculation coverage", "heuristic", validation="method_dependent",
+              provenance=["signature-v2 availability flags"],
+              limitations=["Coverage is not accuracy and missing evidence is not imputed."]),
+        _meta(3, "Plain-English overview", "speculative_synthesis", validation="not_established",
+              provenance=["resonance-v3 configured components"],
+              limitations=["The convergence index is not a probability, diagnosis, or measure of worth."]),
+        _meta(4, "Deterministic name calculations", "mathematical", validation="calculation_reproducible",
+              provenance=["Pythagorean", "Chaldean", "ordinal", "linguistic encoders"],
+              limitations=["Numerology mappings are traditional conventions; arithmetic correctness does not validate personality claims."]),
+        _meta(5, "Astronomical birth-chart calculations", "astronomical", validation="ephemeris_computed",
+              provenance=["Swiss Ephemeris tropical chart"],
+              limitations=["Astrological interpretation is traditional and not scientifically established."]),
+        _meta(6, "Human Design", "traditional_symbolic", validation="not_established",
+              provenance=["true-human-design-core-v1 when available"],
+              limitations=["A versioned symbolic calculation is not a validated personality assessment."]),
+        _meta(7, "User-supplied psychology", "user_reported", validation="depends_on_source_method",
+              provenance=["public request psychology fields"],
+              limitations=["The engine does not independently verify, diagnose, or upgrade self-report status."]),
+        _meta(8, "Cross-system synthesis", "speculative_synthesis", validation="not_established",
+              provenance=["configured report synthesis"],
+              limitations=["Repeated themes across symbolic systems are not independent evidence."]),
+        _meta(9, "Agreements, tensions, and contradictions", "heuristic", validation="method_dependent",
+              provenance=["configured output comparison"],
+              limitations=["Output agreement is not personal similarity or objective compatibility."]),
+        _meta(10, "Provenance, limitations, and reproduction", "mathematical", validation="calculation_reproducible",
+              provenance=["analysis-v1", "signature-v2", EVIDENCE_MODEL],
+              limitations=["Reproducibility establishes stable computation, not empirical validity."]),
+    ]
+
+
+def _alias_line(aliases: list[str] | None) -> str:
+    """Render a bounded, Markdown-safe alias summary for public exports."""
+    if not aliases:
+        return "- Other names: none supplied."
+    return "- Other names: " + ", ".join(f"**{_md(alias)}**" for alias in aliases) + "."
+
+
+def _data_report(
+    sig: dict,
+    psychology: dict | None = None,
+    comparisons: list[dict] | None = None,
+    aliases: list[str] | None = None,
+) -> dict:
+    """Build a compact evidence-first report without interpretive prose."""
+    encoders = sig.get("encoders", {})
+    pyth = encoders.get("pythagorean", {})
+    ling = encoders.get("linguistic", {})
+    resonance = sig.get("resonance", {})
+    lines = [
+        f"# Human Metadata Engine Data Report — {_md(sig.get('text', 'Unknown'))}",
+        "",
+        "> **How to read this report**",
+        "> Data mode reports reproducible string measurements, provenance, and configured comparison outputs. It does not infer personality, fate, cultural origin, or real-world similarity from a name.",
+        "",
+        "## 1. Input and method",
+        "",
+        f"- Analyzed identity: **{_md(sig.get('text', 'Unknown'))}**.",
+        _alias_line(aliases),
+        f"- Contract: `{_md(sig.get('contract_version', 'signature-v2'))}`",
+        "- Analysis mode: `data`",
+        f"- Encoder outputs available: `{len(available_encoder_names(sig))}`",
+        f"- Computed dimensions: `{sig.get('computed_dimensions', sig.get('dimensions', 0))}`",
+        "- Exact birth location, coordinates, and time are intentionally excluded from this export.",
+        "",
+        "## 2. Computed measurements",
+        "",
+        f"- Pythagorean expression: `{pyth.get('expression', '—')}`; total `{pyth.get('total', '—')}`",
+        f"- Chaldean name number: `{encoders.get('chaldean', {}).get('name_number', '—')}`",
+        f"- Ordinal reduced value: `{encoders.get('ordinal', {}).get('ordinal_reduced', '—')}`",
+        f"- Letter count: `{ling.get('letter_count', '—')}`",
+        f"- Entropy ratio: `{float(ling.get('entropy_ratio', 0)):.3f}`",
+        f"- Pattern convergence index: `{resonance.get('score', '—')}/100` (configured output agreement; not accuracy or probability)",
+        "",
+        "## 3. Evidence coverage",
+        "",
+        "Computed string structure, self-report, astronomical calculations, and symbolic layers remain separate. Missing evidence is not imputed.",
+        f"- Psychology supplied: `{'yes' if psychology else 'no'}`",
+        f"- Reference rows returned: `{len(comparisons or [])}`",
+        "",
+        "## 4. Limitations",
+        "",
+        "These outputs describe configured encoders over an input string. They do not establish personality, causation, cultural origin, employment suitability, health status, compatibility, or a relationship between people.",
+    ]
+    markdown = "\n".join(lines) + "\n"
+    return {
+        "markdown": markdown,
+        "word_count": len(markdown.split()),
+        "sections": [1, 2, 3, 4],
+        "section_metadata": [
+            _meta(1, "Input and method", "user_reported", validation="not_applicable",
+                  provenance=["analysis-v1 normalized input"],
+                  limitations=["Exact birth location, coordinates, and time are omitted from the export."]),
+            _meta(2, "Computed measurements", "mathematical", validation="calculation_reproducible",
+                  provenance=["signature-v2 public encoder outputs"],
+                  limitations=["Traditional meanings assigned to calculated numbers are not measurements."]),
+            _meta(3, "Evidence coverage", "heuristic", validation="method_dependent",
+                  provenance=[EVIDENCE_MODEL],
+                  limitations=["Coverage is not accuracy and missing evidence is not imputed."]),
+            _meta(4, "Limitations", "mathematical", validation="not_applicable",
+                  provenance=["analysis-v1 public claim policy"],
+                  limitations=["The listed exclusions apply to every Data report output."]),
+        ],
+        "evidence_model": EVIDENCE_MODEL,
+        "mode": "data",
+    }
+
+
+def _psychology_summary(psychology: dict | None) -> list[str]:
+    if not psychology:
+        return ["No psychology fields were supplied. The engine does not infer them from the name."]
+    lines: list[str] = []
+    if psychology.get("mbti"):
+        lines.append(f"MBTI: `{_md(psychology['mbti'])}` (user supplied)")
+    enneagram = psychology.get("enneagram") or {}
+    if enneagram.get("type"):
+        wing = f"w{enneagram['wing']}" if enneagram.get("wing") else "no wing supplied"
+        lines.append(f"Enneagram: `Type {enneagram['type']} {wing}` (user supplied)")
+    relational = psychology.get("relational_patterns") or {}
+    if relational.get("attachment_style"):
+        lines.append(f"Relational patterns — attachment style: `{_md(relational['attachment_style'])}` (user supplied)")
+    answered_big_five = sorted(
+        key for key, value in (psychology.get("big_five") or {}).items() if value is not None
+    )
+    if answered_big_five:
+        lines.append("Big Five fields supplied: " + ", ".join(_md(key) for key in answered_big_five))
+    return lines or ["Psychology metadata was supplied, but no supported scored field was answered."]
+
+
+def _magic_report(
+    sig: dict,
+    psychology: dict | None,
+    comparisons: list[dict] | None,
+    aliases: list[str] | None = None,
+) -> dict:
+    encoders = sig.get("encoders", {})
+    pyth = encoders.get("pythagorean", {})
+    chaldean = encoders.get("chaldean", {})
+    ordinal = encoders.get("ordinal", {})
+    linguistic = encoders.get("linguistic", {})
+    astrology = encoders.get("astrology") or {}
+    human_design = encoders.get("human_design") or {}
+    resonance = sig.get("resonance") or {}
+    has_astrology = bool(astrology and not astrology.get("error") and astrology.get("sun_sign"))
+    hd_available = human_design.get("available") is True and human_design.get("status") == "provisional_calculation"
+    extensions = [
+        value for value in encoders.values()
+        if isinstance(value, dict) and value.get("system") and value.get("provenance")
+    ]
+    roots = [
+        pyth.get("expression"), chaldean.get("name_number"),
+        encoders.get("gematria", {}).get("absolute_reduced"),
+        encoders.get("isopsephy", {}).get("reduced"),
+    ]
+    psychology_lines = _psychology_summary(psychology)
+    closest = (comparisons or [{}])[0]
+
+    if has_astrology:
+        if astrology.get("date_only") or astrology.get("time_sensitive_fields_withheld"):
+            astronomy_lines = [
+                f"- Sun sign: `{astrology.get('sun_sign')}`.",
+                "- Birth time was unavailable or uncertain; Moon, rising sign, houses, aspects, and Human Design are withheld.",
+            ]
+        else:
+            astronomy_lines = [
+                f"- Sun: `{astrology.get('sun_sign', '—')}`; Moon: `{astrology.get('moon_sign', '—')}`; rising sign: `{astrology.get('ascendant', '—')}`.",
+                f"- Major aspects returned: `{len(astrology.get('aspects') or [])}`; `{len(astrology.get('house_cusps') or [])}` {astrology.get('house_system', 'configured')} house cusps returned.",
+            ]
     else:
-        markdown = EVIDENCE_NOTICE + markdown
-    result = dict(report)
-    result["markdown"] = markdown
-    result["word_count"] = len(markdown.split())
-    result["evidence_model"] = "computed-self_report-symbolic-experimental-v1"
-    return result
+        astronomy_lines = ["- No usable birth-chart calculation is available for this run."]
+
+    if hd_available:
+        hd_lines = [
+            f"- Versioned calculation status: `{human_design.get('status')}`.",
+            f"- Type: `{human_design.get('type', '—')}`; strategy: `{human_design.get('strategy', '—')}`; authority: `{human_design.get('authority', '—')}`; profile: `{human_design.get('profile', '—')}`.",
+            "- Within this symbolic framework, these are rule-derived labels. They are not a validated personality assessment.",
+        ]
+    else:
+        reason = human_design.get("reason") or human_design.get("unavailable") or "Required precise birth inputs were not available."
+        hd_lines = [f"- Human Design status: unavailable — {_md(reason)}"]
+        if human_design.get("user_reported_type"):
+            hd_lines.append(f"- User-reported type: **{_md(human_design['user_reported_type'])}** (self-report only).")
+
+    lines = [
+        f"# Human Metadata Engine Report — {_md(sig.get('text', 'Unknown'))}",
+        "",
+        "> **How to read this report**",
+        "> Direct calculations, astronomy, self-report, traditional symbolic interpretation, and synthesis are labeled separately. The pattern convergence index is not a percentage of accuracy. This report is not diagnosis, prediction, destiny, or an empirical personality assessment.",
+        "",
+        "## 1. Identity and input summary",
+        "",
+        f"- Analyzed identity: **{_md(sig.get('text', 'Unknown'))}**.",
+        _alias_line(aliases),
+        f"- Analysis mode: `magic`; contract: `{_md(sig.get('contract_version', 'signature-v2'))}`.",
+        f"- Birth-derived calculation present: `{'yes' if has_astrology else 'no'}`; psychology supplied: `{'yes' if psychology else 'no'}`.",
+        "- Exact birth location, coordinates, and time are omitted from this export.",
+        "",
+        "## 2. Data quality and calculation coverage",
+        "",
+        f"- Available encoder outputs: `{len(available_encoder_names(sig))}`; computed dimensions: `{sig.get('computed_dimensions', sig.get('dimensions', 0))}`.",
+        f"- Provenance-aware symbolic extensions: `{len(extensions)}`.",
+        "- Missing inputs remain missing. The engine does not substitute a noon birth time or current UTC offset.",
+        "",
+        "## 3. Plain-English overview",
+        "",
+        f"The configured pattern convergence index is **{resonance.get('score', '—')}/100**. It summarizes agreement among configured output components. A higher number is not greater accuracy, ability, worth, compatibility, or certainty.",
+        "",
+        "Within this symbolic framework, repeated patterns can be used as reflection prompts. Treat any prompt as a hypothesis to compare with observed behavior, not as a fact about the person.",
+        "",
+        "## 4. Deterministic name calculations",
+        "",
+        f"- Pythagorean: expression `{pyth.get('expression', '—')}`, soul urge `{pyth.get('soul_urge', '—')}`, personality `{pyth.get('personality', '—')}`.",
+        f"- Chaldean: name number `{chaldean.get('name_number', '—')}`, compound `{chaldean.get('compound_number', '—')}`.",
+        f"- Ordinal: total `{ordinal.get('ordinal_total', '—')}`, reduced `{ordinal.get('ordinal_reduced', '—')}`.",
+        f"- Linguistic: `{linguistic.get('letter_count', '—')}` letters, entropy ratio `{float(linguistic.get('entropy_ratio', 0)):.3f}`.",
+        "",
+        "The arithmetic above is reproducible. Traditional meanings assigned to those numbers are symbolic conventions and are not scientifically established personality measurements.",
+        "",
+        "## 5. Astronomical birth-chart calculations",
+        "",
+        *astronomy_lines,
+        "",
+        "Astronomical positions are ephemeris calculations. Zodiac-based personality meanings are a separate traditional interpretation layer.",
+        "",
+        "## 6. Human Design or related derived systems",
+        "",
+        *hd_lines,
+        "",
+        "## 7. User-supplied psychology",
+        "",
+        *[f"- {item}" for item in psychology_lines],
+        "",
+        "Status labels preserve what the user reported. They are not an independently verified capability claim and do not constitute clinical assessment.",
+        "",
+        "## 8. Cross-system synthesis",
+        "",
+        "The public synthesis compares eight reduced-digit feature categories and six continuous features under fixed rules. Some name-number outputs are mathematically related, so repeated values must not be counted as independent confirmation.",
+        f"The configured roots returned by four mapping families are: `{', '.join(_md(value) for value in roots if value is not None) or 'unavailable'}`.",
+        "",
+        "This is a synthesis, not an empirical assessment.",
+        "",
+        "## 9. Agreements, tensions, and contradictions",
+        "",
+        f"- Highest returned reference-row agreement: `{_md(closest.get('text', 'unavailable'))}` at `{closest.get('agreement', '—')}`.",
+        "- That value describes configured feature proximity, not personal similarity or relationship compatibility.",
+        "- If symbolic wording conflicts with lived behavior or validated assessment, the direct evidence should take precedence.",
+        "",
+        "## 10. Provenance, limitations, and reproduction details",
+        "",
+        f"- Evidence model: `{EVIDENCE_MODEL}`.",
+        f"- Signature contract: `{_md(sig.get('contract_version', 'signature-v2'))}`.",
+        f"- Extension records with per-system convention and source metadata: `{len(extensions)}` (available in the structured API response).",
+        "- Repeating the same normalized inputs, engine version, convention set, and as-of year produces the same deterministic calculation output.",
+        "- Reproducibility establishes stable computation, not scientific validity of symbolic interpretation.",
+    ]
+    markdown = "\n".join(str(line) for line in lines) + "\n"
+    return {
+        "markdown": markdown,
+        "word_count": len(markdown.split()),
+        "sections": list(range(1, 11)),
+        "section_metadata": _common_metadata(),
+        "evidence_model": EVIDENCE_MODEL,
+        "mode": "magic",
+    }
 
 
-__all__ = ["generate_report"]
+def generate_report(
+    sig: dict,
+    psychology: dict | None = None,
+    comparisons: list[dict] | None = None,
+    *,
+    mode: str = "magic",
+    aliases: list[str] | None = None,
+) -> dict:
+    """Generate the public Data or Magic report contract."""
+    if mode == "data":
+        return _data_report(sig, psychology=psychology, comparisons=comparisons, aliases=aliases)
+    if mode != "magic":
+        raise ValueError("report mode must be either 'data' or 'magic'.")
+    return _magic_report(sig, psychology=psychology, comparisons=comparisons, aliases=aliases)
+
+
+__all__ = ["EVIDENCE_MODEL", "generate_report"]

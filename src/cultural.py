@@ -49,7 +49,20 @@ LATIN_PATTERNS = [
 
 
 def map_cultural_origin(name: str) -> dict:
-    """Map a name to likely cultural origins."""
+    """Return a safe status instead of inferring ethnicity from a name.
+
+    A spelling pattern cannot establish a person's ethnicity, nationality, or
+    culture. Callers should use documented etymology with an explicit source
+    rather than this deprecated heuristic module.
+    """
+    return {
+        "name": name,
+        "origins": [],
+        "primary_origin": None,
+        "method": "disabled-unvalidated-cultural-inference",
+        "status": "disabled",
+        "reason": "Name spelling is not evidence of a person's ethnicity, nationality, or culture.",
+    }
     name_lower = name.lower().strip()
 
     matches = []

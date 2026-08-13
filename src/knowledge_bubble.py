@@ -26,7 +26,7 @@ Bubbles are designed to be:
 from __future__ import annotations
 from dataclasses import dataclass, asdict
 from typing import Any, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 import json
 
 
@@ -336,7 +336,7 @@ def create_identity_bubble(
     return KnowledgeBubble(
         topic=f"Identity: {identity_text}",
         version="0.2.0",
-        generated_at=datetime.utcnow().isoformat() + "Z",
+        generated_at=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         subject_id=f"identity:{identity_text.lower().replace(' ', '_')}",
         claims=claims,
         computations=computations,

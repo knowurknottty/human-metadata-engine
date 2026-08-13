@@ -6,7 +6,7 @@ Second-order analysis computed ON TOP of the unified signatures:
 
 1. Composite Resonance Score (0-100) — a single comparable metric per identity
 2. Identity Fingerprint — deterministic visual-hash parameters per identity
-3. Feature vectors + cosine similarity between identities
+3. Feature vectors + transparent feature agreement between identities
 4. Cross-encoder correlation matrix (Pearson on raw magnitudes +
    reduced-digit agreement rates)
 5. Batch comparative report (markdown + JSON)
@@ -19,9 +19,9 @@ Composite Resonance Score — formula and justification
                       + 0.20 * polarity_balance
                       + 0.20 * symbolic_depth )
 
-* numerological_convergence (0.35): the five independent digit systems
-  (Pythagorean expression, Chaldean name number, Ordinal reduced,
-  Gematria absolute reduced, Isopsephy reduced) use different letter
+* numerological_convergence (0.35): four independent digit systems
+  (Pythagorean expression, Chaldean name number, Gematria absolute reduced,
+  Isopsephy reduced) plus the reverse ordinal family use different letter
   mappings, so agreement between them is non-trivial. We measure the
   concentration of the five reduced digits: if m is the multiplicity of
   the most common digit, convergence = (m - 1) / 4. A master number
@@ -66,7 +66,7 @@ RESONANCE_WEIGHTS = {
 DIGIT_FIELDS = {
     "pythagorean": ("pythagorean", "expression"),
     "chaldean": ("chaldean", "name_number"),
-    "ordinal": ("ordinal", "ordinal_reduced"),
+    "ordinal": ("ordinal", "reverse_reduced"),
     "gematria": ("gematria", "absolute_reduced"),
     "isopsephy": ("isopsephy", "reduced"),
 }
@@ -226,16 +226,24 @@ def identity_fingerprint(sig: dict) -> dict:
 
 
 # =====================================================================
-# 3. Feature vectors + similarity
+# 3. Feature vectors + comparison agreement
 # =====================================================================
 
 FEATURE_ORDER = [
     "pyth_expression", "pyth_soul_urge", "pyth_personality",
-    "chaldean_name", "ordinal_reduced", "gematria_reduced",
+    "chaldean_name", "ordinal_reverse_reduced", "gematria_reduced",
     "isopsephy_reduced", "prime_reduced",
     "entropy_ratio", "vowel_ratio", "binary_entropy",
     "polarity_norm", "syllables", "chain_depth",
 ]
+
+# The first eight values are reduced digit categories. Their magnitude is an
+# encoding of a category, not a position on a continuum: 1 and 2 are not
+# "almost the same" merely because their normalized values are nearby.  The
+# remaining values are bounded continuous measures and use declared scales.
+DISCRETE_FEATURE_COUNT = 8
+CONTINUOUS_FEATURE_TOLERANCES = (0.18, 0.15, 0.20, 0.30, 0.20, 0.35)
+FEATURE_AGREEMENT_METRIC = "feature_agreement_v1"
 
 
 def feature_vector(sig: dict) -> list[float]:
@@ -257,7 +265,10 @@ def feature_vector(sig: dict) -> list[float]:
         digit("pythagorean", "soul_urge"),
         digit("pythagorean", "personality"),
         digit("chaldean", "name_number"),
-        digit("ordinal", "ordinal_reduced"),
+        # ``ordinal_reduced`` is mathematically coupled to the Pythagorean
+        # whole-name root. Use the reverse ordinal value as the independent
+        # ordinal family in comparisons.
+        digit("ordinal", "reverse_reduced"),
         digit("gematria", "absolute_reduced"),
         digit("isopsephy", "reduced"),
         digit("binary_prime", "prime_reduced"),
@@ -271,6 +282,12 @@ def feature_vector(sig: dict) -> list[float]:
 
 
 def cosine_similarity(a: list[float], b: list[float]) -> float:
+    """Legacy geometric comparison retained for backward-compatible callers.
+
+    It is intentionally not used for public name comparisons: all-positive
+    normalized feature vectors make cosine scores look deceptively high.
+    Use :func:`feature_agreement` for identity comparison instead.
+    """
     dot = sum(x * y for x, y in zip(a, b))
     na = math.sqrt(sum(x * x for x in a))
     nb = math.sqrt(sum(x * x for x in b))
@@ -279,22 +296,67 @@ def cosine_similarity(a: list[float], b: list[float]) -> float:
     return dot / (na * nb)
 
 
+def _validated_feature_vector(vector: list[float]) -> list[float]:
+    if len(vector) != len(FEATURE_ORDER):
+        raise ValueError(
+            f"Expected {len(FEATURE_ORDER)} features, received {len(vector)}."
+        )
+    values = [float(value) for value in vector]
+    if any(not math.isfinite(value) or not 0.0 <= value <= 1.0 for value in values):
+        raise ValueError("Feature values must be finite numbers in the range [0, 1].")
+    return values
+
+
+def feature_agreement(a: list[float], b: list[float]) -> float:
+    """Return transparent agreement over the named 14-feature schema.
+
+    Eight independent categorical reduced-digit outputs contribute 1 only when
+    they are exactly equal. The reverse ordinal family is used because the
+    ordinary ordinal root duplicates the Pythagorean root. Each of the six
+    continuous features contributes a linear
+    score from 1 at equality to 0 at its documented tolerance.  The result is
+    an encoder-output agreement score, *not* an empirical likelihood,
+    compatibility measure, or percentage of person-level similarity.
+    """
+    left = _validated_feature_vector(a)
+    right = _validated_feature_vector(b)
+    discrete = [1.0 if left[i] == right[i] else 0.0
+                for i in range(DISCRETE_FEATURE_COUNT)]
+    continuous = [
+        _clip01(1.0 - abs(left[index] - right[index]) / tolerance)
+        for index, tolerance in enumerate(
+            CONTINUOUS_FEATURE_TOLERANCES, start=DISCRETE_FEATURE_COUNT
+        )
+    ]
+    return sum(discrete + continuous) / len(FEATURE_ORDER)
+
+
 def identity_similarity_matrix(sigs: list[dict]) -> dict:
-    """Pairwise cosine similarity between all identities."""
+    """Pairwise feature agreement between all identities."""
     vectors = {s["id"]: feature_vector(s) for s in sigs}
     ids = [s["id"] for s in sigs]
     matrix = {}
     for i in ids:
         matrix[i] = {}
         for j in ids:
-            matrix[i][j] = round(cosine_similarity(vectors[i], vectors[j]), 4)
+            matrix[i][j] = round(feature_agreement(vectors[i], vectors[j]), 4)
     neighbors = {}
     for i in ids:
         ranked = sorted(((j, v) for j, v in matrix[i].items() if j != i),
                         key=lambda kv: -kv[1])
-        neighbors[i] = [{"id": j, "similarity": v} for j, v in ranked[:3]]
-    return {"ids": ids, "matrix": matrix, "nearest_neighbors": neighbors,
-            "feature_order": FEATURE_ORDER}
+        neighbors[i] = [{"id": j, "agreement": v} for j, v in ranked[:3]]
+    return {
+        "metric": FEATURE_AGREEMENT_METRIC,
+        "metric_note": (
+            "Eight independent reduced-digit categories require exact equality; six continuous "
+            "features use declared linear tolerances. This is encoder-output "
+            "agreement, not an empirical measure of people."
+        ),
+        "ids": ids,
+        "matrix": matrix,
+        "nearest_neighbors": neighbors,
+        "feature_order": FEATURE_ORDER,
+    }
 
 
 # =====================================================================
@@ -403,10 +465,10 @@ def batch_report(sigs: list[dict]) -> tuple[dict, str]:
                      f"| {e['expression']} | {e['chaldean']} "
                      f"| {e['entropy_ratio']} |")
     lines.append("")
-    lines.append("## Nearest Neighbors (cosine similarity over 14 features)")
+    lines.append("## Nearest Neighbors (feature agreement over 14 features)")
     lines.append("")
     for ident, nbrs in sim["nearest_neighbors"].items():
-        nbr_txt = ", ".join(f"{n['id']} ({n['similarity']:.2f})" for n in nbrs)
+        nbr_txt = ", ".join(f"{n['id']} ({n['agreement']:.2f})" for n in nbrs)
         lines.append(f"- **{ident}** → {nbr_txt}")
     lines.append("")
     lines.append("## Cross-Encoder Digit Agreement")
@@ -422,7 +484,7 @@ def batch_report(sigs: list[dict]) -> tuple[dict, str]:
     report = {
         "n_identities": len(sigs),
         "ranking": ranked,
-        "similarity": sim,
+        "comparison": sim,
         "correlations": corr,
     }
     return report, "\n".join(lines)

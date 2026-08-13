@@ -132,6 +132,8 @@ def normalize_identity(text: str) -> tuple[str, list[str], list[str]]:
     prepared = prepare_encoding_input(text)
     latin_text = prepared["latin_transliteration"]
     ignored = [ch for ch in text if not ch.isalpha() and not ch.isspace() and ch not in "-_"]
+    # Tokens are produced from the sanitized transliteration stream; discarded
+    # digits and punctuation remain auditable in ``ignored``.
     tokens = [t for t in re.split(r"[\s\-_]+", latin_text) if t]
     normalized = "".join(ch for ch in latin_text if "A" <= ch <= "Z")
     return normalized, tokens, ignored

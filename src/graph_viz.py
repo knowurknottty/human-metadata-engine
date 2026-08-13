@@ -17,6 +17,17 @@ import os
 from typing import Optional
 
 
+def _script_json(value) -> str:
+    """Serialize JSON safely inside an inline script element."""
+    return (
+        json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+        .replace("/", "\\u002f")
+    )
+
+
 def generate_graph_html(graph_path: str, output_path: str = None) -> str:
     """Generate interactive HTML graph visualization."""
     with open(graph_path) as f:
@@ -67,8 +78,8 @@ canvas {{ display: block; }}
 <div id="tooltip"></div>
 <canvas id="canvas"></canvas>
 <script>
-const nodes = {json.dumps(node_js)};
-const edges = {json.dumps(edge_js)};
+const nodes = {_script_json(node_js)};
+const edges = {_script_json(edge_js)};
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -208,7 +219,12 @@ canvas.addEventListener('mousemove', e => {{
     tooltip.style.display = 'block';
     tooltip.style.left = (e.clientX + 12) + 'px';
     tooltip.style.top = (e.clientY + 12) + 'px';
-    tooltip.innerHTML = `<b>${{hover.label}}</b><br>Resonance: ${{(hover.resonance || 0).toFixed(1)}}`;
+    tooltip.replaceChildren();
+    const label = document.createElement('b');
+    label.textContent = hover.label;
+    const detail = document.createElement('span');
+    detail.textContent = `Resonance: ${{(hover.resonance || 0).toFixed(1)}}`;
+    tooltip.append(label, document.createElement('br'), detail);
   }} else {{
     tooltip.style.display = 'none';
   }}

@@ -15,6 +15,18 @@ Usage:
 import json
 import os
 
+from analytics import feature_vector
+
+
+def _script_json(value) -> str:
+    return (
+        json.dumps(value, ensure_ascii=False, separators=(",", ":"))
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+        .replace("&", "\\u0026")
+        .replace("/", "\\u002f")
+    )
+
 
 def generate_dashboard(signatures_path: str, output_path: str = None) -> str:
     """Generate interactive comparison dashboard."""
@@ -47,9 +59,12 @@ def generate_dashboard(signatures_path: str, output_path: str = None) -> str:
             "syllables": ling.get("syllables", ling.get("syllable_count", 0)),
             "vowel_ratio": ling.get("vowel_ratio", 0),
             "polarity": binary.get("polarity_score", 0),
-            "resonance": analytics.get("composite_resonance", analytics.get("resonance_score", 0)),
+            "resonance": sig.get("resonance", {}).get(
+                "score", analytics.get("composite_resonance", analytics.get("resonance_score", 0))
+            ),
             "gematria": gem.get("absolute_value", gem.get("value", 0)),
             "isopsephy": iso.get("absolute_value", iso.get("value", 0)),
+            "comparison_features": feature_vector(sig),
         })
 
     html = f"""<!DOCTYPE html>
@@ -103,7 +118,7 @@ tr:hover {{ background: #111; }}
 
   <div class="similarity" id="simBox">
     <div class="score" id="simScore">—</div>
-    <div class="label">Resonance Similarity</div>
+    <div class="label">Feature Agreement (not person-level similarity)</div>
   </div>
 
   <div class="comparison" id="comp">
@@ -116,11 +131,20 @@ tr:hover {{ background: #111; }}
 </div>
 
 <script>
-const data = {json.dumps(identities)};
+const data = {_script_json(identities)};
+const CONTINUOUS_TOLERANCES = [0.18, 0.15, 0.20, 0.30, 0.20, 0.35];
+const esc = (value) => String(value).replace(/[&<>"']/g, ch => ({{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}}[ch]));
+
+function featureAgreement(a, b) {{
+  const discrete = a.slice(0, 8).map((value, index) => value === b[index] ? 1 : 0);
+  const continuous = a.slice(8).map((value, index) =>
+    Math.max(0, 1 - Math.abs(value - b[index + 8]) / CONTINUOUS_TOLERANCES[index]));
+  return [...discrete, ...continuous].reduce((sum, value) => sum + value, 0) / 14;
+}}
 
 function renderCard(el, d, colorClass) {{
   el.innerHTML = `
-    <h2>${{d.name}}</h2>
+    <h2>${{esc(d.name)}}</h2>
     <div class="stat"><span class="stat-label">Expression</span><span class="stat-value">${{d.expression}}</span></div>
     <div class="stat"><span class="stat-label">Soul Urge</span><span class="stat-value">${{d.soul_urge}}</span></div>
     <div class="stat"><span class="stat-label">Personality</span><span class="stat-value">${{d.personality}}</span></div>
@@ -141,22 +165,14 @@ function compare() {{
   renderCard(document.getElementById('cardA'), a, 'bar-a');
   renderCard(document.getElementById('cardB'), b, 'bar-b');
 
-  // Compute similarity
-  const keys = ['expression','soul_urge','personality','entropy','syllables','vowel_ratio','polarity','gematria','isopsephy','resonance'];
-  let dot=0, ma=0, mb=0;
-  keys.forEach(k => {{
-    dot += (a[k]||0)*(b[k]||0);
-    ma += (a[k]||0)**2;
-    mb += (b[k]||0)**2;
-  }});
-  const sim = (ma && mb) ? dot / (Math.sqrt(ma)*Math.sqrt(mb)) : 0;
-  document.getElementById('simScore').textContent = (sim * 100).toFixed(1) + '%';
+  const agreement = featureAgreement(a.comparison_features, b.comparison_features);
+  document.getElementById('simScore').textContent = (agreement * 100).toFixed(1) + '%';
 }}
 
 // Build table
 let html = '<tr><th>Name</th><th>Expression</th><th>Soul</th><th>Personality</th><th>Entropy</th><th>Resonance</th></tr>';
 data.forEach(d => {{
-  html += `<tr><td>${{d.name}}</td><td>${{d.expression}}</td><td>${{d.soul_urge}}</td><td>${{d.personality}}</td><td>${{(d.entropy||0).toFixed(2)}}</td><td>${{(d.resonance||0).toFixed(1)}}</td></tr>`;
+  html += `<tr><td>${{esc(d.name)}}</td><td>${{d.expression}}</td><td>${{d.soul_urge}}</td><td>${{d.personality}}</td><td>${{(d.entropy||0).toFixed(2)}}</td><td>${{(d.resonance||0).toFixed(1)}}</td></tr>`;
 }});
 document.getElementById('table').innerHTML = html;
 

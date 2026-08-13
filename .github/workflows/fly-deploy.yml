@@ -1,24 +1,6 @@
-name: Test and Deploy Fly.io API
+name: Manual legacy Fly.io deploy
 
 on:
-  pull_request:
-    paths:
-      - "src/**"
-      - "webapp/**"
-      - "tests/**"
-      - "requirements.txt"
-      - "Dockerfile"
-      - ".github/workflows/fly-deploy.yml"
-  push:
-    branches: [main]
-    paths:
-      - "src/**"
-      - "webapp/**"
-      - "tests/**"
-      - "requirements.txt"
-      - "Dockerfile"
-      - "fly.toml"
-      - ".github/workflows/fly-deploy.yml"
   workflow_dispatch:
 
 concurrency:
@@ -32,36 +14,26 @@ jobs:
       contents: read
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
 
-      - name: Install mandatory ephemeris dependency
-        run: pip install -r requirements.txt
+      - name: Install pinned runtime and test dependencies
+        run: pip install --require-hashes -r requirements-dev.txt
 
-      - name: Run test suite
+      - name: Run core test suite
         run: |
-          python3 tests/test_pythagorean.py
-          python3 tests/test_extended.py
-          python3 tests/test_final.py
-          python3 tests/test_analytics.py
-          python3 tests/test_symbolic_roadmap.py
-          python3 tests/test_unicode_pipeline_integration.py
-          python3 tests/test_integrated_prototypes.py
-          python3 tests/test_symbolic_contract.py
-          python3 tests/test_web_symbolic_surface.py
-          python3 tests/test_ephemeris_packaging.py
-          python3 tests/test_accuracy_hardening.py
+          python3 tools/run_tests.py --quiet
+          python3 -m pytest -q
+          python3 tools/validate_contracts.py
 
       - name: Set up Flyctl
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: superfly/flyctl-actions/setup-flyctl@master
+        uses: superfly/flyctl-actions/setup-flyctl@ed8efb33836e8b2096c7fd3ba1c8afe303ebbff1 # master reviewed 2026-07-11
 
       - name: Deploy API
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

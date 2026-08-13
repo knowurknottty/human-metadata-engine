@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."
 from engine import compute_unified_signature
 from analytics import (
     composite_resonance, identity_fingerprint, feature_vector,
-    cosine_similarity, identity_similarity_matrix,
+    cosine_similarity, feature_agreement, identity_similarity_matrix,
     cross_encoder_correlations, batch_report, FEATURE_ORDER,
 )
 from snapshot import personality_snapshot
@@ -79,7 +79,13 @@ v1 = feature_vector(s1)
 check("feature vector matches FEATURE_ORDER length", len(v1) == len(FEATURE_ORDER))
 check("features normalized to [0, 1]", all(0 <= x <= 1 for x in v1))
 check("self-similarity is 1.0", abs(cosine_similarity(v1, v1) - 1.0) < 1e-9)
+check("feature agreement with self is 1.0", abs(feature_agreement(v1, v1) - 1.0) < 1e-9)
+discrete_left = [0.0] * 8 + [0.5] * 6
+discrete_right = [1.0 / 9.0] * 8 + [0.5] * 6
+check("different digit categories do not look numerically close",
+      abs(feature_agreement(discrete_left, discrete_right) - (6 / 14)) < 1e-9)
 sim = identity_similarity_matrix(sigs)
+check("comparison matrix declares feature agreement", sim["metric"] == "feature_agreement_v1")
 check("similarity matrix is square",
       len(sim["matrix"]) == 4 and all(len(row) == 4 for row in sim["matrix"].values()))
 check("diagonal is 1.0",
@@ -89,6 +95,9 @@ check("matrix symmetric",
           for a in sim["ids"] for b in sim["ids"]))
 check("3 nearest neighbors per identity",
       all(len(n) == 3 for n in sim["nearest_neighbors"].values()))
+check("nearest-neighbor values are agreement scores",
+      all(0 <= n["agreement"] <= 1
+          for neighbors in sim["nearest_neighbors"].values() for n in neighbors))
 
 # ---- Cross-encoder correlations ----
 corr = cross_encoder_correlations(sigs)
@@ -158,7 +167,6 @@ hd = s1["encoders"].get("human_design", {})
 check("human design has channels list", isinstance(hd.get("channels"), list))
 a1 = s1["encoders"].get("astrology", {})
 check("astrology computed without error", bool(a1) and not a1.get("error"))
-
 print()
 print("=" * 60)
 print(f"Analytics Tests: {PASS} passed, {FAIL} failed out of {PASS + FAIL}")

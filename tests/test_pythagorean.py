@@ -158,12 +158,15 @@ def test_empty_string():
 def test_normalization_contract():
     normalized, tokens, ignored = normalize_identity("  Capt-RYS_42! ")
     assert normalized == "CAPTRYS"
-    assert tokens == ["CAPT", "RYS", "42!"]
+    # Tokens are produced from the sanitized Unicode/transliteration stream.
+    # Discarded digits and punctuation remain auditable in `ignored` but are
+    # not preserved as calculation tokens.
+    assert tokens == ["CAPT", "RYS"]
     assert ignored == ["4", "2", "!"]
     print("✓ test_normalization_contract passed")
 
 
-def test_all_tests():
+def run_all_tests():
     tests = [
         test_letter_mapping,
         test_capt,
@@ -205,5 +208,5 @@ def test_all_tests():
 
 
 if __name__ == "__main__":
-    success = test_all_tests()
+    success = run_all_tests()
     sys.exit(0 if success else 1)
