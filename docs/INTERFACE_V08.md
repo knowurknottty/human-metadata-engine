@@ -1,5 +1,7 @@
 # v0.8 Interface Architecture
 
+> **Historical interface record:** v0.8 is retained for provenance and compatibility history. It is not the current public visual authority. Current presentation is Identity Resonance over the v1.0 Atlas; see [`IDENTITY_RESONANCE_CANONICAL_SHELL.md`](IDENTITY_RESONANCE_CANONICAL_SHELL.md) and [`INTERFACE_V10.md`](INTERFACE_V10.md).
+
 The v0.8.0 application and interface are a presentation-layer release over the
 unchanged `analysis-v1` API, `signature-v2` engine, and `report-v1` report
 contracts. It does not move calculations into JavaScript or change stable error

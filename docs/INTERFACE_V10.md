@@ -1,5 +1,7 @@
 # v1.0 Visual Knowledge System
 
+> **Current status (2026-08-27):** This document remains the v1.0 Atlas interaction, data, accessibility, provenance, and rendering contract. The canonical outer public visual language is now **Identity Resonance**; see [`IDENTITY_RESONANCE_CANONICAL_SHELL.md`](IDENTITY_RESONANCE_CANONICAL_SHELL.md). The shell restoration is presentation-only and does not roll back this Atlas contract.
+
 The v1.0.0 application changes the primary result from a document-first report
 to the **Human Metadata Atlas**. This is a presentation-layer release over the
 unchanged `analysis-v1` API, `signature-v2` engine, and `report-v1` report
