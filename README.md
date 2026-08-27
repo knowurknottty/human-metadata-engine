@@ -2,7 +2,16 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v1.0.0 visual knowledge interface** — The primary result is the Human Metadata Atlas: a linked workspace for six calculated surfaces, a shared provenance inspector, and the evidence-linked **Human Metadata Narrative** shown as **The Living Pattern**. Plain, Mythic, and Research narrative modes share one deterministic claim/evidence plan and change wording only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; the new `synthesis-evidence-v1`, `synthesis-plan-v1`, and `narrative-v1` contracts version independently. No remote model, checkout, or paid entitlement surface is present.
+**v1.0.0 current public interface** — **Identity Resonance** is the canonical public-facing visual shell. The **Human Metadata Engine** remains the computation/data substrate, while the **Human Metadata Atlas** remains the deep interactive research and provenance layer underneath that shell. The six calculated surfaces, shared provenance inspector, and evidence-linked **Human Metadata Narrative / Living Pattern** remain current. Plain, Mythic, and Research narrative modes share one deterministic claim/evidence plan and change wording only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; `synthesis-evidence-v1`, `synthesis-plan-v1`, and `narrative-v1` version independently. The visual restoration does not resurrect historical calculations or weaken epistemic labels. No remote model, checkout, or paid entitlement surface is present.
+
+## Documentation status
+
+- [`docs/IDENTITY_RESONANCE_CANONICAL_SHELL.md`](docs/IDENTITY_RESONANCE_CANONICAL_SHELL.md) — current public visual authority.
+- [`docs/INTERFACE_V10.md`](docs/INTERFACE_V10.md) — current v1.0 Atlas interaction/data architecture under the public shell.
+- [`docs/INTERFACE_V08.md`](docs/INTERFACE_V08.md) — historical v0.8 interface record, retained for provenance.
+- [`docs/README.md`](docs/README.md) — current vs historical documentation map.
+- [`DEPLOYMENT.md`](DEPLOYMENT.md) — current deployment boundary.
+- [`docs/RELEASE_GATES.md`](docs/RELEASE_GATES.md) — release/QA truth boundaries.
 
 ## Quick Start — Web App
 
@@ -12,7 +21,7 @@ A provenance-aware identity metadata architecture that encodes humans, aliases, 
 python3 -m pip install --require-hashes -r requirements.txt && python3 webapp/server.py
 ```
 
-Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The result opens in the Atlas; every selectable mark exposes supporting values, method, source, confidence category, interpretation type, limitations, and a report link. Historical public-reference API input can still use `subject_type: "reference"`.
+Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The result opens in the Identity Resonance shell over the current Atlas workspace; every selectable mark still exposes supporting values, method, source, confidence category, interpretation type, limitations, and a report link. Historical public-reference API input can still use `subject_type: "reference"`.
 
 Place lookup uses Open-Meteo's geocoding endpoint with a bounded timeout, one retry, and an in-process success cache. The place text is sent to that provider. Ambiguous matches return ranked choices; invalid places, provider failures, DST gaps, and DST folds return structured errors rather than guessed chart inputs. Location lookup requires network access. Explicit coordinates plus an IANA timezone work offline; a raw offset is accepted but labeled less reliable for historical calculations.
 
@@ -34,7 +43,8 @@ human-metadata-engine/
 │   └── static/                      # Framework-free visual knowledge interface
 │       ├── atlas.js                 # Visualization model and SVG renderers
 │       ├── app.js                   # Input, interaction, mode, and report controller
-│       └── styles.css               # Responsive/accessible presentation layer
+│       ├── styles.css               # Current Atlas/layout/accessibility presentation base
+│       └── identity-resonance-shell.css # Canonical public visual override; no calculation logic
 ├── src/
 │   ├── engine.py                    # Master orchestrator (signature-v2)
 │   ├── analytics.py                 # Legacy/internal analytics compatibility contract
