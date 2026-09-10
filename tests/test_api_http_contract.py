@@ -66,6 +66,27 @@ class APIHTTPContractTests(unittest.TestCase):
         status, _, _ = self.request("POST", "/api/tarot", b'{"spread":"focus","question":"private"}', "application/json")
         self.assertEqual(status, 400)
 
+    def test_remote_mythic_endpoint_requires_backend_key_and_never_accepts_data_mode(self):
+        previous = os.environ.pop("OPENROUTER_API_KEY", None)
+        try:
+            status, _, payload = self.request(
+                "POST", "/api/narrative/mythic",
+                json.dumps({"name": "Private Example", "mode": "magic"}).encode(),
+                "application/json",
+            )
+            self.assertEqual(status, 503)
+            self.assertEqual(payload["code"], "remote_mythic_unavailable")
+            status, _, payload = self.request(
+                "POST", "/api/narrative/mythic",
+                json.dumps({"name": "Private Example", "mode": "data"}).encode(),
+                "application/json",
+            )
+            self.assertEqual(status, 400)
+            self.assertEqual(payload["code"], "invalid_mythic_request")
+        finally:
+            if previous is not None:
+                os.environ["OPENROUTER_API_KEY"] = previous
+
     def test_expanded_report_survives_form_download_round_trip(self):
         from narrative_helpers import exact_result
         markdown = exact_result()["report"]["markdown"]

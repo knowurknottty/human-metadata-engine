@@ -39,6 +39,7 @@ from analytics import (  # noqa: E402
 from analytics_v2 import composite_resonance as accuracy_composite_resonance  # noqa: E402
 from report_safe import generate_report  # noqa: E402
 from tarot_reading import draw_reading, spread_catalog
+from mythic_remote import generate_remote_mythic, RemoteMythicUnavailable, RemoteMythicInvalid
 from synthesis import build_synthesis, narrative_markdown  # noqa: E402
 from synthesis.contracts import (  # noqa: E402
     EVIDENCE_SCHEMA_VERSION,
@@ -212,7 +213,7 @@ def _version_payload() -> dict:
             "demo_checkout": False,
             "persistence": False,
             "deterministic_narrative": True,
-            "remote_narrative_model": False,
+            "remote_narrative_model": bool(os.environ.get("OPENROUTER_API_KEY", "").strip()),
         },
     }
 
@@ -1003,7 +1004,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._post_sigil()
         if path == "/api/report-download":
             return self._post_report_download()
-        if path not in {"/api/analyze", "/api/tarot"}:
+        if path not in {"/api/analyze", "/api/tarot", "/api/narrative/mythic"}:
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
         client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
         if not _allow_analysis(client_ip):
@@ -1022,7 +1023,22 @@ class Handler(BaseHTTPRequestHandler):
             })
         try:
             payload = self._read_json_body()
-            return self._json(200, draw_reading(payload) if path == "/api/tarot" else analyze(payload))
+            if path == "/api/tarot":
+                return self._json(200, draw_reading(payload))
+            if path == "/api/narrative/mythic":
+                if not isinstance(payload, dict) or payload.get("mode") != "magic":
+                    raise HTTPRequestError(
+                        "Remote Mythic narration requires the current Magic-mode analysis request.",
+                        code="invalid_mythic_request",
+                    )
+                analyzed = analyze(payload)
+                try:
+                    return self._json(200, generate_remote_mythic(analyzed))
+                except RemoteMythicUnavailable as exc:
+                    return self._json(503, _error_payload(exc, code="remote_mythic_unavailable"))
+                except RemoteMythicInvalid as exc:
+                    return self._json(502, _error_payload(exc, code="remote_mythic_invalid"))
+            return self._json(200, analyze(payload))
         except HTTPRequestError as exc:
             return self._json(exc.status, _error_payload(exc))
         except LocationResolutionError as exc:

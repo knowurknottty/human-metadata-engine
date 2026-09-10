@@ -230,7 +230,7 @@ function newEditorialState() {
     result: null, psychology: null, requestPayload: null,
     aliases: [], locationChoices: [], selectedLocation: null,
     submitting: false, generatedAt: null, atlasMode: "explorer", atlasSelections: new Map(),
-    narrativeMode: "plain", synthesisEvidence: new Map(),
+    narrativeMode: "plain", synthesisEvidence: new Map(), remoteMythic: {status: "idle", story: null, model: null},
   };
 }
 
@@ -597,6 +597,100 @@ function renderEditorialReport(result) {
   $("atlas-title").focus();
 }
 
+
+function appendMythicInline(node, text) {
+  const parts = String(text || "").split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
+  for (const part of parts) {
+    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+      const strong = document.createElement("strong");
+      strong.textContent = part.slice(2, -2);
+      node.append(strong);
+    } else node.append(document.createTextNode(part));
+  }
+}
+
+function renderRemoteMythicMarkdown(target, markdown) {
+  const fragment = document.createDocumentFragment();
+  const lines = String(markdown || "").replace(/\r/g, "").split("\n");
+  let paragraph = [];
+  let list = null;
+  const flushParagraph = () => {
+    if (!paragraph.length) return;
+    const p = document.createElement("p");
+    appendMythicInline(p, paragraph.join(" ").trim());
+    fragment.append(p);
+    paragraph = [];
+  };
+  const flushList = () => { if (list) { fragment.append(list); list = null; } };
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!line) { flushParagraph(); flushList(); continue; }
+    const heading = /^(#{1,3})\s+(.+)$/.exec(line);
+    if (heading) {
+      flushParagraph(); flushList();
+      const tag = heading[1].length === 1 ? "h3" : heading[1].length === 2 ? "h4" : "h5";
+      const h = document.createElement(tag);
+      appendMythicInline(h, heading[2]);
+      fragment.append(h);
+      continue;
+    }
+    if (/^[-*]\s+/.test(line)) {
+      flushParagraph();
+      if (!list) list = document.createElement("ul");
+      const li = document.createElement("li");
+      appendMythicInline(li, line.replace(/^[-*]\s+/, ""));
+      list.append(li);
+      continue;
+    }
+    paragraph.push(line);
+  }
+  flushParagraph(); flushList();
+  target.replaceChildren(fragment);
+}
+
+async function loadRemoteMythic() {
+  if (!STATE.result || !STATE.requestPayload || STATE.result.analysis_mode === "data") return;
+  if (STATE.remoteMythic.status === "loading" || STATE.remoteMythic.status === "ready") return;
+  const panel = document.querySelector('[data-narrative-panel="mythic"]');
+  const target = panel?.querySelector("[data-remote-mythic-story]");
+  const status = panel?.querySelector("[data-remote-mythic-status]");
+  const fallback = panel?.querySelector("[data-deterministic-mythic]");
+  if (!panel || !target || !status || !fallback) return;
+  STATE.remoteMythic.status = "loading";
+  status.textContent = "Composing the Mythic reading with Qwen3.8 Flash…";
+  panel.setAttribute("aria-busy", "true");
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 34000);
+  try {
+    const response = await fetch("/api/narrative/mythic", {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(STATE.requestPayload),
+      signal: controller.signal,
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || data.error || "Remote Mythic narration is unavailable.");
+    if (data.schema_version !== "mythic-remote-v1" || typeof data.story !== "string" || !data.story.trim()) {
+      throw new Error("The remote Mythic narrator returned an invalid response.");
+    }
+    renderRemoteMythicMarkdown(target, data.story);
+    target.hidden = false;
+    fallback.hidden = true;
+    STATE.remoteMythic = {status: "ready", story: data.story, model: data.model || null};
+    status.textContent = `AI-authored Mythic reading · ${data.model || "Qwen3.8 Flash"} · derived symbolic facts only.`;
+  } catch (error) {
+    STATE.remoteMythic.status = "failed";
+    target.hidden = true;
+    fallback.hidden = false;
+    status.textContent = error.name === "AbortError"
+      ? "The Mythic narrator timed out. Showing the deterministic reading instead."
+      : `${error.message || "Remote Mythic narration is unavailable."} Showing the deterministic reading instead.`;
+  } finally {
+    clearTimeout(timeout);
+    panel.removeAttribute("aria-busy");
+  }
+}
+
 Object.assign(app, {
   setAtlasMode(mode) {
     if (!STATE.result || !["explorer", "research"].includes(mode)) return;
@@ -619,6 +713,7 @@ Object.assign(app, {
     document.querySelectorAll("[data-narrative-panel]").forEach(panel => {
       panel.hidden = panel.dataset.narrativePanel !== mode;
     });
+    if (mode === "mythic") void loadRemoteMythic();
     document.querySelector(`[data-narrative-panel="${mode}"] h3`)?.focus({preventScroll: true});
   },
 

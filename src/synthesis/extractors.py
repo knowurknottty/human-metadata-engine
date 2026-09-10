@@ -351,7 +351,7 @@ def data_quality(signature: dict, psychology: dict | None) -> dict:
         birth_date = "exact"
         accuracy = birth.get("time_accuracy", "unknown")
         birth_time = accuracy if accuracy in {"exact", "approximate", "unknown"} else "approximate"
-        location = "resolved" if birth.get("timezone_name") else "missing"
+        location = "resolved" if (birth.get("location_provided") or birth.get("coordinates_provided") or birth.get("timezone_basis") in {"resolved_iana", "provided_utc_offset"}) else "missing"
     astronomy = "unavailable" if not astrology.get("sun_sign") else (
         "partial" if astrology.get("time_sensitive_fields_withheld") else "available"
     )

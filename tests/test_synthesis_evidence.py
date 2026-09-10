@@ -36,3 +36,8 @@ def test_user_context_is_labeled_as_supplied_not_calculated():
     assert items
     assert all(item["epistemic_class"] == "user_supplied" for item in items)
     assert all("not calculated" in " ".join(item["limitations"]).lower() for item in items)
+
+def test_resolved_birth_location_quality():
+    result = exact_result()
+    missing = result["synthesis"]["plan"]["missing_or_uncertain_dimensions"]
+    assert "birth_location: missing" not in missing
