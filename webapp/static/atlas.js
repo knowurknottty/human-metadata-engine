@@ -419,8 +419,9 @@ function livingPattern(result) {
   const modes = ["plain", "mythic", "research"];
   const panels = modes.map(mode => {
     const narrative = synthesis.narratives[mode];
-    const sections = narrative.sections.map(section => `<section class="narrative-section"><h3 tabindex="-1">${esc(section.heading)}</h3>${section.paragraphs.flatMap(paragraph => paragraph.sentences).map(sentenceHTML).join("")}</section>`).join("");
-    return `<div class="narrative-mode-panel" data-narrative-panel="${mode}"${mode === "plain" ? "" : " hidden"}>${sections}<p class="narrative-disclaimer">${esc(narrative.disclaimer)}</p></div>`;
+    const contents = `<nav class="narrative-contents" aria-label="${esc(mode)} reading chapters">${narrative.sections.map(section => `<a href="#reading-${mode}-${esc(section.section_id)}">${esc(section.heading)}</a>`).join("")}</nav>`;
+    const sections = narrative.sections.map((section, index) => `<details id="reading-${mode}-${esc(section.section_id)}" class="narrative-section narrative-chapter"${index === 0 ? " open" : ""}><summary><h3 tabindex="-1">${esc(section.heading)}</h3><span>${section.paragraphs.length} ${section.paragraphs.length === 1 ? "passage" : "passages"}</span></summary>${section.paragraphs.map(paragraph => `<div class="narrative-paragraph">${paragraph.sentences.map(sentenceHTML).join("")}</div>`).join("")}</details>`).join("");
+    return `<div class="narrative-mode-panel" data-narrative-panel="${mode}"${mode === "plain" ? "" : " hidden"}>${contents}${sections}<p class="narrative-disclaimer">${esc(narrative.disclaimer)}</p></div>`;
   }).join("");
   const tension = plan.originating_tension;
   const tensionHTML = tension ? `<div class="tension-axis" role="group" aria-label="Unresolved tension between ${esc(tension.pole_a)} and ${esc(tension.pole_b)}"><strong>${esc(tension.pole_a)}</strong><span aria-hidden="true">←──────→</span><strong>${esc(tension.pole_b)}</strong><p>Unresolved ${esc(tension.type.replaceAll("_", " "))}; ${esc(tension.uncertainty)} confidence.</p></div>` : `<p class="tension-empty">No sufficiently supported polarity was detected.</p>`;
@@ -491,5 +492,21 @@ function buildAtlas(result, options = {}) {
   return {html, selections};
 }
 
+document.addEventListener("click", event => {
+  const link = event.target.closest(".narrative-contents a");
+  if (!link) return;
+  const chapter = document.getElementById(link.getAttribute("href").slice(1));
+  if (chapter) chapter.open = true;
+});
+// Print all chapters without changing the reader's chosen expansion state.
+let chapterPrintState = [];
+window.addEventListener("beforeprint", () => {
+  chapterPrintState = [...document.querySelectorAll(".narrative-chapter, .tarot-card-reading details, .tarot-method")].map(node => [node, node.open]);
+  chapterPrintState.forEach(([node]) => { node.open = true; });
+});
+window.addEventListener("afterprint", () => {
+  chapterPrintState.forEach(([node, open]) => { node.open = open; });
+  chapterPrintState = [];
+});
 window.HMEAtlas = {buildAtlas};
 })( );

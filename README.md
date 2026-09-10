@@ -366,3 +366,20 @@ This system uses symbolic numerological and astrological systems as **interpreti
 ## License
 
 Private — Inversion Labs
+
+## Expanded non-AI readings and tarot
+
+The Living Pattern now includes detailed local chapters for name systems, natal
+placements and aspects, Human Design, and name-derived tarot correspondences.
+Plain, Mythic and Research retain the same evidence links. Chapter navigation,
+expandable reading sections and complete Markdown export support longer readings.
+
+A separate **Tarot** section offers One-card focus, Situation / Challenge /
+Guidance, and Five-card crossroads. It draws without replacement from a 78-card
+upright deck and uses original card-specific interpretations. The optional question
+stays in the browser. No model or AI API key is required. Readings can be downloaded
+with their ordered card IDs and version for replay.
+
+See [the reading library and API contract](docs/NARRATIVE_READING_LIBRARY.md).
+Deploy the updated Python backend together with the frontend: the existing Netlify
+proxy forwards `/api/tarot` and `/api/tarot/spreads` to that backend.

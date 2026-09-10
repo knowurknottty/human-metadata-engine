@@ -54,6 +54,29 @@ class APIHTTPContractTests(unittest.TestCase):
             "POST", "/api/analyze", json.dumps(payload, separators=(",", ":")).encode(), "application/json"
         )
 
+    def test_tarot_spreads_and_actual_draw_over_http(self):
+        status, _, catalog = self.request("GET", "/api/tarot/spreads")
+        self.assertEqual(status, 200)
+        self.assertEqual([s["card_count"] for s in catalog["spreads"]], [1, 3, 5])
+        for spread, count in (("focus", 1), ("situation", 3), ("crossroads", 5)):
+            status, _, reading = self.request("POST", "/api/tarot", json.dumps({"spread": spread}).encode(), "application/json")
+            self.assertEqual(status, 200)
+            self.assertEqual(len({c["id"] for c in reading["cards"]}), count)
+            self.assertFalse(reading["ai_used"])
+        status, _, _ = self.request("POST", "/api/tarot", b'{"spread":"focus","question":"private"}', "application/json")
+        self.assertEqual(status, 400)
+
+    def test_expanded_report_survives_form_download_round_trip(self):
+        from narrative_helpers import exact_result
+        markdown = exact_result()["report"]["markdown"]
+        body = urlencode({"filename": "human_metadata_expanded.md", "markdown": markdown}).encode()
+        self.assertGreater(len(body), 64 * 1024)
+        status, headers, _ = self.request("POST", "/api/report-download", body, "application/x-www-form-urlencoded")
+        self.assertEqual(status, 303)
+        status, _, downloaded = self.request("GET", headers["Location"])
+        self.assertEqual(status, 200)
+        self.assertEqual(downloaded.decode(), markdown)
+
     def test_operational_endpoints_have_distinct_contracts(self):
         live_status, _, live = self.request("GET", "/healthz")
         ready_status, _, ready = self.request("GET", "/readyz")

@@ -38,6 +38,7 @@ from analytics import (  # noqa: E402
 )
 from analytics_v2 import composite_resonance as accuracy_composite_resonance  # noqa: E402
 from report_safe import generate_report  # noqa: E402
+from tarot_reading import draw_reading, spread_catalog
 from synthesis import build_synthesis, narrative_markdown  # noqa: E402
 from synthesis.contracts import (  # noqa: E402
     EVIDENCE_SCHEMA_VERSION,
@@ -124,6 +125,7 @@ except ImportError:
 EPHEMERIS_AVAILABLE = _swisseph is not None
 REQUEST_TIMEOUT_SECONDS = float(os.environ.get("HME_REQUEST_TIMEOUT_SECONDS", "15"))
 MAX_REQUEST_BYTES = 64 * 1024
+MAX_DOWNLOAD_REQUEST_BYTES = 1024 * 1024
 RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", "60"))
 RATE_LIMIT_REQUESTS = int(os.environ.get("HME_RATE_LIMIT_REQUESTS", "20"))
 RATE_LIMIT_MAX_TRACKED_IPS = int(os.environ.get("HME_RATE_LIMIT_MAX_TRACKED_IPS", "10000"))
@@ -918,7 +920,7 @@ class Handler(BaseHTTPRequestHandler):
             raise HTTPRequestError("Content-Length must be an integer.", code="invalid_content_length") from exc
         if length <= 0:
             raise HTTPRequestError("Request body is empty.", code="empty_request_body")
-        if length > MAX_REQUEST_BYTES:
+        if length > MAX_DOWNLOAD_REQUEST_BYTES:
             raise HTTPRequestError("Payload too large.", code="payload_too_large", status=413)
         body = self.rfile.read(length)
         if len(body) != length:
@@ -977,6 +979,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, _version_payload())
         if path == "/api/defaults":
             return self._json(200, {"identities": default_summaries()})
+        if path == "/api/tarot/spreads":
+            return self._json(200, {"spreads": spread_catalog()})
         if path == "/api/modes":
             return self._json(200, {
                 "modes": [
@@ -999,7 +1003,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._post_sigil()
         if path == "/api/report-download":
             return self._post_report_download()
-        if path != "/api/analyze":
+        if path not in {"/api/analyze", "/api/tarot"}:
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
         client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
         if not _allow_analysis(client_ip):
@@ -1018,7 +1022,7 @@ class Handler(BaseHTTPRequestHandler):
             })
         try:
             payload = self._read_json_body()
-            return self._json(200, analyze(payload))
+            return self._json(200, draw_reading(payload) if path == "/api/tarot" else analyze(payload))
         except HTTPRequestError as exc:
             return self._json(exc.status, _error_payload(exc))
         except LocationResolutionError as exc:
@@ -1044,7 +1048,7 @@ class Handler(BaseHTTPRequestHandler):
         """Queue browser-generated Markdown for a bounded, retryable GET."""
         try:
             content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
-            payload = self._read_json_body() if content_type == "application/json" else self._read_download_form()
+            payload = self._read_json_body(max_bytes=MAX_DOWNLOAD_REQUEST_BYTES) if content_type == "application/json" else self._read_download_form()
             if not isinstance(payload, dict) or set(payload) != {"filename", "markdown"}:
                 raise HTTPRequestError("Download request is invalid.", code="invalid_download_request")
             filename = payload.get("filename")

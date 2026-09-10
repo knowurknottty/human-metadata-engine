@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 
 from .contracts import PLAN_SCHEMA_VERSION, PROHIBITED_TOPICS, SYNTHESIS_LIMITATION
+from .readings import CHAPTERS, reading_entries
 
 GIFT_LANGUAGE = {
     "analysis": ("pattern discrimination", "overfitting meaning to every detail"),
@@ -130,6 +131,22 @@ def build_plan(evidence_packet: dict, motifs: list[dict], agreements: list[dict]
             contradicting=tension["evidence_ids"] if tension else [],
             metadata={"title": central_title, "tension": tension},
         ))
+    # Several supported themes and polarities survive into the reading, not
+    # just the top-ranked label. Preserve the original first claims and IDs.
+    for motif in motifs[1:4]:
+        gift, shadow = GIFT_LANGUAGE.get(motif["label"],
+            (f"exploring {motif['label']} in a concrete situation", f"overidentifying with {motif['label']}"))
+        claims_by_section["gifts"].append(_claim("gift", "gift", motif["label"], motif["evidence_ids"], motif["confidence"], metadata={"gift": gift}))
+        claims_by_section["shadow_expressions"].append(_claim("shadow", "shadow", motif["label"], motif["evidence_ids"], motif["confidence"], metadata={"gift": gift, "shadow": shadow}))
+    for other in contradictions[1:3]:
+        claims_by_section["originating_tension"].append(_claim(
+            "tension", "tension", f"{other['pole_a']}|{other['pole_b']}", other["evidence_ids"], other["uncertainty"], metadata=other))
+    for agreement in agreements[:3]:
+        claims_by_section.setdefault("shared_threads", []).append(_claim(
+            "agreement", "agreement", agreement["motif"], agreement["evidence_ids"], agreement["strength"], metadata=agreement))
+    for entry in reading_entries(evidence_packet):
+        claims_by_section.setdefault(entry["section"], []).append(_claim(
+            entry["section"], "reading", entry["title"], entry["evidence_ids"], "tentative", metadata=entry))
     claims_by_section["evidence_ledger"] = [claim for section, claims in claims_by_section.items() if section != "evidence_ledger" for claim in claims]
     headings = {
         "central_pattern": "The Central Pattern", "originating_tension": "The Originating Tension",
@@ -137,6 +154,8 @@ def build_plan(evidence_packet: dict, motifs: list[dict], agreements: list[dict]
         "path_of_integration": "The Path of Integration", "recurring_symbols": "Recurring Symbols",
         "mythic_telling": "The Mythic Telling", "evidence_ledger": "Evidence Ledger",
     }
+    headings.update(CHAPTERS)
+    headings["shared_threads"] = "Where the systems meet"
     sections = [
         {"section_id": key, "purpose": headings[key], "claims": claims}
         for key, claims in claims_by_section.items() if claims

@@ -52,7 +52,12 @@ class PublicReportStructureTests(unittest.TestCase):
         ):
             with self.subTest(unsupported=unsupported):
                 self.assertNotIn(unsupported, markdown)
-        self.assertLess(len(markdown.split()), 1200)
+        # The compact calculation report remains bounded; the requested long-form
+        # reading is an explicit additional section, not repeated filler.
+        base, narrative = markdown.split("## Human Metadata Narrative", 1)
+        self.assertLess(len(base.split()), 1200)
+        self.assertIn("The language of your name", narrative)
+        self.assertIn("Your name-derived tarot archetype", narrative)
         self.assertIn("not a percentage of accuracy", markdown)
 
     def test_same_request_replays_identically_and_export_contains_versions(self):

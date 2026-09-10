@@ -19,6 +19,7 @@
     </a>
     <nav aria-label="Primary navigation">
       <a href="#method-intro">Method</a>
+      <a href="#tarot-reading">Tarot</a>
       <button type="button" class="button button--small" onclick="app.scrollToForm()">Build an atlas</button>
     </nav>
   </div>
@@ -201,6 +202,25 @@
   </section>
 
   <section id="dashboard" class="report-shell" hidden></section>
+  <section id="tarot-reading" class="tarot-reading" aria-labelledby="tarot-title">
+    <div class="tarot-heading"><p class="eyebrow">A moment for reflection</p><h2 id="tarot-title">Let the cards open a question.</h2>
+    <p>A shuffled 78-card deck. Three ways to explore. Rich, locally authored readings with no AI.</p></div>
+    <form>
+      <fieldset class="tarot-choices"><legend>Choose your reading</legend>
+        <label><input type="radio" name="spread" value="focus" checked><span><strong>One-card focus</strong><small>One theme, a fresh perspective, a practical question.</small></span></label>
+        <label><input type="radio" name="spread" value="situation"><span><strong>Situation / Challenge / Guidance</strong><small>Three cards to explore what is present and how to respond.</small></span></label>
+        <label><input type="radio" name="spread" value="crossroads"><span><strong>Five-card crossroads</strong><small>Compare two paths and find a small next step.</small></span></label>
+      </fieldset>
+      <div class="field-group"><label for="tarot-question">What would you like to explore? <span class="optional">Optional</span></label>
+      <textarea id="tarot-question" maxlength="500" rows="2" placeholder="A question to hold while you read…" aria-describedby="tarot-private"></textarea>
+      <p id="tarot-private" class="field-hint">Your question stays in this page and is included only if you download your reading. It is not sent to the server or used to choose the cards.</p></div>
+      <button type="submit" class="button button--primary" data-tarot-draw>Shuffle and draw</button>
+    </form>
+    <p role="status" aria-live="polite" data-tarot-status></p>
+    <div data-tarot-result></div>
+    <button type="button" class="button" data-tarot-save hidden>Download this reading</button>
+    <p class="field-hint">This is a separate card draw, not your name-derived correspondence. Upright readings only. Symbolic reflection, not a forecast.</p>
+  </section>
 </main>
 
 <footer class="site-footer">
@@ -210,5 +230,6 @@
 
 <script src="/atlas.js?v=1.0.0"></script>
 <script src="/app.js?v=1.0.0"></script>
+<script src="/tarot.js?v=1.0.0"></script>
 </body>
 </html>

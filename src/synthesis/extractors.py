@@ -131,6 +131,24 @@ def extract_astrology(signature: dict, _psychology: dict | None) -> list[dict]:
                 provenance_ref=provenance, atlas_targets=["system:astrology"], report_target="birth-chart",
                 independence_group="astrology",
             ))
+    for index, planet in enumerate(astrology.get("planets") or []):
+        if not planet.get("planet") or not planet.get("sign"):
+            continue
+        # Withheld charts must not reintroduce time-sensitive fields through a
+        # compound placement record, even if an upstream caller supplies them.
+        fields_to_read = ["sign"] if astrology.get("time_sensitive_fields_withheld") else ["sign", "house", "retrograde"]
+        for field in fields_to_read:
+            value = planet.get(field)
+            if value is None:
+                continue
+            items.append(_item(
+                system="astrology", subsystem=f"planet_{field}",
+                source_path=f"signature.encoders.astrology.planets.{index}.{field}", value=value,
+                symbol_family=f"planet_{field}", role=planet["planet"],
+                ontology_system="reading_only", provenance_ref=provenance,
+                atlas_targets=[f"planet:{planet['planet']}"], report_target="birth-chart",
+                limitations=[SYMBOLIC_LIMITATION], independence_group="astrology",
+            ))
     for index, aspect in enumerate(astrology.get("aspects") or []):
         planets = aspect.get("planets") or []
         if len(planets) != 2 or not aspect.get("type"):
@@ -162,6 +180,16 @@ def extract_human_design(signature: dict, _psychology: dict | None) -> list[dict
                 provenance_ref=provenance, atlas_targets=["system:human_design"], report_target="human-design",
                 independence_group="human_design",
             ))
+    for field in ("authority", "profile", "definition"):
+        value = hd.get(field)
+        if value is not None:
+            items.append(_item(
+                system="human_design", subsystem=field,
+                source_path=f"signature.encoders.human_design.{field}", value=value,
+                symbol_family=f"human_design_{field}", ontology_system="reading_only",
+                provenance_ref=provenance, atlas_targets=["system:human_design"],
+                report_target="human-design", limitations=[SYMBOLIC_LIMITATION], independence_group="human_design",
+            ))
     for index, gate in enumerate(hd.get("gates") or []):
         if not isinstance(gate, int) or not 1 <= gate <= 64:
             continue
@@ -183,11 +211,11 @@ def extract_human_design(signature: dict, _psychology: dict | None) -> list[dict
             limitations=[SYMBOLIC_LIMITATION], independence_group="human_design",
         ))
     for index, center in enumerate(hd.get("centers") or []):
-        if center.get("defined") is not True or not center.get("name"):
+        if not isinstance(center.get("defined"), bool) or not center.get("name"):
             continue
         items.append(_item(
-            system="human_design", subsystem="defined_center", source_path=f"signature.encoders.human_design.centers.{index}.name",
-            value=center["name"], symbol_family="human_design_center", epistemic_class="deterministic_relationship",
+            system="human_design", subsystem="center_state", source_path=f"signature.encoders.human_design.centers.{index}",
+            value=dict(center), symbol_family="human_design_center", epistemic_class="deterministic_relationship",
             provenance_ref=provenance, atlas_targets=[f"center:{center['name']}"], report_target="human-design",
             limitations=[SYMBOLIC_LIMITATION], independence_group="human_design",
         ))
@@ -241,6 +269,24 @@ def extract_chinese(signature: dict, _psychology: dict | None) -> list[dict]:
     return items
 
 
+def extract_tarot(signature: dict, _psychology: dict | None) -> list[dict]:
+    envelope = (signature.get("encoders") or {}).get("tarot") or {}
+    data = envelope.get("data") if envelope.get("status") == "computed" else None
+    if not isinstance(data, dict):
+        return []
+    index = data.get("major_arcana_index")
+    if type(index) is not int or not 0 <= index < 22:
+        return []
+    return [_item(
+        system="tarot", subsystem="name_correspondence",
+        source_path="signature.encoders.tarot.data.major_arcana_index", value=index,
+        symbol_family="tarot_correspondence", ontology_system="reading_only",
+        provenance_ref=_envelope_provenance(envelope), atlas_targets=["system:tarot"],
+        report_target="name-calculations", independence_group="name_number",
+        limitations=["A deterministic name-derived correspondence, not a shuffled card draw.", SYMBOLIC_LIMITATION],
+    )]
+
+
 def extract_psychology(_signature: dict, psychology: dict | None) -> list[dict]:
     if not psychology:
         return []
@@ -290,7 +336,7 @@ def extract_psychology(_signature: dict, psychology: dict | None) -> list[dict]:
 
 EXTRACTORS: tuple[Callable[[dict, dict | None], list[dict]], ...] = (
     extract_numerology, extract_name_structure, extract_astrology, extract_human_design,
-    extract_tree_of_life, extract_chinese, extract_psychology,
+    extract_tree_of_life, extract_chinese, extract_tarot, extract_psychology,
 )
 
 

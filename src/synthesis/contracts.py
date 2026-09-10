@@ -5,7 +5,7 @@ PLAN_SCHEMA_VERSION = "synthesis-plan-v1"
 NARRATIVE_SCHEMA_VERSION = "narrative-v1"
 ONTOLOGY_VERSION = "motif-ontology-v1"
 MAPPING_VERSION = "project-authored-symbolic-normalization-v1"
-TEMPLATE_VERSION = "narrative-templates-v1"
+TEMPLATE_VERSION = "narrative-templates-v2"
 
 EPISTEMIC_TIERS = {
     "deterministic_calculation": 1,

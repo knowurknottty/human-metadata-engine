@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 
 from .contracts import NARRATIVE_SCHEMA_VERSION, TEMPLATE_VERSION
+from .reading_library import LIBRARY_VERSION
 
 MODES = {"plain", "mythic", "research"}
 
@@ -22,6 +23,15 @@ def _text(claim: dict, mode: str) -> str:
     motif = claim["motif"].replace("|", " and ")
     meta = claim["metadata"]
     kind = claim["claim_type"]
+    if kind == "reading":
+        return meta["texts"][mode]
+    if kind == "agreement":
+        systems = ", ".join(meta["participating_systems"])
+        if mode == "mythic":
+            return f"The thread of {motif} appears in several margins of the atlas: {systems}. Let the images speak beside one another without pretending they share a single origin. Where does this theme help you describe an experience, and where does another reading fit better?"
+        if mode == "research":
+            return f"{motif.title()} is supported by the normalization groups {', '.join(meta['independence_groups'])}. {meta['ambiguity']} {meta['alternative_reading']} Inspect the linked records before treating recurrence as informative."
+        return f"The theme of {motif} appears across {systems}. These records meet through the project's shared vocabulary; agreement may reflect that vocabulary rather than an enduring quality in you. Try a concrete example and a counterexample. Repeated name calculations do not become independent evidence merely because they use different alphabets."
     if kind == "descriptive" and "central_supported" in meta:
         if not meta["central_supported"]:
             return "No single archetype dominates this partial profile; the strongest available motif remains tentative."
@@ -38,7 +48,7 @@ def _text(claim: dict, mode: str) -> str:
             if mode == "mythic" else
             f"Evidence-linked motif: {motif}. Its bounded gift reading is {gift}."
             if mode == "research" else
-            f"This pattern may favor {gift}; whether it appears in life requires direct observation."
+            f"The {motif} theme invites {gift}. Recall a time when that approach made a situation clearer or more workable. What conditions helped: enough time, a receptive collaborator, a clear boundary, or a specific task? Those conditions tell you more than a label alone."
         )
     if kind == "shadow":
         shadow = meta["shadow"]
@@ -47,7 +57,7 @@ def _text(claim: dict, mode: str) -> str:
             if mode == "mythic" else
             f"The gift and shadow share the same evidence: a possible distortion is {shadow}."
             if mode == "research" else
-            f"A possible shadow of the same pattern is {shadow}; this is not a clinical conclusion."
+            f"The counterweight to {motif} is noticing {shadow}. Consider the point at which a useful approach stops serving the situation. What small sign would tell you to pause, ask for feedback, or try another response? This is an invitation to observe a pattern, not an assertion that it describes you."
         )
     if kind == "tension":
         a, b = meta["pole_a"], meta["pole_b"]
@@ -56,7 +66,7 @@ def _text(claim: dict, mode: str) -> str:
             if mode == "mythic" else
             f"The plan preserves an unresolved {a}–{b} polarity, with evidence retained for both poles."
             if mode == "research" else
-            f"The strongest tension is between {a} and {b}; both may be relevant in different contexts, and the contradiction remains unresolved."
+            f"A supported tension is between {a} and {b}; both may be relevant in different contexts, and the contradiction remains unresolved. Describe a situation that asks for {a}, then one that needs {b}. Instead of choosing a permanent winner, identify the cue that would help you change your approach. The records for both poles remain available."
         )
     if kind == "integrative" and "title" in meta:
         tension = meta.get("tension")
@@ -92,10 +102,10 @@ def realize(plan: dict, mode: str) -> dict:
             continue
         sections.append({
             "section_id": planned["section_id"], "heading": planned["purpose"],
-            "paragraphs": [{"paragraph_id": f"paragraph_{planned['section_id']}",
-                            "text": " ".join(item["text"] for item in sentences), "sentences": sentences}],
+            "paragraphs": [{"paragraph_id": f"paragraph_{planned['section_id']}_{index}",
+                            "text": item["text"], "sentences": [item]} for index, item in enumerate(sentences)],
         })
-    canonical = plan["analysis_id"] + ":" + mode + ":" + TEMPLATE_VERSION
+    canonical = plan["analysis_id"] + ":" + mode + ":" + TEMPLATE_VERSION + ":" + LIBRARY_VERSION
     return {
         "schema_version": NARRATIVE_SCHEMA_VERSION, "mode": mode,
         "tone": "poetic" if mode == "mythic" else "grounded" if mode == "plain" else "evidence-first",
@@ -105,6 +115,6 @@ def realize(plan: dict, mode: str) -> dict:
             "engine": "deterministic-template", "model": None, "prompt_version": None,
             "temperature": 0, "generated_at": None, "template_version": TEMPLATE_VERSION,
             "deterministic_input_hash": hashlib.sha256(canonical.encode()).hexdigest(),
-            "remote_provider_used": False,
+            "remote_provider_used": False, "reading_library_version": LIBRARY_VERSION,
         },
     }

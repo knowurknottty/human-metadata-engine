@@ -30,6 +30,14 @@ def verify_narrative(evidence_packet: dict, plan: dict, narrative: dict) -> dict
                         seen_claims.add(claim_id)
                         if not set(referenced).issubset(set(claims[claim_id]["evidence_ids"])):
                             errors.append({"sentence_id": sid, "category": "unsupported_evidence", "detail": claim_id, "action": "reject"})
+                if not referenced:
+                    errors.append({"sentence_id": sid, "category": "missing_evidence", "detail": "Every passage needs evidence.", "action": "reject"})
+                for claim_id in claim_ids:
+                    claim = claims.get(claim_id)
+                    if claim and claim["claim_type"] == "reading":
+                        expected = claim["metadata"]["texts"].get(narrative.get("mode"))
+                        if sentence.get("text") != expected or set(referenced) != set(claim["evidence_ids"]):
+                            errors.append({"sentence_id": sid, "category": "reading_mismatch", "detail": "Reading differs from its planned authored text or evidence.", "action": "reject"})
                 unknown_evidence = set(referenced) - evidence_ids
                 if unknown_evidence:
                     errors.append({"sentence_id": sid, "category": "unknown_evidence", "detail": ",".join(sorted(unknown_evidence)), "action": "reject"})
