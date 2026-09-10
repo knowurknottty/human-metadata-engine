@@ -21,12 +21,12 @@ export default {
       for (const name of ['content-type', 'accept']) if (request.headers.has(name)) headers.set(name, request.headers.get(name));
       try {
         const upstream = await fetch(new URL(url.pathname + url.search, origin.origin), {
-          method:request.method, headers, redirect:'manual',
+          method:request.method, headers, redirect:'manual', duplex:'half',
           body:['GET','HEAD'].includes(request.method) ? undefined : request.body,
           signal:AbortSignal.timeout(35000),
         });
         const responseHeaders = new Headers(security);
-        for (const name of ['content-type','content-disposition','retry-after']) if (upstream.headers.has(name)) responseHeaders.set(name, upstream.headers.get(name));
+        for (const name of ['content-type','content-disposition','retry-after','location']) if (upstream.headers.has(name)) responseHeaders.set(name, upstream.headers.get(name));
         responseHeaders.set('Cache-Control','no-store');
         return new Response(upstream.body, {status:upstream.status,headers:responseHeaders});
       } catch {
