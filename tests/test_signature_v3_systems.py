@@ -33,12 +33,31 @@ def test_bazi_known_reference_day_and_month():
     assert calc["pillars"]["day"]["stem"] == "Jia"
     assert calc["pillars"]["day"]["branch"] == "Zi"
     assert calc["day_master"] == {"stem": "Jia", "element": "Wood", "polarity": "Yang"}
+    assert calc["five_phase_distribution_basis"]["complete"] is True
     assert math.isclose(sum(calc["five_phase_distribution"].values()), 1.0, abs_tol=1e-5)
 
 
-def test_unknown_birth_time_is_not_silently_replaced_with_noon():
+def test_unknown_birth_time_keeps_bazi_date_pillars_without_guessing_hour():
     unknown = {**BIRTH, "time_accuracy": "unknown"}
-    for result in (compute_bazi(unknown), compute_jyotish(unknown), compute_vimshottari(unknown)):
+    unknown.pop("hour")
+    unknown.pop("minute")
+    result = compute_bazi(unknown)
+    assert result["status"] == "computed"
+    assert result["dependency_roots"] == ["birth_date"]
+    calc = result["calculation"]
+    assert calc["pillars"]["hour"] is None
+    assert calc["pillars"]["year"]["stem"] == "Ji"
+    assert calc["pillars"]["month"]["stem"] == "Ding"
+    assert calc["pillars"]["day"]["stem"] == "Jia"
+    assert calc["five_phase_distribution_basis"]["complete"] is False
+    assert calc["five_phase_distribution_basis"]["available_pillars"] == ["year", "month", "day"]
+    assert calc["solar_longitude"] is None
+    assert calc["solar_longitude_range"] is not None
+
+
+def test_unknown_birth_time_refuses_jyotish_and_vimshottari():
+    unknown = {**BIRTH, "time_accuracy": "unknown"}
+    for result in (compute_jyotish(unknown), compute_vimshottari(unknown)):
         assert result["status"] == "input_insufficient"
         assert result["calculation"] == {}
 

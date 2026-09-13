@@ -43,6 +43,9 @@ not be relabeled as empirical support.
 
 - `bazi-v1` — Four Pillars, Day Master, hidden stems, Ten Gods, and structural
   Five-Phase distribution under disclosed Li Chun/Jie/civil-time conventions.
+  With unknown birth time, it preserves date-derived pillars, leaves the hour
+  pillar null, and withholds year/month only when that local date crosses a
+  relevant solar-term boundary.
 - `jyotish-v1` — Lahiri sidereal planets/houses, 27 nakshatras and padas,
   D9/Navamsha, and D10/Dasamsa. It requests Swiss Ephemeris speed explicitly so
   retrograde labels are calculated rather than defaulting false.
@@ -53,11 +56,14 @@ not be relabeled as empirical support.
 
 ## Fail-closed rules
 
-Unknown birth time is not replaced with a noon chart for BaZi or Jyotish v1.
-Missing required inputs return `input_insufficient`; unsupported calculation
-states return `unavailable`. The implementation does not fabricate Day-Master
-strength percentages, event predictions, or empirical personality validity.
+Unknown birth time is never replaced with an invented noon reading. BaZi v1 can
+emit a partial date-derived result with an explicit null hour pillar and partial
+Five-Phase basis. Jyotish v1 and Vimshottari v1 return `input_insufficient` when
+exact-time-dependent coordinates are unavailable. Missing required inputs return
+`input_insufficient`; unsupported calculation states return `unavailable`.
 
-The new artifacts remain outside the legacy composite resonance score and
-identity-fingerprint spokes until an explicit migration defines how those
-surfaces should consume dependency-aware data.
+The implementation does not fabricate Day-Master strength percentages, event
+predictions, or empirical personality validity. New artifacts remain outside the
+legacy composite resonance score and identity-fingerprint spokes until an
+explicit migration defines how those surfaces should consume dependency-aware
+data.

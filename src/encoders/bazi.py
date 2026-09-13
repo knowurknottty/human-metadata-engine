@@ -31,15 +31,18 @@ GENERATES = {"Wood": "Fire", "Fire": "Earth", "Earth": "Metal", "Metal": "Water"
 CONTROLS = {"Wood": "Earth", "Earth": "Water", "Water": "Fire", "Fire": "Metal", "Metal": "Wood"}
 
 
-def _meta() -> dict[str, Any]:
+def _meta(*, time_known: bool = True) -> dict[str, Any]:
     return {
         "system_version": "bazi-v1",
         "tradition": "Chinese Four Pillars / BaZi",
         "convention": "li-chun-jie-civil-time-v1",
         "artifact_class": "static_signature",
         "epistemic_class": "deterministic_calculation",
-        "dependency_roots": ["birth_instant"],
-        "input_dependencies": ["birth.date", "birth.local_time", "birth.utc_offset"],
+        "dependency_roots": ["birth_instant"] if time_known else ["birth_date"],
+        "input_dependencies": (
+            ["birth.date", "birth.local_time", "birth.utc_offset"]
+            if time_known else ["birth.date", "birth.utc_offset"]
+        ),
         "source_ids": ["SRC-BAZI-SEXAGENARY", "SRC-BAZI-JIEQI"],
         "sensitivity": "personal",
         "license_info": {
@@ -89,34 +92,20 @@ def _ten_god(day_stem: int, other_stem: int) -> str:
     raise AssertionError("unreachable five-phase relationship")
 
 
-def _solar_longitude(birth: dict[str, Any]) -> float:
+def _solar_longitude_at(
+    year: int, month: int, day: int, hour: int, minute: int, timezone_offset: float
+) -> float:
     if swe is None:
         raise RuntimeError("Swiss Ephemeris is required for BaZi solar-term calculation.")
     swe.set_ephe_path(None)
-    hour_ut = birth["hour"] + birth["minute"] / 60.0 - float(birth["timezone_offset"])
-    jd = swe.julday(birth["year"], birth["month"], birth["day"], hour_ut)
+    hour_ut = hour + minute / 60.0 - float(timezone_offset)
+    jd = swe.julday(year, month, day, hour_ut)
     return float(swe.calc_ut(jd, swe.SUN, swe.FLG_MOSEPH)[0][0]) % 360.0
 
 
-def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
-    required = {"year", "month", "day", "hour", "minute", "timezone_offset"}
-    missing = sorted(required - set(birth))
-    if missing:
-        return system_result(
-            "bazi", calculation={}, status="input_insufficient",
-            limitations=[f"Missing required birth fields: {', '.join(missing)}"], **_meta(),
-        )
-    if birth.get("time_accuracy") == "unknown":
-        return system_result(
-            "bazi", calculation={}, status="input_insufficient",
-            limitations=["bazi-v1 requires a known birth time and does not substitute a noon hour pillar."],
-            **_meta(),
-        )
-    datetime(int(birth["year"]), int(birth["month"]), int(birth["day"]), int(birth["hour"]), int(birth["minute"]))
-    sun_lon = _solar_longitude(birth)
-
-    bazi_year = int(birth["year"])
-    if int(birth["month"]) <= 2 and sun_lon < 315.0:
+def _year_month_pillars(year_value: int, month_value: int, sun_lon: float) -> tuple[int, dict[str, Any], dict[str, Any]]:
+    bazi_year = year_value
+    if month_value <= 2 and sun_lon < 315.0:
         bazi_year -= 1
     year_index = (bazi_year - 4) % 60
     year = _pillar(year_index)
@@ -126,37 +115,114 @@ def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
     first_month_stem = ((year["stem_index"] % 5) * 2 + 2) % 10
     month_stem = (first_month_stem + month_offset) % 10
     month_cycle = next(i for i in range(60) if i % 10 == month_stem and i % 12 == month_branch)
-    month = _pillar(month_cycle)
+    return bazi_year, year, _pillar(month_cycle)
 
-    day_index = (_jdn(int(birth["year"]), int(birth["month"]), int(birth["day"])) + 49) % 60
-    day = _pillar(day_index)
 
-    hour_branch = ((int(birth["hour"]) + 1) // 2) % 12
-    zi_stem = (day["stem_index"] % 5) * 2
-    hour_stem = (zi_stem + hour_branch) % 10
-    hour_cycle = next(i for i in range(60) if i % 10 == hour_stem and i % 12 == hour_branch)
-    hour = _pillar(hour_cycle)
-
-    pillars = {"year": year, "month": month, "day": day, "hour": hour}
+def _structure(pillars: dict[str, dict[str, Any] | None], day: dict[str, Any]) -> tuple[dict[str, float], dict[str, Any], list[str]]:
     counts: Counter[str] = Counter()
-    for pillar in pillars.values():
+    available = []
+    for label, pillar in pillars.items():
+        if pillar is None:
+            continue
+        available.append(label)
         counts[pillar["stem_element"]] += 1.0
         hidden = HIDDEN_STEMS[pillar["branch_index"]]
         share = 1.0 / len(hidden)
         for stem in hidden:
             counts[STEM_ELEMENT[stem]] += share
     total = sum(counts.values()) or 1.0
-    elements = {name: round(counts[name] / total, 6) for name in ["Wood", "Fire", "Earth", "Metal", "Water"]}
+    elements = {
+        name: round(counts[name] / total, 6)
+        for name in ["Wood", "Fire", "Earth", "Metal", "Water"]
+    }
 
-    ten_gods = {}
+    ten_gods: dict[str, Any] = {}
     for label, pillar in pillars.items():
+        if pillar is None:
+            ten_gods[label] = None
+            ten_gods[f"{label}_hidden"] = []
+            continue
         stem_index = pillar["stem_index"]
         ten_gods[label] = "Day Master" if label == "day" else _ten_god(day["stem_index"], stem_index)
         ten_gods[f"{label}_hidden"] = [
             {"stem": STEMS[index], "relation": _ten_god(day["stem_index"], index)}
             for index in HIDDEN_STEMS[pillar["branch_index"]]
         ]
+    return elements, ten_gods, available
 
+
+def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
+    time_known = birth.get("time_accuracy") != "unknown"
+    required = {"year", "month", "day", "timezone_offset"}
+    if time_known:
+        required.update({"hour", "minute"})
+    missing = sorted(required - set(birth))
+    if missing:
+        return system_result(
+            "bazi", calculation={}, status="input_insufficient",
+            limitations=[f"Missing required birth fields: {', '.join(missing)}"],
+            **_meta(time_known=time_known),
+        )
+
+    year_value = int(birth["year"])
+    month_value = int(birth["month"])
+    day_value = int(birth["day"])
+    datetime(year_value, month_value, day_value)
+    day = _pillar((_jdn(year_value, month_value, day_value) + 49) % 60)
+
+    if time_known:
+        hour_value = int(birth["hour"])
+        minute_value = int(birth["minute"])
+        datetime(year_value, month_value, day_value, hour_value, minute_value)
+        sun_lon = _solar_longitude_at(
+            year_value, month_value, day_value, hour_value, minute_value,
+            float(birth["timezone_offset"]),
+        )
+        bazi_year, year, month = _year_month_pillars(year_value, month_value, sun_lon)
+        hour_branch = ((hour_value + 1) // 2) % 12
+        zi_stem = (day["stem_index"] % 5) * 2
+        hour_stem = (zi_stem + hour_branch) % 10
+        hour_cycle = next(i for i in range(60) if i % 10 == hour_stem and i % 12 == hour_branch)
+        hour = _pillar(hour_cycle)
+        solar_payload: float | None = round(sun_lon, 6)
+        solar_range = None
+        limitations = [
+            "Five-phase distribution is an equal-share structural count of visible and hidden stems, not a Day-Master strength score.",
+            "v1 uses supplied civil time and UTC offset; true/apparent solar-time correction is not applied.",
+            "v1 changes the day at civil midnight; alternate late-Zi rollover schools are not blended.",
+        ]
+    else:
+        start_lon = _solar_longitude_at(
+            year_value, month_value, day_value, 0, 0, float(birth["timezone_offset"])
+        )
+        end_lon = _solar_longitude_at(
+            year_value, month_value, day_value, 23, 59, float(birth["timezone_offset"])
+        )
+        start_bazi_year, start_year, start_month = _year_month_pillars(
+            year_value, month_value, start_lon
+        )
+        end_bazi_year, end_year, end_month = _year_month_pillars(
+            year_value, month_value, end_lon
+        )
+        year = start_year if start_year["cycle_index"] == end_year["cycle_index"] else None
+        month = start_month if start_month["cycle_index"] == end_month["cycle_index"] else None
+        bazi_year = start_bazi_year if start_bazi_year == end_bazi_year else None
+        hour = None
+        solar_payload = None
+        solar_range = {"start_local_day": round(start_lon, 6), "end_local_day": round(end_lon, 6)}
+        limitations = [
+            "Birth time is unknown; the hour pillar is unavailable rather than imputed.",
+            "Year and month pillars are emitted only when they are stable across the entire supplied local birth date.",
+            "If the birth date crosses a Li Chun or Jie boundary, the affected pillar is withheld because exact time is required.",
+            "Five-phase distribution uses only available pillars and is marked partial when the hour pillar is absent.",
+            "v1 uses the supplied UTC offset and does not apply true/apparent solar-time correction.",
+            "v1 changes the day at civil midnight; alternate late-Zi rollover schools are not blended.",
+        ]
+
+    pillars: dict[str, dict[str, Any] | None] = {
+        "year": year, "month": month, "day": day, "hour": hour,
+    }
+    elements, ten_gods, available_pillars = _structure(pillars, day)
     calculation = {
         "pillars": pillars,
         "day_master": {
@@ -164,17 +230,18 @@ def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
         },
         "ten_gods": ten_gods,
         "five_phase_distribution": elements,
-        "solar_longitude": round(sun_lon, 6),
+        "five_phase_distribution_basis": {
+            "available_pillars": available_pillars,
+            "complete": len(available_pillars) == 4,
+        },
+        "solar_longitude": solar_payload,
+        "solar_longitude_range": solar_range,
         "bazi_year": bazi_year,
+        "time_accuracy": "known" if time_known else "unknown",
     }
     return system_result(
-        "bazi", calculation=calculation,
-        limitations=[
-            "Five-phase distribution is an equal-share structural count of visible and hidden stems, not a Day-Master strength score.",
-            "v1 uses supplied civil time and UTC offset; true/apparent solar-time correction is not applied.",
-            "v1 changes the day at civil midnight; alternate late-Zi rollover schools are not blended.",
-        ],
-        **_meta(),
+        "bazi", calculation=calculation, limitations=limitations,
+        **_meta(time_known=time_known),
     )
 
 
