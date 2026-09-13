@@ -1,0 +1,18 @@
+/* Keep Tarot spread radios intrinsic-sized even though the legacy form rule
+   styles text-like inputs as full-width controls. Loaded after styles.css. */
+.tarot-choices input[type="radio"] {
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  min-height: 0;
+  margin: .2rem 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  accent-color: var(--accent);
+}
+
+.tarot-choices label > span {
+  flex: 1 1 auto;
+  min-width: 0;
+}
