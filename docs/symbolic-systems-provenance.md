@@ -5,7 +5,8 @@
 IDs. The catalog records the source tradition or reference used to choose that
 convention; it does not turn symbolic correspondences into empirical claims.
 Where scholarship or practice diverges, the encoder returns its named variant
-rather than blending alternatives.
+rather than blending alternatives. `signature-v3` artifacts reuse this catalog
+through the stricter `system-result-v2` provenance envelope.
 
 ## Core and historical systems
 
@@ -27,10 +28,19 @@ rather than blending alternatives.
 - `SRC-YIJING-KING-WEN` — *Zhou Yi* 64-hexagram King Wen sequence.
 - `SRC-WU-XING` — five-phase sequence: Wood, Fire, Earth, Metal, Water.
 - `SRC-SEXAGENARY-CYCLE` — ten heavenly stems and twelve earthly branches year-cycle convention.
+- `SRC-BAZI-SEXAGENARY` — Four-Pillars use of the sexagenary stem/branch cycle for year, month, day, and hour pillars.
+- `SRC-BAZI-JIEQI` — 24-solar-term astronomy; `bazi-v1` uses Li Chun for the year boundary and 30-degree Jie month boundaries.
 - `SRC-EGYPTIAN-UNILITERALS` — conventional Egyptological uniliteral transliteration.
 - `SRC-EGYPTIAN-DECANS` — 36-decan division; this implementation exposes a civil-calendar index, not reconstructed astronomy.
+- `SRC-JYOTISH-LAHIRI` — Lahiri sidereal ayanamsa as implemented by Swiss Ephemeris.
 - `SRC-JYOTISH-NAKSHATRA` — 27-nakshatra framework. Exact placements require complete birth data and an ephemeris.
+- `SRC-JYOTISH-NAVAMSHA` — D9/Navamsha ninefold sign division with modality-based starting signs.
+- `SRC-JYOTISH-DASAMSA` — D10/Dasamsa tenfold sign division; odd signs start from themselves and even signs from the ninth sign.
+- `SRC-JYOTISH-VIMSHOTTARI` — fixed Ketu-through-Mercury 120-year Vimshottari sequence; birth balance derives from the unelapsed Moon-nakshatra fraction.
+- `SRC-MAYAN-GMT` — Goodman-Martinez-Thompson 584283 correlation used by the Classical Maya calendar artifact.
 - `SRC-MAYAN-TZOLKIN` — 260-day Tzolk'in with the GMT correlation anchored at 2012-12-21 = 4 Ajaw.
+- `SRC-MAYAN-HAAB` — 365-day Haab' calendar used in the Classical Maya Calendar Round.
+- `SRC-MAYAN-G-SERIES` — ninefold Lord-of-Night cycle; the 2012-12-21 anchor resolves to G9 under this convention.
 - `SRC-CUNEIFORM-UNICODE` — Unicode Cuneiform block identifiers; no lexical decipherment is claimed.
 
 ## Specialized systems and constraints
@@ -52,6 +62,8 @@ rather than blending alternatives.
 ## Source-boundary rules
 
 1. Native scripts are retained in the input; transliteration uses `builtin-v1` and is named in each result.
-2. A missing script dictionary, ephemeris, or complete birth time produces an explicit limitation rather than a substituted reading.
+2. A missing script dictionary, ephemeris, complete birth time, or required location produces an explicit limitation rather than a substituted reading.
 3. Indus, cuneiform, and hieroglyphic data are never assigned invented lexical meanings.
-4. The source catalog supports reproducibility and review; it is not a claim of historical certainty or predictive validity.
+4. Source recurrence is not evidence independence. `birth_date` and `birth_instant` belong to one `birth` dependency family in `signature-v3`.
+5. Timing artifacts are derived from frozen natal inputs and are excluded from static-signature convergence.
+6. The source catalog supports reproducibility and review; it is not a claim of historical certainty or predictive validity.
