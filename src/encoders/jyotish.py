@@ -1,8 +1,8 @@
 """Sidereal/Jyotish astronomical projection using Swiss Ephemeris.
 
-v1 implements a Lahiri sidereal natal projection, 27 nakshatras/padas, and
-deterministic D9 Navamsha and D10 Dasamsa projections. Interpretive meanings
-and dashas are kept out of this static calculation module.
+v2 supports explicit Lahiri or Raman ayanamsa selection, 27 nakshatras/padas,
+D9 Navamsha, D10 Dasamsa, and explicit mean/true lunar-node conventions.
+Interpretive meanings and dashas remain outside this static calculation module.
 """
 from __future__ import annotations
 
@@ -33,26 +33,41 @@ PLANETS = {
     "Sun": 0, "Moon": 1, "Mercury": 2, "Venus": 3, "Mars": 4,
     "Jupiter": 5, "Saturn": 6, "Uranus": 7, "Neptune": 8, "Pluto": 9,
 }
+AYANAMSA_MODES = {
+    "lahiri": ("Lahiri", 1),
+    "raman": ("Raman", 3),
+}
+NODE_MODES = {
+    "mean": ("mean", 10),
+    "true": ("true", 11),
+}
 
 
-def _meta() -> dict[str, Any]:
+def _meta(*, ayanamsa: str, lunar_node: str) -> dict[str, Any]:
+    aya_key = ayanamsa.strip().lower()
+    node_key = lunar_node.strip().lower()
+    aya_name = AYANAMSA_MODES[aya_key][0]
+    node_name = NODE_MODES[node_key][0]
+    source_ids = [
+        "SRC-SWISSEPH-SIDEREAL", "SRC-JYOTISH-NAKSHATRA",
+        "SRC-JYOTISH-NAVAMSHA", "SRC-JYOTISH-DASAMSA", "SRC-JYOTISH-LUNAR-NODES",
+    ]
+    source_ids.append("SRC-JYOTISH-LAHIRI" if aya_key == "lahiri" else "SRC-JYOTISH-RAMAN")
     return {
-        "system_version": "jyotish-v1",
+        "system_version": "jyotish-v2",
         "tradition": "Jyotish / sidereal astrology",
-        "convention": "lahiri-27-nakshatra-v1",
+        "convention": f"{aya_key}-{node_name}-node-27-nakshatra-v2",
         "artifact_class": "static_signature",
         "epistemic_class": "deterministic_calculation",
         "dependency_roots": ["birth_instant"],
         "input_dependencies": ["birth.date", "birth.local_time", "birth.utc_offset", "birth.coordinates"],
-        "source_ids": [
-            "SRC-JYOTISH-LAHIRI", "SRC-JYOTISH-NAKSHATRA",
-            "SRC-JYOTISH-NAVAMSHA", "SRC-JYOTISH-DASAMSA",
-        ],
+        "source_ids": source_ids,
         "sensitivity": "personal",
         "license_info": {
             "calculation_code": "project-authored",
             "third_party_dependencies": ["pyswisseph AGPL-3.0-or-later"],
         },
+        "ayanamsa_name": aya_name,
     }
 
 
@@ -81,8 +96,6 @@ def _nakshatra(lon: float) -> dict[str, Any]:
 def _dasamsa(lon: float) -> dict[str, Any]:
     _, degree, sign_index = _sign(lon)
     division = min(9, int(degree // 3.0))
-    # Traditional sign numbering is 1-based: odd signs begin from themselves;
-    # even signs begin from the ninth sign counted inclusively.
     start = sign_index if sign_index % 2 == 0 else (sign_index + 8) % 12
     d10_sign_index = (start + division) % 12
     return {
@@ -110,69 +123,90 @@ def _navamsha(lon: float) -> dict[str, Any]:
     }
 
 
-def compute_jyotish(birth: dict[str, Any], *, ayanamsa: str = "lahiri") -> dict[str, Any]:
+def _point(lon: float, speed: float) -> dict[str, Any]:
+    sign, degree, sign_index = _sign(lon)
+    return {
+        "longitude": round(lon % 360.0, 6),
+        "sign": sign,
+        "sign_index": sign_index,
+        "degree": round(degree, 6),
+        "speed_longitude": round(speed, 9),
+        "retrograde": speed < 0,
+        "nakshatra": _nakshatra(lon),
+        "d9_navamsha": _navamsha(lon),
+        "d10_dasamsa": _dasamsa(lon),
+    }
+
+
+def compute_jyotish(
+    birth: dict[str, Any],
+    *,
+    ayanamsa: str = "lahiri",
+    lunar_node: str = "mean",
+) -> dict[str, Any]:
+    aya_key = ayanamsa.strip().lower()
+    node_key = lunar_node.strip().lower()
+    if aya_key not in AYANAMSA_MODES:
+        raise ValueError(f"jyotish-v2 ayanamsa must be one of: {', '.join(sorted(AYANAMSA_MODES))}")
+    if node_key not in NODE_MODES:
+        raise ValueError(f"jyotish-v2 lunar_node must be one of: {', '.join(sorted(NODE_MODES))}")
+    meta = _meta(ayanamsa=aya_key, lunar_node=node_key)
+    aya_name = meta.pop("ayanamsa_name")
+
     required = {"year", "month", "day", "hour", "minute", "timezone_offset", "lat", "lon"}
     missing = sorted(required - set(birth))
     if missing:
         return system_result(
             "jyotish", calculation={}, status="input_insufficient",
-            limitations=[f"Missing required birth fields: {', '.join(missing)}"], **_meta(),
+            limitations=[f"Missing required birth fields: {', '.join(missing)}"], **meta,
         )
     if birth.get("time_accuracy") == "unknown":
         return system_result(
             "jyotish", calculation={}, status="input_insufficient",
-            limitations=["jyotish-v1 requires a known birth time and does not substitute a noon chart."],
-            **_meta(),
+            limitations=["jyotish-v2 requires a known birth time and does not substitute a noon chart."],
+            **meta,
         )
     if swe is None:
         raise RuntimeError("Swiss Ephemeris is required for Jyotish calculation.")
-    if ayanamsa.lower() != "lahiri":
-        raise ValueError("jyotish-v1 currently supports only the Lahiri ayanamsa.")
 
     swe.set_ephe_path(None)
     hour_ut = birth["hour"] + birth["minute"] / 60.0 - float(birth["timezone_offset"])
     jd = swe.julday(birth["year"], birth["month"], birth["day"], hour_ut)
-    swe.set_sid_mode(swe.SIDM_LAHIRI)
+    sid_mode = AYANAMSA_MODES[aya_key][1]
+    swe.set_sid_mode(sid_mode)
     planet_flags = swe.FLG_SIDEREAL | swe.FLG_MOSEPH | swe.FLG_SPEED
     ayanamsa_deg = float(swe.get_ayanamsa_ut(jd))
 
     planets: dict[str, Any] = {}
     for name, pid in PLANETS.items():
         data = swe.calc_ut(jd, pid, planet_flags)[0]
-        lon = float(data[0]) % 360.0
-        speed = float(data[3])
-        sign, degree, sign_index = _sign(lon)
-        planets[name] = {
-            "longitude": round(lon, 6),
-            "sign": sign,
-            "sign_index": sign_index,
-            "degree": round(degree, 6),
-            "speed_longitude": round(speed, 9),
-            "retrograde": speed < 0,
-            "nakshatra": _nakshatra(lon),
-            "d9_navamsha": _navamsha(lon),
-            "d10_dasamsa": _dasamsa(lon),
-        }
+        planets[name] = _point(float(data[0]), float(data[3]))
+
+    node_id = NODE_MODES[node_key][1]
+    node_data = swe.calc_ut(jd, node_id, planet_flags)[0]
+    rahu_lon = float(node_data[0]) % 360.0
+    rahu_speed = float(node_data[3])
+    lunar_nodes = {
+        "mode": node_key,
+        "Rahu": _point(rahu_lon, rahu_speed),
+        "Ketu": _point((rahu_lon + 180.0) % 360.0, rahu_speed),
+        "relationship": "Ketu is emitted exactly 180 degrees opposite the selected ascending lunar node.",
+    }
 
     cusps, ascmc = swe.houses_ex(
         jd, float(birth["lat"]), float(birth["lon"]), b"P", swe.FLG_SIDEREAL
     )
     asc_lon = float(ascmc[0]) % 360.0
-    asc_sign, asc_degree, asc_index = _sign(asc_lon)
-    ascendant = {
-        "longitude": round(asc_lon, 6),
-        "sign": asc_sign,
-        "sign_index": asc_index,
-        "degree": round(asc_degree, 6),
-        "nakshatra": _nakshatra(asc_lon),
-        "d9_navamsha": _navamsha(asc_lon),
-        "d10_dasamsa": _dasamsa(asc_lon),
-    }
+    ascendant = _point(asc_lon, 0.0)
+    ascendant.pop("speed_longitude")
+    ascendant.pop("retrograde")
+
     calculation = {
-        "ayanamsa": {"name": "Lahiri", "degrees": round(ayanamsa_deg, 6)},
+        "ayanamsa": {"name": aya_name, "key": aya_key, "degrees": round(ayanamsa_deg, 6)},
         "zodiac": "sidereal",
-        "ephemeris_profile": "pyswisseph-moshier-sidereal-speed-v1",
+        "ephemeris_profile": "pyswisseph-moshier-sidereal-speed-v2",
         "planets": planets,
+        "lunar_nodes": lunar_nodes,
         "ascendant": ascendant,
         "house_system": "Placidus sidereal projection",
         "house_cusps": [round(float(value) % 360.0, 6) for value in cusps],
@@ -181,13 +215,18 @@ def compute_jyotish(birth: dict[str, Any], *, ayanamsa: str = "lahiri") -> dict[
     return system_result(
         "jyotish", calculation=calculation,
         limitations=[
-            "This v1 layer computes astronomical/symbolic coordinates only; it does not claim empirical personality validity.",
+            "This layer computes astronomical/symbolic coordinates only; it does not claim empirical personality validity.",
+            "Lahiri and Raman are alternative sidereal zero-point conventions and are not blended into one result.",
+            "Mean and true lunar nodes are alternative astronomical conventions; the selected mode is recorded explicitly.",
             "Vimshottari Dasha belongs in a separate timing artifact and is not emitted by this static signature.",
             "D9 and D10 are deterministic divisional projections; interpretive meanings are intentionally not embedded here.",
             "Uranus, Neptune, and Pluto are exposed as modern optional sidereal additions; they are not classical Jyotish grahas.",
         ],
-        **_meta(),
+        **meta,
     )
 
 
-__all__ = ["compute_jyotish"]
+__all__ = [
+    "compute_jyotish", "SIGNS", "NAKSHATRAS", "AYANAMSA_MODES", "NODE_MODES",
+    "_nakshatra", "_navamsha", "_dasamsa",
+]
