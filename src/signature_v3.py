@@ -76,6 +76,7 @@ def compute_signature_v3(
     result["timing_policy"] = {
         "requires_explicit_as_of_for_dynamic_artifacts": True,
         "planetary_hours_require_separate_timing_context": True,
+        "timezone_model": "explicit_fixed_utc_offset_no_iana_dst_resolution",
         "zodiacal_releasing_status": "level_1_only",
     }
     return result

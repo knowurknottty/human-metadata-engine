@@ -46,3 +46,4 @@ Primary implementation reference: Astrodienst, *Swiss Ephemeris 2.10 — Program
 4. Timing artifacts remain outside static-signature convergence.
 5. Calendar normalizations such as 365.2425 days are emitted in results and are not described as universal historical consensus.
 6. Calculated periods, contacts, or returns are coordinates in a symbolic system, not predictions of concrete events.
+7. v1 timing contexts use the supplied numeric UTC offset as a fixed offset. IANA time-zone databases, historical offset changes, and daylight-saving transitions are not inferred or reconstructed.
