@@ -7,7 +7,7 @@ contract remains `report-v1` until a separate public migration is reviewed.
 ## Why v3 exists
 
 The older encoder map mixes static calculations, symbolic correspondences,
-assessments, and future timing work in one flat namespace. v3 instead emits
+assessments, and time-varying work in one flat namespace. v3 instead emits
 versioned `system-result-v2` artifacts with explicit provenance and dependency
 semantics.
 
@@ -19,7 +19,7 @@ IDs, licensing/dependency notes, and limitations.
 ## Artifact classes
 
 - `static_signature` — stable calculations from a frozen subject input.
-- `timing` — time-varying calculations derived from a frozen natal signature.
+- `timing` — time-varying calculations derived from a frozen natal signature or from an explicit environment/time context.
 - `divination_session` — session/event artifacts with explicit casting entropy.
 - `assessment` — user-supplied or instrument-derived assessment data.
 - `environment` — place/orientation/context traditions.
@@ -30,40 +30,38 @@ Only the first two are implemented in this tranche.
 ## Independence policy
 
 A system count is a lens count, not an evidence count. Raw dependency roots are
-preserved for provenance, then collapsed into independence families. For
-example, `birth_date` and `birth_instant` both belong to the `birth` family, so
-BaZi, Jyotish, Classical Maya, and Vimshottari do not become four independent
-confirmations merely because four traditions use the same birth data.
+preserved for provenance, then collapsed into independence families. `birth_date`
+and `birth_instant` both belong to the `birth` family, so natal and timing systems
+do not become independent confirmations merely because multiple traditions use
+the same birth data.
 
 Timing artifacts are excluded from static-signature convergence entirely.
-Repeated symbolic motifs may be reported as symbolic recurrence, but they must
-not be relabeled as empirical support.
+Planetary hours use `environment_context`, but that still does not make them
+empirical evidence about a person.
 
-## Implemented v3 systems
+## Implemented v3 static systems
 
-- `bazi-v1` — Four Pillars, Day Master, hidden stems, Ten Gods, and structural
-  Five-Phase distribution under disclosed Li Chun/Jie/civil-time conventions.
-  With unknown birth time, it preserves date-derived pillars, leaves the hour
-  pillar null, and withholds year/month only when that local date crosses a
-  relevant solar-term boundary.
-- `jyotish-v1` — Lahiri sidereal planets/houses, 27 nakshatras and padas,
-  D9/Navamsha, and D10/Dasamsa. It requests Swiss Ephemeris speed explicitly so
-  retrograde labels are calculated rather than defaulting false.
-- `maya-classical-gmt-v1` — Long Count, Tzolk'in, Haab', Calendar Round, and
-  Lord of Night under GMT 584283; modern Dreamspell remains separate.
-- `vimshottari-v1` — separate timing artifact computing the birth balance and
-  Mahadasha boundaries under a disclosed 365.2425-day year convention.
+- `bazi-v1` — Four Pillars, Day Master, hidden stems, Ten Gods, and structural Five-Phase distribution under disclosed Li Chun/Jie/civil-time conventions.
+- `jyotish-v2` — explicit Lahiri **or** Raman sidereal projection; mean **or** true Rahu/Ketu convention; 27 nakshatras/padas; D9/Navamsha; D10/Dasamsa; sidereal Placidus houses; explicit speed requests for retrograde state. Alternatives are named and never averaged.
+- `maya-classical-gmt-v1` — Long Count, Tzolk'in, Haab', Calendar Round, and Lord of Night under GMT 584283.
+
+## Implemented timing systems
+
+All dynamic artifacts require an explicit `as_of`; the engine never reads the wall clock silently.
+
+- `vimshottari-v2` — birth balance and Mahadasha boundaries using the selected Jyotish ayanamsa and a disclosed 365.2425-day year normalization.
+- `transits-v1` — tropical geocentric positions plus major natal/transit contacts inside a fixed one-degree computational orb.
+- `secondary-progressions-v1` — day-for-year planetary progressions using `elapsed_days / 365.2425` symbolic days after birth.
+- `solar-arc-v1` — the secondary-progressed Sun arc applied uniformly to natal planets, Ascendant, and Midheaven; coordinate output only.
+- `solar-return-v1` — exact tropical Sun-longitude return bracketing `as_of` using Swiss Ephemeris solar-crossing search; the return chart is erected for stored birth coordinates.
+- `annual-profection-v1` — one whole sign per completed civil year from the natal rising sign, using the classical seven-planet domicile ruler as Lord of the Year.
+- `planetary-hours-v1` — twelve unequal daylight hours and twelve unequal night hours from explicit environment coordinates, using sunrise/sunset and the Chaldean order. It is an `environment_context` timing artifact.
+- `zodiacal-releasing-l1-v1` — Level-1 releasing from Fortune or Spirit, tropical zodiac, day/night lot reversal, Valens-style sign-period table, and explicit 365.2425-day calendar normalization. L2-L4 and loosing-of-the-bond are intentionally not emitted yet.
 
 ## Fail-closed rules
 
-Unknown birth time is never replaced with an invented noon reading. BaZi v1 can
-emit a partial date-derived result with an explicit null hour pillar and partial
-Five-Phase basis. Jyotish v1 and Vimshottari v1 return `input_insufficient` when
-exact-time-dependent coordinates are unavailable. Missing required inputs return
-`input_insufficient`; unsupported calculation states return `unavailable`.
+Unknown birth time is never replaced with an invented noon reading. BaZi can emit a partial date-derived result; exact-time-dependent Jyotish and natal timing artifacts return `input_insufficient` when required inputs are unavailable.
 
-The implementation does not fabricate Day-Master strength percentages, event
-predictions, or empirical personality validity. New artifacts remain outside the
-legacy composite resonance score and identity-fingerprint spokes until an
-explicit migration defines how those surfaces should consume dependency-aware
-data.
+Dynamic timing requires explicit `as_of`; planetary hours additionally require a separate `timing_context` with latitude, longitude, and UTC offset. Unsupported or geographically impossible states return `unavailable` rather than fabricated coordinates.
+
+The implementation does not fabricate event predictions, empirical personality validity, or claims that symbolic recurrence is independent evidence. New artifacts remain outside the legacy composite resonance score and identity-fingerprint spokes until an explicit migration defines how those surfaces should consume dependency-aware data.
