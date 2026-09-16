@@ -20,13 +20,19 @@ Primary implementation reference: Astrodienst, *Swiss Ephemeris 2.10 — Program
 - `SRC-IANA-TZDB` — Python `zoneinfo` (PEP 615) using the IANA Time Zone Database. Runtime requirements pin `tzdata==2026.4` as the cross-platform fallback when the host OS does not provide zone files.
 - `timezone_id` is preferred when supplied. A numeric `timezone_offset` remains an explicit fixed-offset fallback for compatibility.
 - Ambiguous local times require `timezone_fold=0` or `timezone_fold=1`; nonexistent local times in a forward clock transition fail closed.
-- When both `timezone_id` and `timezone_offset` are supplied, `timezone_id` is authoritative for v2 timing and any mismatch is retained in timezone provenance.
+- When both `timezone_id` and `timezone_offset` are supplied, `timezone_id` is authoritative for BaZi v2, Jyotish v3, and v2 timing artifacts; any supplied-offset mismatch is retained in timezone provenance.
+- Unknown-time BaZi evaluates the local date at 00:00 and 23:59 under the named zone so a DST or historical offset change inside the date is not silently flattened into one numeric offset.
+
+## BaZi conventions
+
+- `bazi-v2` preserves the existing Li Chun/Jie, civil-midnight, and civil-hour conventions while replacing raw-offset-only solar-term timing with the shared zone-aware civil-time resolver.
+- The hour pillar remains based on supplied local civil clock time. True/apparent solar-time correction and alternate late-Zi day rollover schools remain separate, unblended conventions.
 
 ## Jyotish conventions
 
 - `SRC-JYOTISH-LAHIRI` — Lahiri ayanamsa as a named Swiss Ephemeris predefined sidereal mode.
 - `SRC-JYOTISH-RAMAN` — B. V. Raman ayanamsa as a separate named Swiss Ephemeris predefined sidereal mode. It is never averaged with Lahiri.
-- `SRC-JYOTISH-LUNAR-NODES` — Swiss Ephemeris distinguishes mean node (`SE_MEAN_NODE = 10`) and true node (`SE_TRUE_NODE = 11`). `jyotish-v2` records the selected convention and emits Ketu exactly 180 degrees opposite the selected ascending node.
+- `SRC-JYOTISH-LUNAR-NODES` — Swiss Ephemeris distinguishes mean node (`SE_MEAN_NODE = 10`) and true node (`SE_TRUE_NODE = 11`). `jyotish-v3` records the selected convention and emits Ketu exactly 180 degrees opposite the selected ascending node.
 - `SRC-JYOTISH-NAKSHATRA` — 27 equal nakshatra divisions of the selected sidereal zodiac, each divided into four padas.
 - `SRC-JYOTISH-NAVAMSHA` — D9/Navamsha deterministic ninefold sign projection.
 - `SRC-JYOTISH-DASAMSA` — D10/Dasamsa deterministic tenfold sign projection.
@@ -38,7 +44,7 @@ Primary implementation reference: Astrodienst, *Swiss Ephemeris 2.10 — Program
 - `SRC-TIMING-SECONDARY-PROGRESSIONS` — project-authored day-for-year convention: elapsed days divided by 365.2425 produce symbolic ephemeris days after birth. v1 progresses planets only.
 - `SRC-TIMING-SOLAR-ARC` — project-authored v1 convention: secondary-progressed Sun minus natal Sun is the arc; the same arc is added to natal planets, Ascendant, and Midheaven.
 - `SRC-TIMING-SOLAR-RETURN` — exact tropical natal-Sun-longitude crossing with `swe_solcross_ut()`. v1 erects the return chart at stored birth coordinates; relocation is not silently assumed.
-- `SRC-PROFECTIONS-WHOLE-SIGN` — Hellenistic annual-profection count: age zero begins in the rising sign/first place, then advances one whole sign per completed civil year; the traditional domicile ruler becomes Lord of the Year. v2 resolves the civil birthday through `timezone_id` when available and otherwise uses the explicit fixed offset.
+- `SRC-PROFECTIONS-WHOLE-SIGN` — Hellenistic annual-profection count: age zero begins in the rising sign/first place, then advances one whole sign per completed year; the traditional domicile ruler becomes Lord of the Year. v2 resolves the civil birthday through `timezone_id` when available and otherwise uses the explicit fixed offset.
 
 ## Zodiacal Releasing convention
 
@@ -63,3 +69,4 @@ The period-number table remains: Aries 15, Taurus 8, Gemini 20, Cancer 25, Leo 1
 5. Calendar normalizations are emitted per artifact. Vimshottari/secondary progressions retain their disclosed 365.2425-day normalization; Zodiacal Releasing v2 uses the distinct 360/30/2.5-day/5-hour reconstruction.
 6. Calculated periods, contacts, or returns are coordinates in a symbolic system, not predictions of concrete events.
 7. IANA zone rules are used only when an explicit `timezone_id` is supplied; the engine does not guess a zone name from coordinates.
+8. Static and timing artifacts share the same IANA-over-fixed-offset precedence so one birth record cannot intentionally resolve to two different instants inside signature-v3.

@@ -28,12 +28,12 @@ AS_OF = "2026-09-15T19:00:00Z"
 def test_jyotish_supports_named_lahiri_and_raman_without_blending():
     lahiri = compute_jyotish(BIRTH, ayanamsa="lahiri", lunar_node="mean")
     raman = compute_jyotish(BIRTH, ayanamsa="raman", lunar_node="mean")
-    assert lahiri["system_version"] == "jyotish-v2"
-    assert raman["system_version"] == "jyotish-v2"
+    assert lahiri["system_version"] == "jyotish-v3"
+    assert raman["system_version"] == "jyotish-v3"
     assert lahiri["calculation"]["ayanamsa"]["name"] == "Lahiri"
     assert raman["calculation"]["ayanamsa"]["name"] == "Raman"
-    assert lahiri["convention"] == "lahiri-mean-node-27-nakshatra-v2"
-    assert raman["convention"] == "raman-mean-node-27-nakshatra-v2"
+    assert lahiri["convention"] == "lahiri-mean-node-27-nakshatra-zone-aware-v3"
+    assert raman["convention"] == "raman-mean-node-27-nakshatra-zone-aware-v3"
     delta = (raman["calculation"]["planets"]["Moon"]["longitude"] - lahiri["calculation"]["planets"]["Moon"]["longitude"]) % 360
     assert 1.0 < delta < 2.0
 
