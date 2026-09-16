@@ -1,4 +1,4 @@
-"""Deterministic BaZi/Four-Pillars calculation with explicit conventions.
+"""Deterministic BaZi/Four-Pillars calculation with explicit civil-time conventions.
 
 This module computes pillars and structural relationships. It intentionally does
 not convert elemental counts into a fortune claim or a generic Day-Master
@@ -16,6 +16,7 @@ except ImportError:  # pragma: no cover
     swe = None
 
 from system_contracts import system_result
+from time_context import TimezoneResolutionError, normalize_birth_timezone, resolve_local_datetime
 
 STEMS = ["Jia", "Yi", "Bing", "Ding", "Wu", "Ji", "Geng", "Xin", "Ren", "Gui"]
 BRANCHES = ["Zi", "Chou", "Yin", "Mao", "Chen", "Si", "Wu", "Wei", "Shen", "You", "Xu", "Hai"]
@@ -31,19 +32,27 @@ GENERATES = {"Wood": "Fire", "Fire": "Earth", "Earth": "Metal", "Metal": "Water"
 CONTROLS = {"Wood": "Earth", "Earth": "Water", "Water": "Fire", "Fire": "Metal", "Metal": "Wood"}
 
 
-def _meta(*, time_known: bool = True) -> dict[str, Any]:
+def _uses_iana(birth: dict[str, Any]) -> bool:
+    return bool(birth.get("timezone_id") or birth.get("tzid"))
+
+
+def _meta(*, time_known: bool, use_iana: bool) -> dict[str, Any]:
+    zone_dependency = "birth.timezone_id" if use_iana else "birth.utc_offset"
+    source_ids = ["SRC-BAZI-SEXAGENARY", "SRC-BAZI-JIEQI"]
+    if use_iana:
+        source_ids.append("SRC-IANA-TZDB")
+    dependencies = ["birth.date", zone_dependency]
+    if time_known:
+        dependencies.append("birth.local_time")
     return {
-        "system_version": "bazi-v1",
+        "system_version": "bazi-v2",
         "tradition": "Chinese Four Pillars / BaZi",
-        "convention": "li-chun-jie-civil-time-v1",
+        "convention": "li-chun-jie-civil-time-zone-aware-v2",
         "artifact_class": "static_signature",
         "epistemic_class": "deterministic_calculation",
         "dependency_roots": ["birth_instant"] if time_known else ["birth_date"],
-        "input_dependencies": (
-            ["birth.date", "birth.local_time", "birth.utc_offset"]
-            if time_known else ["birth.date", "birth.utc_offset"]
-        ),
-        "source_ids": ["SRC-BAZI-SEXAGENARY", "SRC-BAZI-JIEQI"],
+        "input_dependencies": dependencies,
+        "source_ids": source_ids,
         "sensitivity": "personal",
         "license_info": {
             "calculation_code": "project-authored",
@@ -92,14 +101,17 @@ def _ten_god(day_stem: int, other_stem: int) -> str:
     raise AssertionError("unreachable five-phase relationship")
 
 
-def _solar_longitude_at(
-    year: int, month: int, day: int, hour: int, minute: int, timezone_offset: float
-) -> float:
+def _solar_longitude_utc(utc_value: datetime) -> float:
     if swe is None:
         raise RuntimeError("Swiss Ephemeris is required for BaZi solar-term calculation.")
     swe.set_ephe_path(None)
-    hour_ut = hour + minute / 60.0 - float(timezone_offset)
-    jd = swe.julday(year, month, day, hour_ut)
+    hour_ut = (
+        utc_value.hour
+        + utc_value.minute / 60.0
+        + utc_value.second / 3600.0
+        + utc_value.microsecond / 3_600_000_000.0
+    )
+    jd = swe.julday(utc_value.year, utc_value.month, utc_value.day, hour_ut)
     return float(swe.calc_ut(jd, swe.SUN, swe.FLG_MOSEPH)[0][0]) % 360.0
 
 
@@ -151,17 +163,34 @@ def _structure(pillars: dict[str, dict[str, Any] | None], day: dict[str, Any]) -
     return elements, ten_gods, available
 
 
+def _unknown_day_timezone_basis(start: dict[str, Any], end: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "model": start["model"],
+        "timezone_id": start.get("timezone_id"),
+        "source_precedence": "timezone_id" if start["model"] == "iana_zoneinfo" else "timezone_offset",
+        "day_start_effective_offset_hours": start["effective_offset_hours"],
+        "day_end_effective_offset_hours": end["effective_offset_hours"],
+        "day_start_abbreviation": start.get("abbreviation"),
+        "day_end_abbreviation": end.get("abbreviation"),
+        "tzdata_version": start.get("tzdata_version"),
+    }
+
+
 def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
     time_known = birth.get("time_accuracy") != "unknown"
-    required = {"year", "month", "day", "timezone_offset"}
+    use_iana = _uses_iana(birth)
+    meta = _meta(time_known=time_known, use_iana=use_iana)
+    required = {"year", "month", "day"}
     if time_known:
         required.update({"hour", "minute"})
     missing = sorted(required - set(birth))
+    if not use_iana and "timezone_offset" not in birth:
+        missing.append("timezone_id|timezone_offset")
     if missing:
         return system_result(
             "bazi", calculation={}, status="input_insufficient",
             limitations=[f"Missing required birth fields: {', '.join(missing)}"],
-            **_meta(time_known=time_known),
+            **meta,
         )
 
     year_value = int(birth["year"])
@@ -174,10 +203,15 @@ def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
         hour_value = int(birth["hour"])
         minute_value = int(birth["minute"])
         datetime(year_value, month_value, day_value, hour_value, minute_value)
-        sun_lon = _solar_longitude_at(
-            year_value, month_value, day_value, hour_value, minute_value,
-            float(birth["timezone_offset"]),
-        )
+        try:
+            _, timezone_basis = normalize_birth_timezone(birth)
+        except TimezoneResolutionError as exc:
+            return system_result(
+                "bazi", calculation={}, status="input_insufficient",
+                limitations=[str(exc)], **meta,
+            )
+        utc_value = datetime.fromisoformat(timezone_basis["birth_utc_iso"].replace("Z", "+00:00"))
+        sun_lon = _solar_longitude_utc(utc_value)
         bazi_year, year, month = _year_month_pillars(year_value, month_value, sun_lon)
         hour_branch = ((hour_value + 1) // 2) % 12
         zi_stem = (day["stem_index"] % 5) * 2
@@ -188,22 +222,24 @@ def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
         solar_range = None
         limitations = [
             "Five-phase distribution is an equal-share structural count of visible and hidden stems, not a Day-Master strength score.",
-            "v1 uses supplied civil time and UTC offset; true/apparent solar-time correction is not applied.",
-            "v1 changes the day at civil midnight; alternate late-Zi rollover schools are not blended.",
+            "v2 resolves an explicit IANA timezone_id when supplied; otherwise it uses the explicit fixed UTC offset.",
+            "v2 uses civil clock time for the hour pillar; true/apparent solar-time correction is not applied.",
+            "v2 changes the day at civil midnight; alternate late-Zi rollover schools are not blended.",
         ]
     else:
-        start_lon = _solar_longitude_at(
-            year_value, month_value, day_value, 0, 0, float(birth["timezone_offset"])
-        )
-        end_lon = _solar_longitude_at(
-            year_value, month_value, day_value, 23, 59, float(birth["timezone_offset"])
-        )
-        start_bazi_year, start_year, start_month = _year_month_pillars(
-            year_value, month_value, start_lon
-        )
-        end_bazi_year, end_year, end_month = _year_month_pillars(
-            year_value, month_value, end_lon
-        )
+        try:
+            start = resolve_local_datetime(year_value, month_value, day_value, 0, 0, birth)
+            end = resolve_local_datetime(year_value, month_value, day_value, 23, 59, birth)
+        except TimezoneResolutionError as exc:
+            return system_result(
+                "bazi", calculation={}, status="input_insufficient",
+                limitations=[str(exc)], **meta,
+            )
+        timezone_basis = _unknown_day_timezone_basis(start, end)
+        start_lon = _solar_longitude_utc(start["utc_datetime"])
+        end_lon = _solar_longitude_utc(end["utc_datetime"])
+        start_bazi_year, start_year, start_month = _year_month_pillars(year_value, month_value, start_lon)
+        end_bazi_year, end_year, end_month = _year_month_pillars(year_value, month_value, end_lon)
         year = start_year if start_year["cycle_index"] == end_year["cycle_index"] else None
         month = start_month if start_month["cycle_index"] == end_month["cycle_index"] else None
         bazi_year = start_bazi_year if start_bazi_year == end_bazi_year else None
@@ -215,8 +251,8 @@ def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
             "Year and month pillars are emitted only when they are stable across the entire supplied local birth date.",
             "If the birth date crosses a Li Chun or Jie boundary, the affected pillar is withheld because exact time is required.",
             "Five-phase distribution uses only available pillars and is marked partial when the hour pillar is absent.",
-            "v1 uses the supplied UTC offset and does not apply true/apparent solar-time correction.",
-            "v1 changes the day at civil midnight; alternate late-Zi rollover schools are not blended.",
+            "v2 resolves the local date boundaries through an explicit IANA timezone_id when supplied, including offset changes within that date.",
+            "v2 changes the day at civil midnight; alternate late-Zi rollover schools are not blended.",
         ]
 
     pillars: dict[str, dict[str, Any] | None] = {
@@ -238,10 +274,11 @@ def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
         "solar_longitude_range": solar_range,
         "bazi_year": bazi_year,
         "time_accuracy": "known" if time_known else "unknown",
+        "timezone_basis": timezone_basis,
     }
     return system_result(
         "bazi", calculation=calculation, limitations=limitations,
-        **_meta(time_known=time_known),
+        **meta,
     )
 
 

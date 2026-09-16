@@ -1,11 +1,13 @@
 """Sidereal/Jyotish astronomical projection using Swiss Ephemeris.
 
-v2 supports explicit Lahiri or Raman ayanamsa selection, 27 nakshatras/padas,
-D9 Navamsha, D10 Dasamsa, and explicit mean/true lunar-node conventions.
+v3 supports explicit Lahiri or Raman ayanamsa selection, 27 nakshatras/padas,
+D9 Navamsha, D10 Dasamsa, explicit mean/true lunar-node conventions, and
+zone-aware conversion of civil birth time to one UTC instant.
 Interpretive meanings and dashas remain outside this static calculation module.
 """
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
 
 try:
@@ -14,6 +16,7 @@ except ImportError:  # pragma: no cover
     swe = None
 
 from system_contracts import system_result
+from time_context import TimezoneResolutionError, normalize_birth_timezone
 
 SIGNS = [
     "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo",
@@ -43,7 +46,11 @@ NODE_MODES = {
 }
 
 
-def _meta(*, ayanamsa: str, lunar_node: str) -> dict[str, Any]:
+def _uses_iana(birth: dict[str, Any]) -> bool:
+    return bool(birth.get("timezone_id") or birth.get("tzid"))
+
+
+def _meta(*, ayanamsa: str, lunar_node: str, use_iana: bool) -> dict[str, Any]:
     aya_key = ayanamsa.strip().lower()
     node_key = lunar_node.strip().lower()
     aya_name = AYANAMSA_MODES[aya_key][0]
@@ -53,14 +60,17 @@ def _meta(*, ayanamsa: str, lunar_node: str) -> dict[str, Any]:
         "SRC-JYOTISH-NAVAMSHA", "SRC-JYOTISH-DASAMSA", "SRC-JYOTISH-LUNAR-NODES",
     ]
     source_ids.append("SRC-JYOTISH-LAHIRI" if aya_key == "lahiri" else "SRC-JYOTISH-RAMAN")
+    if use_iana:
+        source_ids.append("SRC-IANA-TZDB")
+    zone_dependency = "birth.timezone_id" if use_iana else "birth.utc_offset"
     return {
-        "system_version": "jyotish-v2",
+        "system_version": "jyotish-v3",
         "tradition": "Jyotish / sidereal astrology",
-        "convention": f"{aya_key}-{node_name}-node-27-nakshatra-v2",
+        "convention": f"{aya_key}-{node_name}-node-27-nakshatra-zone-aware-v3",
         "artifact_class": "static_signature",
         "epistemic_class": "deterministic_calculation",
         "dependency_roots": ["birth_instant"],
-        "input_dependencies": ["birth.date", "birth.local_time", "birth.utc_offset", "birth.coordinates"],
+        "input_dependencies": ["birth.date", "birth.local_time", zone_dependency, "birth.coordinates"],
         "source_ids": source_ids,
         "sensitivity": "personal",
         "license_info": {
@@ -147,14 +157,17 @@ def compute_jyotish(
     aya_key = ayanamsa.strip().lower()
     node_key = lunar_node.strip().lower()
     if aya_key not in AYANAMSA_MODES:
-        raise ValueError(f"jyotish-v2 ayanamsa must be one of: {', '.join(sorted(AYANAMSA_MODES))}")
+        raise ValueError(f"jyotish-v3 ayanamsa must be one of: {', '.join(sorted(AYANAMSA_MODES))}")
     if node_key not in NODE_MODES:
-        raise ValueError(f"jyotish-v2 lunar_node must be one of: {', '.join(sorted(NODE_MODES))}")
-    meta = _meta(ayanamsa=aya_key, lunar_node=node_key)
+        raise ValueError(f"jyotish-v3 lunar_node must be one of: {', '.join(sorted(NODE_MODES))}")
+    use_iana = _uses_iana(birth)
+    meta = _meta(ayanamsa=aya_key, lunar_node=node_key, use_iana=use_iana)
     aya_name = meta.pop("ayanamsa_name")
 
-    required = {"year", "month", "day", "hour", "minute", "timezone_offset", "lat", "lon"}
+    required = {"year", "month", "day", "hour", "minute", "lat", "lon"}
     missing = sorted(required - set(birth))
+    if not use_iana and "timezone_offset" not in birth:
+        missing.append("timezone_id|timezone_offset")
     if missing:
         return system_result(
             "jyotish", calculation={}, status="input_insufficient",
@@ -163,15 +176,29 @@ def compute_jyotish(
     if birth.get("time_accuracy") == "unknown":
         return system_result(
             "jyotish", calculation={}, status="input_insufficient",
-            limitations=["jyotish-v2 requires a known birth time and does not substitute a noon chart."],
+            limitations=["jyotish-v3 requires a known birth time and does not substitute a noon chart."],
             **meta,
         )
     if swe is None:
         raise RuntimeError("Swiss Ephemeris is required for Jyotish calculation.")
 
+    try:
+        _, timezone_basis = normalize_birth_timezone(birth)
+    except TimezoneResolutionError as exc:
+        return system_result(
+            "jyotish", calculation={}, status="input_insufficient",
+            limitations=[str(exc)], **meta,
+        )
+
+    utc_value = datetime.fromisoformat(timezone_basis["birth_utc_iso"].replace("Z", "+00:00"))
+    hour_ut = (
+        utc_value.hour
+        + utc_value.minute / 60.0
+        + utc_value.second / 3600.0
+        + utc_value.microsecond / 3_600_000_000.0
+    )
     swe.set_ephe_path(None)
-    hour_ut = birth["hour"] + birth["minute"] / 60.0 - float(birth["timezone_offset"])
-    jd = swe.julday(birth["year"], birth["month"], birth["day"], hour_ut)
+    jd = swe.julday(utc_value.year, utc_value.month, utc_value.day, hour_ut)
     sid_mode = AYANAMSA_MODES[aya_key][1]
     swe.set_sid_mode(sid_mode)
     planet_flags = swe.FLG_SIDEREAL | swe.FLG_MOSEPH | swe.FLG_SPEED
@@ -204,7 +231,8 @@ def compute_jyotish(
     calculation = {
         "ayanamsa": {"name": aya_name, "key": aya_key, "degrees": round(ayanamsa_deg, 6)},
         "zodiac": "sidereal",
-        "ephemeris_profile": "pyswisseph-moshier-sidereal-speed-v2",
+        "ephemeris_profile": "pyswisseph-moshier-sidereal-speed-v3",
+        "timezone_basis": timezone_basis,
         "planets": planets,
         "lunar_nodes": lunar_nodes,
         "ascendant": ascendant,
@@ -218,6 +246,8 @@ def compute_jyotish(
             "This layer computes astronomical/symbolic coordinates only; it does not claim empirical personality validity.",
             "Lahiri and Raman are alternative sidereal zero-point conventions and are not blended into one result.",
             "Mean and true lunar nodes are alternative astronomical conventions; the selected mode is recorded explicitly.",
+            "An explicit IANA timezone_id is authoritative when supplied; a numeric offset remains the compatibility fallback.",
+            "Ambiguous civil times require timezone_fold and nonexistent civil times fail closed rather than selecting an instant silently.",
             "Vimshottari Dasha belongs in a separate timing artifact and is not emitted by this static signature.",
             "D9 and D10 are deterministic divisional projections; interpretive meanings are intentionally not embedded here.",
             "Uranus, Neptune, and Pluto are exposed as modern optional sidereal additions; they are not classical Jyotish grahas.",

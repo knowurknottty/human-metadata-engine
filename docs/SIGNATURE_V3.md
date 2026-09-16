@@ -41,8 +41,8 @@ empirical evidence about a person.
 
 ## Implemented v3 static systems
 
-- `bazi-v1` — Four Pillars, Day Master, hidden stems, Ten Gods, and structural Five-Phase distribution under disclosed Li Chun/Jie/civil-time conventions.
-- `jyotish-v2` — explicit Lahiri **or** Raman sidereal projection; mean **or** true Rahu/Ketu convention; 27 nakshatras/padas; D9/Navamsha; D10/Dasamsa; sidereal Placidus houses; explicit speed requests for retrograde state. Alternatives are named and never averaged.
+- `bazi-v2` — Four Pillars, Day Master, hidden stems, Ten Gods, and structural Five-Phase distribution under disclosed Li Chun/Jie/civil-time conventions. An explicit IANA `timezone_id` is authoritative when supplied; date-only partial results evaluate local-day boundaries with the zone's historical offsets.
+- `jyotish-v3` — explicit Lahiri **or** Raman sidereal projection; mean **or** true Rahu/Ketu convention; 27 nakshatras/padas; D9/Navamsha; D10/Dasamsa; sidereal Placidus houses; explicit speed requests for retrograde state; and IANA-aware conversion of civil birth time to one UTC instant.
 - `maya-classical-gmt-v1` — Long Count, Tzolk'in, Haab', Calendar Round, and Lord of Night under GMT 584283.
 
 ## Implemented timing systems
@@ -58,11 +58,11 @@ All dynamic artifacts require an explicit `as_of`; the engine never reads the wa
 - `planetary-hours-v2` — twelve unequal daylight hours and twelve unequal night hours from explicit environment coordinates, using sunrise/sunset, local civil date, IANA-zone resolution when available, and the Chaldean order.
 - `zodiacal-releasing-v2` — Fortune/Spirit releasing with the Valens same-sign Spirit start rule, idealized 360-day years / 30-day months, L1-L4 recursive units, and loosing-of-the-bond at L2-L4. Full L1/L2 schedules are emitted; L3/L4 are emitted for the active parent chain at `as_of`.
 
-## Timezone policy
+## Civil-time policy
 
-`timezone_id` (for example `America/New_York`) is the preferred v2 timing input and is resolved with Python `zoneinfo`. The project pins `tzdata` as a fallback when a host does not provide system IANA data. A numeric `timezone_offset` remains supported as an explicit fixed-offset compatibility path.
+`timezone_id` (for example `America/New_York`) is the preferred v3 civil-time input and is resolved with Python `zoneinfo`. The project pins `tzdata` as a fallback when a host does not provide system IANA data. A numeric `timezone_offset` remains supported as an explicit fixed-offset compatibility path.
 
-The engine does not infer a timezone name from latitude/longitude. Ambiguous local times during a backward clock transition require `timezone_fold=0` or `timezone_fold=1`; nonexistent local times during a forward transition fail closed. If both `timezone_id` and `timezone_offset` are supplied, v2 timing treats the named IANA zone as authoritative and records any supplied-offset mismatch in provenance.
+The same precedence now applies to both static and timing artifacts. The engine does not infer a timezone name from latitude/longitude. Ambiguous local times during a backward clock transition require `timezone_fold=0` or `timezone_fold=1`; nonexistent local times during a forward transition fail closed. If both `timezone_id` and `timezone_offset` are supplied, the named IANA zone is authoritative and any supplied-offset mismatch is retained in provenance.
 
 ## Fail-closed rules
 
