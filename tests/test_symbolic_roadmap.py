@@ -24,7 +24,7 @@ class SymbolicRoadmapTests(unittest.TestCase):
     def test_every_roadmap_system_is_registered_and_provenanced(self):
         expected = {
             "kabbalah_tree_of_life", "sacred_geometry",
-            "alchemical_transformation", "sumerian_sexagesimal",
+            "alchemical_transformation", "sumerian_sexagesimal", "sumerian_me_ontology",
             "hermetic_principles", "tarot", "babylonian_planetary",
             "hermes_thoth_nabu", "solomonic", "arabic_abjad", "chinese",
             "egyptian", "vedic_jyotish", "mayan_tzolkin", "cuneiform_magic",
@@ -50,6 +50,36 @@ class SymbolicRoadmapTests(unittest.TestCase):
         self.assertIn("SHLVM", prepared["latin_transliteration"])
         self.assertIn("MHMD", prepared["latin_transliteration"])
         self.assertEqual(prepared["transliteration_profile"], "builtin-v1")
+
+    def test_sumerian_me_is_historical_reference_not_identity_assignment(self):
+        capt = encode_symbolic_systems("CAPT")["sumerian_me_ontology"]
+        other = encode_symbolic_systems("Jennifer Larson")["sumerian_me_ontology"]
+        self.assertEqual(capt["phase"], "historical")
+        self.assertEqual(capt["interpretation_level"], "historical")
+        self.assertEqual(capt["data"]["source_text_id"], "ETCSL-1.3.1")
+        self.assertEqual(capt["data"]["evidence_layer"], "historical_textual")
+        self.assertTrue(capt["data"]["lacunae_present"])
+        self.assertEqual(capt["data"]["named_item_count"], 81)
+        self.assertEqual(capt["data"]["cuneiform_sign"], "𒈨")
+        self.assertEqual(capt["data"]["cuneiform_codepoint"], "U+12228")
+        all_items = [item for category in capt["data"]["categories"] for item in category["items"]]
+        self.assertIn("black garment", all_items)
+        self.assertIn("colourful garment", all_items)
+        self.assertIsNone(capt["data"]["personal_mapping"])
+        self.assertFalse(capt["data"]["identity_input_used"])
+        self.assertIn("modern analytical groupings", capt["data"]["category_policy"])
+        crosswalk = capt["data"]["modern_capacity_crosswalk"]
+        self.assertEqual(crosswalk["epistemic_layer"], "modern_analytic")
+        self.assertFalse(crosswalk["historical_claim"])
+        self.assertEqual(len(crosswalk["mappings"]), 9)
+        self.assertEqual(crosswalk["personalization_policy"]["status"], "disabled_by_default")
+        self.assertIn("name", crosswalk["personalization_policy"]["forbidden_basis"])
+        self.assertEqual(capt["data"]["categories"], other["data"]["categories"])
+        self.assertEqual(crosswalk, other["data"]["modern_capacity_crosswalk"])
+        items = {item for category in capt["data"]["categories"] for item in category["items"]}
+        self.assertIn("kingship", items)
+        self.assertIn("craft of the scribe", items)
+        self.assertIn("wisdom", items)
 
     def test_native_abjad_and_temporal_systems_have_canonical_outputs(self):
         results = encode_symbolic_systems(

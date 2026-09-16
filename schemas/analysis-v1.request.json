@@ -15,7 +15,8 @@
     "user_reported_human_design_type": {"type": "string", "enum": ["Manifestor", "Generator", "Manifesting Generator", "Projector", "Reflector"]},
     "lineage_surnames": {"type": "array", "maxItems": 12, "items": {"type": "string", "minLength": 1, "maxLength": 120}},
     "observations": {"type": "array", "maxItems": 40, "items": {"$ref": "#/$defs/observation"}},
-    "constellation": {"type": "object"}
+    "constellation": {"type": "object"},
+    "sumerian_me_reflection": {"type": "boolean", "default": false}
   },
   "$defs": {
     "birth": {
@@ -73,7 +74,8 @@
         "text": {"type": "string", "minLength": 1, "maxLength": 500},
         "source": {"type": "string", "maxLength": 80},
         "confidence": {"type": "string", "enum": ["unrated", "low", "medium", "high"]},
-        "occurred_at": {"type": ["string", "null"], "maxLength": 40}
+        "occurred_at": {"type": ["string", "null"], "maxLength": 40},
+        "capacity_domains": {"type": "array", "maxItems": 9, "uniqueItems": true, "items": {"type": "string", "enum": ["sovereignty_and_offices", "liminality_and_cult", "conflict_and_power", "sexuality_and_social_space", "speech_music_and_performance", "crafts_and_technical_practice", "knowledge_and_judgment", "household_pastoral_and_labor", "social_affect_and_norms"]}}
       }
     },
     "attachment": {

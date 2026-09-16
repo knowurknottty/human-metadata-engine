@@ -60,6 +60,7 @@ from constellation import (  # noqa: E402
 )
 from etymology import analyze_name_etymology  # noqa: E402
 from evidence_v3 import evidence_dashboard  # noqa: E402
+from sumerian_me_reflection import build_sumerian_me_reflection  # noqa: E402
 from encoders.pipeline import MANIFEST_VERSION as CONVENTION_SET_VERSION  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
 from snapshot import personality_snapshot  # noqa: E402
@@ -160,7 +161,7 @@ SECURITY_HEADERS = {
 
 ANALYSIS_REQUEST_FIELDS = {
     "name", "aliases", "mode", "subject_type", "as_of_year", "birth", "psychology",
-    "user_reported_human_design_type", "lineage_surnames", "observations", "constellation",
+    "user_reported_human_design_type", "lineage_surnames", "observations", "constellation", "sumerian_me_reflection",
 }
 PUBLIC_BIRTH_FIELDS = {
     "year", "month", "day", "hour", "minute", "time_accuracy", "location",
@@ -731,6 +732,13 @@ def analyze(payload):
 
     lineage_surnames = _validated_lineage_surnames(payload.get("lineage_surnames"))
     observations = _validated_observations(payload.get("observations"))
+    reflection_requested = payload.get("sumerian_me_reflection", False)
+    if not isinstance(reflection_requested, bool):
+        raise PublicContractError("sumerian_me_reflection must be a boolean.")
+    sumerian_me_reflection = build_sumerian_me_reflection(
+        observations,
+        enabled=reflection_requested,
+    )
     constellation = validate_constellation(payload.get("constellation"))
 
     sig = _compute_signature(identity, mode=mode)
@@ -776,6 +784,7 @@ def analyze(payload):
         "lineage_surnames": lineage_surnames,
         "observations": observations,
         "constellation": constellation,
+        "sumerian_me_reflection": reflection_requested,
     })
     report = generate_report(
         sig,
@@ -840,6 +849,7 @@ def analyze(payload):
         "etymology": etymology,
         "evidence": evidence,
         "observations": observations,
+        "sumerian_me_reflection": sumerian_me_reflection,
         "constellation": constellation_result,
     }
     return _redact_public_output(response)

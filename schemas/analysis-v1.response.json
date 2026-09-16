@@ -31,7 +31,21 @@
     "normalized_input": {"type": "object"},
     "psychology": {"type": ["object", "null"]},
     "aliases": {"type": "array", "items": {"type": "object", "required": ["name", "category", "deterministic", "scientific_validation", "calculations", "fingerprint", "pattern_convergence"]}},
-    "evidence": {"type": "object", "required": ["method_version", "layers", "claim_policy"]}
+    "evidence": {"type": "object", "required": ["method_version", "layers", "claim_policy"]},
+    "sumerian_me_reflection": {
+      "type": "object",
+      "required": ["version", "source_ontology_version", "epistemic_layer", "historical_claim", "enabled", "available", "status", "mapping_basis", "forbidden_automatic_bases", "domain_matches"],
+      "properties": {
+        "version": {"const": "sumerian-me-reflection-v1"},
+        "source_ontology_version": {"type": "string"},
+        "epistemic_layer": {"const": "modern_interpretive"},
+        "historical_claim": {"const": false},
+        "enabled": {"type": "boolean"}, "available": {"type": "boolean"}, "status": {"type": "string"},
+        "mapping_basis": {"type": "string"}, "forbidden_automatic_bases": {"type": "array", "items": {"type": "string"}},
+        "domain_matches": {"type": "array", "items": {"type": "object"}},
+        "reason": {"type": "string"}, "limitations": {"type": "array", "items": {"type": "string"}}
+      }
+    }
   },
   "$defs": {
     "report_section_metadata": {

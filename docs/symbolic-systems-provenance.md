@@ -15,6 +15,9 @@ through the stricter `system-result-v2` provenance envelope.
 - `SRC-PYTHAGOREAN-TETRACTYS` — Pythagorean tetractys number symbolism.
 - `SRC-ALCHEMY-FOUR-STAGES` — four-color work convention: nigredo, albedo, citrinitas, rubedo.
 - `SRC-MESOPOTAMIAN-SEXAGESIMAL` — Mesopotamian base-60 place-value convention.
+- `SRC-ETCSL-INANA-ENKI` — ETCSL 1.3.1, *Inana and Enki*; composite Sumerian text/translation used for the visible *me* inventory. The current bounded inventory contains the 81 legible named items in the surviving final recitation; damaged placeholders are excluded rather than reconstructed. This is not asserted to be a complete ancient canonical total.
+- `SRC-FARBER-ME-LIST` — Gertrud Farber, *Der Mythos ‘Inanna und Enki’ unter besonderer Berücksichtigung der Liste der me* (Studia Pohl 10, 1973); specialist study of the *me* list and its textual tradition.
+- `SRC-ORACC-ENKI` — ORACC Ancient Mesopotamian Gods and Goddesses, Enki/Ea overview; contextual secondary reference for the narrative transfer of the powers of civilization, not a source for filling textual lacunae.
 - `SRC-HERMETIC-SEVEN-PRINCIPLES` — *The Kybalion* seven-principles convention; modern Hermetic text, not an ancient corpus claim.
 - `SRC-TAROT-RWS` — Rider-Waite-Smith major-arcana ordering.
 - `SRC-CHALDEAN-ORDER` — Saturn, Jupiter, Mars, Sun, Venus, Mercury, Moon order.
@@ -67,3 +70,5 @@ through the stricter `system-result-v2` provenance envelope.
 4. Source recurrence is not evidence independence. `birth_date` and `birth_instant` belong to one `birth` dependency family in `signature-v3`.
 5. Timing artifacts are derived from frozen natal inputs and are excluded from static-signature convergence.
 6. The source catalog supports reproducibility and review; it is not a claim of historical certainty or predictive validity.
+7. The Sumerian *me* ontology is a corpus-level historical/textual reference. No modern name, birth datum, numerological result, or other identity feature is treated as evidence that a person possesses or corresponds to a particular *me*. Any future personal correspondence layer must use a separately versioned modern convention and remain explicitly interpretive.
+8. The nine thematic *me* categories and the Human Capacity crosswalk are Inversion Labs analytical structures, not classifications stated by ETCSL or claimed as ancient Sumerian doctrine. They are versioned separately from the historical inventory and may not be cited as source-text evidence.

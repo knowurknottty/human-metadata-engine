@@ -32,12 +32,14 @@ class SymbolicContractTests(unittest.TestCase):
         envelope = schema["$defs"]["symbolic_encoder_envelope"]
         self.assertEqual(envelope["required"], ["system", "phase", "status", "interpretation_level", "provenance", "data"])
         self.assertEqual(envelope["properties"]["provenance"]["required"], ["manifest_version", "convention", "source_ids", "input_mode"])
+        self.assertIn("historical", envelope["properties"]["interpretation_level"]["enum"])
+        self.assertIn("sumerian_me_ontology", schema["properties"]["encoders"]["properties"])
         self.assertIn("encoders", schema["properties"])
 
     def test_long_report_explains_extension_scope_and_resonance_boundary(self):
         signature = compute_unified_signature({"id": "test:capt", "text": "CAPT"})
         report = generate_report(signature)
-        self.assertIn("provenance-aware symbolic extensions", report["markdown"])
+        self.assertIn("provenance-aware extensions", report["markdown"])
         self.assertIn("excluded from the composite resonance score", report["markdown"])
 
     def test_long_report_contains_an_untruncated_extension_registry(self):
