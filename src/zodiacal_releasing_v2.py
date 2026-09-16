@@ -103,9 +103,7 @@ def _generate_subperiods(
     return periods
 
 
-def _find_active(periods: list[dict[str, Any]], as_of_utc: datetime | None) -> dict[str, Any] | None:
-    if as_of_utc is None:
-        return None
+def _find_active(periods: list[dict[str, Any]], as_of_utc: datetime) -> dict[str, Any] | None:
     for item in periods:
         if _from_iso(item["start_utc"]) <= as_of_utc < _from_iso(item["end_utc"]):
             return dict(item)
@@ -168,7 +166,7 @@ def compute_zodiacal_releasing(
     if lot_key not in {"fortune", "spirit"}:
         raise ValueError("zodiacal-releasing-v2 lot must be 'fortune' or 'spirit'.")
     convention = "valens-modern-standard-360day-l1-l4-lb-v2"
-    deps = ["birth.date", "birth.local_time", "birth.timezone_id_or_offset", "birth.coordinates", "as_of(optional)"]
+    deps = ["birth.date", "birth.local_time", "birth.timezone_id_or_offset", "birth.coordinates", "as_of"]
     base = dict(
         system_version="zodiacal-releasing-v2",
         tradition="Hellenistic zodiacal releasing",
@@ -192,15 +190,19 @@ def compute_zodiacal_releasing(
             ],
         },
     )
+    as_of_utc = _parse_as_of(as_of)
+    if as_of_utc is None:
+        return system_result(
+            "zodiacal_releasing", calculation={}, status="input_insufficient",
+            limitations=["zodiacal-releasing-v2 requires an explicit as_of time."], **base,
+        )
     try:
         normalized, timezone_basis = normalize_birth_timezone(birth)
         birth_utc, natal_jd, natal = _natal_frame(normalized, require_coordinates=True)
     except (TimezoneResolutionError, ValueError) as exc:
         return system_result("zodiacal_releasing", calculation={}, status="input_insufficient",
                              limitations=[str(exc)], **base)
-
-    as_of_utc = _parse_as_of(as_of)
-    if as_of_utc is not None and as_of_utc < birth_utc:
+    if as_of_utc < birth_utc:
         return system_result("zodiacal_releasing", calculation={}, status="input_insufficient",
                              limitations=["as_of precedes the birth instant."], **base)
 
@@ -230,7 +232,7 @@ def compute_zodiacal_releasing(
     active_l3 = None
     level_4: list[dict[str, Any]] = []
     active_l4 = None
-    if active_l1 is not None and as_of_utc is not None:
+    if active_l1 is not None:
         l2_siblings = [
             item for item in level_2
             if item.get("parent_level_1_start_utc") == active_l1["start_utc"]
@@ -258,6 +260,11 @@ def compute_zodiacal_releasing(
                     "end_utc": item["end_utc"],
                 })
 
+    levels_emitted = [1, 2]
+    if level_3:
+        levels_emitted.append(3)
+    if level_4:
+        levels_emitted.append(4)
     calculation = {
         "zodiac": "tropical",
         "sect": sect,
@@ -275,14 +282,9 @@ def compute_zodiacal_releasing(
         "level_3_periods_active_parent": level_3,
         "level_4_periods_active_parent": level_4,
         "loosing_of_bond_events": loosing_events,
-        "as_of_utc": as_of_utc.isoformat().replace("+00:00", "Z") if as_of_utc else None,
-        "active_hierarchy": {
-            "L1": active_l1,
-            "L2": active_l2,
-            "L3": active_l3,
-            "L4": active_l4,
-        } if as_of_utc is not None else None,
-        "levels_emitted": [1, 2, 3, 4] if as_of_utc is not None else [1, 2],
+        "as_of_utc": as_of_utc.isoformat().replace("+00:00", "Z"),
+        "active_hierarchy": {"L1": active_l1, "L2": active_l2, "L3": active_l3, "L4": active_l4},
+        "levels_emitted": levels_emitted,
     }
     limitations = [
         "v2 uses the disclosed 360-day-year / 30-day-month reconstruction; it intentionally replaces the earlier v1 365.2425-day ZR normalization.",
@@ -292,7 +294,7 @@ def compute_zodiacal_releasing(
         "This implementation releases only from Fortune or Spirit; Eros and interpretive peak/culmination overlays are not included.",
         "The artifact provides symbolic period coordinates only and does not predict events or outcomes.",
     ]
-    if as_of_utc is not None and active_l1 is None:
+    if active_l1 is None:
         limitations.append("as_of lies beyond the single 12-sign L1 cycle emitted by v2; no active hierarchy is reported.")
     return system_result("zodiacal_releasing", calculation=calculation, limitations=limitations, **base)
 
