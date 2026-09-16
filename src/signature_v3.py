@@ -13,16 +13,16 @@ from encoders.bazi import compute_bazi
 from encoders.jyotish import compute_jyotish
 from encoders.maya_classical import compute_classical_maya
 from system_contracts import SIGNATURE_V3, summarize_systems
+from time_context import TimezoneResolutionError, normalize_birth_timezone
 from timing_v1 import (
-    compute_annual_profection,
-    compute_planetary_hours,
     compute_secondary_progressions,
     compute_solar_arc,
     compute_solar_return,
     compute_transits,
     compute_vimshottari,
-    compute_zodiacal_releasing,
 )
+from timing_v2 import compute_annual_profection, compute_planetary_hours
+from zodiacal_releasing_v2 import compute_zodiacal_releasing
 
 
 def compute_signature_v3(
@@ -51,13 +51,22 @@ def compute_signature_v3(
     result["system_manifest"] = summarize_systems(systems)
 
     timing: dict[str, dict[str, Any]] = {}
-    if include_timing and birth:
-        timing["vimshottari"] = compute_vimshottari(birth, as_of=as_of, ayanamsa=jyotish_ayanamsa)
+    timing_birth = birth
+    timing_timezone_error: str | None = None
+    if include_timing and birth and birth.get("timezone_id"):
+        try:
+            timing_birth, _ = normalize_birth_timezone(birth)
+        except TimezoneResolutionError as exc:
+            timing_birth = None
+            timing_timezone_error = str(exc)
+
+    if include_timing and timing_birth:
+        timing["vimshottari"] = compute_vimshottari(timing_birth, as_of=as_of, ayanamsa=jyotish_ayanamsa)
         if as_of is not None:
-            timing["transits"] = compute_transits(birth, as_of=as_of)
-            timing["secondary_progressions"] = compute_secondary_progressions(birth, as_of=as_of)
-            timing["solar_arc"] = compute_solar_arc(birth, as_of=as_of)
-            timing["solar_return"] = compute_solar_return(birth, as_of=as_of)
+            timing["transits"] = compute_transits(timing_birth, as_of=as_of)
+            timing["secondary_progressions"] = compute_secondary_progressions(timing_birth, as_of=as_of)
+            timing["solar_arc"] = compute_solar_arc(timing_birth, as_of=as_of)
+            timing["solar_return"] = compute_solar_return(timing_birth, as_of=as_of)
             timing["annual_profection"] = compute_annual_profection(birth, as_of=as_of)
             timing["zodiacal_releasing"] = compute_zodiacal_releasing(birth, as_of=as_of, lot="spirit")
     if include_timing and timing_context is not None and as_of is not None:
@@ -76,8 +85,12 @@ def compute_signature_v3(
     result["timing_policy"] = {
         "requires_explicit_as_of_for_dynamic_artifacts": True,
         "planetary_hours_require_separate_timing_context": True,
-        "timezone_model": "explicit_fixed_utc_offset_no_iana_dst_resolution",
-        "zodiacal_releasing_status": "level_1_only",
+        "timezone_model": "iana_zoneinfo_preferred_fixed_offset_fallback",
+        "timezone_id_field": "timezone_id",
+        "ambiguous_local_time_requires_timezone_fold": True,
+        "timezone_resolution_error": timing_timezone_error,
+        "zodiacal_releasing_status": "levels_1_through_4_with_loosing_of_bond",
+        "zodiacal_releasing_calendar": "360_day_year_30_day_month_recursive_twelfths",
     }
     return result
 
