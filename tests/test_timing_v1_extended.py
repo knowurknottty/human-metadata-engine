@@ -139,5 +139,6 @@ def test_signature_v3_emits_dynamic_timing_only_when_explicitly_requested():
     assert with_timing["systems"]["jyotish"]["calculation"]["lunar_nodes"]["mode"] == "true"
     assert {"vimshottari", "transits", "secondary_progressions", "solar_arc", "solar_return",
             "annual_profection", "zodiacal_releasing", "planetary_hours"} <= set(with_timing["timing"])
-    assert with_timing["timing_policy"]["zodiacal_releasing_status"] == "level_1_only"
+    assert with_timing["timing_policy"]["zodiacal_releasing_status"] == "levels_1_through_4_with_loosing_of_bond"
+    assert with_timing["timing_policy"]["timezone_model"] == "iana_zoneinfo_preferred_fixed_offset_fallback"
     assert with_timing["convergence_policy"]["timing_excluded_from_static_convergence"] is True
