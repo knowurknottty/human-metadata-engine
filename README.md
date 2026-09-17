@@ -2,7 +2,7 @@
 
 A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
 
-**v1.0.0 visual knowledge interface** — The primary result is the Human Metadata Atlas: a linked workspace for six calculated surfaces, a shared provenance inspector, and the evidence-linked **Human Metadata Narrative** shown as **The Living Pattern**. Plain, Mythic, and Research narrative modes share one deterministic claim/evidence plan and change wording only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; the new `synthesis-evidence-v1`, `synthesis-plan-v1`, and `narrative-v1` contracts version independently. No remote model, checkout, or paid entitlement surface is present.
+**v1.0.0 visual knowledge interface** — The primary result is the Human Metadata Atlas: a linked workspace for six calculated surfaces, a shared provenance inspector, and the evidence-linked **Human Metadata Narrative** shown as **The Living Pattern**. The deterministic Plain/Mythic/Research realizations share one claim/evidence plan; Mythic may additionally request a bounded optional remote narration when configured, with deterministic fallback. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; `synthesis-evidence-v1`, `synthesis-plan-v1`, `narrative-v1`, and the separately versioned Sumerian reflection contract evolve independently. No checkout or paid entitlement surface is present.
 
 ## Quick Start — Web App
 
@@ -158,11 +158,12 @@ Second-order analysis computed on top of the unified signatures:
 
 Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
 
-## Provenance-Aware Symbolic Extensions (25 Systems)
+## Provenance-Aware Extensions (26 Systems)
 
-The expansion is available through `compute_unified_signature(...)["encoders"]` and is grouped into the four roadmap phases plus structural integrations:
+The expansion is available through `compute_unified_signature(...)["encoders"]` and contains 26 provenance-aware extensions. Twenty-five are roadmap/structural symbolic or computed lenses; `sumerian_me_ontology` is a separate historical-textual reference layer:
 
 - **Phase 1:** Kabbalistic Tree of Life, Sacred Geometry, Alchemical Transformation, Sumerian Sexagesimal, Hermetic Principles.
+- **Historical/textual:** Sumerian *me* ontology — 81 legible named items bounded to the surviving ETCSL *Inana and Enki* recitation used by this implementation; damaged placeholders are not reconstructed.
 - **Phase 2:** Tarot, Babylonian Planetary Numbers, Hermes–Thoth–Nabu Lineage, Solomonic Indexing, Arabic Abjad.
 - **Phase 3:** Chinese I Ching/Wu Xing/year-pillar context, Egyptian uniliteral/decans, Vedic Jyotish requirements, Mayan Tzolkin, Cuneiform structural analysis.
 - **Phase 4:** Elder Futhark, Ogham, Egyptian Ma'at, Mandaean Duodecimal, architectural-proportion analysis, Indus structural analysis, Unicode codepoints.
@@ -170,7 +171,7 @@ The expansion is available through `compute_unified_signature(...)["encoders"]` 
 
 Every extension returns `system`, `phase`, `status`, `interpretation_level`, `provenance`, and `data`. Direct-script input is preserved, while Latin-only systems use the named `builtin-v1` transliteration profile. See [the provenance catalog](docs/symbolic-systems-provenance.md) for each convention, source ID, and limitation.
 
-The extension results are intentionally excluded from the existing composite resonance formula and fingerprint spokes. They are symbolic or computed lenses, not empirical findings.
+The extension results are intentionally excluded from the existing composite resonance formula and fingerprint spokes. Most are symbolic or computed lenses; the Sumerian *me* ontology is historical/textual corpus data. None of these extension records is empirical personality evidence.
 
 ## Graph Algorithms
 
@@ -325,6 +326,8 @@ are rejected. JSON must use `Content-Type: application/json`, bodies are capped
 at 64 KiB, and errors contain a stable `code` plus a human-readable `message`.
 Names and aliases are bounded and markup/control characters are rejected.
 
+The optional `sumerian_me_reflection` request flag enables `sumerian-me-reflection-v1`. Reflection observations may include explicit `capacity_domains` tags chosen by the user. The engine does **not** infer those tags from observation prose and does not derive them from name, birth data, numerology, astrology, Human Design, or resonance scores. The public reflection output omits raw observation text. See [the Sumerian *me* integration contract](docs/SUMERIAN_ME_INTEGRATION.md).
+
 ```bash
 curl -sS http://127.0.0.1:8000/api/analyze \
   -H 'Content-Type: application/json' \
@@ -361,7 +364,7 @@ documented compatibility contracts for internal/legacy callers.
 
 ## Disclaimer
 
-This system uses symbolic numerological and astrological systems as **interpretive lenses**, not empirical proof. Claims derived from these systems should be treated as symbolic analysis, not factual assertions.
+This system uses symbolic numerological and astrological systems as **interpretive lenses**, not empirical proof. Historical/textual corpus layers are labeled separately from symbolic interpretation, and modern crosswalks are labeled separately from both. No layer should be treated as an empirical personality verdict.
 
 ## License
 

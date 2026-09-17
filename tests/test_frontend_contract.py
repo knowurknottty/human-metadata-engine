@@ -116,6 +116,21 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertNotIn("Optional psychological metadata", HTML)
         self.assertNotIn("Epistemic metadata", HTML)
 
+    def test_sumerian_me_reflection_is_explicit_opt_in_and_user_tagged(self):
+        self.assertIn("Human Capacity / 𒈨 Reflection", HTML)
+        self.assertIn('id="me-reflection-enabled"', HTML)
+        self.assertIn("It does not infer tags", HTML)
+        self.assertIn("ME_CAPACITY_DOMAINS", SCRIPT)
+        self.assertIn("readMeObservationPayload", SCRIPT)
+        self.assertIn("payload.sumerian_me_reflection = true", SCRIPT)
+        self.assertIn("capacity_domains", SCRIPT)
+        self.assertIn("The engine will not classify this sentence for you", SCRIPT)
+        self.assertIn("renderMeReflection", SCRIPT)
+        self.assertIn("Historical corpus", SCRIPT)
+        self.assertIn("does not calculate, score, or assign an ancient <em>me</em>", SCRIPT)
+        self.assertIn(".me-epistemic-chain", STYLES)
+        self.assertIn(".me-domain-grid", STYLES)
+
     def test_untouched_big_five_values_are_not_submitted(self):
         self.assertIn('data-touched="false"', SCRIPT)
         self.assertIn('dataset.touched === "true"', SCRIPT)

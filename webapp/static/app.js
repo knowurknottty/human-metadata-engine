@@ -13,6 +13,17 @@ const B5 = [
   ["extraversion","Extraversion"],["agreeableness","Agreeableness"],
   ["neuroticism","Neuroticism"],
 ];
+const ME_CAPACITY_DOMAINS = [
+  ["sovereignty_and_offices", "Sovereignty, offices, and regalia", "governance · role · authority · stewardship"],
+  ["liminality_and_cult", "Liminality, cult, and sacred function", "transition · ritual · boundary · transformation"],
+  ["conflict_and_power", "Conflict, power, and civic disruption", "agency · conflict · defense · collective order"],
+  ["sexuality_and_social_space", "Sexuality and social space", "intimacy · attraction · social exchange"],
+  ["speech_music_and_performance", "Speech, music, and performance", "communication · expression · performance"],
+  ["crafts_and_technical_practice", "Crafts and technical practice", "making · technical skill · recording"],
+  ["knowledge_and_judgment", "Knowledge, counsel, and judgment", "knowledge · counsel · evaluation · planning"],
+  ["household_pastoral_and_labor", "Household, pastoral life, fire, and labor", "care · labor · maintenance · mobility · lineage"],
+  ["social_affect_and_norms", "Social affect and norms", "social norms · respect · awe · prosociality"],
+];
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -229,6 +240,7 @@ function newEditorialState() {
   return {
     result: null, psychology: null, requestPayload: null,
     aliases: [], locationChoices: [], selectedLocation: null,
+    meObservations: [{text: "", source: "self_report", confidence: "unrated", domains: []}],
     submitting: false, generatedAt: null, atlasMode: "explorer", atlasSelections: new Map(),
     narrativeMode: "plain", synthesisEvidence: new Map(), remoteMythic: {status: "idle", story: null, model: null},
   };
@@ -274,10 +286,13 @@ function updateReviewSummary() {
     });
     B5.forEach(([key]) => { if ($(`bf-${key}`)?.dataset.touched === "true") contextCount += 1; });
   }
+  const meEnabled = $("me-reflection-enabled")?.checked || false;
+  const taggedObservations = meEnabled ? STATE.meObservations.filter(item => item.text.trim() && item.domains.length).length : 0;
   const rows = [
     ["Name", name], ["Other names", STATE.aliases.length ? STATE.aliases.join(", ") : "None"],
     ["Birth date", date], ["Birth time", time], ["Birthplace", location],
     ["Personal context", contextCount ? `${contextCount} supplied field${contextCount === 1 ? "" : "s"}` : "Not included"],
+    ["Human Capacity / 𒈨 Reflection", meEnabled ? `${taggedObservations} explicitly tagged observation${taggedObservations === 1 ? "" : "s"}` : "Not included"],
   ];
   target.innerHTML = rows.map(([term, value]) => `<div><dt>${esc(term)}</dt><dd>${esc(value)}</dd></div>`).join("");
 }
@@ -386,6 +401,14 @@ function collectEditorialValidationErrors() {
     const hasManualLocation = hasCoordinates && ($("b-zone").value.trim() || $("b-tz").value !== "");
     if (!$("b-loc").value.trim() && !hasManualLocation) errors.push({message: "Enter a birthplace. Advanced users may instead supply coordinates and a timezone identifier.", fieldId: "b-loc"});
   }
+  if ($("me-reflection-enabled")?.checked) {
+    const completed = STATE.meObservations.filter(item => item.text.trim());
+    if (!completed.length) errors.push({message: "Add at least one observation for the 𒈨 reflection.", fieldId: "me-observation-0"});
+    else {
+      const untaggedIndex = STATE.meObservations.findIndex(item => item.text.trim() && !item.domains.length);
+      if (untaggedIndex >= 0) errors.push({message: "Choose at least one capacity domain for each reflection observation.", fieldId: `me-observation-${untaggedIndex}`});
+    }
+  }
   return errors;
 }
 
@@ -424,6 +447,38 @@ function readPsychologyPayload() {
   });
   if (Object.keys(assessmentStatus).length) psychology.assessment_status = assessmentStatus;
   return Object.keys(psychology).length ? psychology : null;
+}
+
+function renderMeObservations() {
+  const target = $("me-observation-list");
+  if (!target) return;
+  target.innerHTML = STATE.meObservations.map((item, index) => `
+    <article class="me-observation-card">
+      <div class="me-observation-card__header"><h5>Observation ${index + 1}</h5>${STATE.meObservations.length > 1 ? `<button type="button" class="button button--quiet" onclick="app.removeMeObservation(${index})">Remove</button>` : ""}</div>
+      <div class="field-group"><label for="me-observation-${index}">What did you observe?</label><textarea id="me-observation-${index}" maxlength="500" rows="3" placeholder="Describe a specific behavior, repeated pattern, skill, responsibility, or lived example." oninput="app.updateMeObservation(${index}, 'text', this.value)">${esc(item.text)}</textarea><p class="field-hint">Use an observable example where possible. The engine will not classify this sentence for you.</p></div>
+      <div class="field-grid field-grid--two">
+        <div class="field-group"><label for="me-source-${index}">Evidence source</label><input id="me-source-${index}" type="text" maxlength="80" value="${esc(item.source)}" oninput="app.updateMeObservation(${index}, 'source', this.value)" aria-describedby="me-source-help-${index}"><p class="field-hint" id="me-source-help-${index}">For example: self_report, journal, repeated_work_example.</p></div>
+        <div class="field-group"><label for="me-confidence-${index}">Your confidence in this observation</label><select id="me-confidence-${index}" onchange="app.updateMeObservation(${index}, 'confidence', this.value)">${["unrated","low","medium","high"].map(value => `<option value="${value}" ${item.confidence === value ? "selected" : ""}>${compactLabel(value)}</option>`).join("")}</select></div>
+      </div>
+      <fieldset class="me-domain-fieldset"><legend>Which modern capacity domains does this observation support?</legend><p class="field-hint">Choose only domains you explicitly intend to compare. These are modern project categories, not ancient Sumerian classifications.</p><div class="me-domain-grid">${ME_CAPACITY_DOMAINS.map(([id,label,domains]) => `<label class="me-domain-choice"><input type="checkbox" ${item.domains.includes(id) ? "checked" : ""} onchange="app.toggleMeDomain(${index}, '${id}', this.checked)"><span><strong>${esc(label)}</strong><small>${esc(domains)}</small></span></label>`).join("")}</div></fieldset>
+    </article>`).join("");
+}
+
+function readMeObservationPayload() {
+  if (!$("me-reflection-enabled")?.checked) return [];
+  return STATE.meObservations.filter(item => item.text.trim()).map(item => ({
+    text: item.text.trim(),
+    source: item.source.trim() || "user_supplied",
+    confidence: item.confidence || "unrated",
+    capacity_domains: [...item.domains],
+  }));
+}
+
+function renderMeReflection(reflection) {
+  if (!reflection?.enabled) return "";
+  if (!reflection.available) return `<section class="me-reflection-result"><p class="eyebrow">Modern interpretive comparison</p><h3>Human Capacity / 𒈨 Reflection</h3><div class="omitted-note"><strong>No comparison produced.</strong> ${esc(reflection.reason || "No explicitly tagged capacity evidence was available.")}</div></section>`;
+  const matches = (reflection.domain_matches || []).map(match => `<details class="me-match"><summary><span><strong>${esc(match.category_label)}</strong><small>${esc(match.support_observation_count)} explicit observation${match.support_observation_count === 1 ? "" : "s"}</small></span></summary><p><strong>Modern capacity crosswalk:</strong> ${esc((match.capacity_domains || []).join(" · "))}</p><p><strong>Historical corpus items grouped here:</strong> ${esc((match.historical_me_items || []).join(" · "))}</p><p class="field-hint">The grouping is modern. The historical items are corpus references, not traits assigned to the subject.</p></details>`).join("");
+  return `<section class="me-reflection-result"><header><p class="eyebrow">Modern interpretive comparison</p><h3>Human Capacity / 𒈨 Reflection</h3><p>This view preserves three separate epistemic layers. It does not calculate, score, or assign an ancient <em>me</em>.</p></header><div class="me-epistemic-chain"><div><span>1</span><strong>Personal evidence</strong><small>Observation you supplied</small></div><div><span>2</span><strong>Modern analytical bridge</strong><small>Capacity tag you explicitly chose</small></div><div><span>3</span><strong>Historical corpus</strong><small>Attested <em>me</em> shown for comparison</small></div></div><div class="me-match-list">${matches}</div><div class="limits-note"><strong>Boundary.</strong> These correspondences are a Human Metadata reflection surface, not evidence that the Sumerians assigned these <em>me</em> to you.</div></section>`;
 }
 
 function buildRequestPayload() {
@@ -467,6 +522,11 @@ function buildRequestPayload() {
   const psychology = readPsychologyPayload();
   if (psychology) payload.psychology = psychology;
   STATE.psychology = psychology;
+  if ($("me-reflection-enabled")?.checked) {
+    payload.sumerian_me_reflection = true;
+    const observations = readMeObservationPayload();
+    if (observations.length) payload.observations = observations;
+  }
   return payload;
 }
 
@@ -510,6 +570,8 @@ function renderEditorialReport(result) {
   const convergence = signature.resonance || {};
   const contextSections = STATE.psychology ? clientProfileSections(STATE.psychology) : null;
   const contextRows = contextSections ? Object.values(contextSections).flat() : [];
+  const meReflection = result.sumerian_me_reflection || null;
+  const meReflectionHtml = renderMeReflection(meReflection);
   const reducedValues = [pythagorean.expression, chaldean.name_number, ordinal.ordinal_reduced, gematria.absolute_reduced, isopsephy.reduced].filter(value => value !== undefined);
   const distinctValues = [...new Set(reducedValues)];
   const atlas = window.HMEAtlas.buildAtlas(result, {requestPayload: payload, psychology: STATE.psychology});
@@ -547,6 +609,7 @@ function renderEditorialReport(result) {
       ${coverageItem("Time-sensitive calculations", !birth ? "not-included" : birth.time_accuracy === "unknown" ? "limited" : "complete", !birth ? "No birth details were supplied." : birth.time_accuracy === "unknown" ? "Rising sign, houses, and Human Design are withheld." : "An exact local time was supplied.")}
       ${coverageItem("Location resolution", birth ? "complete" : "not-included", birth ? "Coordinates and historical timezone were resolved or supplied." : "No birthplace was supplied.")}
       ${coverageItem("Personal context", STATE.psychology ? "complete" : "not-included", STATE.psychology ? "Only fields supplied by you are included." : "No self-reported context was supplied.")}
+      ${coverageItem("Human Capacity / 𒈨 Reflection", meReflection?.available ? "complete" : meReflection?.enabled ? "limited" : "not-included", meReflection?.available ? "Built only from capacity tags you explicitly attached to observations." : meReflection?.enabled ? "Requested, but no explicit tagged capacity evidence produced a comparison." : "Opt-in reflection was not requested.")}
     </div></section>
 
     <nav class="report-navigation" aria-label="Report sections" data-open="false"><button type="button" aria-expanded="false" onclick="app.toggleReportNavigation(this)">Report sections</button><ul>
@@ -568,7 +631,7 @@ function renderEditorialReport(result) {
 
       <section id="human-design" class="report-section"><p class="section-number">04</p><h2>Human Design</h2><p class="information-type">Type of information: Traditional interpretation using calculated astronomical inputs</p>${humanDesign ? `<p class="section-summary">The configured Human Design adapter returned a ${esc(humanDesign.type)} result using the supplied exact birth time.</p><div class="value-grid">${valueCell("Type", humanDesign.type)}${valueCell("Strategy", humanDesign.strategy)}${valueCell("Authority", humanDesign.authority)}${valueCell("Profile", (humanDesign.profile || []).join(" / "))}${valueCell("Active gates", (humanDesign.gates || []).length)}${valueCell("Defined centers", (humanDesign.centers || []).filter(center => center.defined).length)}</div><div class="limits-note"><strong>Limits.</strong> Human Design is a symbolic system. These labels are not psychological or medical measurements.</div>` : `<div class="omitted-note"><strong>Not included.</strong> ${birth?.time_accuracy === "unknown" ? "An exact birth time is required, so this section was withheld." : "No exact birth date, time, and location were supplied."}</div>`}</section>
 
-      <section id="personal-context-report" class="report-section"><p class="section-number">05</p><h2>Personal context</h2><p class="information-type">Type of information: Supplied by you</p>${contextRows.length ? `<p class="section-summary">These entries came directly from the form and were not inferred by the engine.</p><dl class="calculation-list">${contextRows.map(row => `<div><dt>${esc(row.label)}</dt><dd>${esc(row.value)} · ${esc(row.status_label)}</dd></div>`).join("")}</dl>` : `<div class="omitted-note"><strong>Not included.</strong> No optional personal context was supplied. The engine did not infer it from the name or birth data.</div>`}</section>
+      <section id="personal-context-report" class="report-section"><p class="section-number">05</p><h2>Personal context</h2><p class="information-type">Type of information: Supplied by you${meReflection?.enabled ? " plus an explicitly opted-in modern interpretive comparison" : ""}</p>${contextRows.length ? `<p class="section-summary">These entries came directly from the form and were not inferred by the engine.</p><dl class="calculation-list">${contextRows.map(row => `<div><dt>${esc(row.label)}</dt><dd>${esc(row.value)} · ${esc(row.status_label)}</dd></div>`).join("")}</dl>` : `<div class="omitted-note"><strong>Personal framework fields not included.</strong> No optional personal context was supplied in those framework fields. The engine did not infer it from the name or birth data.</div>`}${meReflectionHtml}</section>
 
       <section id="cross-system" class="report-section"><p class="section-number">06</p><h2>Cross-system synthesis</h2><p class="information-type">Type of information: Interpretive synthesis</p><p class="section-summary">The cross-system convergence score is ${Number(convergence.score || 0).toFixed(1)} out of 100.</p><p>A project-specific summary of how often selected symbolic calculations produce similar reduced values. It is not a scientific measure.</p><dl class="calculation-list">${Object.entries(convergence.components || {}).map(([key, value]) => `<div><dt>${esc(compactLabel(key))}</dt><dd>${(Number(value) * 100).toFixed(0)} of 100 within this configured index</dd></div>`).join("")}</dl><div class="limits-note"><strong>Do not read this as confidence.</strong> A higher value does not mean greater accuracy, compatibility, ability, or worth.</div></section>
 
@@ -577,8 +640,9 @@ function renderEditorialReport(result) {
       <section id="methods" class="report-section"><p class="section-number">08</p><h2>Methods and limitations</h2><p class="information-type">Type of information: Method and source</p><p class="section-summary">The report keeps arithmetic, astronomy, supplied information, traditional interpretation, and experimental synthesis distinct.</p><dl class="method-list">
         <div><dt>Mathematical</dt><dd>Letter mappings, totals, reductions, ratios, entropy, and the deterministic graphic.</dd></div>
         <div><dt>Astronomical</dt><dd>${astrology ? esc(astrology.calculation_engine || "Configured ephemeris") : "Not used in this report"}; positions are calculations, while astrological meanings remain traditional.</dd></div>
-        <div><dt>Supplied by you</dt><dd>Name, other names, birth details, and any optional personal context.</dd></div>
-        <div><dt>Interpretive</dt><dd>${extensions.length} configured symbolic extensions and the traditional meanings attached to calculated values.</dd></div>
+        <div><dt>Supplied by you</dt><dd>Name, other names, birth details, optional personal context, and any reflection observations/capacity tags you explicitly entered.</dd></div>
+        <div><dt>Historical/textual</dt><dd>The Sumerian 𒈨 ontology preserves a bounded historical corpus reference and remains identity-independent by default.</dd></div>
+        <div><dt>Interpretive</dt><dd>${extensions.length} configured provenance-aware extensions plus traditional or project-authored interpretive mappings. The 𒈨 Human Capacity crosswalk is modern and opt-in.</dd></div>
         <div><dt>Experimental</dt><dd>The cross-system convergence score and synthesis language. These are project-specific, not scientifically validated.</dd></div>
         <div><dt>Privacy</dt><dd>${esc(result.privacy?.retention || "Not persisted by the web process")}. ${esc(result.privacy?.warning || "Network and infrastructure logs may still exist.")}</dd></div>
         <div><dt>Location provider</dt><dd>${birth ? "Open-Meteo geocoding may receive the birthplace text to resolve coordinates and historical timezone." : "Not used because no birthplace was supplied."}</dd></div>
@@ -794,6 +858,50 @@ Object.assign(app, {
     updateReviewSummary();
   },
 
+  toggleMeReflection() {
+    const enabled = $("me-reflection-enabled").checked;
+    const fields = $("me-reflection-fields");
+    fields.hidden = !enabled;
+    fields.setAttribute("aria-disabled", String(!enabled));
+    fields.querySelectorAll("input, select, textarea, button").forEach(control => {
+      if (control.id !== "me-add-observation") control.disabled = !enabled;
+    });
+    $("me-add-observation").disabled = !enabled;
+    renderMeObservations();
+    updateReviewSummary();
+  },
+
+  updateMeObservation(index, field, value) {
+    const item = STATE.meObservations[index];
+    if (!item || !["text", "source", "confidence"].includes(field)) return;
+    item[field] = value;
+    updateReviewSummary();
+  },
+
+  toggleMeDomain(index, domain, checked) {
+    const item = STATE.meObservations[index];
+    if (!item || !ME_CAPACITY_DOMAINS.some(([id]) => id === domain)) return;
+    const domains = new Set(item.domains);
+    if (checked) domains.add(domain); else domains.delete(domain);
+    item.domains = Array.from(domains);
+    updateReviewSummary();
+  },
+
+  addMeObservation() {
+    if (STATE.meObservations.length >= 10) return;
+    STATE.meObservations.push({text: "", source: "self_report", confidence: "unrated", domains: []});
+    renderMeObservations();
+    $(`me-observation-${STATE.meObservations.length - 1}`)?.focus();
+    updateReviewSummary();
+  },
+
+  removeMeObservation(index) {
+    if (STATE.meObservations.length <= 1) return;
+    STATE.meObservations.splice(index, 1);
+    renderMeObservations();
+    updateReviewSummary();
+  },
+
   toggleUnknownTime() {
     const unknown = $("b-time-unknown").checked;
     $("birth-time-field").hidden = unknown;
@@ -931,6 +1039,8 @@ Object.assign(app, {
     });
     app.toggleSection("birth");
     app.toggleSection("psych");
+    renderMeObservations();
+    app.toggleMeReflection();
     syncAliasField();
     updateReviewSummary();
     setSurface("dashboard", false);
@@ -977,6 +1087,8 @@ function initEditorial() {
   $("analyze-form").addEventListener("change", updateReviewSummary);
   app.toggleSection("birth");
   app.toggleSection("psych");
+  renderMeObservations();
+  app.toggleMeReflection();
   updateWingOptions();
   syncAliasField();
   updateReviewSummary();

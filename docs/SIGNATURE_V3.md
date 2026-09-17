@@ -71,3 +71,7 @@ Unknown birth time is never replaced with an invented noon reading. BaZi can emi
 Dynamic timing requires explicit `as_of`; planetary hours additionally require a separate `timing_context` with latitude, longitude, and either `timezone_id` or `timezone_offset`. Unsupported, ambiguous, nonexistent, or geographically impossible states return an explicit failure status rather than fabricated coordinates.
 
 The implementation does not fabricate event predictions, empirical personality validity, or claims that symbolic recurrence is independent evidence. New artifacts remain outside the legacy composite resonance score and identity-fingerprint spokes until an explicit migration defines how those surfaces should consume dependency-aware data.
+
+## Adjacent historical/reflection boundary
+
+The compatibility encoder map now includes `sumerian_me_ontology` as a historical/textual corpus reference, and `analysis-v1` can optionally return `sumerian-me-reflection-v1`. Neither is promoted into v3 static-signature convergence by this tranche. Historical attestation is not an independence family for personality evidence, and explicit reflection tags remain user-supplied/modern-interpretive context rather than a new v3 proof source.

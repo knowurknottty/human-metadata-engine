@@ -1,5 +1,7 @@
 # v1.0 release-candidate QA evidence
 
+> **Scope note (2026-09-16):** the evidence below predates the new Human Capacity / 𒈨 Reflection form and result surface. Existing physical screenshots, mobile interaction passes, and committed visual baselines must not be cited as verification of that new UI. The reflection API/frontend contracts are automated; refreshed browser and physical-device QA remain open.
+
 Date: 2026-07-18 (America/Chicago)
 
 ## Physical-device matrix
@@ -134,3 +136,9 @@ open. The defensible public-release status is **NOT READY** until those required
 device gates pass. The deterministic Narrative Synthesis layer also requires
 its live physical/mobile interaction rerun. The local implementation remains a
 release candidate with the documented v1.1 topology boundary.
+
+## Post-v1.0 Sumerian reflection delta
+
+The `feature/sumerian-me-reflection-r1` branch adds an opt-in observation/tag interface and three-layer result view. Static frontend contracts verify the opt-in control, user-selected category tags, historical/modern boundary copy, result renderer, and responsive CSS hooks. Server tests verify that unknown/duplicate tags fail, disabled-by-default behavior remains intact, raw observation text is absent from the reflection object, and no score is emitted.
+
+This automated evidence does **not** replace browser interaction, screenshot inspection, TalkBack/VoiceOver, or physical mobile QA for the new controls. Those checks must be rerun before the reflection UI can inherit the older v1.0 physical/visual evidence.

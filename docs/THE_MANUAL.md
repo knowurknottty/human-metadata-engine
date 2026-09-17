@@ -19,6 +19,7 @@ The last clause matters. The product is not an authority assigning a destiny, di
 - **The Manual** — working public product name: the thing a person opens and uses.
 - **Human Metadata Atlas** — the visual exploration surface inside The Manual.
 - **The Living Pattern** — the evidence-linked narrative/synthesis layer.
+- **Human Capacity / 𒈨 Reflection** — an optional, user-tagged comparison from observed experience through a modern capacity crosswalk to a bounded historical corpus; never an ancient personality assignment.
 - **Human Metadata Engine** — the deterministic, provenance-aware computational core.
 - **signature-v3 / system-result-v2** — versioned machine contracts beneath the product.
 
@@ -30,7 +31,7 @@ This split lets the public identity become warmer and immediately understandable
 2. **Inspectable.** A useful manual shows where a result came from, what inputs it used, and which convention produced it.
 3. **Multiple lenses are not multiple proofs.** Systems sharing the same dependency remain correlated views, not independent confirmations.
 4. **Known unknowns stay unknown.** Missing birth time, ambiguous civil time, proprietary assessment data, or unsupported cultural material is withheld or labeled rather than fabricated.
-5. **Data and interpretation stay distinguishable.** Calculated coordinates, user-supplied observations, traditional symbolic interpretations, and synthesis are different epistemic classes.
+5. **Data and interpretation stay distinguishable.** Calculated coordinates, historical/textual references, user-supplied observations, modern analytical crosswalks, traditional symbolic interpretations, and synthesis are different epistemic classes.
 6. **The person remains the authority on the person.** The Manual is a reference instrument, not a verdict.
 
 ## Rename boundary

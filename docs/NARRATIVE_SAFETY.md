@@ -26,8 +26,7 @@ closed on invented IDs, prohibited language, and prohibited topics.
 
 ## Privacy
 
-Synthesis is in-process, deterministic, and not persisted. No remote model is
-called, no provider key exists, and no raw profile is added to logs. Markdown
+Core synthesis is in-process, deterministic, and not persisted. The optional remote Mythic adapter is a separate presentation path and is used only when configured/selected; it receives a redacted derived-facts packet rather than the raw profile. No raw profile is added to application request logs. Markdown
 downloads use a random, short-lived, process-memory token. The visible browser
 action submits a same-origin form, receives a `303` redirect, and follows that
 redirect to a GET attachment in the same user-initiated navigation instead of
@@ -38,16 +37,13 @@ queue the generated report for at most 120 seconds and serve it with
 no server-side report file.
 
 Exports intentionally omit exact coordinates, exact birth location, and raw
-observation text under the existing public redaction/report policy. A user who
-saves a Markdown or PDF file is responsible for the resulting local copy.
+observation text under the existing public redaction/report policy. The optional Sumerian *me* reflection likewise returns observation references, source/confidence metadata, explicit capacity tags, and matched corpus categories without copying raw observation prose into the reflection object. A user who saves a Markdown or PDF file is responsible for the resulting local copy.
 
 ## Optional AI boundary
 
-No AI realization adapter ships in v1. If introduced later, it must be opt-in,
-receive only a validated `synthesis-plan-v1`, disclose transmitted fields and
-provider, return schema-valid `narrative-v1`, and pass the same deterministic
-verifier. Failure must fall back to deterministic templates; remote operation
-must never be required for core functionality.
+The core narrative remains deterministic and local. The current UI also exposes an optional remote Mythic narration adapter when configured. That adapter receives a redacted packet of derived symbolic facts and plan/theme hints; the implementation excludes the person's name, aliases, raw birth date/time/location/coordinates, raw psychology, user observations, and user-context evidence. Remote failure falls back to the deterministic Mythic realization and never blocks core analysis.
+
+Any future remote adapter must preserve the same rule: disclose provider/model and transmitted field classes, never make remote operation mandatory, validate the returned structure/facts, and fail back to deterministic output. The Sumerian *me* reflection is not transmitted as personal observation evidence to the remote Mythic adapter under the current contract.
 
 ## Resource limits and isolation
 

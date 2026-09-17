@@ -14,7 +14,8 @@ deployment, payment boundary, or privacy posture is production-ready.
 | Browser flow | Name-only, full Kirk fixture, unknown time, ambiguity selection, multi-error recovery, alias tokens, report focus/actions, and 320 CSS-pixel completion | Verified in the local in-app browser; physical-device QA remains |
 | Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |
 | Visual knowledge layer | Six computed visual surfaces, a shared provenance inspector, Explorer/Research modes, and text/print equivalents | Verified locally in headless Chrome; physical-device QA remains |
-| Narrative synthesis layer | Versioned evidence/plan/narrative contracts, explicit ontology, deterministic realization, verifier, and sentence-level Atlas links | Automated contracts verified locally; complete physical-device interaction QA remains |
+| Narrative synthesis layer | Versioned evidence/plan/narrative contracts, explicit ontology, deterministic realization, verifier, sentence-level Atlas links, and optional bounded remote Mythic narration | Automated contracts verified locally; complete physical-device interaction QA remains |
+| Human Capacity / 𒈨 reflection | Historical/textual ontology, explicit modern crosswalk, opt-in observation tags, no semantic inference, no score/rank, public-text redaction | API/frontend contracts verified locally; refreshed browser baseline and physical-device interaction QA remain |
 | Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
 | Commerce | Checkout, card fields, paywall, and client-side entitlement simulation are absent | Not part of v1.0.0 |
@@ -35,7 +36,9 @@ Release only when every item below is true:
 - [x] No checkout, card field, paywall, or simulated entitlement is shipped.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
 - [x] The first result view contains analysis identity, coverage, six computed visual surfaces, and a provenance/limitations inspector. The complete report remains the Research-mode reference layer (verified by frontend contracts; browser interaction verification is release-candidate evidence).
-- [x] Magic mode exposes the Living Pattern from a deterministic evidence/claim plan; Plain, Mythic, and Research wording preserves identical claims, confidence, contradictions, and evidence links. Data mode keeps narrative disabled.
+- [x] Magic mode exposes the Living Pattern from a deterministic evidence/claim plan. The three deterministic realizations preserve identical claims, confidence, contradictions, and evidence links; optional remote Mythic narration is a separate bounded presentation path with deterministic fallback. Data mode keeps narrative disabled.
+- [x] The Human Capacity / 𒈨 request contract is opt-in, requires explicit user-selected capacity tags, rejects unknown/duplicate domain IDs, and returns no automatic score/rank/assignment.
+- [ ] Browser and physical-device QA confirms the new 𒈨 observation/tag controls and three-layer result remain understandable, keyboard-operable, and overflow-free at release target widths.
 - [x] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings (frontend and API tests).
 - [x] CSS-viewport QA confirms readable explanatory text, stacked controls, expandable technical detail, and zero horizontal overflow at 320, 360, 390, 412, and 768 CSS pixels.
 - [ ] Physical-device QA confirms the same behavior in current iPhone Safari and Android Chrome.
@@ -89,10 +92,8 @@ general enthusiasm as the release metric.
 ## Scope deliberately deferred
 
 Stress response and boundary style remain out of the public profile until the
-product has an established self-observation model for them. More symbolic
-encoders are also deferred: increasing breadth before improving comprehension,
-trust, payment boundaries, and actionability would increase apparent complexity
-without improving the user outcome.
+product has an established self-observation model for them. Additional unreviewed symbolic encoders are deferred: increasing breadth before improving comprehension,
+trust, payment boundaries, and actionability would increase apparent complexity without improving the user outcome. The Sumerian *me* addition is treated differently because its corpus layer is historical/textual and its optional personal crosswalk is explicitly user-tagged and separately versioned.
 
 ## Repository release checklist
 

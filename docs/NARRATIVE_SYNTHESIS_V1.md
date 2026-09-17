@@ -71,10 +71,8 @@ two independent groups. Otherwise the output says that no single archetype
 dominates. Titles compose the highest supported motifs instead of selecting a
 generic personality from a small fixed catalog.
 
-Plain, mythic, and research modes use the same claim IDs, evidence IDs,
-strengths, contradictions, and section plan. Only wording changes. Default
-operation is deterministic and local. The v1 release has no model adapter and
-sends no profile data to a remote AI provider.
+Plain, mythic, and research modes use the same deterministic claim IDs, evidence IDs,
+strengths, contradictions, and section plan. Plain and Research realization are local. Mythic has a deterministic local realization and may request optional remote narration through a separately bounded adapter when configured; remote failure leaves the deterministic plan/result intact. The remote packet excludes raw identity, birth, psychology, and observation data.
 
 ## Data quality
 
@@ -95,3 +93,7 @@ sends no profile data to a remote AI provider.
 The central seal is a text mark made from the first two letters of the dominant
 motif IDs. It encodes no additional result, does not claim occult provenance,
 and is not biometric. Its accessible name gives the full central title.
+
+## Historical/reflection exclusion
+
+The Sumerian `sumerian_me_ontology` corpus record and `sumerian-me-reflection-v1` do not participate in motif ranking, agreement counts, central-pattern selection, or contradiction scoring. Historical attestation and an explicit user-selected capacity tag are different evidence classes from narrative symbolic recurrence and must not inflate synthesis confidence.

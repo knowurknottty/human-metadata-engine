@@ -26,9 +26,11 @@ This crosswalk is an Inversion Labs interpretive artifact. It is not ancient Sum
 
 ## Layer 4 — optional personal reflection
 
-Personal mapping is disabled by default. A future reflection layer may compare explicitly observed or self-reported evidence with the modern capacity domains, but only under a separately versioned convention.
+`src/sumerian_me_reflection.py` implements `sumerian-me-reflection-v1`. It is disabled by default and becomes available only when the request explicitly sets `sumerian_me_reflection: true` and supplies observations with user-selected `capacity_domains`.
 
-Forbidden automatic bases include name, birth data, numerology, astrology, and symbolic resonance scores. None establishes that a modern person possesses or corresponds to a particular *me*.
+The mapper does not classify observation prose. It aggregates only explicit tags, records observation references/source/confidence without copying raw prose into the reflection object, and exposes the corresponding modern category/crosswalk plus the historical corpus items grouped under that category.
+
+Forbidden automatic bases include name, birth data, numerology, astrology, Human Design, and symbolic resonance scores. None establishes that a modern person possesses or corresponds to a particular *me*.
 
 ## Invariants
 
@@ -54,3 +56,11 @@ resonance score as evidence.
 The result reports modern category matches and the historical corpus items grouped under those
 categories. This is a comparison surface, not a claim that the subject possesses a Sumerian *me*.
 Raw observation text is never copied into the reflection result.
+
+## Public UI contract
+
+The v1.0 Optional context form exposes **Human Capacity / 𒈨 Reflection** as an explicit checkbox. Each reflection observation has text/source/confidence fields plus the nine modern Human Metadata categories. The user must deliberately choose the categories; the browser and server do not infer them from the observation sentence.
+
+The result renders three visible steps: **Personal evidence → Modern analytical bridge → Historical corpus**. Category matches are expandable and show the modern capacity crosswalk separately from the historical *me* items. The interface never displays a *me* score, rank, destiny claim, or automatic assignment.
+
+Automated frontend/API contracts cover opt-in behavior, validation, redaction, and the no-score boundary. Because the form/result layout is new, existing v1.0 screenshot/physical-device evidence does not by itself verify this surface; refreshed browser/device QA remains a release gate.

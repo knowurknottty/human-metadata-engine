@@ -123,7 +123,8 @@ class ConvergenceTests(unittest.TestCase):
         script = (Path(ROOT) / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
         self.assertNotIn("25</strong><span>", html)
         self.assertIn("const extensions = Object.values(encoders)", script)
-        self.assertIn("${extensions.length} configured symbolic extensions", script)
+        self.assertIn("${extensions.length} configured provenance-aware extensions", script)
+        self.assertIn("Historical/textual", script)
 
     def test_ordinal_does_not_create_a_second_independent_vote(self):
         signature = {

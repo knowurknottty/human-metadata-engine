@@ -32,7 +32,8 @@ class WebSymbolicSurfaceTests(unittest.TestCase):
         self.assertIn("Methods and limitations", source)
         self.assertIn("Method and source", source)
         self.assertIn("const extensions = Object.values(encoders)", source)
-        self.assertIn("${extensions.length} configured symbolic extensions", source)
+        self.assertIn("${extensions.length} configured provenance-aware extensions", source)
+        self.assertIn("Historical/textual", source)
         self.assertIn("Complete generated report and section labels", source)
         self.assertNotIn("JSON.stringify(extension.data", source)
 

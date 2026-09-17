@@ -31,3 +31,7 @@ antialiasing changes as product regressions would be unreliable.
 Set `HME_RUN_NETWORK_QA=1` to add a live Open-Meteo ambiguous-location browser
 check. It is intentionally optional for baseline regeneration because it depends
 on an external provider; release verification runs it separately.
+
+## Reflection UI baseline boundary
+
+The Human Capacity / 𒈨 Reflection adds controls to Optional context and a conditional result block inside Personal context. The committed v1.0 PNG set predates that feature and therefore does not verify its layout. A release candidate containing the reflection UI must regenerate sanitized desktop and narrow-width captures with a non-personal synthetic observation/tag fixture, inspect the three-layer labels and expandable matches, and record the new manifest hashes before claiming visual-baseline coverage.

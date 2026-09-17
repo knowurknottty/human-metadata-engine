@@ -1,5 +1,7 @@
 # Human Metadata Atlas launch evidence — 2026-09-10 UTC
 
+> **Repository delta after this launch snapshot (2026-09-16):** the `feature/sumerian-me-reflection-r1` branch adds the historical Sumerian *me* ontology, an opt-in evidence-bound Human Capacity reflection, and its public UI. Those changes are locally regression-tested but are **not evidence that either recorded demo deployment contains the feature**. Deployment/physical-browser claims below remain scoped to the 2026-09-10 revisions named in this document.
+
 ## Available demos
 
 - Netlify: https://inversionlabs-hmd.netlify.app (public).

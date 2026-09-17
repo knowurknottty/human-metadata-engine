@@ -2,8 +2,8 @@
 
 The v1.0.0 application changes the primary result from a document-first report
 to the **Human Metadata Atlas**. This is a presentation-layer release over the
-unchanged `analysis-v1` API, `signature-v2` engine, and `report-v1` report
-contracts.
+version-stable `analysis-v1` API, `signature-v2` engine, and `report-v1` report
+contracts. `analysis-v1` now has backward-compatible optional Sumerian-reflection request/response fields; the contract identifier itself is unchanged.
 
 ## Architecture boundary
 
@@ -22,9 +22,7 @@ relationships. Unavailable subsystems render an explicit unavailable state.
 The concise Living Pattern card appears after analysis/coverage identity and
 before the six-surface rail. It does not replace or recalculate any surface.
 The backend supplies `synthesis-evidence-v1`, `synthesis-plan-v1`, and three
-`narrative-v1` realizations. Plain, Mythic, and Research buttons change only the
-visible realization; claim IDs, evidence IDs, confidence, motif ranking, and
-contradictions are identical.
+deterministic `narrative-v1` realizations. Their claim IDs, evidence IDs, confidence, motif ranking, and contradictions are identical. Plain and Research display those local realizations directly. Mythic always has the deterministic realization available and may, when configured, overlay a separately bounded AI-authored narration; that remote prose is not itself the sentence-ID/evidence ledger.
 
 Every narrative sentence is a native button with its confidence, evidence
 count, and contradiction state in the accessible name. Activation highlights
@@ -246,6 +244,20 @@ objects receive the same cross-highlight state. Motion is limited to focus,
 highlight, and fade transitions and is disabled by the existing reduced-motion
 contract.
 
+## Human Capacity / 𒈨 Reflection
+
+The Optional context step contains an opt-in **Human Capacity / 𒈨 Reflection** surface. It is not a seventh calculated Atlas system and does not alter the six-surface rail.
+
+The form enforces a three-layer interaction:
+
+1. the person enters a concrete observation;
+2. the person explicitly chooses one or more modern Human Metadata capacity categories;
+3. the result may show historically attested *me* that the project groups under those modern categories.
+
+Neither `app.js` nor the server performs free-text semantic classification for this feature: the system does not infer tags. Untagged prose is not converted into a capacity match. The request uses `sumerian_me_reflection: true` plus observation-level `capacity_domains`; the public response returns `sumerian-me-reflection-v1` and omits the raw observation text from the reflection payload.
+
+The result view renders **Personal evidence → Modern analytical bridge → Historical corpus** as three separate labels. It contains no score, rank, automatic *me* assignment, or claim that a historical *me* belongs to the subject. Explorer/Research mode changes presentation only; it never changes those mappings.
+
 ## Modes
 
 - **Explorer** is the default. It presents the six visual systems and keeps the
@@ -270,7 +282,7 @@ reference report.
 ## Known verification boundary
 
 Static contracts, JavaScript parsing, server/API tests, and automated viewport
-captures can verify structure and rendering. Physical-device VoiceOver,
+captures can verify structure and rendering. The Human Capacity / 𒈨 Reflection has automated contract coverage, but its newly added form/result layout requires a refreshed browser-baseline and physical-device interaction pass before those visual/device gates can be claimed for this feature. Physical-device VoiceOver,
 TalkBack, iPhone Safari, and low-end Android Chrome checks remain separate
 release gates until run on those devices.
 
