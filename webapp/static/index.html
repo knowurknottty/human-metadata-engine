@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Human Metadata Atlas | Visual symbolic analysis</title>
-<meta name="description" content="Explore calculated astrology, Human Design, numerology, Tree-of-Life mappings, and provenance through one linked visual workspace.">
+<title>The Human Manual | Inversion Labs</title>
+<meta name="description" content="The Human Manual, for and by Humans — an inspectable convergence of symbolic, historical, astronomical, psychological, and self-reported systems by Inversion Labs.">
 <link rel="stylesheet" href="/styles.css?v=1.0.0">
 <link rel="stylesheet" href="/tarot-radio-fix.css?v=1.0.1">
 <link rel="stylesheet" href="/identity-resonance-shell.css?v=1.0.0">
@@ -15,14 +15,14 @@
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a href="#" class="wordmark" onclick="app.reset(); return false;" aria-label="Human Metadata Engine home">
-      <span class="wordmark__mark" aria-hidden="true">HME</span>
-      <span>Human Metadata Engine</span>
+    <a href="#" class="wordmark" onclick="app.reset(); return false;" aria-label="The Human Manual — Inversion Labs home">
+      <span class="wordmark__mark" aria-hidden="true"><img src="/assets/inversion-labs-infinite-key.jpg" alt=""></span>
+      <span class="wordmark__copy"><strong>Inversion Labs</strong><small>The Human Manual</small></span>
     </a>
     <nav aria-label="Primary navigation">
       <a href="#method-intro">Method</a>
       <a href="#tarot-reading">Tarot</a>
-      <button type="button" class="button button--small" onclick="app.scrollToForm()">Build an atlas</button>
+      <button type="button" class="button button--small" onclick="app.scrollToForm()">Open the manual</button>
     </nav>
   </div>
 </header>
@@ -30,16 +30,18 @@
 <main>
   <section id="landing" class="intro" aria-labelledby="page-title">
     <div class="intro__grid">
-      <div>
-        <p class="eyebrow">Human Metadata Atlas · visual system v1.0</p>
-        <h1 id="page-title">Explore the systems. Trace every result.</h1>
-        <p class="intro__lede">A linked visual workspace for calculated name systems, astronomy, Human Design, and symbolic correspondences. Every active mark traces back to structured engine output, method, and provenance.</p>
-        <button type="button" class="button button--primary" onclick="app.scrollToForm()">Build my atlas</button>
+      <div class="intro__copy">
+        <p class="eyebrow">INVERSION LABS / THE HUMAN MANUAL</p>
+        <h1 id="page-title">The Human Manual,<br><span>for and by Humans.</span></h1>
+        <p class="intro__lede">Humans have spent thousands of years trying to describe humans — through names, numbers, stars, cycles, archetypes, psychology, ritual, and systems of meaning. This tool computes those maps separately, shows where they converge or disagree, and keeps every layer traceable to its method.</p>
+        <p class="intro__lede intro__lede--secondary">No single system gets to define you. The point is to see the maps, the evidence, the limits, and the patterns side by side — then decide what is useful yourself.</p>
+        <div class="intro__actions"><button type="button" class="button button--primary" onclick="app.scrollToForm()">Build my manual</button><a class="button button--quiet" href="#privacy-before-input">How this handles my data</a></div>
       </div>
       <div class="intro__boundary" id="method-intro">
+        <div class="intro__brandmark"><img src="/assets/inversion-labs-infinite-key.jpg" alt="Inversion Labs infinite-key emblem"><p>Tools for people. A freer tomorrow.</p></div>
         <section aria-labelledby="is-title">
-          <h2 id="is-title">A visual knowledge system</h2>
-          <p>The same validated input produces the same calculated result when the engine and convention versions stay the same. Visuals expose those results; they do not invent new ones.</p>
+          <h2 id="is-title">A map of maps</h2>
+          <p>The same validated input produces the same calculated result when the engine and convention versions stay the same. Calculated, historical, interpretive, and user-supplied layers remain visibly distinct.</p>
         </section>
         <section aria-labelledby="is-not-title">
           <h2 id="is-not-title">The boundary</h2>
@@ -49,11 +51,22 @@
     </div>
   </section>
 
+  <section id="privacy-before-input" class="trust-strip" aria-labelledby="privacy-before-input-title">
+    <div class="trust-strip__heading"><p class="eyebrow">Before you type anything</p><h2 id="privacy-before-input-title">Your information is an input, not the product.</h2><p>You should know exactly what crosses a network boundary before deciding what to share.</p></div>
+    <div class="trust-grid">
+      <article><strong>What goes to this site</strong><p>When you run a calculation, the fields you chose are sent to this site's server for the calculations you request.</p></article>
+      <article><strong>What may go elsewhere</strong><p>Birthplace text may be sent to the configured location provider so coordinates and historical timezone can be resolved. The interface identifies that step when it is used.</p></article>
+      <article><strong>Optional means optional</strong><p>Skip anything you do not want to provide. Missing inputs stay visibly missing; the engine does not quietly invent an exact birth time, personality score, or observation.</p></article>
+      <article><strong>No hidden enrichment</strong><p>This experience does not silently search social profiles, buy dossiers, append outside identity records, or infer missing personal facts behind your back.</p></article>
+    </div>
+    <p class="trust-strip__note">Network and infrastructure logs may still exist. The report explains provenance and limitations instead of promising impossible anonymity.</p>
+  </section>
+
   <section id="form-section" class="workflow" aria-labelledby="form-title">
     <div class="workflow__heading">
-      <p class="eyebrow">Your inputs</p>
-      <h2 id="form-title">Build your atlas</h2>
-      <p>Start with a name. Birth details unlock the astronomy wheel and, with an exact time, the bodygraph. Missing inputs remain visibly missing.</p>
+      <p class="eyebrow">Your manual begins here</p>
+      <h2 id="form-title">Choose what to calculate.</h2>
+      <p>Start with a name. Birth details unlock astronomical and Human Design layers. Optional context stays optional, and missing inputs remain visibly missing rather than guessed.</p>
     </div>
 
     <form id="analyze-form" novalidate onsubmit="app.submit(event)">
@@ -182,7 +195,7 @@
             </div>
             <section class="me-reflection-setup" aria-labelledby="me-reflection-heading">
               <h4 id="me-reflection-heading">Human Capacity / Sumerian me Reflection</h4>
-              <p>This optional layer compares observations you explicitly tag with a modern Human Metadata capacity taxonomy, then shows the historically attested <em>me</em> grouped under those modern categories. It does not infer tags and does not claim that you possess an ancient Sumerian <em>me</em>.</p>
+              <p>This optional layer compares observations you explicitly tag with a project-authored capacity taxonomy, then shows the historically attested <em>me</em> grouped under those modern categories. It does not infer tags and does not claim that you possess an ancient Sumerian <em>me</em>.</p>
               <label class="choice-control choice-control--compact" for="me-reflection-enabled">
                 <input type="checkbox" id="me-reflection-enabled" onchange="app.toggleMeReflection()">
                 <span><strong>Include the Sumerian me reflection</strong><small>You choose every capacity tag. Name, birth data, numerology, astrology, and resonance scores are not used to assign categories.</small></span>
@@ -205,7 +218,7 @@
       </section>
 
       <div class="submit-area">
-        <button type="submit" id="submit-btn" class="button button--primary">Build my atlas</button>
+        <button type="submit" id="submit-btn" class="button button--primary">Build my manual</button>
         <p>Your entries are used to create the report. The application does not intentionally include your name, exact birth time, or coordinates in normal server logs.</p>
       </div>
     </form>
@@ -213,8 +226,8 @@
 
   <section id="processing" class="processing" hidden aria-labelledby="processing-title">
     <div class="processing__mark" aria-hidden="true"></div>
-    <h2 id="processing-title">Calculating your atlas…</h2>
-    <p id="processing-step" role="status" aria-live="polite">Your entries are being calculated and organized into linked visual systems.</p>
+    <h2 id="processing-title">Building your manual…</h2>
+    <p id="processing-step" role="status" aria-live="polite">Your chosen inputs are being calculated and organized into traceable systems.</p>
   </section>
 
   <section id="dashboard" class="report-shell" hidden></section>
@@ -239,9 +252,10 @@
   </section>
 </main>
 
+<section class="brand-signature" aria-label="About Inversion Labs"><img src="/assets/inversion-labs-more-human-possible.jpg" alt="Inversion Labs — non-extractive intelligence infrastructure. More Human Possible."></section>
 <footer class="site-footer">
-  <p>Calculations can be reproducible while their symbolic interpretations remain traditional or experimental.</p>
-  <p>Human Metadata Engine · Inversion Labs</p>
+  <p>Calculations can be reproducible while their symbolic interpretations remain traditional, historical, project-authored, or experimental.</p>
+  <p>The Human Manual · Inversion Labs · Tools for people. A freer tomorrow.</p>
 </footer>
 
 <script src="/atlas.js?v=1.0.0"></script>

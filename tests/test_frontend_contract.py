@@ -15,10 +15,10 @@ STYLES = (ROOT / "webapp" / "static" / "styles.css").read_text(encoding="utf-8")
 class EditorialFrontendContractTests(unittest.TestCase):
     def test_primary_heading_and_truthful_product_boundary_are_exact(self):
         self.assertIn(
-            "Explore the systems. Trace every result.",
+            "The Human Manual,",
             HTML,
         )
-        self.assertIn("A visual knowledge system", HTML)
+        self.assertIn("A map of maps", HTML)
         self.assertIn("The boundary", HTML)
         self.assertIn("not a diagnosis, personality test, prediction, or scientific proof", HTML)
 
@@ -76,7 +76,7 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertIn("Correct these", SCRIPT)
 
     def test_loading_is_honest_live_and_duplicate_submits_are_blocked(self):
-        self.assertIn("Calculating your atlas…", HTML)
+        self.assertIn("Building your manual…", HTML)
         self.assertIn('role="status" aria-live="polite"', HTML)
         self.assertIn("if (STATE.submitting) return", SCRIPT)
         self.assertIn("submitButton.disabled = true", SCRIPT)

@@ -1,4 +1,4 @@
-/* Human Metadata Atlas — deterministic visualization layer.
+/* The Human Manual — deterministic visualization layer.
  *
  * This file renders structured API output only. It does not calculate symbolic
  * results, infer missing relationships, or mutate the analysis response.
@@ -405,7 +405,7 @@ function unavailablePanel(id, title, explanation) {
 function livingPattern(result) {
   const synthesis = result.synthesis;
   if (!synthesis?.plan || !synthesis?.narratives) {
-    return `<section class="living-pattern living-pattern--unavailable" aria-labelledby="living-pattern-title"><p class="eyebrow">Human Metadata Narrative</p><h2 id="living-pattern-title">The Living Pattern</h2><p>Narrative synthesis is unavailable for this analysis.</p></section>`;
+    return `<section class="living-pattern living-pattern--unavailable" aria-labelledby="living-pattern-title"><p class="eyebrow">Human Manual Narrative</p><h2 id="living-pattern-title">The Living Pattern</h2><p>Narrative synthesis is unavailable for this analysis.</p></section>`;
   }
   const evidenceById = new Map((synthesis.evidence?.evidence_items || []).map(item => [item.evidence_id, item]));
   const plan = synthesis.plan;
@@ -435,7 +435,7 @@ function livingPattern(result) {
     return `<tr><th scope="row">${esc(claim.claim_type.replaceAll("_", " "))}: ${esc(claim.motif.replace("|", " / "))}</th><td>${esc(systems.join(", "))}</td><td>${items.length}</td><td>${esc(claim.strength)}</td><td>${claim.contradicting_evidence_ids.length ? "Retained" : "None linked"}</td><td><details><summary>Sources and limits</summary><p>${esc(sources)}</p><p>${esc(claim.limitation)}</p></details></td></tr>`;
   }).join("");
   return `<section class="living-pattern" aria-labelledby="living-pattern-title">
-    <header class="living-pattern-header"><div><p class="eyebrow">Human Metadata Narrative</p><h2 id="living-pattern-title">The Living Pattern</h2><p>Evidence-linked symbolic synthesis. The six Atlas surfaces remain the calculation record.</p></div><div><div class="narrative-mode-switch" role="group" aria-label="Narrative mode">${modes.map(mode => `<button type="button" data-narrative-mode="${mode}" aria-pressed="${mode === "plain"}">${esc(mode)}</button>`).join("")}</div><p class="narrative-ai-note">Plain and Research are local and deterministic. Mythic may use Qwen3.8 Flash through OpenRouter when selected.</p></div></header>
+    <header class="living-pattern-header"><div><p class="eyebrow">Human Manual Narrative</p><h2 id="living-pattern-title">The Living Pattern</h2><p>Evidence-linked symbolic synthesis. The six Atlas surfaces remain the calculation record.</p></div><div><div class="narrative-mode-switch" role="group" aria-label="Narrative mode">${modes.map(mode => `<button type="button" data-narrative-mode="${mode}" aria-pressed="${mode === "plain"}">${esc(mode)}</button>`).join("")}</div><p class="narrative-ai-note">Plain and Research are local and deterministic. Mythic may use Qwen3.8 Flash through OpenRouter when selected.</p></div></header>
     <div class="central-pattern-card"><div class="archetype-seal" role="img" aria-label="Deterministic text seal for ${esc(central.title)}"><span>${esc(central.motif_ids.map(id => id.replace("motif_", "").slice(0, 2).toUpperCase()).join(" · ") || "—")}</span></div><div><p class="panel-index">Central pattern</p><h3>${esc(central.title)}</h3><p>${esc(central.definition)}</p><p><strong>${esc(central.confidence)} confidence</strong> · ${central.systems.length} participating systems</p></div></div>
     ${tensionHTML}
     <div class="living-pattern-narratives">${panels}</div>
@@ -482,7 +482,7 @@ function buildAtlas(result, options = {}) {
 
   const html = `<section class="atlas" data-atlas-mode="explorer" aria-labelledby="atlas-title">
     <header class="atlas-header">
-      <div class="atlas-heading"><p class="eyebrow">Human Metadata Atlas</p><h1 id="atlas-title" tabindex="-1">${esc(signature.text)}</h1><p>A visual index of calculated systems. Select any object to trace its values, method, provenance, and limits.</p></div>
+      <div class="atlas-heading"><p class="eyebrow">The Human Manual</p><h1 id="atlas-title" tabindex="-1">${esc(signature.text)}</h1><p>A visual index of calculated systems. Select any object to trace its values, method, provenance, and limits.</p></div>
       <div class="atlas-header-actions"><div class="mode-switch" role="group" aria-label="Atlas presentation mode"><button type="button" data-atlas-mode-button="explorer" aria-pressed="true">Explorer</button><button type="button" data-atlas-mode-button="research" aria-pressed="false">Research</button></div><div class="action-group"><button type="button" class="button" onclick="app.downloadReport()">Download report</button><button type="button" class="button" onclick="window.print()">Print</button><button type="button" class="button" onclick="app.editInputs()">Edit inputs</button></div></div>
     </header>
     <section class="atlas-summary" aria-label="Analysis identity and coverage"><div><span>Analysis</span><strong>${esc(result.input_hash?.slice(0, 12) || "not supplied")}</strong></div><div><span>Engine</span><strong>${esc(result.engine_version || "signature-v2")}</strong></div><div><span>Report</span><strong>${esc(reportMeta.report_schema_version || "report-v1")}</strong></div><div><span>Birth data</span><strong>${payload.birth ? (payload.birth.time_accuracy === "unknown" ? "Date only" : "Exact time") : "Not supplied"}</strong></div>${coverage.map(([label,status]) => `<div data-status="${esc(status)}"><span>${esc(label)}</span><strong>${esc(status)}</strong></div>`).join("")}</section>

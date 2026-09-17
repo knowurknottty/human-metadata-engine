@@ -386,3 +386,102 @@ body::before { background: linear-gradient(90deg, transparent, var(--ir-gold), t
   .atlas-panel { margin-bottom: .2in; background: #fff; box-shadow: none; }
   .living-pattern { background: #fff; box-shadow: none; }
 }
+
+/* Human Manual public identity + trust layer. */
+.wordmark__mark {
+  width: 2.45rem;
+  height: 2.45rem;
+  overflow: hidden;
+  border: 1px solid rgba(213,170,86,.5);
+  border-radius: 50%;
+  background: #020711;
+  box-shadow: 0 0 24px rgba(213,170,86,.09);
+}
+.wordmark__mark::after { content: none; }
+.wordmark__mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.wordmark > span.wordmark__copy:last-child {
+  display: grid;
+  gap: .08rem;
+  font-size: initial;
+  line-height: 1.05;
+}
+.wordmark > span.wordmark__copy:last-child::after { content: none; }
+.wordmark__copy strong {
+  color: var(--ir-text);
+  font: 650 .78rem var(--font-body);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+.wordmark__copy small {
+  color: var(--ir-gold-bright);
+  font: 600 .56rem var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.intro__copy h1 span { color: var(--ir-gold-bright); }
+.intro__lede--secondary { max-width: 66ch; margin-top: 1rem; color: #a9b1bd; font-size: .95rem; }
+.intro__actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-top: 1.35rem; }
+.intro__actions .button--quiet { text-decoration: none; border-color: rgba(213,170,86,.28); color: #c9d0d9; }
+.intro__brandmark { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.15rem; margin-bottom: .25rem; border-bottom: 1px solid var(--ir-line); }
+.intro__brandmark img { width: 5.25rem; height: 5.25rem; flex: 0 0 auto; object-fit: cover; border-radius: .5rem; border: 1px solid rgba(213,170,86,.35); box-shadow: 0 14px 38px rgba(0,0,0,.35); }
+.intro__brandmark p { margin: 0; color: var(--ir-gold-bright); font: 600 .7rem/1.5 var(--font-mono); letter-spacing: .1em; text-transform: uppercase; }
+
+.trust-strip {
+  width: min(calc(100% - 2rem), 78rem);
+  margin: 0 auto clamp(3rem, 7vw, 6rem);
+  padding: clamp(1.25rem, 3vw, 2rem) 0;
+  border-block: 1px solid var(--ir-line);
+}
+.trust-strip__heading { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1.3fr); gap: .75rem 2rem; align-items: end; }
+.trust-strip__heading .eyebrow { grid-column: 1 / -1; }
+.trust-strip__heading h2 { margin: 0; max-width: 16ch; color: #f2eee4; font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1; }
+.trust-strip__heading > p:last-child { margin: 0; max-width: 52ch; color: var(--ir-muted); }
+.trust-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; margin-top: 1.5rem; background: var(--ir-line); border: 1px solid var(--ir-line); }
+.trust-grid article { min-width: 0; padding: 1rem; background: rgba(3,9,19,.96); }
+.trust-grid strong { display: block; margin-bottom: .45rem; color: var(--ir-gold-bright); font: 650 .7rem var(--font-mono); letter-spacing: .06em; text-transform: uppercase; }
+.trust-grid p { margin: 0; color: #aeb7c2; font-size: .82rem; line-height: 1.55; }
+.trust-strip__note { margin: .85rem 0 0; color: #748294; font-size: .74rem; }
+.brand-signature { width: min(calc(100% - 2rem), 78rem); margin: clamp(3rem, 8vw, 7rem) auto 2rem; }
+.brand-signature img { display: block; width: 100%; height: auto; border: 1px solid rgba(213,170,86,.28); box-shadow: 0 26px 80px rgba(0,0,0,.4); }
+
+@media (max-width: 800px) {
+  .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trust-strip__heading { grid-template-columns: 1fr; }
+  .trust-strip__heading .eyebrow { grid-column: auto; }
+  .intro__brandmark img { width: 4.25rem; height: 4.25rem; }
+}
+@media (max-width: 560px) {
+  .wordmark__copy small { display: none; }
+  .wordmark__copy strong { font-size: .68rem; letter-spacing: .1em; }
+  .intro__actions { align-items: stretch; }
+  .intro__actions .button { width: 100%; justify-content: center; text-align: center; }
+  .trust-grid { grid-template-columns: 1fr; }
+  .brand-signature { width: 100%; margin-bottom: 1rem; }
+  .brand-signature img { border-inline: 0; }
+}
+
+/* Human Manual mobile release polish. */
+@media (max-width: 560px) {
+  .site-header__inner { gap: .5rem; }
+  .site-header nav a { display: none; }
+  .site-header nav .button { padding-inline: .75rem; min-height: 2.55rem; font-size: .67rem; }
+  .wordmark__copy small { display: none; }
+  .intro { padding-top: 2.6rem; }
+  .intro h1 { font-size: clamp(2.75rem, 13.8vw, 4.25rem); line-height: .94; overflow-wrap: normal; }
+  .intro__lede { font-size: .98rem; }
+  .intro__actions { display: grid; grid-template-columns: 1fr; }
+  .intro__actions .button { width: 100%; justify-content: center; }
+  .trust-strip { padding-inline: 1rem; }
+}
+@media (max-width: 380px) {
+  .site-header nav .button { display: none; }
+  .intro h1 { font-size: clamp(2.55rem, 13.2vw, 3.7rem); }
+}
+
+/* Prevent long display copy from establishing a wider mobile grid track. */
+.intro__grid > *, .intro__copy, .intro__boundary { min-width: 0; }
+@media (max-width: 560px) {
+  .intro h1, .intro h1 span, .intro__lede, .intro__lede--secondary { max-width: 100%; }
+  .intro h1 span { white-space: normal; overflow-wrap: break-word; }
+  .intro__lede, .intro__lede--secondary { overflow-wrap: anywhere; }
+}
