@@ -1,6 +1,6 @@
 # Narrative epistemic boundaries
 
-The Human Metadata Narrative is a bounded symbolic reflection. Stable
+The Living Pattern inside The Human Manual is a bounded symbolic reflection. Stable
 calculation does not make traditional interpretation a scientific personality
 measurement.
 
@@ -10,11 +10,15 @@ measurement.
    astronomical positions.
 2. `deterministic_relationship` — returned aspects, complete channels, defined
    centers, gates, and other versioned structural relationships.
-3. `traditional_symbolic_interpretation` — ontology mappings attached to named
+3. `historical_textual_reference` — bounded corpus data such as the Sumerian
+   *me* inventory; historical attestation is not personality evidence.
+4. `traditional_symbolic_interpretation` — ontology mappings attached to named
    conventions.
-4. `user_supplied` — optional psychology/context, clearly labeled and not
-   independently verified.
-5. `interpretive_synthesis` — motifs, gifts, possible shadows, tensions, and
+5. `user_supplied` — optional psychology/context and observations, clearly
+   labeled and not independently verified.
+6. `modern_interpretive_reflection` — project-authored crosswalks applied only
+   to explicit user tags, including `sumerian-me-reflection-v1`.
+7. `interpretive_synthesis` — motifs, gifts, possible shadows, tensions, and
    developmental questions authored by deterministic project templates.
 
 The hierarchy is categorical, not a ladder that converts Tier 1 calculation
@@ -51,3 +55,9 @@ returned values and declared ontology rules. It does not prove that the motif
 describes the subject, that systems validate one another, or that an outcome
 will occur. User observation and validated assessment remain the appropriate
 ways to test a reflection against lived reality.
+
+## Sumerian *me* boundary
+
+`sumerian_me_ontology` is historical/textual reference data. Its nine Inversion Labs analytical groupings and `inversion-labs-human-capacity-crosswalk-v1` are modern analytical structures. `sumerian-me-reflection-v1` is a third, modern interpretive layer that can consume only explicit observation tags under its current contract.
+
+The reflection is outside the narrative motif ranking, composite resonance score, and fingerprint. A selected capacity domain means only that the person chose to compare an observation against that modern category; it does not show that the Sumerian text assigned a *me* to the person.

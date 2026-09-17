@@ -1,0 +1,5 @@
+{
+  "name": "human-metadata-atlas",
+  "private": true,
+  "scripts": {"build": "node scripts/build_sites.mjs"}
+}

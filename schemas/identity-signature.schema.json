@@ -11,7 +11,7 @@
         "system": { "type": "string" },
         "phase": { "type": "string", "enum": ["phase_1", "phase_2", "phase_3", "phase_4", "structural"] },
         "status": { "type": "string", "enum": ["computed", "input_insufficient", "unavailable"] },
-        "interpretation_level": { "type": "string", "enum": ["computed", "symbolic"] },
+        "interpretation_level": { "type": "string", "enum": ["computed", "symbolic", "historical"] },
         "provenance": {
           "type": "object",
           "required": ["manifest_version", "convention", "source_ids", "input_mode"],
@@ -134,6 +134,7 @@
         "sacred_geometry": { "$ref": "#/$defs/symbolic_encoder_envelope" },
         "alchemical_transformation": { "$ref": "#/$defs/symbolic_encoder_envelope" },
         "sumerian_sexagesimal": { "$ref": "#/$defs/symbolic_encoder_envelope" },
+        "sumerian_me_ontology": { "$ref": "#/$defs/symbolic_encoder_envelope" },
         "hermetic_principles": { "$ref": "#/$defs/symbolic_encoder_envelope" },
         "tarot": { "$ref": "#/$defs/symbolic_encoder_envelope" },
         "babylonian_planetary": { "$ref": "#/$defs/symbolic_encoder_envelope" },
@@ -169,7 +170,7 @@
         "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
         "interpretation_level": {
           "type": "string",
-          "enum": ["computed", "symbolic", "inferred", "speculative"]
+          "enum": ["computed", "symbolic", "historical", "inferred", "speculative"]
         }
       }
     },

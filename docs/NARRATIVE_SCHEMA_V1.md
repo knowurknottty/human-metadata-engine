@@ -56,3 +56,7 @@ analysis, fetch, or recomputation.
 
 The Markdown export records narrative/evidence schema versions, mode,
 sentence evidence references, confidence, limits, and data-quality states.
+
+## Adjacent top-level reflection
+
+`sumerian_me_reflection` is a top-level `analysis-v1` response object, not part of `analysis-v1.synthesis` and not a `narrative-v1` evidence source. This prevents an opt-in modern historical crosswalk from silently acquiring motif-ranking or narrative-evidence weight.

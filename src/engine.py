@@ -39,7 +39,7 @@ from encoders.linguistic import linguistic_signature
 from encoders.binary_prime import binary_prime_signature
 from encoders.gematria import gematria_signature
 from encoders.isopsephy import isopsephy_signature
-from encoders.pipeline import encode_symbolic_systems
+from encoders.pipeline import ROADMAP_SYSTEMS, encode_symbolic_systems
 
 from analytics import (
     composite_resonance, identity_fingerprint,
@@ -466,7 +466,7 @@ def run_engine():
     """Run the complete engine and generate all outputs."""
     print("Human Metadata Engine v0.4.0")
     print("=" * 60)
-    print(f"Running {len(IDENTITIES)} identities through core encoders + 25 provenance-aware extensions + analytics...")
+    print(f"Running {len(IDENTITIES)} identities through core encoders + {len(ROADMAP_SYSTEMS)} provenance-aware extensions + analytics...")
     print()
 
     # Compute all signatures

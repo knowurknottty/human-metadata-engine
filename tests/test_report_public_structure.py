@@ -52,7 +52,12 @@ class PublicReportStructureTests(unittest.TestCase):
         ):
             with self.subTest(unsupported=unsupported):
                 self.assertNotIn(unsupported, markdown)
-        self.assertLess(len(markdown.split()), 1200)
+        # The compact calculation report remains bounded; the requested long-form
+        # reading is an explicit additional section, not repeated filler.
+        base, narrative = markdown.split("## The Human Manual Narrative", 1)
+        self.assertLess(len(base.split()), 1200)
+        self.assertIn("The language of your name", narrative)
+        self.assertIn("Your name-derived tarot archetype", narrative)
         self.assertIn("not a percentage of accuracy", markdown)
 
     def test_same_request_replays_identically_and_export_contains_versions(self):
@@ -67,13 +72,13 @@ class PublicReportStructureTests(unittest.TestCase):
         ):
             self.assertIn(field, first["report"]["metadata"])
         self.assertEqual(first["application_version"], "1.0.0")
-        self.assertIn("# Human Metadata Engine Report — Ada Lovelace", first["report"]["markdown"])
+        self.assertIn("# The Human Manual Report — Ada Lovelace", first["report"]["markdown"])
         self.assertIn("Other names: **Ada King**", first["report"]["markdown"])
 
     def test_aliases_are_markdown_escaped_in_export(self):
         result = analyze({"name": "Ada Lovelace", "aliases": ["Ada *King*"], "mode": "data"})
         markdown = result["report"]["markdown"]
-        self.assertIn("# Human Metadata Engine Data Report — Ada Lovelace", markdown)
+        self.assertIn("# The Human Manual Data Report — Ada Lovelace", markdown)
         self.assertIn(r"Other names: **Ada \*King\***", markdown)
 
     def test_browser_markdown_renderer_escapes_before_formatting(self):

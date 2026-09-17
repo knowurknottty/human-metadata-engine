@@ -15,10 +15,10 @@ STYLES = (ROOT / "webapp" / "static" / "styles.css").read_text(encoding="utf-8")
 class EditorialFrontendContractTests(unittest.TestCase):
     def test_primary_heading_and_truthful_product_boundary_are_exact(self):
         self.assertIn(
-            "Explore the systems. Trace every result.",
+            "The Human Manual,",
             HTML,
         )
-        self.assertIn("A visual knowledge system", HTML)
+        self.assertIn("A map of maps", HTML)
         self.assertIn("The boundary", HTML)
         self.assertIn("not a diagnosis, personality test, prediction, or scientific proof", HTML)
 
@@ -76,7 +76,7 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertIn("Correct these", SCRIPT)
 
     def test_loading_is_honest_live_and_duplicate_submits_are_blocked(self):
-        self.assertIn("Calculating your atlas…", HTML)
+        self.assertIn("Building your manual…", HTML)
         self.assertIn('role="status" aria-live="polite"', HTML)
         self.assertIn("if (STATE.submitting) return", SCRIPT)
         self.assertIn("submitButton.disabled = true", SCRIPT)
@@ -115,6 +115,21 @@ class EditorialFrontendContractTests(unittest.TestCase):
             self.assertIn(f'id="{field}"', HTML)
         self.assertNotIn("Optional psychological metadata", HTML)
         self.assertNotIn("Epistemic metadata", HTML)
+
+    def test_sumerian_me_reflection_is_explicit_opt_in_and_user_tagged(self):
+        self.assertIn("Human Capacity / Sumerian me Reflection", HTML)
+        self.assertIn('id="me-reflection-enabled"', HTML)
+        self.assertIn("It does not infer tags", HTML)
+        self.assertIn("ME_CAPACITY_DOMAINS", SCRIPT)
+        self.assertIn("readMeObservationPayload", SCRIPT)
+        self.assertIn("payload.sumerian_me_reflection = true", SCRIPT)
+        self.assertIn("capacity_domains", SCRIPT)
+        self.assertIn("The engine will not classify this sentence for you", SCRIPT)
+        self.assertIn("renderMeReflection", SCRIPT)
+        self.assertIn("Historical corpus", SCRIPT)
+        self.assertIn("does not calculate, score, or assign an ancient <em>me</em>", SCRIPT)
+        self.assertIn(".me-epistemic-chain", STYLES)
+        self.assertIn(".me-domain-grid", STYLES)
 
     def test_untouched_big_five_values_are_not_submitted(self):
         self.assertIn('data-touched="false"', SCRIPT)

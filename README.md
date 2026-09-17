@@ -1,17 +1,8 @@
-# Human Metadata Engine
+# The Human Manual, for and by Humans
 
-A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
+**Inversion Labs** builds this as an inspectable, deterministic convergence of human-description systems: calculations, historical sources, symbolic traditions, user-supplied context, and explicitly labeled project-authored synthesis. The repository name `human-metadata-engine` remains an internal compatibility identifier; it is not the public product name.
 
-**v1.0.0 current public interface** — **Identity Resonance** is the canonical public-facing visual shell. The **Human Metadata Engine** remains the computation/data substrate, while the **Human Metadata Atlas** remains the deep interactive research and provenance layer underneath that shell. The six calculated surfaces, shared provenance inspector, and evidence-linked **Human Metadata Narrative / Living Pattern** remain current. Plain, Mythic, and Research narrative modes share one deterministic claim/evidence plan and change wording only. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; `synthesis-evidence-v1`, `synthesis-plan-v1`, and `narrative-v1` version independently. The visual restoration does not resurrect historical calculations or weaken epistemic labels. No remote model, checkout, or paid entitlement surface is present.
-
-## Documentation status
-
-- [`docs/IDENTITY_RESONANCE_CANONICAL_SHELL.md`](docs/IDENTITY_RESONANCE_CANONICAL_SHELL.md) — current public visual authority.
-- [`docs/INTERFACE_V10.md`](docs/INTERFACE_V10.md) — current v1.0 Atlas interaction/data architecture under the public shell.
-- [`docs/INTERFACE_V08.md`](docs/INTERFACE_V08.md) — historical v0.8 interface record, retained for provenance.
-- [`docs/README.md`](docs/README.md) — current vs historical documentation map.
-- [`DEPLOYMENT.md`](DEPLOYMENT.md) — current deployment boundary.
-- [`docs/RELEASE_GATES.md`](docs/RELEASE_GATES.md) — release/QA truth boundaries.
+**Current public experience** — **The Human Manual** opens into an evidence-linked visual workspace and **The Living Pattern** narrative. Grounded, Story, and Sources views share one deterministic claim/evidence plan. Story uses a versioned local prose lexicon and deterministic compositor; it does not call a remote language model. The downloadable Markdown includes an Agent Handoff contract for people who want to bring their own assistant afterward. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; synthesis and Sumerian-reflection contracts evolve independently.
 
 ## Quick Start — Web App
 
@@ -21,7 +12,7 @@ A provenance-aware identity metadata architecture that encodes humans, aliases, 
 python3 -m pip install --require-hashes -r requirements.txt && python3 webapp/server.py
 ```
 
-Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The result opens in the Identity Resonance shell over the current Atlas workspace; every selectable mark still exposes supporting values, method, source, confidence category, interpretation type, limitations, and a report link. Historical public-reference API input can still use `subject_type: "reference"`.
+Open http://localhost:8000 and enter a primary name. Other names use removable tokens; birth data and personal context are optional. A regular birth flow needs only date, local time, and a recognizable place such as `Chicago, Illinois`; the server resolves coordinates, a geographic timezone identifier, and the date-specific historical UTC offset. “I do not know my exact birth time” withholds time-sensitive fields instead of presenting an internal placeholder as an observed time. Ambiguous places become keyboard-operable choices without clearing the form. Advanced users may instead provide coordinates and a timezone identifier. The result opens in the Atlas; every selectable mark exposes supporting values, method, source, confidence category, interpretation type, limitations, and a report link. Historical public-reference API input can still use `subject_type: "reference"`.
 
 Place lookup uses Open-Meteo's geocoding endpoint with a bounded timeout, one retry, and an in-process success cache. The place text is sent to that provider. Ambiguous matches return ranked choices; invalid places, provider failures, DST gaps, and DST folds return structured errors rather than guessed chart inputs. Location lookup requires network access. Explicit coordinates plus an IANA timezone work offline; a raw offset is accepted but labeled less reliable for historical calculations.
 
@@ -43,8 +34,7 @@ human-metadata-engine/
 │   └── static/                      # Framework-free visual knowledge interface
 │       ├── atlas.js                 # Visualization model and SVG renderers
 │       ├── app.js                   # Input, interaction, mode, and report controller
-│       ├── styles.css               # Current Atlas/layout/accessibility presentation base
-│       └── identity-resonance-shell.css # Canonical public visual override; no calculation logic
+│       └── styles.css               # Responsive/accessible presentation layer
 ├── src/
 │   ├── engine.py                    # Master orchestrator (signature-v2)
 │   ├── analytics.py                 # Legacy/internal analytics compatibility contract
@@ -67,7 +57,7 @@ human-metadata-engine/
 │   │   ├── astrology.py             # Tropical astrology (Swiss Ephemeris)
 │   │   ├── human_design.py          # Human Design / Gene Keys (64 gates)
 │   │   └── psychology.py            # Big Five, MBTI, Enneagram (user-supplied)
-│   │   ├── pipeline.py               # 25-system provenance-aware expansion pipeline
+│   │   ├── pipeline.py               # 26-system provenance-aware expansion pipeline
 │   │   ├── kabbalah.py               # Tree of Life source module
 │   │   └── apollonius.py             # Apollonius source module, unified by pipeline
 │   ├── graph/
@@ -164,15 +154,16 @@ Second-order analysis computed on top of the unified signatures:
 | **Batch Reports** | Comparative ranking of any identity set (markdown + JSON) |
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
 | **Public Reports** | Concise Data mode or a ten-section truth-bounded Magic report with per-section epistemic metadata (`src/report_safe.py`) |
-| **Human Metadata Narrative** | Deterministic evidence extraction, project-authored motif normalization, independent-group agreement, preserved contradictions, and evidence-linked Plain/Mythic/Research realization (`src/synthesis/`) |
+| **The Living Pattern** | Deterministic evidence extraction, project-authored motif normalization, preserved contradictions, and evidence-linked Grounded/Story/Sources realization with a versioned local prose lexicon (`src/synthesis/`) |
 
 Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
 
-## Provenance-Aware Symbolic Extensions (25 Systems)
+## Provenance-Aware Extensions (26 Systems)
 
-The expansion is available through `compute_unified_signature(...)["encoders"]` and is grouped into the four roadmap phases plus structural integrations:
+The expansion is available through `compute_unified_signature(...)["encoders"]` and contains 26 provenance-aware extensions. Twenty-five are roadmap/structural symbolic or computed lenses; `sumerian_me_ontology` is a separate historical-textual reference layer:
 
 - **Phase 1:** Kabbalistic Tree of Life, Sacred Geometry, Alchemical Transformation, Sumerian Sexagesimal, Hermetic Principles.
+- **Historical/textual:** Sumerian *me* ontology — 81 legible named items bounded to the surviving ETCSL *Inana and Enki* recitation used by this implementation; damaged placeholders are not reconstructed.
 - **Phase 2:** Tarot, Babylonian Planetary Numbers, Hermes–Thoth–Nabu Lineage, Solomonic Indexing, Arabic Abjad.
 - **Phase 3:** Chinese I Ching/Wu Xing/year-pillar context, Egyptian uniliteral/decans, Vedic Jyotish requirements, Mayan Tzolkin, Cuneiform structural analysis.
 - **Phase 4:** Elder Futhark, Ogham, Egyptian Ma'at, Mandaean Duodecimal, architectural-proportion analysis, Indus structural analysis, Unicode codepoints.
@@ -180,7 +171,7 @@ The expansion is available through `compute_unified_signature(...)["encoders"]` 
 
 Every extension returns `system`, `phase`, `status`, `interpretation_level`, `provenance`, and `data`. Direct-script input is preserved, while Latin-only systems use the named `builtin-v1` transliteration profile. See [the provenance catalog](docs/symbolic-systems-provenance.md) for each convention, source ID, and limitation.
 
-The extension results are intentionally excluded from the existing composite resonance formula and fingerprint spokes. They are symbolic or computed lenses, not empirical findings.
+The extension results are intentionally excluded from the existing composite resonance formula and fingerprint spokes. Most are symbolic or computed lenses; the Sumerian *me* ontology is historical/textual corpus data. None of these extension records is empirical personality evidence.
 
 ## Graph Algorithms
 
@@ -335,6 +326,8 @@ are rejected. JSON must use `Content-Type: application/json`, bodies are capped
 at 64 KiB, and errors contain a stable `code` plus a human-readable `message`.
 Names and aliases are bounded and markup/control characters are rejected.
 
+The optional `sumerian_me_reflection` request flag enables `sumerian-me-reflection-v1`. Reflection observations may include explicit `capacity_domains` tags chosen by the user. The engine does **not** infer those tags from observation prose and does not derive them from name, birth data, numerology, astrology, Human Design, or resonance scores. The public reflection output omits raw observation text. See [the Sumerian *me* integration contract](docs/SUMERIAN_ME_INTEGRATION.md).
+
 ```bash
 curl -sS http://127.0.0.1:8000/api/analyze \
   -H 'Content-Type: application/json' \
@@ -371,8 +364,25 @@ documented compatibility contracts for internal/legacy callers.
 
 ## Disclaimer
 
-This system uses symbolic numerological and astrological systems as **interpretive lenses**, not empirical proof. Claims derived from these systems should be treated as symbolic analysis, not factual assertions.
+This system uses symbolic numerological and astrological systems as **interpretive lenses**, not empirical proof. Historical/textual corpus layers are labeled separately from symbolic interpretation, and modern crosswalks are labeled separately from both. No layer should be treated as an empirical personality verdict.
 
 ## License
 
 Private — Inversion Labs
+
+## Expanded non-AI readings and tarot
+
+The Living Pattern now includes detailed local chapters for name systems, natal
+placements and aspects, Human Design, and name-derived tarot correspondences.
+Grounded, Story, and Sources retain the same evidence links. Chapter navigation,
+expandable reading sections and complete Markdown export support longer readings.
+
+A separate **Tarot** section offers One-card focus, Situation / Challenge /
+Guidance, and Five-card crossroads. It draws without replacement from a 78-card
+upright deck and uses original card-specific interpretations. The optional question
+stays in the browser. No model or AI API key is required. Readings can be downloaded
+with their ordered card IDs and version for replay.
+
+See [the reading library and API contract](docs/NARRATIVE_READING_LIBRARY.md).
+Deploy the updated Python backend together with the frontend: the existing Netlify
+proxy forwards `/api/tarot` and `/api/tarot/spreads` to that backend.

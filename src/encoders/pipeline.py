@@ -25,6 +25,7 @@ ROADMAP_SYSTEMS: dict[str, str] = {
     "sacred_geometry": "phase_1",
     "alchemical_transformation": "phase_1",
     "sumerian_sexagesimal": "phase_1",
+    "sumerian_me_ontology": "historical",
     "hermetic_principles": "phase_1",
     "tarot": "phase_2",
     "babylonian_planetary": "phase_2",
@@ -56,6 +57,7 @@ SYSTEM_PROVENANCE: dict[str, dict[str, Any]] = {
     "sacred_geometry": {"convention": "integer-patterns-tetractys-polygon-v1", "source_ids": ["SRC-PYTHAGOREAN-TETRACTYS"]},
     "alchemical_transformation": {"convention": "four-color-work-v1", "source_ids": ["SRC-ALCHEMY-FOUR-STAGES"]},
     "sumerian_sexagesimal": {"convention": "base-60-place-value-v1", "source_ids": ["SRC-MESOPOTAMIAN-SEXAGESIMAL"]},
+    "sumerian_me_ontology": {"convention": "etcsl-visible-me-inventory-v1", "source_ids": ["SRC-ETCSL-INANA-ENKI", "SRC-FARBER-ME-LIST", "SRC-ORACC-ENKI"]},
     "hermetic_principles": {"convention": "seven-principles-modern-hermetic-v1", "source_ids": ["SRC-HERMETIC-SEVEN-PRINCIPLES"]},
     "tarot": {"convention": "rider-waite-smith-major-arcana-v1", "source_ids": ["SRC-TAROT-RWS"]},
     "babylonian_planetary": {"convention": "chaldean-planetary-order-v1", "source_ids": ["SRC-CHALDEAN-ORDER"]},
@@ -287,6 +289,16 @@ def _alchemy(context: dict[str, Any], **_: Any) -> dict[str, Any]:
 def _sexagesimal(context: dict[str, Any], **_: Any) -> dict[str, Any]:
     total = _letter_total(context)
     return {"decimal_total": total, "base_60_digits": _base(total, 60), "place_value_base": 60}
+
+
+def _sumerian_me(context: dict[str, Any], **_: Any) -> dict[str, Any]:
+    # Deliberately independent of the analyzed identity. The historical corpus
+    # does not support assigning a modern person to a me from name/birth data.
+    from .sumerian_me import build_sumerian_me_ontology
+
+    data = build_sumerian_me_ontology()
+    data["identity_input_used"] = False
+    return data
 
 
 def _hermetic(context: dict[str, Any], **_: Any) -> dict[str, Any]:
@@ -530,6 +542,7 @@ def _bridge(context: dict[str, Any], birth: dict[str, Any] | None = None, **_: A
 BUILDERS: dict[str, Callable[..., dict[str, Any]]] = {
     "kabbalah_tree_of_life": _kabbalah, "sacred_geometry": _sacred_geometry,
     "alchemical_transformation": _alchemy, "sumerian_sexagesimal": _sexagesimal,
+    "sumerian_me_ontology": _sumerian_me,
     "hermetic_principles": _hermetic, "tarot": _tarot,
     "babylonian_planetary": _babylonian_planetary, "hermes_thoth_nabu": _lineage,
     "solomonic": _solomonic, "arabic_abjad": _abjad, "chinese": _chinese,
@@ -563,6 +576,8 @@ def encode_symbolic_systems(
         interpretation = "symbolic"
         if system == "unicode_codepoint":
             interpretation = "computed"
+        elif system == "sumerian_me_ontology":
+            interpretation = "historical"
         results[system] = {
             "system": system,
             "phase": ROADMAP_SYSTEMS[system],

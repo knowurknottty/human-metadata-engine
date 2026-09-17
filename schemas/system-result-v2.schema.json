@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "system-result-v2.schema.json",
+  "title": "SystemResultV2",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "system_id",
+    "system_version",
+    "tradition",
+    "convention",
+    "artifact_class",
+    "epistemic_class",
+    "input_dependencies",
+    "dependency_roots",
+    "sensitivity",
+    "status",
+    "calculation",
+    "interpretation",
+    "provenance",
+    "license",
+    "limitations"
+  ],
+  "properties": {
+    "contract_version": {"const": "system-result-v2"},
+    "system_id": {"type": "string", "minLength": 1},
+    "system_version": {"type": "string", "minLength": 1},
+    "tradition": {"type": "string"},
+    "convention": {"type": "string"},
+    "artifact_class": {
+      "enum": ["static_signature", "timing", "divination_session", "assessment", "environment", "biometric"]
+    },
+    "epistemic_class": {
+      "enum": [
+        "deterministic_calculation", "deterministic_relationship",
+        "traditional_symbolic_interpretation", "user_supplied", "measured_observation",
+        "interpretive_synthesis"
+      ]
+    },
+    "input_dependencies": {
+      "type": "array", "uniqueItems": true, "items": {"type": "string"}
+    },
+    "dependency_roots": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "birth_instant", "birth_date", "name_string", "assessment_instrument",
+          "session_entropy", "environment_context", "biometric_observation"
+        ]
+      }
+    },
+    "sensitivity": {"enum": ["public", "personal", "sensitive"]},
+    "status": {"enum": ["computed", "input_insufficient", "unavailable"]},
+    "calculation": {"type": "object"},
+    "interpretation": {"type": "object"},
+    "provenance": {
+      "type": "object",
+      "required": ["source_ids"],
+      "properties": {
+        "source_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "license": {
+      "type": "object",
+      "required": ["calculation_code", "third_party_dependencies"],
+      "properties": {
+        "calculation_code": {"type": "string"},
+        "third_party_dependencies": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}}
+  },
+  "additionalProperties": false
+}

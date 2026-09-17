@@ -38,7 +38,9 @@ from analytics import (  # noqa: E402
 )
 from analytics_v2 import composite_resonance as accuracy_composite_resonance  # noqa: E402
 from report_safe import generate_report  # noqa: E402
+from tarot_reading import draw_reading, spread_catalog
 from synthesis import build_synthesis, narrative_markdown  # noqa: E402
+from agent_handoff import agent_handoff_markdown  # noqa: E402
 from synthesis.contracts import (  # noqa: E402
     EVIDENCE_SCHEMA_VERSION,
     NARRATIVE_SCHEMA_VERSION,
@@ -58,6 +60,7 @@ from constellation import (  # noqa: E402
 )
 from etymology import analyze_name_etymology  # noqa: E402
 from evidence_v3 import evidence_dashboard  # noqa: E402
+from sumerian_me_reflection import build_sumerian_me_reflection  # noqa: E402
 from encoders.pipeline import MANIFEST_VERSION as CONVENTION_SET_VERSION  # noqa: E402
 from sigil import generate_custom_sigil  # noqa: E402
 from snapshot import personality_snapshot  # noqa: E402
@@ -124,6 +127,7 @@ except ImportError:
 EPHEMERIS_AVAILABLE = _swisseph is not None
 REQUEST_TIMEOUT_SECONDS = float(os.environ.get("HME_REQUEST_TIMEOUT_SECONDS", "15"))
 MAX_REQUEST_BYTES = 64 * 1024
+MAX_DOWNLOAD_REQUEST_BYTES = 1024 * 1024
 RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", "60"))
 RATE_LIMIT_REQUESTS = int(os.environ.get("HME_RATE_LIMIT_REQUESTS", "20"))
 RATE_LIMIT_MAX_TRACKED_IPS = int(os.environ.get("HME_RATE_LIMIT_MAX_TRACKED_IPS", "10000"))
@@ -157,7 +161,7 @@ SECURITY_HEADERS = {
 
 ANALYSIS_REQUEST_FIELDS = {
     "name", "aliases", "mode", "subject_type", "as_of_year", "birth", "psychology",
-    "user_reported_human_design_type", "lineage_surnames", "observations", "constellation",
+    "user_reported_human_design_type", "lineage_surnames", "observations", "constellation", "sumerian_me_reflection",
 }
 PUBLIC_BIRTH_FIELDS = {
     "year", "month", "day", "hour", "minute", "time_accuracy", "location",
@@ -211,6 +215,7 @@ def _version_payload() -> dict:
             "persistence": False,
             "deterministic_narrative": True,
             "remote_narrative_model": False,
+            "deterministic_storytelling": True,
         },
     }
 
@@ -728,6 +733,13 @@ def analyze(payload):
 
     lineage_surnames = _validated_lineage_surnames(payload.get("lineage_surnames"))
     observations = _validated_observations(payload.get("observations"))
+    reflection_requested = payload.get("sumerian_me_reflection", False)
+    if not isinstance(reflection_requested, bool):
+        raise PublicContractError("sumerian_me_reflection must be a boolean.")
+    sumerian_me_reflection = build_sumerian_me_reflection(
+        observations,
+        enabled=reflection_requested,
+    )
     constellation = validate_constellation(payload.get("constellation"))
 
     sig = _compute_signature(identity, mode=mode)
@@ -773,6 +785,7 @@ def analyze(payload):
         "lineage_surnames": lineage_surnames,
         "observations": observations,
         "constellation": constellation,
+        "sumerian_me_reflection": reflection_requested,
     })
     report = generate_report(
         sig,
@@ -811,6 +824,7 @@ def analyze(payload):
                 "narrative_schema": NARRATIVE_SCHEMA_VERSION,
             },
         }
+    report["markdown"] += "\n" + agent_handoff_markdown(analysis_mode=mode, synthesis_available=(mode == "magic"))
     report["word_count"] = len(report["markdown"].split())
     response = {
         "application_version": APP_VERSION,
@@ -837,6 +851,7 @@ def analyze(payload):
         "etymology": etymology,
         "evidence": evidence,
         "observations": observations,
+        "sumerian_me_reflection": sumerian_me_reflection,
         "constellation": constellation_result,
     }
     return _redact_public_output(response)
@@ -918,7 +933,7 @@ class Handler(BaseHTTPRequestHandler):
             raise HTTPRequestError("Content-Length must be an integer.", code="invalid_content_length") from exc
         if length <= 0:
             raise HTTPRequestError("Request body is empty.", code="empty_request_body")
-        if length > MAX_REQUEST_BYTES:
+        if length > MAX_DOWNLOAD_REQUEST_BYTES:
             raise HTTPRequestError("Payload too large.", code="payload_too_large", status=413)
         body = self.rfile.read(length)
         if len(body) != length:
@@ -977,6 +992,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(200, _version_payload())
         if path == "/api/defaults":
             return self._json(200, {"identities": default_summaries()})
+        if path == "/api/tarot/spreads":
+            return self._json(200, {"spreads": spread_catalog()})
         if path == "/api/modes":
             return self._json(200, {
                 "modes": [
@@ -999,7 +1016,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._post_sigil()
         if path == "/api/report-download":
             return self._post_report_download()
-        if path != "/api/analyze":
+        if path not in {"/api/analyze", "/api/tarot"}:
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
         client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
         if not _allow_analysis(client_ip):
@@ -1018,6 +1035,8 @@ class Handler(BaseHTTPRequestHandler):
             })
         try:
             payload = self._read_json_body()
+            if path == "/api/tarot":
+                return self._json(200, draw_reading(payload))
             return self._json(200, analyze(payload))
         except HTTPRequestError as exc:
             return self._json(exc.status, _error_payload(exc))
@@ -1044,7 +1063,7 @@ class Handler(BaseHTTPRequestHandler):
         """Queue browser-generated Markdown for a bounded, retryable GET."""
         try:
             content_type = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
-            payload = self._read_json_body() if content_type == "application/json" else self._read_download_form()
+            payload = self._read_json_body(max_bytes=MAX_DOWNLOAD_REQUEST_BYTES) if content_type == "application/json" else self._read_download_form()
             if not isinstance(payload, dict) or set(payload) != {"filename", "markdown"}:
                 raise HTTPRequestError("Download request is invalid.", code="invalid_download_request")
             filename = payload.get("filename")

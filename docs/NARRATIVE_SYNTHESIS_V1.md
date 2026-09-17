@@ -1,9 +1,6 @@
 # Narrative Synthesis Engine v1
 
-The public feature is named **Human Metadata Narrative** and appears in the
-Atlas as **The Living Pattern**. The first name describes the versioned data
-product; the second matches the Atlas's visual, exploratory language without
-claiming that a symbolic synthesis is a scientific model of a person.
+The public feature is **The Living Pattern** inside **The Human Manual**. Internally, it remains the versioned deterministic narrative-synthesis subsystem. Public naming does not change the evidence, plan, or narrative schemas, and the symbolic synthesis is never presented as a scientific model of a person.
 
 ## Boundary and data flow
 
@@ -32,7 +29,8 @@ The code boundaries are:
   versioned, project-authored normalization decisions.
 - `src/synthesis/analysis.py` — motif ranking, agreement, and contradiction.
 - `src/synthesis/plan.py` — deterministic claims and section architecture.
-- `src/synthesis/realize.py` — bounded mode-specific templates.
+- `src/synthesis/realize.py` — bounded mode-specific realization.
+- `src/synthesis/prose_lexicon.py` — versioned deterministic vocabulary banks and connective-prose composition.
 - `src/synthesis/verify.py` — sentence/claim/evidence, prohibited-language, and
   prohibited-topic verification.
 - `src/synthesis/pipeline.py` — composition only; no extraction or scoring
@@ -71,10 +69,7 @@ two independent groups. Otherwise the output says that no single archetype
 dominates. Titles compose the highest supported motifs instead of selecting a
 generic personality from a small fixed catalog.
 
-Plain, mythic, and research modes use the same claim IDs, evidence IDs,
-strengths, contradictions, and section plan. Only wording changes. Default
-operation is deterministic and local. The v1 release has no model adapter and
-sends no profile data to a remote AI provider.
+Grounded (`plain`), Story (`mythic`), and Sources (`research`) use the same deterministic claim IDs, evidence IDs, strengths, contradictions, and section plan. All three are generated in-process. Story enriches the authored base readings with deterministic, seed-stable openings, transitions, counterpoints, reflection prompts, and closings from `deterministic-prose-lexicon-v1`; no remote language model participates in the public narrative path.
 
 ## Data quality
 
@@ -95,3 +90,7 @@ sends no profile data to a remote AI provider.
 The central seal is a text mark made from the first two letters of the dominant
 motif IDs. It encodes no additional result, does not claim occult provenance,
 and is not biometric. Its accessible name gives the full central title.
+
+## Historical/reflection exclusion
+
+The Sumerian `sumerian_me_ontology` corpus record and `sumerian-me-reflection-v1` do not participate in motif ranking, agreement counts, central-pattern selection, or contradiction scoring. Historical attestation and an explicit user-selected capacity tag are different evidence classes from narrative symbolic recurrence and must not inflate synthesis confidence.

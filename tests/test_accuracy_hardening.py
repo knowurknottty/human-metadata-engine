@@ -89,9 +89,15 @@ class ConvergenceTests(unittest.TestCase):
 
         signature = _compute_signature({"id": "test:name", "text": "Ada Lovelace"}, mode="data")
         available = signature["snapshot"]["available_layers"]
-        self.assertEqual(len(available), 32)
-        self.assertEqual(signature["snapshot"]["highlights"][0], "32 encoder outputs available")
-        self.assertEqual(signature["dimensions"], 176)
+        expected_available = [
+            name for name, value in signature["encoders"].items()
+            if isinstance(value, dict) and not value.get("error") and value.get("available", True) is not False
+        ]
+        self.assertEqual(available, expected_available)
+        self.assertEqual(
+            signature["snapshot"]["highlights"][0],
+            f"{len(expected_available)} encoder outputs available",
+        )
         self.assertEqual(signature["computed_dimensions"], count_signature_dimensions(signature))
         self.assertEqual(signature["dimensions"] - signature["computed_dimensions"], 8)
         self.assertNotEqual(len(signature["encoders"]), len(available))
@@ -117,7 +123,8 @@ class ConvergenceTests(unittest.TestCase):
         script = (Path(ROOT) / "webapp" / "static" / "app.js").read_text(encoding="utf-8")
         self.assertNotIn("25</strong><span>", html)
         self.assertIn("const extensions = Object.values(encoders)", script)
-        self.assertIn("${extensions.length} configured symbolic extensions", script)
+        self.assertIn("${extensions.length} configured provenance-aware extensions", script)
+        self.assertIn("Historical/textual", script)
 
     def test_ordinal_does_not_create_a_second_independent_vote(self):
         signature = {

@@ -107,7 +107,7 @@ def _data_report(
     ling = encoders.get("linguistic", {})
     resonance = sig.get("resonance", {})
     lines = [
-        f"# Human Metadata Engine Data Report — {_md(sig.get('text', 'Unknown'))}",
+        f"# The Human Manual Data Report — {_md(sig.get('text', 'Unknown'))}",
         "",
         "> **How to read this report**",
         "> Data mode reports reproducible string measurements, provenance, and configured comparison outputs. It does not infer personality, fate, cultural origin, or real-world similarity from a name.",
@@ -241,7 +241,7 @@ def _magic_report(
             hd_lines.append(f"- User-reported type: **{_md(human_design['user_reported_type'])}** (self-report only).")
 
     lines = [
-        f"# Human Metadata Engine Report — {_md(sig.get('text', 'Unknown'))}",
+        f"# The Human Manual Report — {_md(sig.get('text', 'Unknown'))}",
         "",
         "> **How to read this report**",
         "> Direct calculations, astronomy, self-report, traditional symbolic interpretation, and synthesis are labeled separately. The pattern convergence index is not a percentage of accuracy. This report is not diagnosis, prediction, destiny, or an empirical personality assessment.",

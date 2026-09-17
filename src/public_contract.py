@@ -11,6 +11,7 @@ import math
 import re
 import unicodedata
 from typing import Any
+from sumerian_me_reflection import CAPACITY_CATEGORY_IDS
 
 
 MODES = {"data", "magic"}
@@ -312,7 +313,7 @@ def validate_observations(raw: Any) -> list[dict[str, Any]]:
     for index, item in enumerate(raw):
         if not isinstance(item, dict):
             raise PublicContractError(f"observations[{index}] must be an object.")
-        if set(item) - {"text", "source", "confidence", "occurred_at"}:
+        if set(item) - {"text", "source", "confidence", "occurred_at", "capacity_domains"}:
             raise PublicContractError(f"observations[{index}] contains unsupported fields.")
         text = item.get("text")
         if not isinstance(text, str) or not text.strip():
@@ -329,11 +330,22 @@ def validate_observations(raw: Any) -> list[dict[str, Any]]:
         occurred_at = item.get("occurred_at")
         if occurred_at is not None and (not isinstance(occurred_at, str) or len(occurred_at) > 40):
             raise PublicContractError(f"observations[{index}].occurred_at must be a short string.")
+        capacity_domains = item.get("capacity_domains", [])
+        if not isinstance(capacity_domains, list) or len(capacity_domains) > len(CAPACITY_CATEGORY_IDS):
+            raise PublicContractError(f"observations[{index}].capacity_domains must be an array of known domain ids.")
+        if len(capacity_domains) != len(set(capacity_domains)):
+            raise PublicContractError(f"observations[{index}].capacity_domains must not contain duplicates.")
+        invalid_domains = [value for value in capacity_domains if value not in CAPACITY_CATEGORY_IDS]
+        if invalid_domains:
+            raise PublicContractError(
+                f"observations[{index}].capacity_domains contains unknown ids: " + ", ".join(map(str, invalid_domains))
+            )
         result.append({
             "text": text,
             "source": source.strip(),
             "confidence": confidence,
             "occurred_at": occurred_at,
+            "capacity_domains": list(capacity_domains),
         })
     return result
 

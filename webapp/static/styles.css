@@ -1046,6 +1046,16 @@ svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3
   border: 1px solid currentColor;
   font-weight: 700;
 }
+.narrative-ai-note { max-width: 28rem; margin: .55rem 0 0; color: var(--text-secondary); font-size: .78rem; line-height: 1.45; text-align: right; }
+.remote-mythic-intro { margin: 1.25rem 0 2rem; padding: 1rem 1.2rem; border-left: 2px solid var(--accent); background: var(--surface-subtle); }
+.remote-mythic-intro p { margin: 0 0 .35rem; }
+.remote-mythic-intro small { color: var(--text-secondary); }
+.remote-mythic-story { max-width: 52rem; margin: 0 auto; }
+.remote-mythic-story h3 { font: clamp(2rem, 4vw, 3.4rem)/1.08 var(--font-display); margin: 2.5rem 0 1rem; text-wrap: balance; }
+.remote-mythic-story h4 { font: clamp(1.45rem, 2.6vw, 2.1rem)/1.2 var(--font-display); margin: 2.25rem 0 .8rem; text-wrap: balance; }
+.remote-mythic-story h5 { font: 1.15rem/1.3 var(--font-display); margin: 1.75rem 0 .6rem; }
+.remote-mythic-story p, .remote-mythic-story li { font-size: 1.04rem; line-height: 1.82; color: var(--text-secondary); }
+.remote-mythic-story strong { color: var(--text-primary); font-weight: 650; }
 .narrative-disclaimer,
 .living-pattern-limits {
   max-width: 72ch;
@@ -1081,3 +1091,95 @@ svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3
   .narrative-ledger > .table-scroll { display: block !important; overflow: visible; }
   .narrative-ledger table { min-width: 0; font-size: 8pt; }
 }
+
+/* Long-form local readings and the independent tarot spread. */
+.narrative-contents { display: flex; flex-wrap: wrap; gap: .6rem 1.2rem; padding: 1.25rem 0; border-block: 1px solid var(--border-default); }
+.narrative-contents a { padding-block: .4rem; }
+.narrative-paragraph { margin-block: 1rem; }
+.narrative-paragraph .narrative-sentence { line-height: 1.8; }
+.tarot-reading { width: min(calc(100% - 2rem), 74rem); margin: 5rem auto; padding-top: 3rem; border-top: 1px solid var(--accent); }
+.tarot-heading { max-width: 46rem; margin-bottom: 2rem; }
+.tarot-heading h2 { font: clamp(2.4rem, 5vw, 4.5rem)/1.1 var(--font-display); margin: .5rem 0 1rem; }
+.tarot-choices { border: 0; padding: 0; margin: 0 0 1.5rem; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 1rem; }
+.tarot-choices legend { padding: 0 0 1rem; }
+.tarot-choices label { border: 1px solid var(--border-default); padding: 1.25rem; display: flex; align-items: start; gap: .75rem; cursor: pointer; border-radius: var(--radius-medium); }
+.tarot-choices label:has(input:checked) { border-color: var(--accent); background: var(--surface-subtle); }
+.tarot-choices small { display: block; color: var(--text-secondary); margin-top: .5rem; }
+.tarot-reading textarea { width: 100%; }
+.tarot-spread-stage { display: grid; gap: clamp(1rem, 2.4vw, 2rem); margin: 2.5rem auto 3.5rem; align-items: center; justify-items: center; }
+.tarot-spread-stage[data-spread="focus"] { grid-template-columns: minmax(14rem, 19rem); justify-content: center; max-width: 24rem; }
+.tarot-spread-stage[data-spread="situation"] { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 62rem; }
+.tarot-spread-stage[data-spread="crossroads"] { grid-template-columns: repeat(3, minmax(12rem, 1fr)); grid-template-rows: repeat(3, auto); max-width: 62rem; }
+.tarot-spread-stage[data-spread="crossroads"] > .tarot-card-visual:nth-child(1) { grid-column: 2; grid-row: 2; }
+.tarot-spread-stage[data-spread="crossroads"] > .tarot-card-visual:nth-child(2) { grid-column: 1; grid-row: 2; }
+.tarot-spread-stage[data-spread="crossroads"] > .tarot-card-visual:nth-child(3) { grid-column: 3; grid-row: 2; }
+.tarot-spread-stage[data-spread="crossroads"] > .tarot-card-visual:nth-child(4) { grid-column: 2; grid-row: 1; }
+.tarot-spread-stage[data-spread="crossroads"] > .tarot-card-visual:nth-child(5) { grid-column: 2; grid-row: 3; }
+.tarot-card-visual { width: min(100%, 17rem); min-width: 0; }
+.tarot-card-face { aspect-ratio: 2 / 3; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 1.35rem; text-align: center; border: 1px solid var(--accent); outline: 1px solid var(--border-default); outline-offset: -9px; background: radial-gradient(circle at 50% 36%, var(--surface-subtle), var(--surface-raised) 68%); color: var(--accent); box-shadow: 0 18px 50px rgba(0,0,0,.16); }
+.tarot-position { color: var(--text-secondary); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+.tarot-card-mark { font-size: clamp(3.5rem, 7vw, 5rem); line-height: 1.2; }
+.tarot-card-name { font: clamp(1.4rem, 2.5vw, 2rem)/1.15 var(--font-display); color: var(--text-primary); text-wrap: balance; }
+.tarot-card-face small { color: var(--text-secondary); }
+.tarot-interpretations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.5rem; margin: 1rem 0 2.5rem; }
+.tarot-interpretations[data-spread="focus"] { grid-template-columns: minmax(0, 44rem); }
+.tarot-card-reading { min-width: 0; overflow-wrap: anywhere; padding: 1.25rem 0 1.5rem; border-top: 1px solid var(--border-default); }
+.tarot-reading-position { margin: 0 0 .35rem; color: var(--accent) !important; font-size: .75rem; letter-spacing: .09em; text-transform: uppercase; }
+.tarot-card-reading h4 { font: 1.55rem/1.3 var(--font-display); margin: 0 0 .5rem; }
+.tarot-card-question { font-style: italic; }
+.tarot-card-reading p { color: var(--text-secondary); }
+.tarot-card-reading summary, .tarot-method summary { min-height: 44px; cursor: pointer; color: var(--accent); }
+.tarot-intention { font-style: italic; overflow-wrap: anywhere; }
+@media (max-width: 720px) {
+  .tarot-choices { grid-template-columns: 1fr; }
+  .tarot-reading { margin-block: 3rem; }
+  .tarot-spread-stage, .tarot-spread-stage[data-spread="focus"], .tarot-spread-stage[data-spread="situation"], .tarot-spread-stage[data-spread="crossroads"] { grid-template-columns: 1fr; grid-template-rows: none; max-width: 20rem; }
+  .tarot-spread-stage[data-spread="crossroads"] > .tarot-card-visual:nth-child(n) { grid-column: auto; grid-row: auto; }
+  .tarot-interpretations, .tarot-interpretations[data-spread="focus"] { grid-template-columns: 1fr; }
+  .narrative-ai-note { text-align: left; max-width: none; }
+  .narrative-contents { display: grid; grid-template-columns: 1fr; }
+  .narrative-contents a { min-height: 44px; }
+}
+@media print {
+  .narrative-contents, .tarot-reading form, [data-tarot-save], [data-tarot-status] { display: none !important; }
+  .tarot-reading:has([data-tarot-result]:empty) { display: none; }
+  .tarot-card-reading { break-inside: avoid; }
+  .tarot-spread { display: block; }
+}
+.narrative-chapter > summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; cursor: pointer; min-height: 56px; }
+.narrative-chapter > summary h3 { margin: 0; }
+.narrative-chapter > summary span { color: var(--text-secondary); white-space: nowrap; }
+.narrative-chapter > summary::before { content: '+'; color: var(--accent); }
+.narrative-chapter[open] > summary::before { content: '−'; }
+.narrative-chapter { scroll-margin-top: 5rem; }
+@media (max-width: 460px) { .narrative-chapter > summary { flex-wrap: wrap; } }
+
+/* Human Capacity / Sumerian me reflection */
+.me-reflection-setup { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border-default); }
+.me-reflection-setup > p { max-width: 72ch; color: var(--text-secondary); }
+.me-observation-list { display: grid; gap: 1rem; margin: 1rem 0; }
+.me-observation-card { padding: 1rem; border: 1px solid var(--border-default); border-radius: var(--radius-medium); background: var(--surface-subtle); }
+.me-observation-card__header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.me-observation-card__header h5 { margin: 0; font: 1.15rem/1.3 var(--font-display); }
+.me-domain-fieldset { margin: 1rem 0 0; padding: 0; border: 0; }
+.me-domain-fieldset legend { font-weight: 700; margin-bottom: .35rem; }
+.me-domain-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-top: .8rem; }
+.me-domain-choice { display: flex; align-items: flex-start; gap: .65rem; min-width: 0; padding: .75rem; border: 1px solid var(--border-default); border-radius: var(--radius-small); cursor: pointer; }
+.me-domain-choice:has(input:checked) { border-color: var(--accent); background: var(--surface-raised); }
+.me-domain-choice input { margin-top: .2rem; }
+.me-domain-choice span { min-width: 0; }
+.me-domain-choice small { display: block; margin-top: .25rem; color: var(--text-secondary); overflow-wrap: anywhere; }
+.me-reflection-result { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--accent); }
+.me-reflection-result header { max-width: 72ch; }
+.me-epistemic-chain { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1rem 0 1.5rem; }
+.me-epistemic-chain > div { display: grid; grid-template-columns: auto 1fr; gap: .15rem .65rem; align-items: center; padding: .85rem; border: 1px solid var(--border-default); }
+.me-epistemic-chain span { grid-row: 1 / 3; display: grid; place-items: center; width: 2rem; height: 2rem; border: 1px solid var(--accent); border-radius: 50%; color: var(--accent); font-weight: 700; }
+.me-epistemic-chain small { color: var(--text-secondary); }
+.me-match-list { display: grid; gap: .65rem; }
+.me-match { border: 1px solid var(--border-default); padding: .75rem 1rem; }
+.me-match summary { min-height: 44px; cursor: pointer; }
+.me-match summary span { display: grid; gap: .2rem; }
+.me-match summary small { color: var(--text-secondary); font-weight: 400; }
+.me-match p { overflow-wrap: anywhere; }
+@media (max-width: 720px) { .me-domain-grid, .me-epistemic-chain { grid-template-columns: 1fr; } }
+@media print { .me-reflection-setup { display: none !important; } .me-match { break-inside: avoid-page; } }

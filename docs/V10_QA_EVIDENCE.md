@@ -1,6 +1,10 @@
 # v1.0 release-candidate QA evidence
 
-Date: 2026-07-18 (America/Chicago)
+> **Scope note (2026-09-17):** the current Human Manual card-release candidate has fresh automated code, browser, download, privacy, Story-mode, and Sumerian-reflection evidence in Headless Chrome 153. The older physical-device evidence below remains useful but predates parts of this release; physical Android/iPhone and TalkBack/VoiceOver completion remains a separate open gate.
+
+Original physical-device date: 2026-07-18 (America/Chicago)
+
+Current automated release-candidate update: 2026-09-17
 
 ## Physical-device matrix
 
@@ -18,20 +22,15 @@ flows. The Android USB/ADB connection was absent at the end of the run.
 
 ### Final automated release-gate rerun
 
-After the last provenance, verifier, narrative wording, and stale-highlight
-patches, the exact candidate checkout produced:
+On the final Human Manual release-candidate tree, the verification gate produced:
 
-- `.venv/bin/python -m pytest -q` — **294 passed, 95 subtests passed**.
-- `.venv/bin/python -m pytest --collect-only -q` — **294 tests collected**.
-- `.venv/bin/python tools/run_tests.py --quiet` — **42 test files; 0 failures;
-  `ALL_TESTS_PASS`**.
-- `.venv/bin/python tools/validate_contracts.py` —
-  **`PUBLIC_CONTRACTS_VALID`**.
+- `.venv/bin/python -m pytest -q` — **383 passed, 100 subtests passed**.
+- `.venv/bin/python tools/run_tests.py --quiet` — **57 test files; 0 failures; `ALL_TESTS_PASS`**.
+- `.venv/bin/python tools/validate_contracts.py` — **`PUBLIC_CONTRACTS_VALID`** and **`SYSTEM_RESULT_V2_SCHEMA_VALID`**.
 - `.venv/bin/python -m compileall -q src webapp` — exit 0, no output.
-- `node --check webapp/static/app.js` and `node --check
-  webapp/static/atlas.js` — exit 0, no output.
+- `node --check` over every `webapp/static/*.js` file and `tools/capture_atlas_baselines.mjs` — exit 0.
 - `git diff --check` — exit 0, no output.
-- Dedicated synthesis/narrative suite — **32 passed**.
+- Deterministic storytelling contracts cover the versioned prose lexicon, byte-stable replay, evidence-ID preservation, zero public remote-model path, richer Story prose, and Agent Handoff export.
 
 ### Physical Android defect evidence
 
@@ -81,46 +80,44 @@ patches, the exact candidate checkout produced:
 
 ## Automated browser matrix
 
-Command:
+Final release command (with `HME_PYTHON_BIN` pointed at the repository's verified `.venv` interpreter):
 
 ```bash
-HME_RUN_NETWORK_QA=1 node tools/capture_atlas_baselines.mjs
+HME_RUN_NETWORK_QA=1 HME_QA_PORT=8900 HME_QA_DEBUG_PORT=9440 node tools/capture_atlas_baselines.mjs
 ```
 
-Environment: Headless Chrome 150.0.0.0 on macOS, device scale factor 1. The
-390 × 844 and other narrow-width checks use Chrome mobile metrics emulation.
+Environment: Headless Chrome 153.0.0.0 on macOS, device scale factor 1. Mobile checks use Chrome device-metrics emulation; they are browser evidence, not a substitute for physical-device QA.
 
 | Flow/check | Result |
 | --- | --- |
+| Human Manual / Inversion Labs public identity | PASS |
+| Privacy/trust disclosure before the first PII field | PASS |
+| First-run horizontal overflow at 320/360/390/412/768 CSS px | PASS |
 | Exact birth via real form/API with explicit IANA zone and coordinates | PASS |
 | Name-only via real form/API | PASS |
 | Unknown exact time | PASS — astrology remains, Human Design is explicitly unavailable, summary says Date only |
 | Live ambiguous location (`Springfield`, Open-Meteo) | PASS — multiple keyboard-operable choices rendered |
 | Hostile HTML-like name | PASS — rejected; no inserted element |
-| Six surface count | PASS |
-| Duplicate element IDs | PASS — none in the rendered exact-birth Atlas/report DOM |
+| Six surface count and unique element IDs | PASS |
 | Constellation, astrology, center/gate, Tree, numerology, fingerprint selection | PASS — one current selection and inspector detail each |
-| Chrome accessibility tree | PASS — 169 named buttons; calculated root, planets, centers, and gates exposed by name |
+| Chrome accessibility tree | PASS — 174 named buttons; calculated root, planets, centers, and gates exposed by name |
 | Repeated Explorer/Research switching | PASS — presentation changes with zero fetch calls |
+| Story mode | PASS — deterministic local Story renders with zero additional fetch calls |
+| Post-report bring-your-own-agent handoff prompt | PASS |
 | Fullscreen fallback | PASS — opens, Escape closes, focus returns to the control |
-| Horizontal overflow at 320/360/390/412/768 CSS px | PASS |
-| Print media | PASS — gate index and Research text/provenance visible; inspector hidden |
-| Print action | PASS |
-| Markdown download | PASS — one `.md` file with expected report heading |
+| Result horizontal overflow at 320/360/390/412/768 CSS px | PASS |
+| Print media and print action | PASS |
+| Markdown download | PASS — one Human Manual `.md` file containing `## Agent Handoff` and `human-manual-agent-handoff-v1` |
 | Repeated exact fixture | PASS — Atlas DOM is byte-identical |
-| Exact-birth → name-only replacement | PASS — planet/center marks removed; at least two unavailable panels |
+| Human Capacity / Sumerian me reflection | PASS — exact explicit tags, three-layer boundary, no score/rank, 390px no-overflow |
+| Exact-birth → name-only replacement | PASS — planet/center marks removed; unavailable panels replace exact-birth surfaces |
 | Start new analysis | PASS — prior dashboard becomes hidden |
 
-The machine-readable capture hashes, widths, scroll positions, and individual
-selection results are in `docs/assets/ui-v10/manifest.json`.
+The machine-readable hashes, widths, scroll positions, exact fixtures, and individual checks are in `docs/assets/ui-v10/manifest.json`.
 
 ## Manual screenshot inspection
 
-The nine committed sanitized PNGs were inspected for visible clipping, missing
-glyph boxes, misleading stale data, and unavailable-state clarity. The focused
-desktop and 390-pixel captures show the constellation, astrology symbols,
-center/channel diagram, gate index, Research mode, and name-only unavailable
-state. No user or personal-report fixture is present.
+The 14 sanitized PNGs in the final manifest were inspected for visible clipping, missing glyph boxes, misleading stale data, and unavailable-state clarity. They cover the Human Manual first run, pre-input privacy boundary, exact-birth workspace, focused astronomy/bodygraph/constellation surfaces, Research mode, name-only unavailable state, and the Sumerian reflection on desktop and 390-pixel mobile. Fixtures are synthetic; no real user report is committed.
 
 This inspection is evidence for the captured Chrome/font environment only. It
 does not prove zodiac, planetary, I Ching, or Tree-of-Life font coverage on the
@@ -128,9 +125,12 @@ unavailable physical Android/iPhone targets.
 
 ## Release implication
 
-Automated and static evidence is green, but the explicit physical Android,
-TalkBack, iPhone Safari, and VoiceOver release gates in `RELEASE_GATES.md` are
-open. The defensible public-release status is **NOT READY** until those required
-device gates pass. The deterministic Narrative Synthesis layer also requires
-its live physical/mobile interaction rerun. The local implementation remains a
-release candidate with the documented v1.1 topology boundary.
+The automated public-demo/card-pilot gate is green for the current Human Manual candidate. Physical Android/iPhone and TalkBack/VoiceOver completion remains open and must not be described as verified. Therefore this evidence supports a bounded public demo/card rollout, not a claim that every general-consumer physical-device gate in `RELEASE_GATES.md` is closed.
+
+## Post-v1.0 Sumerian reflection delta
+
+The current release candidate includes an opt-in observation/tag interface and three-layer result view. Static/frontend/server contracts verify explicit opt-in, user-selected category tags, historical/modern boundaries, disabled-by-default behavior, raw-observation redaction, and absence of reflection scoring.
+
+A sanitized synthetic browser fixture exercises the same public UI path with `crafts_and_technical_practice` and `knowledge_and_judgment`. Headless Chrome 153 rendered exactly two expandable matches, the labels **Personal evidence → Modern analytical bridge → Historical corpus**, the explicit historical-personal boundary statement, and no horizontal overflow at 390 CSS pixels. The mobile capture is fully readable. The desktop subsection capture is functionally complete but its heading is partially under the sticky report bars because the baseline helper scrolls the subsection flush to the viewport; this is capture framing, not hidden result content or horizontal overflow.
+
+Final reflection capture hashes: `desktop-sumerian-reflection.png` = `86b8945e1703439b0e97a17af323297a96194bd2bd92a312d451cb73688ea920`; `mobile-sumerian-reflection.png` = `7b0e5a6edc1f1fe092c7f93ee62bba2fa1f73928603c4a9a49b45140f3677e30`. This browser evidence does **not** replace TalkBack/VoiceOver or physical Android/iPhone QA for the new controls.

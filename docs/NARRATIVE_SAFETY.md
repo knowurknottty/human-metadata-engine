@@ -26,9 +26,7 @@ closed on invented IDs, prohibited language, and prohibited topics.
 
 ## Privacy
 
-Synthesis is in-process, deterministic, and not persisted. No remote model is
-called, no provider key exists, and no raw profile is added to logs. Markdown
-downloads use a random, short-lived, process-memory token. The visible browser
+Core synthesis and all three public narrative views are in-process, deterministic, and not persisted. No remote language model receives profile or narrative data from the public application path. No raw profile is added to application request logs. Markdown downloads use a random, short-lived, process-memory token. The visible browser
 action submits a same-origin form, receives a `303` redirect, and follows that
 redirect to a GET attachment in the same user-initiated navigation instead of
 waiting on an asynchronous handoff.
@@ -38,16 +36,11 @@ queue the generated report for at most 120 seconds and serve it with
 no server-side report file.
 
 Exports intentionally omit exact coordinates, exact birth location, and raw
-observation text under the existing public redaction/report policy. A user who
-saves a Markdown or PDF file is responsible for the resulting local copy.
+observation text under the existing public redaction/report policy. The optional Sumerian *me* reflection likewise returns observation references, source/confidence metadata, explicit capacity tags, and matched corpus categories without copying raw observation prose into the reflection object. A user who saves a Markdown or PDF file is responsible for the resulting local copy.
 
-## Optional AI boundary
+## External-agent boundary
 
-No AI realization adapter ships in v1. If introduced later, it must be opt-in,
-receive only a validated `synthesis-plan-v1`, disclose transmitted fields and
-provider, return schema-valid `narrative-v1`, and pass the same deterministic
-verifier. Failure must fall back to deterministic templates; remote operation
-must never be required for core functionality.
+The public application does not call a remote language model for narrative prose. Story mode is produced by the deterministic compositor and versioned prose lexicon. The Markdown export includes an **Agent Handoff** section so a person may deliberately take the file to an assistant of their choice after download. That external use is outside this server's trust boundary; the handoff instructs the receiving agent to preserve provenance, contradictions, missing data, and epistemic labels and not invent personal facts.
 
 ## Resource limits and isolation
 
