@@ -4,6 +4,8 @@ from __future__ import annotations
 import hashlib
 
 LEXICON_VERSION = "deterministic-prose-lexicon-v1"
+LITERARY_EXPANSION_MIN_FACTOR = 2
+LITERARY_EXPANSION_PREFERRED_FACTOR = 5
 
 LEXICON_BANKS = {
     "story_openers": (
@@ -113,6 +115,20 @@ LEXICON_BANKS = {
         "A good story can stay honest about where its evidence ends.",
     ),
 }
+
+
+def literary_inventory() -> dict[str, int]:
+    items = [item for bank in LEXICON_BANKS.values() for item in bank]
+    return {"banks": len(LEXICON_BANKS), "usable_units": len(items), "unique_units": len(set(items))}
+
+
+def literary_expansion_targets(previous_accepted_units: int) -> dict[str, int]:
+    if previous_accepted_units < 1:
+        raise ValueError("previous_accepted_units must be positive")
+    return {
+        "minimum": previous_accepted_units * LITERARY_EXPANSION_MIN_FACTOR,
+        "preferred": previous_accepted_units * LITERARY_EXPANSION_PREFERRED_FACTOR,
+    }
 
 
 def _pick(seed: str, bank: str, salt: str) -> str:
