@@ -33,3 +33,11 @@ def test_first_run_explains_network_boundary_before_name_input():
 def test_public_brand_assets_exist():
     assert (STATIC / "assets" / "inversion-labs-infinite-key.jpg").is_file()
     assert (STATIC / "assets" / "inversion-labs-more-human-possible.jpg").is_file()
+
+def test_public_copy_names_human_lineage_and_agent_handoff():
+    assert "Designed by humans across centuries. Computed, compared, and converged by Inversion Labs." in HTML
+    lowered = APP.casefold()
+    assert "cool fucking story" in lowered
+    assert "favorite agent" in lowered
+    assert "welcome to the inversion" in lowered
+    assert "reportactions(true)" in lowered

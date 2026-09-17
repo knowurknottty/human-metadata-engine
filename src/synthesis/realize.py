@@ -6,6 +6,7 @@ import hashlib
 
 from .contracts import NARRATIVE_SCHEMA_VERSION, TEMPLATE_VERSION
 from .reading_library import LIBRARY_VERSION
+from .prose_lexicon import LEXICON_VERSION, enrich_synthesis_sentence
 
 MODES = {"plain", "mythic", "research"}
 
@@ -19,7 +20,7 @@ def _sentence(claim: dict, text: str) -> dict:
     }
 
 
-def _text(claim: dict, mode: str) -> str:
+def _base_text(claim: dict, mode: str) -> str:
     motif = claim["motif"].replace("|", " and ")
     meta = claim["metadata"]
     kind = claim["claim_type"]
@@ -90,6 +91,15 @@ def _text(claim: dict, mode: str) -> str:
     return f"The plan records {motif} as a bounded interpretive claim."
 
 
+def _text(claim: dict, mode: str, analysis_id: str) -> str:
+    base = _base_text(claim, mode)
+    seed = f"{analysis_id}:{claim['claim_id']}:{mode}"
+    return enrich_synthesis_sentence(
+        base, seed=seed, mode=mode, claim_type=claim["claim_type"],
+        contradiction=bool(claim["contradicting_evidence_ids"] or claim["claim_type"] == "tension"),
+    )
+
+
 def realize(plan: dict, mode: str) -> dict:
     if mode not in MODES:
         raise ValueError("Narrative mode must be plain, mythic, or research.")
@@ -97,7 +107,7 @@ def realize(plan: dict, mode: str) -> dict:
     for planned in plan["narrative_sections"]:
         if planned["section_id"] == "evidence_ledger":
             continue
-        sentences = [_sentence(claim, _text(claim, mode)) for claim in planned["claims"]]
+        sentences = [_sentence(claim, _text(claim, mode, plan["analysis_id"])) for claim in planned["claims"]]
         if not sentences:
             continue
         sections.append({
@@ -112,9 +122,9 @@ def realize(plan: dict, mode: str) -> dict:
         "sections": sections, "summary": plan["central_archetype"]["definition"],
         "disclaimer": "A deterministic symbolic reflection, not scientific personality measurement, diagnosis, prediction, or destiny.",
         "generation_metadata": {
-            "engine": "deterministic-template", "model": None, "prompt_version": None,
+            "engine": "deterministic-compositor", "model": None, "prompt_version": None,
             "temperature": 0, "generated_at": None, "template_version": TEMPLATE_VERSION,
             "deterministic_input_hash": hashlib.sha256(canonical.encode()).hexdigest(),
-            "remote_provider_used": False, "reading_library_version": LIBRARY_VERSION,
+            "remote_provider_used": False, "reading_library_version": LIBRARY_VERSION, "lexicon_version": LEXICON_VERSION,
         },
     }

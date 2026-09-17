@@ -40,8 +40,8 @@ class WebSymbolicSurfaceTests(unittest.TestCase):
     def test_landing_copy_describes_the_expansion_without_empirical_claims(self):
         with open(os.path.join(ROOT, "webapp", "static", "index.html"), encoding="utf-8") as handle:
             source = handle.read()
-        self.assertIn("Explore the systems. Trace every result.", source)
-        self.assertIn("Every active mark traces back to structured engine output", source)
+        self.assertIn("The Human Manual,", source)
+        self.assertIn("keeps every layer traceable to its method", source)
         self.assertIn("not a diagnosis, personality test, prediction, or scientific proof", source)
 
     def test_fake_checkout_is_removed_and_full_report_actions_are_available(self):

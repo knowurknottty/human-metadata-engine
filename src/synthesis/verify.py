@@ -36,8 +36,10 @@ def verify_narrative(evidence_packet: dict, plan: dict, narrative: dict) -> dict
                     claim = claims.get(claim_id)
                     if claim and claim["claim_type"] == "reading":
                         expected = claim["metadata"]["texts"].get(narrative.get("mode"))
-                        if sentence.get("text") != expected or set(referenced) != set(claim["evidence_ids"]):
-                            errors.append({"sentence_id": sid, "category": "reading_mismatch", "detail": "Reading differs from its planned authored text or evidence.", "action": "reject"})
+                        actual = sentence.get("text") or ""
+                        text_matches = actual == expected or (narrative.get("mode") == "mythic" and actual.startswith(expected + " "))
+                        if not text_matches or set(referenced) != set(claim["evidence_ids"]):
+                            errors.append({"sentence_id": sid, "category": "reading_mismatch", "detail": "Reading must preserve its planned authored text and exact evidence before deterministic Story enrichment.", "action": "reject"})
                 unknown_evidence = set(referenced) - evidence_ids
                 if unknown_evidence:
                     errors.append({"sentence_id": sid, "category": "unknown_evidence", "detail": ",".join(sorted(unknown_evidence)), "action": "reject"})

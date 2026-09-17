@@ -1,9 +1,6 @@
 # Narrative Synthesis Engine v1
 
-The public feature is named **Human Metadata Narrative** and appears in the
-Atlas as **The Living Pattern**. The first name describes the versioned data
-product; the second matches the Atlas's visual, exploratory language without
-claiming that a symbolic synthesis is a scientific model of a person.
+The public feature is **The Living Pattern** inside **The Human Manual**. Internally, it remains the versioned deterministic narrative-synthesis subsystem. Public naming does not change the evidence, plan, or narrative schemas, and the symbolic synthesis is never presented as a scientific model of a person.
 
 ## Boundary and data flow
 
@@ -32,7 +29,8 @@ The code boundaries are:
   versioned, project-authored normalization decisions.
 - `src/synthesis/analysis.py` — motif ranking, agreement, and contradiction.
 - `src/synthesis/plan.py` — deterministic claims and section architecture.
-- `src/synthesis/realize.py` — bounded mode-specific templates.
+- `src/synthesis/realize.py` — bounded mode-specific realization.
+- `src/synthesis/prose_lexicon.py` — versioned deterministic vocabulary banks and connective-prose composition.
 - `src/synthesis/verify.py` — sentence/claim/evidence, prohibited-language, and
   prohibited-topic verification.
 - `src/synthesis/pipeline.py` — composition only; no extraction or scoring
@@ -71,8 +69,7 @@ two independent groups. Otherwise the output says that no single archetype
 dominates. Titles compose the highest supported motifs instead of selecting a
 generic personality from a small fixed catalog.
 
-Plain, mythic, and research modes use the same deterministic claim IDs, evidence IDs,
-strengths, contradictions, and section plan. Plain and Research realization are local. Mythic has a deterministic local realization and may request optional remote narration through a separately bounded adapter when configured; remote failure leaves the deterministic plan/result intact. The remote packet excludes raw identity, birth, psychology, and observation data.
+Grounded (`plain`), Story (`mythic`), and Sources (`research`) use the same deterministic claim IDs, evidence IDs, strengths, contradictions, and section plan. All three are generated in-process. Story enriches the authored base readings with deterministic, seed-stable openings, transitions, counterpoints, reflection prompts, and closings from `deterministic-prose-lexicon-v1`; no remote language model participates in the public narrative path.
 
 ## Data quality
 

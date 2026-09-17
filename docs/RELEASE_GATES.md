@@ -1,4 +1,4 @@
-# Human Metadata Engine Release Gates
+# The Human Manual Release Gates
 
 This document turns the human-usability review into testable release criteria.
 It is the source of truth for what can ship as a local demo, paid beta, or
@@ -14,7 +14,7 @@ deployment, payment boundary, or privacy posture is production-ready.
 | Browser flow | Name-only, full Kirk fixture, unknown time, ambiguity selection, multi-error recovery, alias tokens, report focus/actions, and 320 CSS-pixel completion | Verified in the local in-app browser; physical-device QA remains |
 | Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |
 | Visual knowledge layer | Six computed visual surfaces, a shared provenance inspector, Explorer/Research modes, and text/print equivalents | Verified locally in headless Chrome; physical-device QA remains |
-| Narrative synthesis layer | Versioned evidence/plan/narrative contracts, explicit ontology, deterministic realization, verifier, sentence-level Atlas links, and optional bounded remote Mythic narration | Automated contracts verified locally; complete physical-device interaction QA remains |
+| Narrative synthesis layer | Versioned evidence/plan/narrative contracts, explicit ontology, deterministic compositor, 90+ phrase initial lexicon, verifier, sentence-level evidence links, and local Grounded/Story/Sources views | Automated contracts verified locally; complete physical-device interaction QA remains |
 | Human Capacity / 𒈨 reflection | Historical/textual ontology, explicit modern crosswalk, opt-in observation tags, no semantic inference, no score/rank, public-text redaction | API/frontend contracts verified locally; refreshed browser baseline and physical-device interaction QA remain |
 | Optional Big Five handling | Untouched sliders render `Not answered` and are omitted from the request payload | Verified locally |
 | External deployment reachability | Must be checked from an independent network against the deployed HTTPS domain | Unverified until run |
@@ -27,7 +27,7 @@ deployment, payment boundary, or privacy posture is production-ready.
 Release only when every item below is true:
 
 - [ ] A stable domain serves the app over HTTPS with a valid certificate.
-- [ ] `/api/health` (or an equivalent public health endpoint) is reachable from an independent network.
+- [ ] `/healthz` and `/readyz` is reachable from an independent network.
 - [ ] The deployed process is supervised with restart policy. Application request timeouts and structured error codes are implemented locally.
 - [ ] Security headers are present at the actual ingress, including HSTS, CSP, Referrer-Policy, Permissions-Policy, and X-Content-Type-Options.
 - [ ] The UI says that inputs are processed for the report, are not intentionally retained by the web process, and may still appear in infrastructure logs.
@@ -36,9 +36,9 @@ Release only when every item below is true:
 - [x] No checkout, card field, paywall, or simulated entitlement is shipped.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
 - [x] The first result view contains analysis identity, coverage, six computed visual surfaces, and a provenance/limitations inspector. The complete report remains the Research-mode reference layer (verified by frontend contracts; browser interaction verification is release-candidate evidence).
-- [x] Magic mode exposes the Living Pattern from a deterministic evidence/claim plan. The three deterministic realizations preserve identical claims, confidence, contradictions, and evidence links; optional remote Mythic narration is a separate bounded presentation path with deterministic fallback. Data mode keeps narrative disabled.
-- [x] The Human Capacity / 𒈨 request contract is opt-in, requires explicit user-selected capacity tags, rejects unknown/duplicate domain IDs, and returns no automatic score/rank/assignment.
-- [ ] Browser and physical-device QA confirms the new 𒈨 observation/tag controls and three-layer result remain understandable, keyboard-operable, and overflow-free at release target widths.
+- [x] Magic mode exposes The Living Pattern from a deterministic evidence/claim plan. Grounded, Story, and Sources preserve identical claims, confidence, contradictions, and evidence links. Story is generated in-process by the deterministic compositor and versioned prose lexicon; no remote model is required or called. Data mode keeps narrative disabled.
+- [x] The Human Capacity / Sumerian me request contract is opt-in, requires explicit user-selected capacity tags, rejects unknown/duplicate domain IDs, and returns no automatic score/rank/assignment.
+- [ ] Browser and physical-device QA confirms the new Sumerian me observation/tag controls and three-layer result remain understandable, keyboard-operable, and overflow-free at release target widths.
 - [x] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings (frontend and API tests).
 - [x] CSS-viewport QA confirms readable explanatory text, stacked controls, expandable technical detail, and zero horizontal overflow at 320, 360, 390, 412, and 768 CSS pixels.
 - [ ] Physical-device QA confirms the same behavior in current iPhone Safari and Android Chrome.

@@ -1,9 +1,9 @@
 # v1.0 Visual Knowledge System
 
-> **Current status (2026-08-27):** This document remains the v1.0 Atlas interaction, data, accessibility, provenance, and rendering contract. The canonical outer public visual language is now **Identity Resonance**; see [`IDENTITY_RESONANCE_CANONICAL_SHELL.md`](IDENTITY_RESONANCE_CANONICAL_SHELL.md). The shell restoration is presentation-only and does not roll back this Atlas contract.
+> **Current status (2026-09-17):** This document remains the v1.0 deep-workspace interaction, data, accessibility, provenance, and rendering contract. The public product is **The Human Manual, for and by Humans** under Inversion Labs; **Identity Resonance** names the visual grammar used by the research workspace. Public naming and brand restoration do not roll back this contract.
 
 The v1.0.0 application changes the primary result from a document-first report
-to the **Human Metadata Atlas**. This is a presentation-layer release over the
+to the visual research workspace inside **The Human Manual** (internally still called the Atlas in code and schema-adjacent documentation). This is a presentation-layer release over the
 version-stable `analysis-v1` API, `signature-v2` engine, and `report-v1` report
 contracts. `analysis-v1` now has backward-compatible optional Sumerian-reflection request/response fields; the contract identifier itself is unchanged.
 
@@ -19,12 +19,11 @@ contracts. `analysis-v1` now has backward-compatible optional Sumerian-reflectio
 The visualization layer does not calculate symbolic results or infer missing
 relationships. Unavailable subsystems render an explicit unavailable state.
 
-## Human Metadata Narrative: The Living Pattern
+## The Living Pattern
 
 The concise Living Pattern card appears after analysis/coverage identity and
 before the six-surface rail. It does not replace or recalculate any surface.
-The backend supplies `synthesis-evidence-v1`, `synthesis-plan-v1`, and three
-deterministic `narrative-v1` realizations. Their claim IDs, evidence IDs, confidence, motif ranking, and contradictions are identical. Plain and Research display those local realizations directly. Mythic always has the deterministic realization available and may, when configured, overlay a separately bounded AI-authored narration; that remote prose is not itself the sentence-ID/evidence ledger.
+The backend supplies `synthesis-evidence-v1`, `synthesis-plan-v1`, and three deterministic `narrative-v1` realizations. Their claim IDs, evidence IDs, confidence, motif ranking, and contradictions are identical. Public labels are **Grounded**, **Story**, and **Sources**; all are generated in-process. Story adds deterministic authored vocabulary from the versioned prose lexicon and never calls a remote model.
 
 Every narrative sentence is a native button with its confidence, evidence
 count, and contradiction state in the accessible name. Activation highlights

@@ -1,6 +1,6 @@
 # Narrative epistemic boundaries
 
-The Human Metadata Narrative is a bounded symbolic reflection. Stable
+The Living Pattern inside The Human Manual is a bounded symbolic reflection. Stable
 calculation does not make traditional interpretation a scientific personality
 measurement.
 
@@ -58,6 +58,6 @@ ways to test a reflection against lived reality.
 
 ## Sumerian *me* boundary
 
-`sumerian_me_ontology` is historical/textual reference data. Its nine Human Metadata groupings and `inversion-labs-human-capacity-crosswalk-v1` are modern analytical structures. `sumerian-me-reflection-v1` is a third, modern interpretive layer that can consume only explicit observation tags under its current contract.
+`sumerian_me_ontology` is historical/textual reference data. Its nine Inversion Labs analytical groupings and `inversion-labs-human-capacity-crosswalk-v1` are modern analytical structures. `sumerian-me-reflection-v1` is a third, modern interpretive layer that can consume only explicit observation tags under its current contract.
 
 The reflection is outside the narrative motif ranking, composite resonance score, and fingerprint. A selected capacity domain means only that the person chose to compare an observation against that modern category; it does not show that the Sumerian text assigned a *me* to the person.

@@ -1,8 +1,8 @@
-# Human Metadata Engine
+# The Human Manual, for and by Humans
 
-A provenance-aware identity metadata architecture that encodes humans, aliases, projects, personas, and symbolic identities into a structured graph.
+**Inversion Labs** builds this as an inspectable, deterministic convergence of human-description systems: calculations, historical sources, symbolic traditions, user-supplied context, and explicitly labeled project-authored synthesis. The repository name `human-metadata-engine` remains an internal compatibility identifier; it is not the public product name.
 
-**v1.0.0 visual knowledge interface** — The primary result is the Human Metadata Atlas: a linked workspace for six calculated surfaces, a shared provenance inspector, and the evidence-linked **Human Metadata Narrative** shown as **The Living Pattern**. The deterministic Plain/Mythic/Research realizations share one claim/evidence plan; Mythic may additionally request a bounded optional remote narration when configured, with deterministic fallback. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; `synthesis-evidence-v1`, `synthesis-plan-v1`, `narrative-v1`, and the separately versioned Sumerian reflection contract evolve independently. No checkout or paid entitlement surface is present.
+**Current public experience** — **The Human Manual** opens into an evidence-linked visual workspace and **The Living Pattern** narrative. Grounded, Story, and Sources views share one deterministic claim/evidence plan. Story uses a versioned local prose lexicon and deterministic compositor; it does not call a remote language model. The downloadable Markdown includes an Agent Handoff contract for people who want to bring their own assistant afterward. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; synthesis and Sumerian-reflection contracts evolve independently.
 
 ## Quick Start — Web App
 
@@ -57,7 +57,7 @@ human-metadata-engine/
 │   │   ├── astrology.py             # Tropical astrology (Swiss Ephemeris)
 │   │   ├── human_design.py          # Human Design / Gene Keys (64 gates)
 │   │   └── psychology.py            # Big Five, MBTI, Enneagram (user-supplied)
-│   │   ├── pipeline.py               # 25-system provenance-aware expansion pipeline
+│   │   ├── pipeline.py               # 26-system provenance-aware expansion pipeline
 │   │   ├── kabbalah.py               # Tree of Life source module
 │   │   └── apollonius.py             # Apollonius source module, unified by pipeline
 │   ├── graph/
@@ -154,7 +154,7 @@ Second-order analysis computed on top of the unified signatures:
 | **Batch Reports** | Comparative ranking of any identity set (markdown + JSON) |
 | **Personality Snapshots** | Deterministic narrative from astrology + Human Design + psychology layers |
 | **Public Reports** | Concise Data mode or a ten-section truth-bounded Magic report with per-section epistemic metadata (`src/report_safe.py`) |
-| **Human Metadata Narrative** | Deterministic evidence extraction, project-authored motif normalization, independent-group agreement, preserved contradictions, and evidence-linked Plain/Mythic/Research realization (`src/synthesis/`) |
+| **The Living Pattern** | Deterministic evidence extraction, project-authored motif normalization, preserved contradictions, and evidence-linked Grounded/Story/Sources realization with a versioned local prose lexicon (`src/synthesis/`) |
 
 Reference population outputs are generated from the current engine version; dimension counts intentionally are not fixed across encoder releases.
 
@@ -374,7 +374,7 @@ Private — Inversion Labs
 
 The Living Pattern now includes detailed local chapters for name systems, natal
 placements and aspects, Human Design, and name-derived tarot correspondences.
-Plain, Mythic and Research retain the same evidence links. Chapter navigation,
+Grounded, Story, and Sources retain the same evidence links. Chapter navigation,
 expandable reading sections and complete Markdown export support longer readings.
 
 A separate **Tarot** section offers One-card focus, Situation / Challenge /

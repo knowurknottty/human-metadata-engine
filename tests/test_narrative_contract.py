@@ -42,8 +42,8 @@ def test_version_endpoint_reports_independent_schemas():
 
 def test_magic_export_contains_narrative_ledger_but_data_mode_does_not():
     magic = exact_result()
-    assert "## Human Metadata Narrative — The Living Pattern" in magic["report"]["markdown"]
+    assert "## The Human Manual Narrative — The Living Pattern" in magic["report"]["markdown"]
     assert "### Evidence ledger" in magic["report"]["markdown"]
     data = analyze({"name": "Ada Lovelace", "mode": "data"})
     assert data["synthesis"]["available"] is False
-    assert "Human Metadata Narrative" not in data["report"]["markdown"]
+    assert "The Human Manual Narrative" not in data["report"]["markdown"]

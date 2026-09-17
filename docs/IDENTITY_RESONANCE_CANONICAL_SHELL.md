@@ -2,9 +2,9 @@
 
 ## Decision
 
-**Identity Resonance** is the canonical public-facing visual language. **Human Metadata Engine** remains the authoritative computation/data substrate, and the **Human Metadata Atlas** remains the deep interactive research/provenance layer.
+**The Human Manual, for and by Humans** is the canonical public product identity under Inversion Labs. **Identity Resonance** remains the visual language of the deep interactive research/provenance workspace. The repository/engine naming remains an internal compatibility substrate rather than public product copy.
 
-This change is a presentation restoration, not an engine rollback.
+This change is a presentation and naming restoration, not an engine rollback.
 
 ## Implementation boundary
 
@@ -15,7 +15,7 @@ The restoration is implemented as a CSS override loaded after the existing style
 ## Visual invariants
 
 - near-black observatory field with restrained gold instrumentation;
-- Identity Resonance wordmark in the public shell;
+- Inversion Labs infinite-key mark and The Human Manual identity in the public shell; Identity Resonance remains the deep-workspace visual grammar;
 - identity fingerprint visually anchored at the left on wide screens;
 - astrology is the dominant central field;
 - Tree of Life and Human Design remain graphical and integrated into the same instrument workspace;

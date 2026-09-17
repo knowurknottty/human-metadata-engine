@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Human Metadata exposes the Sumerian *me* as an evidence-bearing historical corpus layer without converting it into an invented ancient personality system.
+The Human Manual exposes the Sumerian *me* as an evidence-bearing historical corpus layer without converting it into an invented ancient personality system.
 
 ## Layer 1 — historical/textual inventory
 
@@ -14,7 +14,7 @@ The value 81 is a bounded surviving-text count, not a claim that ancient Sumeria
 
 ## Layer 2 — modern analytical grouping
 
-The nine thematic categories in `src/encoders/sumerian_me.py` are Human Metadata classifications. ETCSL does not present the list under those nine headings, and the grouping does not preserve source order.
+The nine thematic categories in `src/encoders/sumerian_me.py` are Inversion Labs analytical classifications. ETCSL does not present the list under those nine headings, and the grouping does not preserve source order.
 
 Each category therefore carries `classification_epistemic_layer = modern_analytic`.
 
@@ -59,7 +59,7 @@ Raw observation text is never copied into the reflection result.
 
 ## Public UI contract
 
-The v1.0 Optional context form exposes **Human Capacity / Sumerian me Reflection** as an explicit checkbox. Each reflection observation has text/source/confidence fields plus the nine modern Human Metadata categories. The user must deliberately choose the categories; the browser and server do not infer them from the observation sentence.
+The v1.0 Optional context form exposes **Human Capacity / Sumerian me Reflection** as an explicit checkbox. Each reflection observation has text/source/confidence fields plus the nine modern Inversion Labs analytical categories. The user must deliberately choose the categories; the browser and server do not infer them from the observation sentence.
 
 The result renders three visible steps: **Personal evidence → Modern analytical bridge → Historical corpus**. Category matches are expandable and show the modern capacity crosswalk separately from the historical *me* items. The interface never displays a *me* score, rank, destiny claim, or automatic assignment.
 

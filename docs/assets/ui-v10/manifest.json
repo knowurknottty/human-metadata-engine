@@ -21,98 +21,131 @@
     }
   },
   "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
-  "command": "HME_QA_PORT=8876 HME_QA_DEBUG_PORT=9436 node tools/capture_atlas_baselines.mjs",
+  "command": "HME_RUN_NETWORK_QA=1 HME_QA_PORT=8900 HME_QA_DEBUG_PORT=9440 node tools/capture_atlas_baselines.mjs",
   "captures": [
     {
-      "file": "desktop-overview.png",
-      "sha256": "bb0f81c249e43d4299bee879afae2b3fc60ffb8d4109bf86855310fe649e1c6e",
+      "file": "desktop-first-run.png",
+      "sha256": "b47e1fb36fce315e86ef332c07ef09063db22291417fa32cfc232432598c5b5a",
       "width": 1440,
       "height": 1000,
       "mobile": false,
-      "scrollY": 77
+      "scrollY": 43
+    },
+    {
+      "file": "mobile-first-run.png",
+      "sha256": "0a1b968b14bdb1c3b97549b9bfda83410da145d70e77e0713a35ceafcb9b8b4d",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 43
+    },
+    {
+      "file": "mobile-privacy-before-input.png",
+      "sha256": "c4fb08f5b7cb91a2c6e199a62a38d73184967fd4bde9f58e40d8c082440488e9",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 1414
+    },
+    {
+      "file": "desktop-overview.png",
+      "sha256": "6b5cf1484a3b4f842fae0a793e35a2e9ac7ef2127e0a1fa0e210a75bd72e9c20",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 594
     },
     {
       "file": "desktop-astrology.png",
-      "sha256": "cf4039f703b62198062fecce35cc7c5e127453a5ff5626152791f4f85257d85e",
+      "sha256": "4687602d4a773863419d30e58ecdd5a88dbe68618d54d783c9a71b36f273bf22",
       "width": 1440,
       "height": 1000,
       "mobile": false,
-      "scrollY": 94
+      "scrollY": 578
     },
     {
       "file": "desktop-bodygraph.png",
-      "sha256": "572ce6c78dd3065670812631da3a767cc75da1d55afc88b03afb3e5da3e74864",
+      "sha256": "aa3a4ba95a641631d1b9e90ee5dbefe7854f03fadb5c9fbafbec2c87647d29e0",
       "width": 1440,
       "height": 1000,
       "mobile": false,
-      "scrollY": 80
+      "scrollY": 562
     },
     {
       "file": "desktop-constellation.png",
-      "sha256": "e4fc108783b1d44efe477858ff6089f24efb51e31c483f218d5a43be73e0b87b",
+      "sha256": "743590caeffba2ff28d1e47eacd6eb8bdab909dd18f4379aca4b569c67ce2617",
       "width": 1440,
       "height": 1000,
       "mobile": false,
-      "scrollY": 66
+      "scrollY": 546
     },
     {
       "file": "mobile-overview.png",
-      "sha256": "71518f2843c23e753e666ed479d0324aba20e39826f69d2254589b3bc2dc3183",
+      "sha256": "71d0fac933f0d48947b5db016522ae826a81653525dfced4a2cbd256db04d1ee",
       "width": 390,
       "height": 844,
       "mobile": true,
-      "scrollY": 71
+      "scrollY": 974
     },
     {
       "file": "mobile-astrology.png",
-      "sha256": "cd9f958bfc2d179bdc3c9393d500cdcb8916418dff245ac9289a8443147a9174",
+      "sha256": "72b77e57e1ea0b3a187c6d122a2273511ec44ab6f9c94fb00632a28db18988fb",
       "width": 390,
       "height": 844,
       "mobile": true,
-      "scrollY": 54
+      "scrollY": 1041
     },
     {
       "file": "mobile-bodygraph.png",
-      "sha256": "816b6bc08d3b3b2f0d8fe23f853b2653830aba6ce3075e12c2d3fbcda65aa85b",
+      "sha256": "86708eddb43aa8c4c978c5f0f722d623c8b9090917d2224dc1c17dd8b3cd8514",
       "width": 390,
       "height": 844,
       "mobile": true,
-      "scrollY": 38
+      "scrollY": 1025
     },
     {
       "file": "desktop-research.png",
-      "sha256": "f196171b757056fce4ff123d885735ed4cd4c602e95d51d401d5a41d30a14d56",
+      "sha256": "4caba5f20541be2d863f22bb731636faf8703a909369363c5723204bc205b567",
       "width": 1440,
       "height": 1000,
       "mobile": false,
-      "scrollY": 77
+      "scrollY": 594
     },
     {
       "file": "desktop-sumerian-reflection.png",
-      "sha256": "0c8251985a8bfb84ae85affabc3f99d63c8ad6c01d8af1e5bb5283270ef1b681",
+      "sha256": "86b8945e1703439b0e97a17af323297a96194bd2bd92a312d451cb73688ea920",
       "width": 1440,
       "height": 1000,
       "mobile": false,
-      "scrollY": 10071
+      "scrollY": 8839
     },
     {
       "file": "mobile-sumerian-reflection.png",
-      "sha256": "e252b0d8b18940756cf6ced6f984661b9959ef867a57ca1585fea803d5431591",
+      "sha256": "7b0e5a6edc1f1fe092c7f93ee62bba2fa1f73928603c4a9a49b45140f3677e30",
       "width": 390,
       "height": 844,
       "mobile": true,
-      "scrollY": 15093
+      "scrollY": 14013
     },
     {
       "file": "desktop-unavailable-name-only.png",
-      "sha256": "af24bdd846874be246f4842ae3f7c7c5e1ebd415562ae84efe75cb808ccb8391",
+      "sha256": "86bece659d499dcefc027c8e188add646c68bbb1f041f480a4c2fc7c2c7c29d0",
       "width": 1440,
       "height": 1000,
       "mobile": false,
-      "scrollY": 0
+      "scrollY": 113
     }
   ],
   "checks": {
+    "firstRunNoHorizontalOverflow": {
+      "320": true,
+      "360": true,
+      "390": true,
+      "412": true,
+      "768": true
+    },
+    "firstRunTrustOrder": true,
+    "publicIdentity": true,
     "sixSurfaces": true,
     "uniqueIds": true,
     "selectionMatrix": [
@@ -160,6 +193,8 @@
       "planet": true
     },
     "modeSwitch": true,
+    "storyMode": true,
+    "agentHandoffPrompt": true,
     "fullscreenEscape": true,
     "noHorizontalOverflow": {
       "320": true,
@@ -184,12 +219,13 @@
         "Knowledge, counsel, and judgment"
       ],
       "expandedText": "Crafts and technical practice1 explicit observationModern capacity crosswalk: making · technical_skill · recordingHistorical corpus items grouped here: craft of the carpenter · craft of the coppersmith · craft of the scribe · craft of the smith · craft of the leather-worker · craft of the fuller · craft of the builder · craft of the reed-workerThe grouping is modern. The historical items are corpus references, not traits assigned to the subject.",
-      "boundaryText": "Boundary. These correspondences are a Human Metadata reflection surface, not evidence that the Sumerians assigned these me to you.",
+      "boundaryText": "Boundary. These correspondences are a Human Manual reflection surface, not evidence that the Sumerians assigned these me to you.",
       "mobileNoOverflow": true
     },
     "unavailableReplacement": true,
     "unknownTime": true,
     "startNewHidesCharts": true,
-    "hostileName": true
+    "hostileName": true,
+    "ambiguousLocation": true
   }
 }

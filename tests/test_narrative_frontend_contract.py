@@ -14,14 +14,15 @@ def test_living_pattern_is_integrated_before_six_surface_rail():
     assert "const panels = [" in ATLAS
 
 
-def test_mythic_mode_fetches_remote_story_while_plain_and_research_remain_local():
+def test_all_narrative_modes_are_local_deterministic_views():
     assert 'data-narrative-mode="${mode}"' in ATLAS
     assert 'data-narrative-panel="${mode}"' in ATLAS
     block = APP[APP.index("setNarrativeMode(mode)"):APP.index("selectNarrativeSentence(button)")]
-    assert "loadRemoteMythic" in block
     assert "plain" in block and "mythic" in block and "research" in block
-    assert "/api/narrative/mythic" in APP
-    assert "STATE.requestPayload" in APP
+    assert "loadRemoteMythic" not in APP
+    assert "/api/narrative/mythic" not in APP
+    assert 'mythic: "Story"' in ATLAS
+    assert "generated in-process" in ATLAS
 
 
 def test_sentence_to_atlas_and_atlas_to_sentence_links_are_bidirectional():

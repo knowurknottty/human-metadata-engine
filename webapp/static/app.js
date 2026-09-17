@@ -242,7 +242,7 @@ function newEditorialState() {
     aliases: [], locationChoices: [], selectedLocation: null,
     meObservations: [{text: "", source: "self_report", confidence: "unrated", domains: []}],
     submitting: false, generatedAt: null, atlasMode: "explorer", atlasSelections: new Map(),
-    narrativeMode: "plain", synthesisEvidence: new Map(), remoteMythic: {status: "idle", story: null, model: null},
+    narrativeMode: "plain", synthesisEvidence: new Map(),
   };
 }
 
@@ -530,13 +530,14 @@ function buildRequestPayload() {
   return payload;
 }
 
-function reportActions() {
+function reportActions(includeHandoff = false) {
+  const handoff = includeHandoff ? `<aside class="agent-handoff-prompt"><strong>Still not at “cool fucking story, bro”?</strong><p>Download the Markdown. It includes an Agent Handoff written for your favorite agent — ask it for the bedtime story, technical brief, or voice that works for you without losing the evidence underneath.</p><p>You are unique. Just like everybody else. Welcome to the Inversion.</p></aside>` : "";
   return `<div class="action-group">
     <button type="button" class="button" onclick="app.downloadReport()">Download Markdown</button>
     <button type="button" class="button" onclick="window.print()">Print or save as PDF</button>
     <button type="button" class="button" onclick="app.editInputs()">Edit inputs</button>
     <button type="button" class="button" onclick="app.startNew()">Start a new analysis</button>
-  </div>`;
+  </div>${handoff}`;
 }
 
 function coverageItem(label, status, detail) {
@@ -649,7 +650,7 @@ function renderEditorialReport(result) {
         <div><dt>Application</dt><dd>${esc(result.application_version || "not supplied")} · API ${esc(result.contract_version || "analysis-v1")} · engine ${esc(result.engine_version || "not supplied")} · build ${esc(result.build_revision || "not supplied")}</dd></div>
       </dl><details class="technical-details"><summary>Complete generated report and section labels</summary><p>The backend report contains ${esc(result.report.sections.length)} versioned sections and ${esc(result.report.word_count)} words.</p><ul>${sectionTypes}</ul><div id="report-print-area" class="report-body">${mdToHTML(result.report.markdown)}</div></details></section>
 
-      <div class="end-actions"><h2>Report actions</h2>${reportActions()}<p>Editing an input and creating another analysis produces a new deterministic result for the changed input.</p></div>
+      <div class="end-actions"><h2>Report actions</h2>${reportActions(true)}<p>Editing an input and creating another analysis produces a new deterministic result for the changed input.</p></div>
     </div></section>`;
 
   $("dashboard").dataset.atlasMode = "explorer";
@@ -662,98 +663,6 @@ function renderEditorialReport(result) {
 }
 
 
-function appendMythicInline(node, text) {
-  const parts = String(text || "").split(/(\*\*[^*]+\*\*)/g).filter(Boolean);
-  for (const part of parts) {
-    if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
-      const strong = document.createElement("strong");
-      strong.textContent = part.slice(2, -2);
-      node.append(strong);
-    } else node.append(document.createTextNode(part));
-  }
-}
-
-function renderRemoteMythicMarkdown(target, markdown) {
-  const fragment = document.createDocumentFragment();
-  const lines = String(markdown || "").replace(/\r/g, "").split("\n");
-  let paragraph = [];
-  let list = null;
-  const flushParagraph = () => {
-    if (!paragraph.length) return;
-    const p = document.createElement("p");
-    appendMythicInline(p, paragraph.join(" ").trim());
-    fragment.append(p);
-    paragraph = [];
-  };
-  const flushList = () => { if (list) { fragment.append(list); list = null; } };
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (!line) { flushParagraph(); flushList(); continue; }
-    const heading = /^(#{1,3})\s+(.+)$/.exec(line);
-    if (heading) {
-      flushParagraph(); flushList();
-      const tag = heading[1].length === 1 ? "h3" : heading[1].length === 2 ? "h4" : "h5";
-      const h = document.createElement(tag);
-      appendMythicInline(h, heading[2]);
-      fragment.append(h);
-      continue;
-    }
-    if (/^[-*]\s+/.test(line)) {
-      flushParagraph();
-      if (!list) list = document.createElement("ul");
-      const li = document.createElement("li");
-      appendMythicInline(li, line.replace(/^[-*]\s+/, ""));
-      list.append(li);
-      continue;
-    }
-    paragraph.push(line);
-  }
-  flushParagraph(); flushList();
-  target.replaceChildren(fragment);
-}
-
-async function loadRemoteMythic() {
-  if (!STATE.result || !STATE.requestPayload || STATE.result.analysis_mode === "data") return;
-  if (STATE.remoteMythic.status === "loading" || STATE.remoteMythic.status === "ready") return;
-  const panel = document.querySelector('[data-narrative-panel="mythic"]');
-  const target = panel?.querySelector("[data-remote-mythic-story]");
-  const status = panel?.querySelector("[data-remote-mythic-status]");
-  const fallback = panel?.querySelector("[data-deterministic-mythic]");
-  if (!panel || !target || !status || !fallback) return;
-  STATE.remoteMythic.status = "loading";
-  status.textContent = "Composing the Mythic reading with Qwen3.8 Flash…";
-  panel.setAttribute("aria-busy", "true");
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 34000);
-  try {
-    const response = await fetch("/api/narrative/mythic", {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify(STATE.requestPayload),
-      signal: controller.signal,
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data.message || data.error || "Remote Mythic narration is unavailable.");
-    if (data.schema_version !== "mythic-remote-v1" || typeof data.story !== "string" || !data.story.trim()) {
-      throw new Error("The remote Mythic narrator returned an invalid response.");
-    }
-    renderRemoteMythicMarkdown(target, data.story);
-    target.hidden = false;
-    fallback.hidden = true;
-    STATE.remoteMythic = {status: "ready", story: data.story, model: data.model || null};
-    status.textContent = `AI-authored Mythic reading · ${data.model || "Qwen3.8 Flash"} · derived symbolic facts only.`;
-  } catch (error) {
-    STATE.remoteMythic.status = "failed";
-    target.hidden = true;
-    fallback.hidden = false;
-    status.textContent = error.name === "AbortError"
-      ? "The Mythic narrator timed out. Showing the deterministic reading instead."
-      : `${error.message || "Remote Mythic narration is unavailable."} Showing the deterministic reading instead.`;
-  } finally {
-    clearTimeout(timeout);
-    panel.removeAttribute("aria-busy");
-  }
-}
 
 Object.assign(app, {
   setAtlasMode(mode) {
@@ -777,7 +686,6 @@ Object.assign(app, {
     document.querySelectorAll("[data-narrative-panel]").forEach(panel => {
       panel.hidden = panel.dataset.narrativePanel !== mode;
     });
-    if (mode === "mythic") void loadRemoteMythic();
     document.querySelector(`[data-narrative-panel="${mode}"] h3`)?.focus({preventScroll: true});
   },
 

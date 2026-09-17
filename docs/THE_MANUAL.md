@@ -1,6 +1,6 @@
-# The Manual — working public product name
+# The Human Manual, for and by Humans
 
-**Status:** working title / product-direction note. This does **not** rename the repository, API contracts, or Human Metadata Engine yet.
+**Status:** canonical public product identity as of 2026-09-17. Repository, package, API, schema, and deployment identifiers remain unchanged for compatibility; internal engineering names are not public product branding.
 
 ## Core idea
 
@@ -16,14 +16,15 @@ The last clause matters. The product is not an authority assigning a destiny, di
 
 ## Naming stack
 
-- **The Manual** — working public product name: the thing a person opens and uses.
-- **Human Metadata Atlas** — the visual exploration surface inside The Manual.
-- **The Living Pattern** — the evidence-linked narrative/synthesis layer.
-- **Human Capacity / Sumerian me Reflection** — an optional, user-tagged comparison from observed experience through a modern capacity crosswalk to a bounded historical corpus; never an ancient personality assignment.
-- **Human Metadata Engine** — the deterministic, provenance-aware computational core.
+- **The Human Manual, for and by Humans** — public product name: the thing a person opens and uses.
+- **Inversion Labs** — public maker/brand and trust anchor.
+- **Identity Resonance** — visual grammar of the deep research workspace inside The Human Manual.
+- **The Living Pattern** — evidence-linked deterministic narrative/synthesis layer with Grounded, Story, and Sources views.
+- **Human Capacity / Sumerian me Reflection** — optional user-tagged comparison from observed experience through a modern capacity crosswalk to a bounded historical corpus; never an ancient personality assignment.
+- Internal repository/engine identifiers remain available to developers but are not public product labels.
 - **signature-v3 / system-result-v2** — versioned machine contracts beneath the product.
 
-This split lets the public identity become warmer and immediately understandable without throwing away the technical name, repository history, or stable contracts.
+This split gives the public product a human-readable identity without throwing away repository history or stable machine contracts.
 
 ## Product principles implied by the name
 
@@ -36,4 +37,4 @@ This split lets the public identity become warmer and immediately understandable
 
 ## Rename boundary
 
-Do not rename the repository, package/module names, API identifiers, database contracts, or deployment identifiers merely because this working title exists. A hard rename should be a separate migration after the public name, subtitle, visual identity, search/domain implications, and compatibility redirects are deliberately approved.
+Do not rename the repository, package/module names, API identifiers, database contracts, or deployment identifiers merely because the public product name changed. A hard internal rename remains a separate compatibility migration and is not required for the public product launch.

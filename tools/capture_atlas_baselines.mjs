@@ -185,9 +185,28 @@ async function main() {
     await cdp.send("Runtime.enable");
     await waitForSelector(cdp, "#analyze-form");
 
-    await submitFixture(cdp, "Atlas Verification Fixture", true);
     const captures = [];
     const checks = {};
+    captures.push(await capture(cdp, "desktop-first-run.png", "#landing", 1440, 1000));
+    captures.push(await capture(cdp, "mobile-first-run.png", "#landing", 390, 844, true));
+    captures.push(await capture(cdp, "mobile-privacy-before-input.png", "#privacy-before-input", 390, 844, true));
+    checks.firstRunNoHorizontalOverflow = {};
+    for (const width of [320, 360, 390, 412, 768]) {
+      await viewport(cdp, width, 844, true);
+      checks.firstRunNoHorizontalOverflow[width] = requireCheck(
+        await evaluate(cdp, "document.documentElement.scrollWidth <= document.documentElement.clientWidth"),
+        `first-run no horizontal overflow at ${width}px`,
+      );
+    }
+    checks.firstRunTrustOrder = requireCheck(await evaluate(cdp, `(() => {
+      const trust = document.getElementById("privacy-before-input");
+      const name = document.getElementById("name");
+      return Boolean(trust && name && (trust.compareDocumentPosition(name) & Node.DOCUMENT_POSITION_FOLLOWING));
+    })()`), "privacy disclosure precedes first PII field");
+    checks.publicIdentity = requireCheck(await evaluate(cdp, `document.title.includes("The Human Manual") && document.body.textContent.includes("Inversion Labs") && document.body.textContent.includes("Your information is an input, not the product.")`), "Human Manual identity and trust statement");
+    await viewport(cdp, 1440, 1000, false);
+
+    await submitFixture(cdp, "Atlas Verification Fixture", true);
     captures.push(await capture(cdp, "desktop-overview.png", ".atlas-header", 1440, 1000));
     captures.push(await capturePanel(cdp, "desktop-astrology.png", "astrology", 1440, 1000));
     captures.push(await capturePanel(cdp, "desktop-bodygraph.png", "human-design", 1440, 1000));
@@ -224,6 +243,22 @@ async function main() {
       window.fetch = original;
       return calls === 0 && document.querySelector(".atlas").dataset.atlasMode === "explorer";
     })()`), "mode changes are presentation-only");
+    checks.storyMode = requireCheck(await evaluate(cdp, `(() => {
+      let calls = 0; const original = window.fetch; window.fetch = (...args) => { calls += 1; return original(...args); };
+      app.setNarrativeMode("mythic");
+      const storyPanel = document.querySelector('[data-narrative-panel="mythic"]');
+      const storyButton = [...document.querySelectorAll('[data-narrative-mode]')].find(button => button.textContent.trim() === "Story");
+      const groundedButton = [...document.querySelectorAll('[data-narrative-mode]')].find(button => button.textContent.trim() === "Grounded");
+      const sourcesButton = [...document.querySelectorAll('[data-narrative-mode]')].find(button => button.textContent.trim() === "Sources");
+      const ok = calls === 0 && storyPanel && !storyPanel.hidden && storyButton?.getAttribute("aria-pressed") === "true" && groundedButton && sourcesButton && storyPanel.textContent.trim().length > 500;
+      window.fetch = original;
+      return Boolean(ok);
+    })()`), "Story mode is local, deterministic, labeled, and substantial");
+    checks.agentHandoffPrompt = requireCheck(await evaluate(cdp, `(() => {
+      const prompt = document.querySelector(".agent-handoff-prompt");
+      const text = prompt?.textContent || "";
+      return Boolean(prompt && text.includes("cool fucking story") && text.includes("favorite agent") && text.includes("Welcome to the Inversion"));
+    })()`), "post-report bring-your-own-agent handoff prompt");
     checks.fullscreenEscape = requireCheck(await evaluate(cdp, `(() => {
       app.toggleAtlasFullscreen("numerology");
       const opened = document.getElementById("atlas-numerology").classList.contains("is-expanded");
@@ -258,7 +293,15 @@ async function main() {
       if (downloaded.length) break;
       await pause(100);
     }
-    checks.markdownDownload = requireCheck(downloaded.length === 1 && (await readFile(join(downloadDir, downloaded[0]), "utf8")).startsWith("# Human Metadata Engine Report"), "Markdown download");
+    const downloadedMarkdown = downloaded.length === 1 ? await readFile(join(downloadDir, downloaded[0]), "utf8") : "";
+    checks.markdownDownload = requireCheck(
+      downloaded.length === 1 &&
+      downloadedMarkdown.startsWith("# The Human Manual Report") &&
+      downloadedMarkdown.includes("## Agent Handoff") &&
+      downloadedMarkdown.includes("Do not invent missing personal facts") &&
+      downloadedMarkdown.includes("Preserve contradictions"),
+      "Human Manual Markdown download with Agent Handoff",
+    );
     await submitFixture(cdp, "Atlas Verification Fixture", true);
     const firstAtlas = await evaluate(cdp, "document.querySelector('.atlas').innerHTML");
     await submitFixture(cdp, "Atlas Verification Fixture", true);

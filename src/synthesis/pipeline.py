@@ -6,6 +6,7 @@ from .analysis import detect_agreements, detect_contradictions, rank_motifs
 from .contracts import MAPPING_VERSION, ONTOLOGY_VERSION, TEMPLATE_VERSION
 from .extractors import extract_evidence
 from .plan import build_plan
+from .prose_lexicon import LEXICON_VERSION
 from .realize import realize
 from .verify import verify_narrative
 
@@ -22,7 +23,7 @@ def build_synthesis(signature: dict, psychology: dict | None, analysis_id: str) 
         raise ValueError("Deterministic narrative failed its claim verifier.")
     return {
         "evidence": evidence, "plan": plan, "narratives": narratives, "verification": verification,
-        "versions": {"ontology": ONTOLOGY_VERSION, "mapping": MAPPING_VERSION, "templates": TEMPLATE_VERSION},
+        "versions": {"ontology": ONTOLOGY_VERSION, "mapping": MAPPING_VERSION, "templates": TEMPLATE_VERSION, "lexicon": LEXICON_VERSION},
         "ai_realization": {"enabled": False, "required": False, "remote_provider_used": False},
     }
 
@@ -30,7 +31,7 @@ def build_synthesis(signature: dict, psychology: dict | None, analysis_id: str) 
 def narrative_markdown(synthesis: dict, mode: str = "plain") -> str:
     narrative = synthesis["narratives"][mode]
     evidence = {item["evidence_id"]: item for item in synthesis["evidence"]["evidence_items"]}
-    lines = ["## Human Metadata Narrative — The Living Pattern", "", f"- Mode: `{mode}`", f"- Schema: `{narrative['schema_version']}`", f"- Evidence schema: `{synthesis['evidence']['schema_version']}`", "", f"> {narrative['disclaimer']}", ""]
+    lines = ["## The Human Manual Narrative — The Living Pattern", "", f"- Mode: `{mode}`", f"- Schema: `{narrative['schema_version']}`", f"- Evidence schema: `{synthesis['evidence']['schema_version']}`", "", f"> {narrative['disclaimer']}", ""]
     for section in narrative["sections"]:
         lines.extend([f"### {section['heading']}", ""])
         for paragraph in section["paragraphs"]:
