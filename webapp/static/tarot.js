@@ -52,9 +52,8 @@
         visual.dataset.position = String(index + 1);
         const face = element("div", undefined, "tarot-card-face");
         face.append(element("span", `${index + 1} · ${card.position}`, "tarot-position"));
-        const mark = element("span", card.arcana === "Major" ? "✧" : ({Wands:"✶", Cups:"◡", Swords:"◇", Pentacles:"✥"}[card.suit] || "✧"), "tarot-card-mark");
-        mark.setAttribute("aria-hidden", "true");
-        face.append(mark, element("span", card.name, "tarot-card-name"), element("small", `${card.arcana} arcana · Upright`));
+        const art = TarotArt.renderCardArt(card);
+        face.append(art, element("span", card.name, "tarot-card-name"), element("small", `${card.arcana} arcana · Upright`));
         visual.append(face);
         spreadStage.append(visual);
 
