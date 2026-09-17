@@ -59,7 +59,7 @@ Raw observation text is never copied into the reflection result.
 
 ## Public UI contract
 
-The v1.0 Optional context form exposes **Human Capacity / 𒈨 Reflection** as an explicit checkbox. Each reflection observation has text/source/confidence fields plus the nine modern Human Metadata categories. The user must deliberately choose the categories; the browser and server do not infer them from the observation sentence.
+The v1.0 Optional context form exposes **Human Capacity / Sumerian me Reflection** as an explicit checkbox. Each reflection observation has text/source/confidence fields plus the nine modern Human Metadata categories. The user must deliberately choose the categories; the browser and server do not infer them from the observation sentence.
 
 The result renders three visible steps: **Personal evidence → Modern analytical bridge → Historical corpus**. Category matches are expandable and show the modern capacity crosswalk separately from the historical *me* items. The interface never displays a *me* score, rank, destiny claim, or automatic assignment.
 

@@ -292,7 +292,7 @@ function updateReviewSummary() {
     ["Name", name], ["Other names", STATE.aliases.length ? STATE.aliases.join(", ") : "None"],
     ["Birth date", date], ["Birth time", time], ["Birthplace", location],
     ["Personal context", contextCount ? `${contextCount} supplied field${contextCount === 1 ? "" : "s"}` : "Not included"],
-    ["Human Capacity / 𒈨 Reflection", meEnabled ? `${taggedObservations} explicitly tagged observation${taggedObservations === 1 ? "" : "s"}` : "Not included"],
+    ["Human Capacity / Sumerian me Reflection", meEnabled ? `${taggedObservations} explicitly tagged observation${taggedObservations === 1 ? "" : "s"}` : "Not included"],
   ];
   target.innerHTML = rows.map(([term, value]) => `<div><dt>${esc(term)}</dt><dd>${esc(value)}</dd></div>`).join("");
 }
@@ -403,7 +403,7 @@ function collectEditorialValidationErrors() {
   }
   if ($("me-reflection-enabled")?.checked) {
     const completed = STATE.meObservations.filter(item => item.text.trim());
-    if (!completed.length) errors.push({message: "Add at least one observation for the 𒈨 reflection.", fieldId: "me-observation-0"});
+    if (!completed.length) errors.push({message: "Add at least one observation for the Sumerian me reflection.", fieldId: "me-observation-0"});
     else {
       const untaggedIndex = STATE.meObservations.findIndex(item => item.text.trim() && !item.domains.length);
       if (untaggedIndex >= 0) errors.push({message: "Choose at least one capacity domain for each reflection observation.", fieldId: `me-observation-${untaggedIndex}`});
@@ -476,9 +476,9 @@ function readMeObservationPayload() {
 
 function renderMeReflection(reflection) {
   if (!reflection?.enabled) return "";
-  if (!reflection.available) return `<section class="me-reflection-result"><p class="eyebrow">Modern interpretive comparison</p><h3>Human Capacity / 𒈨 Reflection</h3><div class="omitted-note"><strong>No comparison produced.</strong> ${esc(reflection.reason || "No explicitly tagged capacity evidence was available.")}</div></section>`;
+  if (!reflection.available) return `<section class="me-reflection-result"><p class="eyebrow">Modern interpretive comparison</p><h3>Human Capacity / Sumerian me Reflection</h3><div class="omitted-note"><strong>No comparison produced.</strong> ${esc(reflection.reason || "No explicitly tagged capacity evidence was available.")}</div></section>`;
   const matches = (reflection.domain_matches || []).map(match => `<details class="me-match"><summary><span><strong>${esc(match.category_label)}</strong><small>${esc(match.support_observation_count)} explicit observation${match.support_observation_count === 1 ? "" : "s"}</small></span></summary><p><strong>Modern capacity crosswalk:</strong> ${esc((match.capacity_domains || []).join(" · "))}</p><p><strong>Historical corpus items grouped here:</strong> ${esc((match.historical_me_items || []).join(" · "))}</p><p class="field-hint">The grouping is modern. The historical items are corpus references, not traits assigned to the subject.</p></details>`).join("");
-  return `<section class="me-reflection-result"><header><p class="eyebrow">Modern interpretive comparison</p><h3>Human Capacity / 𒈨 Reflection</h3><p>This view preserves three separate epistemic layers. It does not calculate, score, or assign an ancient <em>me</em>.</p></header><div class="me-epistemic-chain"><div><span>1</span><strong>Personal evidence</strong><small>Observation you supplied</small></div><div><span>2</span><strong>Modern analytical bridge</strong><small>Capacity tag you explicitly chose</small></div><div><span>3</span><strong>Historical corpus</strong><small>Attested <em>me</em> shown for comparison</small></div></div><div class="me-match-list">${matches}</div><div class="limits-note"><strong>Boundary.</strong> These correspondences are a Human Metadata reflection surface, not evidence that the Sumerians assigned these <em>me</em> to you.</div></section>`;
+  return `<section class="me-reflection-result"><header><p class="eyebrow">Modern interpretive comparison</p><h3>Human Capacity / Sumerian me Reflection</h3><p>This view preserves three separate epistemic layers. It does not calculate, score, or assign an ancient <em>me</em>.</p></header><div class="me-epistemic-chain"><div><span>1</span><strong>Personal evidence</strong><small>Observation you supplied</small></div><div><span>2</span><strong>Modern analytical bridge</strong><small>Capacity tag you explicitly chose</small></div><div><span>3</span><strong>Historical corpus</strong><small>Attested <em>me</em> shown for comparison</small></div></div><div class="me-match-list">${matches}</div><div class="limits-note"><strong>Boundary.</strong> These correspondences are a Human Metadata reflection surface, not evidence that the Sumerians assigned these <em>me</em> to you.</div></section>`;
 }
 
 function buildRequestPayload() {
@@ -609,7 +609,7 @@ function renderEditorialReport(result) {
       ${coverageItem("Time-sensitive calculations", !birth ? "not-included" : birth.time_accuracy === "unknown" ? "limited" : "complete", !birth ? "No birth details were supplied." : birth.time_accuracy === "unknown" ? "Rising sign, houses, and Human Design are withheld." : "An exact local time was supplied.")}
       ${coverageItem("Location resolution", birth ? "complete" : "not-included", birth ? "Coordinates and historical timezone were resolved or supplied." : "No birthplace was supplied.")}
       ${coverageItem("Personal context", STATE.psychology ? "complete" : "not-included", STATE.psychology ? "Only fields supplied by you are included." : "No self-reported context was supplied.")}
-      ${coverageItem("Human Capacity / 𒈨 Reflection", meReflection?.available ? "complete" : meReflection?.enabled ? "limited" : "not-included", meReflection?.available ? "Built only from capacity tags you explicitly attached to observations." : meReflection?.enabled ? "Requested, but no explicit tagged capacity evidence produced a comparison." : "Opt-in reflection was not requested.")}
+      ${coverageItem("Human Capacity / Sumerian me Reflection", meReflection?.available ? "complete" : meReflection?.enabled ? "limited" : "not-included", meReflection?.available ? "Built only from capacity tags you explicitly attached to observations." : meReflection?.enabled ? "Requested, but no explicit tagged capacity evidence produced a comparison." : "Opt-in reflection was not requested.")}
     </div></section>
 
     <nav class="report-navigation" aria-label="Report sections" data-open="false"><button type="button" aria-expanded="false" onclick="app.toggleReportNavigation(this)">Report sections</button><ul>
@@ -641,8 +641,8 @@ function renderEditorialReport(result) {
         <div><dt>Mathematical</dt><dd>Letter mappings, totals, reductions, ratios, entropy, and the deterministic graphic.</dd></div>
         <div><dt>Astronomical</dt><dd>${astrology ? esc(astrology.calculation_engine || "Configured ephemeris") : "Not used in this report"}; positions are calculations, while astrological meanings remain traditional.</dd></div>
         <div><dt>Supplied by you</dt><dd>Name, other names, birth details, optional personal context, and any reflection observations/capacity tags you explicitly entered.</dd></div>
-        <div><dt>Historical/textual</dt><dd>The Sumerian 𒈨 ontology preserves a bounded historical corpus reference and remains identity-independent by default.</dd></div>
-        <div><dt>Interpretive</dt><dd>${extensions.length} configured provenance-aware extensions plus traditional or project-authored interpretive mappings. The 𒈨 Human Capacity crosswalk is modern and opt-in.</dd></div>
+        <div><dt>Historical/textual</dt><dd>The Sumerian me ontology preserves a bounded historical corpus reference and remains identity-independent by default.</dd></div>
+        <div><dt>Interpretive</dt><dd>${extensions.length} configured provenance-aware extensions plus traditional or project-authored interpretive mappings. The Human Capacity crosswalk is modern and opt-in.</dd></div>
         <div><dt>Experimental</dt><dd>The cross-system convergence score and synthesis language. These are project-specific, not scientifically validated.</dd></div>
         <div><dt>Privacy</dt><dd>${esc(result.privacy?.retention || "Not persisted by the web process")}. ${esc(result.privacy?.warning || "Network and infrastructure logs may still exist.")}</dd></div>
         <div><dt>Location provider</dt><dd>${birth ? "Open-Meteo geocoding may receive the birthplace text to resolve coordinates and historical timezone." : "Not used because no birthplace was supplied."}</dd></div>

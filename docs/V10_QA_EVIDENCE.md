@@ -1,6 +1,6 @@
 # v1.0 release-candidate QA evidence
 
-> **Scope note (2026-09-16):** the evidence below predates the new Human Capacity / 𒈨 Reflection form and result surface. Existing physical screenshots, mobile interaction passes, and committed visual baselines must not be cited as verification of that new UI. The reflection API/frontend contracts are automated; refreshed browser and physical-device QA remain open.
+> **Scope note (2026-09-16/17):** the older physical-device evidence below still predates the Human Capacity / Sumerian me Reflection. The reflection now has refreshed automated browser interaction and visual-baseline evidence in Headless Chrome 153, but physical Android/iPhone and screen-reader verification for the new controls remains open.
 
 Date: 2026-07-18 (America/Chicago)
 
@@ -139,6 +139,8 @@ release candidate with the documented v1.1 topology boundary.
 
 ## Post-v1.0 Sumerian reflection delta
 
-The `feature/sumerian-me-reflection-r1` branch adds an opt-in observation/tag interface and three-layer result view. Static frontend contracts verify the opt-in control, user-selected category tags, historical/modern boundary copy, result renderer, and responsive CSS hooks. Server tests verify that unknown/duplicate tags fail, disabled-by-default behavior remains intact, raw observation text is absent from the reflection object, and no score is emitted.
+The `feature/sumerian-me-reflection-r1` branch adds an opt-in observation/tag interface and three-layer result view. Static/frontend and server contracts verify explicit opt-in, user-selected category tags, historical/modern boundaries, disabled-by-default behavior, raw-observation redaction, and absence of reflection scoring.
 
-This automated evidence does **not** replace browser interaction, screenshot inspection, TalkBack/VoiceOver, or physical mobile QA for the new controls. Those checks must be rerun before the reflection UI can inherit the older v1.0 physical/visual evidence.
+A sanitized synthetic browser fixture now exercises the same public UI path with `crafts_and_technical_practice` and `knowledge_and_judgment`. Headless Chrome 153 rendered exactly two expandable matches, the labels **Personal evidence → Modern analytical bridge → Historical corpus**, the explicit historical-personal boundary statement, and no horizontal overflow at 390 CSS pixels. Desktop and mobile reflection screenshots were visually inspected. The desktop capture retains sticky-header overlap at the section heading, but the three-layer cards, both matches, and boundary statement are visible; the mobile capture shows the full text-safe heading and complete structure.
+
+Reflection capture hashes: `desktop-sumerian-reflection.png` = `0c8251985a8bfb84ae85affabc3f99d63c8ad6c01d8af1e5bb5283270ef1b681`; `mobile-sumerian-reflection.png` = `e252b0d8b18940756cf6ced6f984661b9959ef867a57ca1585fea803d5431591`. This browser evidence does **not** replace TalkBack/VoiceOver or physical Android/iPhone QA for the new controls.

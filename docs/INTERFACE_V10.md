@@ -244,9 +244,9 @@ objects receive the same cross-highlight state. Motion is limited to focus,
 highlight, and fade transitions and is disabled by the existing reduced-motion
 contract.
 
-## Human Capacity / 𒈨 Reflection
+## Human Capacity / Sumerian me Reflection
 
-The Optional context step contains an opt-in **Human Capacity / 𒈨 Reflection** surface. It is not a seventh calculated Atlas system and does not alter the six-surface rail.
+The Optional context step contains an opt-in **Human Capacity / Sumerian me Reflection** surface. It is not a seventh calculated Atlas system and does not alter the six-surface rail.
 
 The form enforces a three-layer interaction:
 
@@ -282,7 +282,7 @@ reference report.
 ## Known verification boundary
 
 Static contracts, JavaScript parsing, server/API tests, and automated viewport
-captures can verify structure and rendering. The Human Capacity / 𒈨 Reflection has automated contract coverage, but its newly added form/result layout requires a refreshed browser-baseline and physical-device interaction pass before those visual/device gates can be claimed for this feature. Physical-device VoiceOver,
+captures can verify structure and rendering. The Human Capacity / Sumerian me Reflection has automated contract coverage, but its newly added form/result layout requires a refreshed browser-baseline and physical-device interaction pass before those visual/device gates can be claimed for this feature. Physical-device VoiceOver,
 TalkBack, iPhone Safari, and low-end Android Chrome checks remain separate
 release gates until run on those devices.
 

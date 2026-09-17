@@ -117,7 +117,7 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertNotIn("Epistemic metadata", HTML)
 
     def test_sumerian_me_reflection_is_explicit_opt_in_and_user_tagged(self):
-        self.assertIn("Human Capacity / 𒈨 Reflection", HTML)
+        self.assertIn("Human Capacity / Sumerian me Reflection", HTML)
         self.assertIn('id="me-reflection-enabled"', HTML)
         self.assertIn("It does not infer tags", HTML)
         self.assertIn("ME_CAPACITY_DOMAINS", SCRIPT)

@@ -19,7 +19,7 @@ The last clause matters. The product is not an authority assigning a destiny, di
 - **The Manual** — working public product name: the thing a person opens and uses.
 - **Human Metadata Atlas** — the visual exploration surface inside The Manual.
 - **The Living Pattern** — the evidence-linked narrative/synthesis layer.
-- **Human Capacity / 𒈨 Reflection** — an optional, user-tagged comparison from observed experience through a modern capacity crosswalk to a bounded historical corpus; never an ancient personality assignment.
+- **Human Capacity / Sumerian me Reflection** — an optional, user-tagged comparison from observed experience through a modern capacity crosswalk to a bounded historical corpus; never an ancient personality assignment.
 - **Human Metadata Engine** — the deterministic, provenance-aware computational core.
 - **signature-v3 / system-result-v2** — versioned machine contracts beneath the product.
 

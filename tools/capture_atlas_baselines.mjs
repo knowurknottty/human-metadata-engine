@@ -11,8 +11,8 @@ import {spawn} from "node:child_process";
 
 const root = resolve(import.meta.dirname, "..");
 const outputDir = join(root, "docs", "assets", "ui-v10");
-const port = 8765;
-const debugPort = 9325;
+const port = Number(process.env.HME_QA_PORT || 8765);
+const debugPort = Number(process.env.HME_QA_DEBUG_PORT || 9325);
 const baseURL = `http://127.0.0.1:${port}`;
 const chromeCandidates = [
   process.env.HME_CHROME_BIN,
@@ -115,6 +115,26 @@ async function capturePanel(cdp, filename, panelId, width, height, mobile = fals
   } finally {
     await evaluate(cdp, `app.toggleAtlasFullscreen(${JSON.stringify(panelId)})`);
   }
+}
+
+async function submitReflectionFixture(cdp) {
+  await evaluate(cdp, `(() => {
+    app.startNew();
+    const set = (id, value) => { const element = document.getElementById(id); element.value = value; element.dispatchEvent(new Event("input", {bubbles:true})); };
+    set("name", "Atlas Reflection Fixture");
+    const enabled = document.getElementById("me-reflection-enabled");
+    enabled.checked = true;
+    app.toggleMeReflection();
+    app.updateMeObservation(0, "text", "Repeatedly documents technical procedures and compares competing explanations before making a decision.");
+    app.updateMeObservation(0, "source", "synthetic_qa_fixture");
+    app.updateMeObservation(0, "confidence", "high");
+    app.toggleMeDomain(0, "crafts_and_technical_practice", true);
+    app.toggleMeDomain(0, "knowledge_and_judgment", true);
+    document.getElementById("analyze-form").requestSubmit();
+  })()`);
+  await waitForSelector(cdp, "#dashboard:not([hidden]) .me-reflection-result");
+  await evaluate(cdp, `(() => { document.getElementById("dashboard").dataset.atlasMode = "research"; const atlas = document.querySelector(".atlas"); if (atlas) atlas.dataset.atlasMode = "research"; return true; })()`);
+  await evaluate(cdp, "document.fonts.ready");
 }
 
 async function submitFixture(cdp, name, withBirth) {
@@ -247,6 +267,28 @@ async function main() {
     await evaluate(cdp, "app.setAtlasMode('research')");
     captures.push(await capture(cdp, "desktop-research.png", ".atlas-header", 1440, 1000));
 
+    await submitReflectionFixture(cdp);
+    captures.push(await capture(cdp, "desktop-sumerian-reflection.png", ".me-reflection-result", 1440, 1000));
+    captures.push(await capture(cdp, "mobile-sumerian-reflection.png", ".me-reflection-result", 390, 844, true));
+    checks.sumerianReflection = await evaluate(cdp, `(() => {
+      const labels = [...document.querySelectorAll(".me-epistemic-chain strong")].map(node => node.textContent.trim());
+      const matches = [...document.querySelectorAll(".me-match")];
+      if (matches[0]) matches[0].open = true;
+      const matchLabels = matches.map(node => node.querySelector("summary strong")?.textContent.trim() || "").sort();
+      return {
+        labels, matchCount:matches.length, matchLabels,
+        expandedText:matches[0]?.textContent || "",
+        boundaryText:document.querySelector(".me-reflection-result .limits-note")?.textContent || "",
+      };
+    })()`);
+    requireCheck(JSON.stringify(checks.sumerianReflection.labels) === JSON.stringify(["Personal evidence","Modern analytical bridge","Historical corpus"]), "three-layer labels");
+    requireCheck(checks.sumerianReflection.matchCount === 2, "two expandable reflection matches");
+    requireCheck(checks.sumerianReflection.matchLabels.some(label => label.includes("Crafts")) && checks.sumerianReflection.matchLabels.some(label => label.includes("Knowledge")), "exact tagged reflection categories rendered");
+    requireCheck(checks.sumerianReflection.expandedText.includes("Modern capacity crosswalk") && checks.sumerianReflection.expandedText.includes("Historical corpus items grouped here"), "expanded modern/historical separation");
+    requireCheck(checks.sumerianReflection.boundaryText.includes("not evidence that the Sumerians assigned"), "historical-personal boundary copy");
+    checks.sumerianReflection.mobileNoOverflow = requireCheck(await evaluate(cdp, "document.documentElement.scrollWidth <= document.documentElement.clientWidth"), "reflection no horizontal overflow at 390px");
+    await viewport(cdp, 1440, 1000, false);
+
     await submitFixture(cdp, "Atlas Name-Only Fixture", false);
     captures.push(await capturePanel(cdp, "desktop-unavailable-name-only.png", "astrology", 1440, 1000));
     checks.unavailableReplacement = requireCheck(await evaluate(cdp, `!document.querySelector(".astro-planet") && !document.querySelector(".bodygraph-center") && document.querySelectorAll(".atlas-unavailable").length >= 2`), "name-only result replaces exact-birth graphics");
@@ -280,9 +322,9 @@ async function main() {
     }
     const version = await evaluate(cdp, "navigator.userAgent");
     const manifest = {
-      fixture:{exactBirth:{name:"Atlas Verification Fixture", date:"1985-06-15", time:"10:30", timezone:"America/Chicago", latitude:41.8781, longitude:-87.6298}, nameOnly:{name:"Atlas Name-Only Fixture"}},
+      fixture:{exactBirth:{name:"Atlas Verification Fixture", date:"1985-06-15", time:"10:30", timezone:"America/Chicago", latitude:41.8781, longitude:-87.6298}, nameOnly:{name:"Atlas Name-Only Fixture"}, reflection:{name:"Atlas Reflection Fixture", observation:"Synthetic QA observation", capacityDomains:["crafts_and_technical_practice","knowledge_and_judgment"]}},
       browser:version,
-      command:`${process.env.HME_RUN_NETWORK_QA === "1" ? "HME_RUN_NETWORK_QA=1 " : ""}node tools/capture_atlas_baselines.mjs`,
+      command:`${process.env.HME_RUN_NETWORK_QA === "1" ? "HME_RUN_NETWORK_QA=1 " : ""}${process.env.HME_QA_PORT ? `HME_QA_PORT=${port} ` : ""}${process.env.HME_QA_DEBUG_PORT ? `HME_QA_DEBUG_PORT=${debugPort} ` : ""}node tools/capture_atlas_baselines.mjs`,
       captures,
       checks,
     };
