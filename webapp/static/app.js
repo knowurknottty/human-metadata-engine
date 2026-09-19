@@ -544,6 +544,31 @@ function coverageItem(label, status, detail) {
   return `<div class="coverage-item" data-status="${esc(status)}"><strong>${esc(label)}: ${esc(status === "not-included" ? "not included" : status)}</strong><span>${esc(detail)}</span></div>`;
 }
 
+function renderFirstMap(result, {birth, humanDesign, meReflection}) {
+  const available = ["Name calculations"];
+  if (birth) available.push("birth-date astronomy");
+  if (humanDesign) available.push("time-sensitive Human Design");
+  if (STATE.psychology) available.push("the context you supplied");
+  if (meReflection?.available) available.push("your opted-in Human Capacity reflection");
+  const withheld = [];
+  if (!birth) withheld.push("Birth-derived astronomy, houses, and Human Design were not calculated because no birth event was chosen.");
+  else if (birth.time_accuracy === "unknown") withheld.push("Rising sign, houses, aspects, and Human Design remain withheld because exact birth time was not supplied.");
+  if (!STATE.psychology) withheld.push("No self-report was added, so the map does not infer one from your name or birth data.");
+  if (!meReflection?.enabled) withheld.push("The Human Capacity / Sumerian me reflection was not chosen; no personal historical assignment is made.");
+  if (!withheld.length) withheld.push("No additional returned layer is being hidden; every available layer still keeps its own stated limits.");
+  return `<section class="first-map" aria-labelledby="first-map-title">
+    <p class="eyebrow">I AM · first reading</p>
+    <h1 id="first-map-title" tabindex="-1">Your first map</h1>
+    <p class="first-map__lede">A small checkpoint before the full Atlas: the inputs you chose, the calculations that followed, and the boundaries that remain.</p>
+    <div class="first-map__cards">
+      <section><h2>What was calculated</h2><p>Calculated from the supplied inputs: ${esc(available.join(", "))}.</p><p>Traditional meanings and Inversion Labs reflections remain labeled separately from calculation.</p></section>
+      <section><h2>What is intentionally unavailable</h2><ul>${withheld.map(item => `<li>${esc(item)}</li>`).join("")}</ul></section>
+      <section><h2>What this map cannot know</h2><ul><li>It is not proof, not a score, and not a diagnosis.</li><li>lived experience, choice, and future are not inferred.</li><li>Symbolic recurrence is not empirical validation.</li><li>You remain the authority on whether any reflection fits.</li></ul></section>
+    </div>
+    <div class="first-map__actions"><button type="button" class="button button--primary" onclick="app.openFullAtlas()">Open the full Atlas</button><button type="button" class="button" onclick="app.openFullAtlas('research')">Open the record</button></div>
+  </section>`;
+}
+
 function valueCell(label, value) {
   return `<div><span>${esc(label)}</span><strong>${esc(value ?? "—")}</strong></div>`;
 }
@@ -581,7 +606,10 @@ function renderEditorialReport(result) {
   STATE.narrativeMode = "plain";
   STATE.synthesisEvidence = new Map((result.synthesis?.evidence?.evidence_items || []).map(item => [item.evidence_id, item]));
 
+  const firstMap = renderFirstMap(result, {birth, humanDesign, meReflection});
   $("dashboard").innerHTML = `
+    ${firstMap}
+    <div id="full-atlas-content" hidden>
     ${atlas.html}
     <section class="report-reference" aria-labelledby="report-reference-title">
     <header class="reference-header"><p class="eyebrow">Reference layer</p><h2 id="report-reference-title" tabindex="-1">Detailed analysis, methods, and downloads</h2><p>The complete report remains available beneath the visual workspace. Explorer mode keeps it folded; Research mode opens the derivations.</p><button type="button" class="button" onclick="app.setAtlasMode('research')">Open research mode</button></header>
@@ -651,7 +679,8 @@ function renderEditorialReport(result) {
       </dl><details class="technical-details"><summary>Complete generated report and section labels</summary><p>The backend report contains ${esc(result.report.sections.length)} versioned sections and ${esc(result.report.word_count)} words.</p><ul>${sectionTypes}</ul><div id="report-print-area" class="report-body">${mdToHTML(result.report.markdown)}</div></details></section>
 
       <div class="end-actions"><h2>Report actions</h2>${reportActions(true)}<p>Editing an input and creating another analysis produces a new deterministic result for the changed input.</p></div>
-    </div></section>`;
+    </div></section>
+    </div>`;
 
   $("dashboard").dataset.atlasMode = "explorer";
 
@@ -665,6 +694,16 @@ function renderEditorialReport(result) {
 
 
 Object.assign(app, {
+  openFullAtlas(mode = "explorer") {
+    const fullAtlas = $("full-atlas-content");
+    if (!fullAtlas) return;
+    fullAtlas.hidden = false;
+    this.setAtlasMode(mode);
+    const target = mode === "research" ? $("report-reference-title") : $("atlas-title");
+    target?.scrollIntoView({behavior: "smooth", block: "start"});
+    target?.focus({preventScroll: true});
+  },
+
   setAtlasMode(mode) {
     if (!STATE.result || !["explorer", "research"].includes(mode)) return;
     STATE.atlasMode = mode;

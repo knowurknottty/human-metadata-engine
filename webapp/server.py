@@ -40,7 +40,7 @@ from analytics_v2 import composite_resonance as accuracy_composite_resonance  # 
 from report_safe import generate_report  # noqa: E402
 from tarot_reading import draw_reading, spread_catalog
 from synthesis import build_synthesis, narrative_markdown  # noqa: E402
-from agent_handoff import agent_handoff_markdown  # noqa: E402
+from agent_handoff import agent_handoff_markdown, build_handoff_v2, handoff_v2_markdown  # noqa: E402
 from synthesis.contracts import (  # noqa: E402
     EVIDENCE_SCHEMA_VERSION,
     NARRATIVE_SCHEMA_VERSION,
@@ -825,7 +825,6 @@ def analyze(payload):
             },
         }
     report["markdown"] += "\n" + agent_handoff_markdown(analysis_mode=mode, synthesis_available=(mode == "magic"))
-    report["word_count"] = len(report["markdown"].split())
     response = {
         "application_version": APP_VERSION,
         "contract_version": SCHEMA_VERSION,
@@ -854,7 +853,12 @@ def analyze(payload):
         "sumerian_me_reflection": sumerian_me_reflection,
         "constellation": constellation_result,
     }
-    return _redact_public_output(response)
+    public_response = _redact_public_output(response)
+    handoff_v2 = build_handoff_v2(response=public_response, synthesis=synthesis, analysis_mode=mode)
+    public_response["handoff_v2"] = handoff_v2
+    public_response["report"]["markdown"] += "\n" + handoff_v2_markdown(handoff_v2)
+    public_response["report"]["word_count"] = len(public_response["report"]["markdown"].split())
+    return public_response
 
 
 class Handler(BaseHTTPRequestHandler):

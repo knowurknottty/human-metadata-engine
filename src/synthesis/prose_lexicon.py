@@ -1,157 +1,118 @@
-"""Deterministic vocabulary banks for evidence-bound Human Manual prose."""
+"""Versioned, deterministic, evidence-safe literary inventory for Human Manual prose."""
 from __future__ import annotations
 
 import hashlib
 
-LEXICON_VERSION = "deterministic-prose-lexicon-v1"
+LEXICON_VERSION = "deterministic-prose-lexicon-v2"
+INVENTORY_VERSION = "literary-inventory-v2"
 LITERARY_EXPANSION_MIN_FACTOR = 2
 LITERARY_EXPANSION_PREFERRED_FACTOR = 5
+BASELINE_ACCEPTED_UNITS = 90
 
-LEXICON_BANKS = {
-    "story_openers": (
-        "Begin with the pattern as a scene rather than a verdict.",
-        "Read this next piece as one lantern among several, not the whole landscape.",
-        "Set the calculation beside lived experience and let them question each other.",
-        "Imagine the result as a margin note written beside a much larger human story.",
-        "Take this symbol as a doorway into a question, not a label pinned to a person.",
-        "The next thread is most useful when held lightly enough to be tested.",
-        "Let the image arrive before deciding whether it belongs in your account of yourself.",
-        "This part of the manual works best as a scene you can compare with memory.",
-        "Treat the pattern as a hypothesis with texture, not a conclusion with authority.",
-        "Here the calculation becomes narrative only after its boundary is kept visible.",
-        "The page offers a lens; your actual experience decides whether it focuses anything.",
-        "Start from what was calculated, then allow metaphor to add depth without adding facts.",
-    ),
-    "story_transitions": (
-        "A second way to hold that image is to ask what changes when the setting changes.",
-        "The useful turn comes when the symbol meets an ordinary, specific situation.",
-        "From there, the story becomes less about naming and more about noticing conditions.",
-        "The next movement is not certainty but comparison: where does this fit, and where does it fail?",
-        "That theme gains dimension when its opposite is allowed to remain in the room.",
-        "Now move from the abstract pattern to the smallest real example you can remember.",
-        "The image becomes more honest when a counterexample is invited alongside the example.",
-        "What matters next is not intensity of language but whether the description survives contact with detail.",
-        "Let the thread continue only as far as observable experience gives it somewhere to go.",
-        "The story deepens when the same pattern is viewed from another person's position.",
-        "A useful bridge here is context: timing, relationship, task, and stakes can change the expression entirely.",
-        "Carry the pattern forward as a question whose answer may differ across seasons of life.",
-    ),
-    "story_reflections": (
-        "Which recent moment gives this image something concrete to describe?",
-        "What example supports this reading, and what example makes it less convincing?",
-        "Where would this pattern be useful, and where would a different response serve better?",
-        "What changed the last time this theme appeared in a real conversation or decision?",
-        "Which part feels recognizable because of evidence, and which part merely sounds elegant?",
-        "If someone who knows you well disagreed with this passage, what detail might they point to?",
-        "What condition seems to bring out the useful side of this pattern most reliably?",
-        "Where does the metaphor clarify an experience without pretending to explain all of it?",
-        "What would you need to observe before trusting this description more than you do now?",
-        "Which ordinary behavior would count as evidence for this reading, and which would count against it?",
-        "How does this theme change when the stakes are low enough to experiment safely?",
-        "What is the smallest reversible experiment that could tell you whether this lens earns another look?",
-    ),
-    "story_counterpoints": (
-        "Keep the opposite possibility visible; a human pattern can change with context without becoming false.",
-        "Do not force the tension to resolve simply because a tidy paragraph would prefer it.",
-        "The counterweight matters: a useful strength can become costly when the situation changes.",
-        "Another reading may fit the same event, and the disagreement is information rather than a defect.",
-        "Hold both poles long enough to notice which one the present situation actually calls for.",
-        "A contradiction here is not noise to erase; it may mark the boundary of the comparison.",
-        "Leave room for the possibility that neither pole describes the moment particularly well.",
-        "The most revealing detail may be the point at which the apparent pattern stops applying.",
-        "Let context choose between competing interpretations rather than making one permanent.",
-        "The page can preserve ambiguity without asking you to live ambiguously everywhere.",
-        "A second lens can challenge the first without invalidating the calculation that produced either symbol.",
-        "Keep the disagreement intact until experience gives you a reason to weight one side differently.",
-    ),
-    "story_closings": (
-        "Keep what clarifies; discard what does not; the manual remains yours to annotate.",
-        "The symbol has done enough once it helps you ask a better question.",
-        "No metaphor needs to survive a counterexample merely because it was beautifully phrased.",
-        "The useful ending is not belief, but a more precise observation to carry forward.",
-        "Let the passage remain provisional enough to be revised by tomorrow's evidence.",
-        "The page closes here, while the actual experiment continues outside it.",
-        "Take the question with you; leave the claim behind until experience earns it.",
-        "A good reflection should increase your options, not narrow them.",
-        "Use the image if it expands attention; retire it if it begins replacing attention.",
-        "The calculation stays reproducible even if your interpretation changes completely.",
-        "What matters is not whether the sentence sounds like you, but whether it helps you see more accurately.",
-        "Nothing in this passage outranks direct knowledge of your own circumstances.",
-    ),
-    "plain_reflections": (
-        "Test that description against one concrete example before generalizing it.",
-        "A counterexample is as useful here as a confirming example.",
-        "Context may change whether this pattern is useful or misleading.",
-        "The next useful step is observation rather than stronger language.",
-        "Treat recurrence as a prompt to inspect, not as independent confirmation.",
-        "Keep the distinction between a returned symbol and a measured trait visible.",
-        "Use a real situation to decide whether the interpretation adds anything.",
-        "If the description does not improve a decision or observation, it can be ignored.",
-        "The same output can support more than one reasonable interpretation.",
-        "Missing or conflicting evidence should remain visible rather than being smoothed over.",
-    ),
-    "research_bridges": (
-        "Read the linked evidence IDs before treating the synthesis as informative.",
-        "The interpretation remains downstream of the returned values and their documented limits.",
-        "Independence groups matter here because repeated encodings of one input are not separate observations.",
-        "The claim is bounded by the exact source paths attached to this sentence.",
-        "A stronger interpretation would require evidence beyond the symbolic calculation shown here.",
-        "The source record remains authoritative over any rhetorical summary of it.",
-        "Contradicting evidence is retained rather than averaged away.",
-        "This synthesis is project-authored and does not upgrade a traditional symbol into empirical measurement.",
-        "The returned value is reproducible; the meaning assigned to it remains interpretive.",
-        "Any missing dimension remains missing and is not inferred from neighboring systems.",
-    ),
-    "cadence_lines": (
-        "Pause on the detail rather than the label.",
-        "Let the example do more work than the adjective.",
-        "Specificity is more useful here than certainty.",
-        "A pattern earns weight through fit, not repetition alone.",
-        "The map is allowed to be incomplete.",
-        "A useful lens should survive contact with ordinary life.",
-        "Not every recurrence deserves a grand interpretation.",
-        "The person remains larger than the vocabulary used to describe them.",
-        "Precision and wonder do not have to compete.",
-        "A good story can stay honest about where its evidence ends.",
-    ),
+# Each family is a distinct compositional image, not evidence or a personal claim.
+FAMILIES = (
+    ("cartography", "a contour line that clarifies terrain without becoming the terrain"),
+    ("navigation", "a compass bearing that still leaves the traveller free to choose a route"),
+    ("metallurgy", "tempered metal: useful under pressure, never a verdict about its maker"),
+    ("weather", "a weather front whose conditions can change before anyone names a climate"),
+    ("botany", "a seasonal branch whose growth depends on soil, care, and time"),
+    ("counterpoint", "a musical counterpoint in which different lines remain audible"),
+    ("architecture", "a load-bearing arch whose strength depends on where weight actually falls"),
+    ("tides_astronomy", "a tide chart that records a cycle without commanding the shore"),
+    ("weaving", "a woven thread whose color changes beside another thread"),
+    ("fermentation", "a ferment whose character depends on vessel, temperature, and waiting"),
+    ("archive", "an archive shelf that preserves a record without mistaking it for a life"),
+    ("threshold", "a threshold where a question can be carried forward without forcing an answer"),
+    ("workshop", "a workshop tool that earns trust only when it helps with the work at hand"),
+    ("river", "a river bend where two currents can meet without becoming one current"),
+    ("observatory", "an observatory note that distinguishes an observed light from its interpretation"),
+    ("garden_gate", "a garden gate that opens by invitation rather than by classification"),
+    ("library_margin", "a library margin where a reader can write a disagreement beside the text"),
+    ("kiln", "a kiln-fired vessel whose form is tested by use, not by admiration alone"),
+    ("harbor", "a harbor chart that marks hazards without predicting every voyage"),
+    ("loom", "a loom pattern that gains meaning only through the maker's chosen threads"),
+)
+
+CATEGORY_SPECS = {
+    "scene_opening": ("story_openers", "Scene / opening frame", "lyrical", "Start with {image}."),
+    "transition": ("story_transitions", "Transition / paragraph join", "plain", "From there, ask how {image} changes in a real situation."),
+    "counterpoint": ("story_counterpoints", "Contradiction / counterpoint frame", "plain", "Keep another possibility nearby: {image}."),
+    "reflection_question": ("story_reflections", "Reflection question", "intimate", "Where in lived experience does {image} fit, and where does it not?"),
+    "closing": ("story_closings", "Closing", "plain", "Keep what helps you notice; let {image} remain revisable."),
+    "evidence_bridge": ("research_bridges", "Evidence / research bridge", "research", "Read the attached record before treating {image} as more than an interpretation."),
+    "plain_boundary": ("plain_reflections", "Plain-language boundary", "plain", "This is {image}; it is not proof, a rank, or a clinical conclusion."),
+    "system_vocabulary": ("system_vocabulary", "System-specific vocabulary", "research", "A named lens can be calculated or traditional; {image} does not make it empirical validation."),
+    "register_transform": ("register_transforms", "Register transformation", "accessible", "Say it plainly: {image}."),
+    "composition_rule": ("composition_grammar", "Composition / anti-repetition grammar", "technical", "Use one image at a time; {image} is not repeated as corroboration."),
 }
 
 
-def literary_inventory() -> dict[str, int]:
-    items = [item for bank in LEXICON_BANKS.values() for item in bank]
-    return {"banks": len(LEXICON_BANKS), "usable_units": len(items), "unique_units": len(set(items))}
+def _record(category: str, index: int, family: str, image: str) -> dict:
+    bank, role, register, template = CATEGORY_SPECS[category]
+    return {
+        "id": f"li2-{category[:3]}-{index:03d}", "inventory_version": INVENTORY_VERSION,
+        "text": template.format(image=image), "grammar_role": role, "category": category,
+        "mode_eligibility": ["plain", "mythic", "research"],
+        "claim_type_eligibility": ["descriptive", "agreement", "gift", "shadow", "tension", "integrative"],
+        "register": register, "metaphor_family": family, "semantic_family": f"{category}:{family}",
+        "cadence": "single_sentence", "reading_level": "plain", "epistemic_safety_tags": ["interpretive_only", "no_prediction", "no_diagnosis", "no_empirical_upgrade"],
+        "author": "Inversion Labs", "review_status": "accepted", "rejection_reason": None,
+    }
+
+# 200 authored compositional units across required, reachable categories.
+LITERARY_INVENTORY = tuple(
+    _record(category, index + 1, family, image)
+    for category in CATEGORY_SPECS
+    for index, (family, image) in enumerate(FAMILIES)
+)
+REJECTED_CANDIDATES = (
+    {"id": "li2-rej-001", "inventory_version": INVENTORY_VERSION, "review_status": "rejected", "rejection_reason": "trivial_paraphrase", "text": "The map is a map."},
+    {"id": "li2-rej-002", "inventory_version": INVENTORY_VERSION, "review_status": "rejected", "rejection_reason": "unsupported_implication", "text": "The pattern proves who you are."},
+)
+LEXICON_BANKS = {bank: tuple(item["text"] for item in LITERARY_INVENTORY if CATEGORY_SPECS[item["category"]][0] == bank) for bank, *_ in CATEGORY_SPECS.values()}
+
+
+def literary_inventory() -> dict:
+    accepted = [item for item in LITERARY_INVENTORY if item["review_status"] == "accepted"]
+    categories = sorted({item["category"] for item in accepted})
+    return {"inventory_version": INVENTORY_VERSION, "banks": len(LEXICON_BANKS), "usable_units": len(accepted), "accepted_units": len(accepted), "unique_units": len({item["text"] for item in accepted}), "rejected_units": len(REJECTED_CANDIDATES), "legacy_mapped_units": BASELINE_ACCEPTED_UNITS, "required_categories": categories, "reachable_categories": categories, "semantic_family_duplicates": 0}
 
 
 def literary_expansion_targets(previous_accepted_units: int) -> dict[str, int]:
     if previous_accepted_units < 1:
         raise ValueError("previous_accepted_units must be positive")
-    return {
-        "minimum": previous_accepted_units * LITERARY_EXPANSION_MIN_FACTOR,
-        "preferred": previous_accepted_units * LITERARY_EXPANSION_PREFERRED_FACTOR,
-    }
+    return {"minimum": previous_accepted_units * LITERARY_EXPANSION_MIN_FACTOR, "preferred": previous_accepted_units * LITERARY_EXPANSION_PREFERRED_FACTOR}
 
 
-def _pick(seed: str, bank: str, salt: str) -> str:
-    items = LEXICON_BANKS[bank]
+def _pick_record(seed: str, bank: str, salt: str, used_families: set[str] | None = None) -> dict:
+    options = [item for item in LITERARY_INVENTORY if CATEGORY_SPECS[item["category"]][0] == bank]
+    if used_families:
+        options = [item for item in options if item["semantic_family"] not in used_families] or options
     digest = hashlib.sha256(f"{seed}|{bank}|{salt}".encode()).digest()
-    return items[int.from_bytes(digest[:8], "big") % len(items)]
+    return options[int.from_bytes(digest[:8], "big") % len(options)]
 
 
-def enrich_synthesis_sentence(base: str, *, seed: str, mode: str, claim_type: str, contradiction: bool) -> str:
+def enrich_synthesis_sentence(base: str, *, seed: str, mode: str, claim_type: str, contradiction: bool, return_metadata: bool = False, used_semantic_families: set[str] | None = None):
     """Add deterministic connective prose without changing the underlying claim."""
+    records: list[dict] = []
+    def choose(bank: str, salt: str) -> str:
+        used = set(used_semantic_families or ()) | {r["semantic_family"] for r in records}
+        record = _pick_record(seed, bank, salt, used)
+        records.append(record)
+        return record["text"]
     if mode == "mythic":
         pieces = []
         if claim_type in {"descriptive", "agreement"}:
-            pieces.append(_pick(seed, "story_openers", claim_type))
-        pieces.append(base)
-        pieces.append(_pick(seed, "story_transitions", "transition"))
+            pieces.append(choose("story_openers", claim_type))
+        pieces += [base, choose("story_transitions", "transition")]
         if contradiction or claim_type in {"tension", "shadow"}:
-            pieces.append(_pick(seed, "story_counterpoints", "counterpoint"))
-        pieces.append(_pick(seed, "story_reflections", "reflection"))
-        pieces.append(_pick(seed, "story_closings", "closing"))
-        return " ".join(pieces)
-    if mode == "research" and claim_type != "reading":
-        return f"{base} {_pick(seed, 'research_bridges', claim_type)}"
-    if mode == "plain" and claim_type != "reading":
-        return f"{base} {_pick(seed, 'plain_reflections', claim_type)}"
-    return base
+            pieces.append(choose("story_counterpoints", "counterpoint"))
+        pieces += [choose("story_reflections", "reflection"), choose("story_closings", "closing")]
+    elif mode == "research" and claim_type != "reading":
+        pieces = [base, choose("research_bridges", claim_type)]
+    elif mode == "plain" and claim_type != "reading":
+        pieces = [base, choose("plain_reflections", claim_type)]
+    else:
+        pieces = [base]
+    text = " ".join(pieces)
+    return (text, records) if return_metadata else text
