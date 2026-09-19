@@ -11,12 +11,14 @@ from .prose_lexicon import LEXICON_VERSION, enrich_synthesis_sentence
 MODES = {"plain", "mythic", "research"}
 
 
-def _sentence(claim: dict, text: str) -> dict:
+def _sentence(claim: dict, text: str, lexicon_records: list[dict] | None = None) -> dict:
     return {
         "sentence_id": f"sentence_{claim['claim_id'].removeprefix('claim_')}", "text": text,
         "claim_ids": [claim["claim_id"]], "evidence_ids": claim["evidence_ids"],
         "strength": claim["strength"], "epistemic_label": "interpretive_synthesis",
         "contradiction": bool(claim["contradicting_evidence_ids"] or claim["claim_type"] == "tension"),
+        "lexicon_unit_ids": [item["id"] for item in (lexicon_records or [])],
+        "lexicon_semantic_families": [item["semantic_family"] for item in (lexicon_records or [])],
     }
 
 
@@ -91,13 +93,15 @@ def _base_text(claim: dict, mode: str) -> str:
     return f"The plan records {motif} as a bounded interpretive claim."
 
 
-def _text(claim: dict, mode: str, analysis_id: str) -> str:
+def _text(claim: dict, mode: str, analysis_id: str, used_semantic_families: set[str]) -> tuple[str, list[dict]]:
     base = _base_text(claim, mode)
     seed = f"{analysis_id}:{claim['claim_id']}:{mode}"
-    return enrich_synthesis_sentence(
+    enriched = enrich_synthesis_sentence(
         base, seed=seed, mode=mode, claim_type=claim["claim_type"],
         contradiction=bool(claim["contradicting_evidence_ids"] or claim["claim_type"] == "tension"),
+        return_metadata=True, used_semantic_families=used_semantic_families,
     )
+    return enriched if isinstance(enriched, tuple) else (enriched, [])
 
 
 def realize(plan: dict, mode: str) -> dict:
@@ -107,7 +111,12 @@ def realize(plan: dict, mode: str) -> dict:
     for planned in plan["narrative_sections"]:
         if planned["section_id"] == "evidence_ledger":
             continue
-        sentences = [_sentence(claim, _text(claim, mode, plan["analysis_id"])) for claim in planned["claims"]]
+        sentences = []
+        used_semantic_families: set[str] = set()
+        for claim in planned["claims"]:
+            text, lexicon_records = _text(claim, mode, plan["analysis_id"], used_semantic_families)
+            used_semantic_families.update(item["semantic_family"] for item in lexicon_records)
+            sentences.append(_sentence(claim, text, lexicon_records))
         if not sentences:
             continue
         sections.append({
