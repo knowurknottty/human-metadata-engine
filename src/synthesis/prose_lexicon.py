@@ -34,16 +34,28 @@ FAMILIES = (
 )
 
 CATEGORY_SPECS = {
+    # Core narrative progression categories
     "scene_opening": ("story_openers", "Scene / opening frame", "lyrical", "Start with {image}."),
     "transition": ("story_transitions", "Transition / paragraph join", "plain", "From there, ask how {image} changes in a real situation."),
     "counterpoint": ("story_counterpoints", "Contradiction / counterpoint frame", "plain", "Keep another possibility nearby: {image}."),
     "reflection_question": ("story_reflections", "Reflection question", "intimate", "Where in lived experience does {image} fit, and where does it not?"),
     "closing": ("story_closings", "Closing", "plain", "Keep what helps you notice; let {image} remain revisable."),
+    # Research and boundary categories
     "evidence_bridge": ("research_bridges", "Evidence / research bridge", "research", "Read the attached record before treating {image} as more than an interpretation."),
     "plain_boundary": ("plain_reflections", "Plain-language boundary", "plain", "This is {image}; it is not proof, a rank, or a clinical conclusion."),
     "system_vocabulary": ("system_vocabulary", "System-specific vocabulary", "research", "A named lens can be calculated or traditional; {image} does not make it empirical validation."),
     "register_transform": ("register_transforms", "Register transformation", "accessible", "Say it plainly: {image}."),
+    # Composition and meta-rules
     "composition_rule": ("composition_grammar", "Composition / anti-repetition grammar", "technical", "Use one image at a time; {image} is not repeated as corroboration."),
+    # NEW: Epistemic humility categories for R1 expansion
+    "interpretive_marker": ("epistemic_markers", "Interpretive boundary marker", "plain", "This uses {image} as a symbolic lens, not an empirical claim."),
+    "bounded_hypothesis": ("hypothesis_boundaries", "Bounded hypothesis framing", "research", "Consider {image} as one possible reading among others; it invites testing rather than asserting certainty."),
+    # NEW: Relational progression categories
+    "shared_pattern": ("relational_patterns", "Shared pattern recognition", "plain", "Notice how {image} appears in both individual experience and collective observation."),
+    "dialogue_invitation": ("dialogue_prompts", "Dialogue / collaborative inquiry", "intimate", "Ask someone else to describe where they see {image}; compare notes without trying to convince."),
+    # NEW: Temporal/evolutionary categories
+    "temporal_marker": ("temporal_markers", "Temporal positioning", "plain", "This pattern emerged at a specific moment; {image} helps locate it in time rather than treating it as eternal."),
+    "evolution_note": ("evolution_notes", "Pattern evolution tracking", "research", "Observe how {image} changes across different contexts or life stages; patterns shift like weather, not laws."),
 }
 
 

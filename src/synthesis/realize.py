@@ -7,6 +7,11 @@ import hashlib
 from .contracts import NARRATIVE_SCHEMA_VERSION, TEMPLATE_VERSION
 from .reading_library import LIBRARY_VERSION
 from .prose_lexicon import LEXICON_VERSION, enrich_synthesis_sentence
+from .epistemic_safety import (
+    contains_overclaiming_language,
+    validate_epistemic_strength,
+    add_epistemic_metadata_to_section,
+)
 
 MODES = {"plain", "mythic", "research"}
 
@@ -108,32 +113,82 @@ def realize(plan: dict, mode: str) -> dict:
     if mode not in MODES:
         raise ValueError("Narrative mode must be plain, mythic, or research.")
     sections = []
+    total_evidence_count = 0
+    total_contradiction_count = 0
     for planned in plan["narrative_sections"]:
         if planned["section_id"] == "evidence_ledger":
             continue
         sentences = []
         used_semantic_families: set[str] = set()
+        section_evidence = 0
+        section_contradictions = 0
         for claim in planned["claims"]:
             text, lexicon_records = _text(claim, mode, plan["analysis_id"], used_semantic_families)
             used_semantic_families.update(item["semantic_family"] for item in lexicon_records)
             sentences.append(_sentence(claim, text, lexicon_records))
+            # Accumulate evidence and contradiction counts from claim metadata
+            if "evidence_ids" in claim:
+                section_evidence += len(claim["evidence_ids"])
+            if claim.get("contradicting_evidence_ids") or claim.get("claim_type") == "tension":
+                section_contradictions += 1
         if not sentences:
             continue
+        # Attach epistemic metadata to each paragraph for auditability
+        paragraphs = []
+        for index, item in enumerate(sentences):
+            paragraphs.append({
+                "paragraph_id": f"paragraph_{planned['section_id']}_{index}",
+                "text": item["text"],
+                "sentences": [item],
+                "epistemic_label": "interpretive_synthesis",
+            })
         sections.append({
-            "section_id": planned["section_id"], "heading": planned["purpose"],
-            "paragraphs": [{"paragraph_id": f"paragraph_{planned['section_id']}_{index}",
-                            "text": item["text"], "sentences": [item]} for index, item in enumerate(sentences)],
+            "section_id": planned["section_id"],
+            "heading": planned["purpose"],
+            "paragraphs": paragraphs,
+            "evidence_density": section_evidence,
+            "contradictions_preserved": bool(section_contradictions > 0),
         })
+    # Validate epistemic strength across all claims
+    all_claims = []
+    for planned in plan["narrative_sections"]:
+        if planned["section_id"] == "evidence_ledger":
+            continue
+        all_claims.extend(planned.get("claims", []))
+    has_overclaim, overclaim_issues = contains_overclaiming_language(
+        " ".join(claim.get("text", "") for claim in all_claims)
+    )
+    strength_valid, strength_issues = validate_epistemic_strength(all_claims, mode)
+    # Compute aggregate evidence/contradiction counts
+    total_evidence_count = sum(
+        len(c.get("evidence_ids", [])) + len(c.get("contradicting_evidence_ids") or [])
+        for c in all_claims
+    )
     canonical = plan["analysis_id"] + ":" + mode + ":" + TEMPLATE_VERSION + ":" + LIBRARY_VERSION
     return {
-        "schema_version": NARRATIVE_SCHEMA_VERSION, "mode": mode,
+        "schema_version": NARRATIVE_SCHEMA_VERSION,
+        "mode": mode,
         "tone": "poetic" if mode == "mythic" else "grounded" if mode == "plain" else "evidence-first",
-        "sections": sections, "summary": plan["central_archetype"]["definition"],
+        "sections": sections,
+        "summary": plan["central_archetype"]["definition"],
         "disclaimer": "A deterministic symbolic reflection, not scientific personality measurement, diagnosis, prediction, or destiny.",
+        "epistemic_validation": {
+            "overclaim_patterns_found": has_overclaim,
+            "overclaim_issues": overclaim_issues if has_overclaim else [],
+            "strength_valid": strength_valid,
+            "strength_issues": strength_issues if not strength_valid else [],
+            "total_evidence_density": total_evidence_count,
+        },
         "generation_metadata": {
-            "engine": "deterministic-compositor", "model": None, "prompt_version": None,
-            "temperature": 0, "generated_at": None, "template_version": TEMPLATE_VERSION,
+            "engine": "deterministic-compositor",
+            "model": None,
+            "prompt_version": None,
+            "temperature": 0,
+            "generated_at": None,
+            "template_version": TEMPLATE_VERSION,
             "deterministic_input_hash": hashlib.sha256(canonical.encode()).hexdigest(),
-            "remote_provider_used": False, "reading_library_version": LIBRARY_VERSION, "lexicon_version": LEXICON_VERSION,
+            "remote_provider_used": False,
+            "reading_library_version": LIBRARY_VERSION,
+            "lexicon_version": LEXICON_VERSION,
         },
     }

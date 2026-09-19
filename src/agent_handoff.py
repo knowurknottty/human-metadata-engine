@@ -24,9 +24,33 @@ def _evidence_projection(item: dict) -> dict:
         "epistemic_class": item.get("epistemic_class"), "mapping_provenance": item.get("mapping_provenance"),
         "independence_group": item.get("independence_group"), "limitations": item.get("limitations", []),
     })
+    # Handle nested sensitive data in source_value (dict, list, or scalar)
     if isinstance(projected.get("source_value"), dict):
         projected["source_value"] = _safe(projected["source_value"])
+    elif isinstance(projected.get("source_value"), list):
+        # Recursively sanitize each element of the list
+        sanitized_list = []
+        for elem in projected["source_value"]:
+            if isinstance(elem, dict):
+                sanitized_list.append(_safe(elem))
+            elif isinstance(elem, list):
+                sanitized_list.append(sanitize_nested_list(elem))
+            else:
+                sanitized_list.append(elem)
+        projected["source_value"] = sanitized_list
     return projected
+
+def sanitize_nested_list(lst: list) -> list:
+    """Recursively sanitize a nested list for sensitive tokens."""
+    result = []
+    for item in lst:
+        if isinstance(item, dict):
+            result.append(_safe(item))
+        elif isinstance(item, list):
+            result.append(sanitize_nested_list(item))
+        else:
+            result.append(item)
+    return result
 
 
 def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> dict:
