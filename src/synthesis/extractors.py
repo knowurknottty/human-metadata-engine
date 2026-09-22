@@ -287,6 +287,88 @@ def extract_tarot(signature: dict, _psychology: dict | None) -> list[dict]:
     )]
 
 
+
+ROADMAP_EVIDENCE_CONFIG = {
+    "alchemical_transformation": (("stage", "stage_index"), "name_derived_symbolic"),
+    "apollonius": (("total_value", "reduced_total", "dominant_planet", "primary_virtue", "divine_contemplation"), "name_derived_symbolic"),
+    "arabic_abjad": (("abjad_total", "reduced", "input_mode"), "name_derived_symbolic"),
+    "babylonian_planetary": (("planet", "chaldean_order_index"), "name_derived_symbolic"),
+    "cuneiform_magic": (("sign_count", "lexical_decoding", "scope"), "name_derived_symbolic"),
+    "egyptian": (("decan_index", "decan_scope", "hieroglyphic_unicode_count", "uniliteral_transliteration"), "mixed_symbolic"),
+    "egyptian_maat": (("symbolic_balance", "vowels", "consonants", "scope"), "name_derived_symbolic"),
+    "elder_futhark": (("rune_total", "unmapped_latin"), "name_derived_symbolic"),
+    "esoteric_bridge": (("bridge_type", "birth_data_used", "scope"), "crosswalk_comparison"),
+    "hermes_thoth_nabu": (("letter_total", "scope"), "name_derived_symbolic"),
+    "hermetic_principles": (("principle", "principle_index"), "name_derived_symbolic"),
+    "indus_valley": (("symbol_count", "undeciphered"), "name_derived_symbolic"),
+    "mandaean_duodecimal": (("decimal_total", "scope"), "name_derived_symbolic"),
+    "mayan_tzolkin": (("available", "correlation", "tzolkin_day", "tzolkin_number"), "birth_derived_symbolic"),
+    "ogham": (("tree_count",), "name_derived_symbolic"),
+    "sacred_geometry": (("digital_root", "polygon_sides", "tetractys_layer", "geometric_operation"), "name_derived_symbolic"),
+    "solomonic": (("shem_index", "planet", "entity_name_included", "scope"), "name_derived_symbolic"),
+    "sumerian_me_ontology": (("source_text_id", "named_item_count", "category_count", "evidence_layer", "identity_input_used", "personal_mapping_policy", "attestation_status"), "historical_reference"),
+    "sumerian_sexagesimal": (("decimal_total", "place_value_base"), "name_derived_symbolic"),
+    "tartaria_architecture": (("proportion_index", "polygon_sides", "historical_claim_status", "scope"), "name_derived_symbolic"),
+    "temporal_numerology": (("available", "life_path", "birthday_number", "personal_year", "as_of_year"), "birth_derived_symbolic"),
+    "unicode_codepoint": (("codepoint_sum", "utf8_byte_length"), "name_derived_symbolic"),
+    "vedic_jyotish": (("birth_data_available", "calculation_status", "nakshatra", "scope"), "birth_derived_symbolic"),
+}
+
+
+def extract_binary_prime(signature: dict, _psychology: dict | None) -> list[dict]:
+    data = (signature.get("encoders") or {}).get("binary_prime") or {}
+    items = []
+    for field in ("prime_reduced", "binary_weight", "polarity_ratio", "binary_entropy"):
+        value = data.get(field)
+        if value is None or isinstance(value, (dict, list)):
+            continue
+        items.append(_item(
+            system="binary_prime", subsystem=field,
+            source_path=f"signature.encoders.binary_prime.{field}", value=value,
+            symbol_family=f"binary_prime_{field}", ontology_system="reading_only",
+            epistemic_class="deterministic_calculation",
+            provenance_ref=f"signature-v2:binary_prime:{field}",
+            atlas_targets=["system:binary_prime"], report_target="name-calculations",
+            limitations=["This is a deterministic transform of the supplied name string, not a measurement of the person."],
+            independence_group="name_structure",
+        ))
+    return items
+
+
+def extract_roadmap_envelopes(signature: dict, _psychology: dict | None) -> list[dict]:
+    encoders = signature.get("encoders") or {}
+    items = []
+    for system, (fields, independence_group) in ROADMAP_EVIDENCE_CONFIG.items():
+        envelope = encoders.get(system) or {}
+        data = envelope.get("data") if envelope.get("status") == "computed" else None
+        if not isinstance(data, dict):
+            continue
+        historical = system == "sumerian_me_ontology"
+        scope = data.get("scope")
+        base_limit = (
+            "Historical/textual evidence is preserved without inferring a modern personal mapping."
+            if historical else
+            "The returned value is deterministic within the named convention; personal meaning remains symbolic or project-authored interpretation."
+        )
+        for field in fields:
+            value = data.get(field)
+            if value is None or isinstance(value, (dict, list)):
+                continue
+            limits = [base_limit, "This record does not independently validate a personal trait."]
+            if isinstance(scope, str) and scope and field != "scope":
+                limits.append(scope)
+            items.append(_item(
+                system=system, subsystem=field,
+                source_path=f"signature.encoders.{system}.data.{field}",
+                value=value, symbol_family=f"roadmap_{system}_{field}",
+                ontology_system="reading_only", role="other",
+                epistemic_class="historical_textual_reference" if historical else "deterministic_calculation",
+                provenance_ref=_envelope_provenance(envelope),
+                atlas_targets=[f"system:{system}"], report_target="symbolic-systems",
+                limitations=limits, independence_group=independence_group,
+            ))
+    return items
+
 def extract_psychology(_signature: dict, psychology: dict | None) -> list[dict]:
     if not psychology:
         return []
@@ -335,8 +417,10 @@ def extract_psychology(_signature: dict, psychology: dict | None) -> list[dict]:
 
 
 EXTRACTORS: tuple[Callable[[dict, dict | None], list[dict]], ...] = (
-    extract_numerology, extract_name_structure, extract_astrology, extract_human_design,
-    extract_tree_of_life, extract_chinese, extract_tarot, extract_psychology,
+    extract_numerology, extract_name_structure, extract_binary_prime,
+    extract_astrology, extract_human_design,
+    extract_tree_of_life, extract_chinese, extract_tarot,
+    extract_roadmap_envelopes, extract_psychology,
 )
 
 

@@ -5,52 +5,93 @@ from copy import deepcopy
 
 AGENT_HANDOFF_VERSION = "human-manual-agent-handoff-v1"
 HANDOFF_V2_VERSION = "human-manual-agent-handoff-v2"
-SENSITIVE_TOKENS = ("lat", "lon", "location", "timezone", "observation", "text")
+SENSITIVE_KEYS = frozenset({
+    "lat", "latitude", "lon", "lng", "longitude",
+    "location", "place", "birth_place", "birthplace", "address",
+    "timezone", "timezone_name", "timezone_id", "tz", "tz_id",
+    "coords", "coordinates", "geo", "position",
+    "observation", "observation_text", "raw_observation",
+    "note", "notes", "comment", "comments", "subject_notes", "text",
+})
+SENSITIVE_KEY_FRAGMENTS = (
+    "latitude", "longitude", "coordinate", "coords", "timezone",
+    "birth_place", "birthplace", "observation", "subject_notes",
+)
+NORMALIZED_INPUT_EXPORT_KEYS = (
+    "name", "birth_availability", "birth_available", "time_accuracy",
+    "self_report_availability", "self_report_available",
+    "observation_availability", "observation_available",
+)
+SAFE_EVIDENCE_SOURCE_PREFIXES = ("signature.encoders.", "signature.systems.")
+
+
+def _normalized_key(key: str) -> str:
+    return key.casefold().replace("-", "_").replace(" ", "_")
+
+
+def _is_sensitive_key(key: str) -> bool:
+    normalized = _normalized_key(key)
+    if normalized in SENSITIVE_KEYS:
+        return True
+    return any(fragment in normalized for fragment in SENSITIVE_KEY_FRAGMENTS)
 
 
 def _safe(value):
-    """Remove raw location and observation material from a handoff projection."""
+    """Recursively remove fields whose schema keys are explicitly sensitive."""
     if isinstance(value, dict):
-        return {key: _safe(item) for key, item in value.items() if not any(token in key.casefold() for token in SENSITIVE_TOKENS)}
+        return {
+            key: _safe(item)
+            for key, item in value.items()
+            if not _is_sensitive_key(str(key))
+        }
     if isinstance(value, list):
         return [_safe(item) for item in value]
     return value
 
 
+def _normalized_input_projection(normalized: dict) -> dict:
+    """Export only reviewed descriptors; arbitrary normalized-input fields never transit v2."""
+    return {
+        key: deepcopy(normalized[key])
+        for key in NORMALIZED_INPUT_EXPORT_KEYS
+        if key in normalized
+    }
+
+
+def _source_path_is_safe(path: object) -> bool:
+    if not isinstance(path, str):
+        return False
+    lowered = path.casefold()
+    if any(token in lowered for token in (
+        "latitude", "longitude", "location", "timezone",
+        "birth_place", "birthplace", "observation",
+    )):
+        return False
+    return path.startswith(SAFE_EVIDENCE_SOURCE_PREFIXES)
+
+
 def _evidence_projection(item: dict) -> dict:
-    projected = _safe({
-        "evidence_id": item.get("evidence_id"), "system": item.get("system"),
-        "source_path": item.get("source_path"), "source_value": item.get("source_value"),
-        "epistemic_class": item.get("epistemic_class"), "mapping_provenance": item.get("mapping_provenance"),
-        "independence_group": item.get("independence_group"), "limitations": item.get("limitations", []),
-    })
-    # Handle nested sensitive data in source_value (dict, list, or scalar)
-    if isinstance(projected.get("source_value"), dict):
-        projected["source_value"] = _safe(projected["source_value"])
-    elif isinstance(projected.get("source_value"), list):
-        # Recursively sanitize each element of the list
-        sanitized_list = []
-        for elem in projected["source_value"]:
-            if isinstance(elem, dict):
-                sanitized_list.append(_safe(elem))
-            elif isinstance(elem, list):
-                sanitized_list.append(sanitize_nested_list(elem))
-            else:
-                sanitized_list.append(elem)
-        projected["source_value"] = sanitized_list
+    """Project evidence through an allowlist; include source values only from reviewed paths."""
+    projected = {
+        "evidence_id": item.get("evidence_id"),
+        "system": item.get("system"),
+        "source_path": item.get("source_path"),
+        "epistemic_class": item.get("epistemic_class"),
+        "mapping_provenance": item.get("mapping_provenance"),
+        "independence_group": item.get("independence_group"),
+        "limitations": _safe(item.get("limitations", [])),
+    }
+    if "source_value" in item:
+        if _source_path_is_safe(item.get("source_path")):
+            projected["source_value"] = _safe(deepcopy(item.get("source_value")))
+        else:
+            projected["source_value_excluded"] = "unreviewed_or_sensitive_source_path"
     return projected
 
+
 def sanitize_nested_list(lst: list) -> list:
-    """Recursively sanitize a nested list for sensitive tokens."""
-    result = []
-    for item in lst:
-        if isinstance(item, dict):
-            result.append(_safe(item))
-        elif isinstance(item, list):
-            result.append(sanitize_nested_list(item))
-        else:
-            result.append(item)
-    return result
+    """Compatibility helper retained for callers; delegates to the same schema-key policy."""
+    return [_safe(item) for item in lst]
 
 
 def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> dict:
@@ -77,7 +118,7 @@ def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> 
     return {
         "schema_version": HANDOFF_V2_VERSION,
         "analysis_mode": analysis_mode,
-        "subject_inputs": _safe({"normalized_input": deepcopy(normalized), "included": ["name", "birth availability", "self-report availability"], "intentionally_excluded": excluded}),
+        "subject_inputs": {"normalized_input": _normalized_input_projection(normalized), "included": ["name", "birth availability", "self-report availability"], "intentionally_excluded": excluded},
         "deterministic_replay": {"input_hash": response.get("input_hash"), "engine_version": response.get("engine_version"), "build_revision": response.get("build_revision"), "synthesis_versions": synthesis.get("versions", {})},
         "unavailable_calculations": _safe({"data_quality": synthesis.get("evidence", {}).get("data_quality", {}), "missing_or_uncertain_dimensions": plan.get("missing_or_uncertain_dimensions", [])}),
         "evidence_index": [_evidence_projection(item) for item in evidence_items],

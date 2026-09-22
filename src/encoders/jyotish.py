@@ -47,7 +47,7 @@ NODE_MODES = {
 
 
 def _uses_iana(birth: dict[str, Any]) -> bool:
-    return bool(birth.get("timezone_id") or birth.get("tzid"))
+    return bool(birth.get("timezone_id") or birth.get("tzid") or birth.get("timezone_name"))
 
 
 def _meta(*, ayanamsa: str, lunar_node: str, use_iana: bool) -> dict[str, Any]:
