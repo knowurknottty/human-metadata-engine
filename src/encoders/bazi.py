@@ -277,7 +277,19 @@ def compute_bazi(birth: dict[str, Any]) -> dict[str, Any]:
         "timezone_basis": timezone_basis,
     }
     return system_result(
-        "bazi", calculation=calculation, limitations=limitations,
+        "bazi", calculation=calculation,
+        interpretation={
+            "disclosure": {
+                "convention": meta["convention"],
+                "approximation_precision": "undisclosed",
+                "precision_basis": (
+                    "Solar-term (Jieqi) placement uses an ephemeris solar longitude and no documented "
+                    "arcsecond figure is published, so precision is disclosed as undisclosed. This label "
+                    "never implies true-solar correction, 23:00 rollover, or birth-time precision."
+                ),
+            }
+        },
+        limitations=limitations,
         **meta,
     )
 

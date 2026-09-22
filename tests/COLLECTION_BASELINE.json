@@ -1,0 +1,7 @@
+{
+  "pytest_collect_tests": 489,
+  "pytest_collect_files": 68,
+  "canonical_test_files": 66,
+  "generated_at": "2026-09-22",
+  "note": "Run pytest --collect-only; divergence requires a changelog entry"
+}

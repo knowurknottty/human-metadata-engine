@@ -19,15 +19,28 @@ def _tzdata_version() -> str | None:
         return None
 
 
+# ``timezone_name`` is the validated public API spelling. ``timezone_id`` and
+# ``tzid`` remain library aliases. Precedence is preserved, but an unusable
+# spelling no longer blocks a later valid one; none are inferred from
+# coordinates.
+_ZONE_SPELLINGS = ("timezone_id", "tzid", "timezone_name")
+
+
 def _zone_from_context(context: dict[str, Any]) -> tuple[tzinfo, str, str | None]:
-    # ``timezone_name`` is the validated public API spelling. ``timezone_id``
-    # and ``tzid`` remain library aliases; none are inferred from coordinates.
-    zone_id = context.get("timezone_id") or context.get("tzid") or context.get("timezone_name")
-    if zone_id:
+    attempted: list[str] = []
+    for spelling in _ZONE_SPELLINGS:
+        raw = context.get(spelling)
+        if raw in (None, ""):
+            continue
+        attempted.append(f"{spelling}={raw}")
         try:
-            return ZoneInfo(str(zone_id)), "iana_zoneinfo", str(zone_id)
-        except (ZoneInfoNotFoundError, ValueError) as exc:
-            raise TimezoneResolutionError(f"Unknown or invalid IANA timezone_id: {zone_id}") from exc
+            return ZoneInfo(str(raw)), "iana_zoneinfo", str(raw)
+        except (ZoneInfoNotFoundError, ValueError):
+            continue
+    if attempted:
+        raise TimezoneResolutionError(
+            "Unknown or invalid IANA timezone; tried " + ", ".join(attempted)
+        )
     if "timezone_offset" not in context:
         raise TimezoneResolutionError("Provide timezone_id or timezone_offset.")
     offset = float(context["timezone_offset"])
