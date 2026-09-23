@@ -384,5 +384,5 @@ stays in the browser. No model or AI API key is required. Readings can be downlo
 with their ordered card IDs and version for replay.
 
 See [the reading library and API contract](docs/NARRATIVE_READING_LIBRARY.md).
-Deploy the updated Python backend together with the frontend: the existing Netlify
-proxy forwards `/api/tarot` and `/api/tarot/spreads` to that backend.
+Deploy the updated Python backend together with the frontend: Netlify's
+allowlisted deterministic bridge forwards `/api/tarot` and `/api/tarot/spreads` to that backend; arbitrary `/api/*` paths are not proxied.

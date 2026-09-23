@@ -65,8 +65,7 @@ it is neither transmitted nor used to select cards or customize prose.
 The API uses the existing request validation, rate limiter and concurrency gate.
 The client prevents concurrent draws, has a timeout, renders through textContent,
 and keeps the preceding reading on failure. It does not auto-redraw or call AI.
-The generic Netlify `/api/*` proxy already forwards these routes; the Python
-backend must be updated together with the frontend before production use.
+Netlify exposes only the allowlisted deterministic engine routes needed by the public client. Unknown `/api/*` paths are not proxied, and there is no SPA catch-all rewrite to mask missing backend routes. The bridge is transport only: it does not invoke an AI provider or model. The Python backend must be updated together with the frontend before production use.
 
 ## Editorial source boundaries
 

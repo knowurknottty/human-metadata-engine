@@ -79,6 +79,16 @@ constants quietly.
 5. **Quarantine** — a stale golden may be quarantined only with a recorded
    changelog entry naming the convention change that invalidated it.
 
+### R4 changelog
+
+- **2026-09-23 — local-first Netlify ingress hardening.** Removed the SPA
+  catch-all rewrite and wildcard `/api/*` proxy. The Netlify bridge now exposes
+  only the six deterministic engine routes used by the public client and
+  diagnostics. Unknown application/API paths fail closed, cross-origin response
+  synthesis was removed, and a regression test locks the route allowlist.
+  Intentional collection re-baseline: **490 pytest tests / 68 pytest files** and
+  **67 canonical test files**.
+
 ### Per-system disclosure block
 
 Each calculator emits an additive `interpretation.disclosure` block beside its
