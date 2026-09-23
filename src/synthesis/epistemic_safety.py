@@ -70,7 +70,23 @@ def _safe_strength(value):
     return 1.0
 
 def validate_epistemic_strength(claims: list[dict], mode: str) -> tuple[bool, list[str]]:
-    """Ensure interpretive claims don't exceed their epistemic tier."""
+    """Pinned return contract for interpretive strength validation.
+
+    Contract (asserted by ``tests/test_no_fabrication.py``):
+
+    * Returns ``(valid, issues)`` where ``valid`` is ``True`` if and only if
+      ``issues`` is empty.
+    * ``valid`` is ``True`` for an empty claim list or for every claim whose
+      ``strength`` stays at or below its mode threshold.
+    * ``valid`` is ``False`` and ``issues`` is non-empty whenever any claim
+      exceeds the mode's tier threshold. ``mythic`` permits up to
+      ``MAX_INTERPRETIVE_STRENGTH``; ``plain`` and ``research`` permit up to
+      ``MAX_INTERPRETIVE_STRENGTH * 0.8``.
+    * Unrecognised modes are accepted and impose no threshold, so they never
+      raise.
+    * ``valid`` is not a truth-confidence scalar; it is a bounded
+      policy-compliance flag.
+    """
     issues = []
     
     # Mythic mode can be more poetic but still bounded

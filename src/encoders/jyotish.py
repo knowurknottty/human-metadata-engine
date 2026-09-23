@@ -242,6 +242,17 @@ def compute_jyotish(
     }
     return system_result(
         "jyotish", calculation=calculation,
+        interpretation={
+            "disclosure": {
+                "convention": meta["convention"],
+                "approximation_precision": "undisclosed",
+                "precision_basis": (
+                    "No documented arcsecond figure for this sidereal projection is published in the "
+                    "implementation docs, so precision is disclosed as undisclosed rather than invented. "
+                    "This label never implies birth-time precision or true-solar support."
+                ),
+            }
+        },
         limitations=[
             "This layer computes astronomical/symbolic coordinates only; it does not claim empirical personality validity.",
             "Lahiri and Raman are alternative sidereal zero-point conventions and are not blended into one result.",
