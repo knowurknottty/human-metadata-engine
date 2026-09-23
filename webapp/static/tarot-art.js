@@ -2,6 +2,21 @@
 (() => {
   "use strict";
   const NS = "http://www.w3.org/2000/svg";
+  const MAJOR_ASSETS = Object.freeze({
+    0: "/assets/tarot/major-00-seeker.webp",
+    1: "/assets/tarot/major-01-alchemist.webp",
+    2: "/assets/tarot/major-02-mirror.webp",
+    3: "/assets/tarot/major-03-weaver-many-one.webp",
+    4: "/assets/tarot/major-04-builder.webp",
+    5: "/assets/tarot/major-05-beacon.webp",
+    6: "/assets/tarot/major-06-bridge.webp",
+    7: "/assets/tarot/major-07-signal.webp",
+    8: "/assets/tarot/major-08-weaver-patterns.webp",
+    9: "/assets/tarot/major-09-lantern.webp",
+    10: "/assets/tarot/major-10-wheel.webp",
+    11: "/assets/tarot/major-11-justice.webp",
+    12: "/assets/tarot/major-12-suspension.webp",
+  });
   const MAJOR_SCENES = [
     "wanderer","tools","pillars","garden","throne","arch","choice","chariot","strength","lantern","wheel",
     "scales","suspension","renewal","vessels","chain","tower","star","moon","sun","call","wreath",
@@ -87,6 +102,23 @@
     const wrap=document.createElement("div");
     wrap.className="tarot-card-art";
     wrap.dataset.cardArt=card.id || card.name;
+
+    const majorIndex = card.arcana === "Major" ? Number(card.number) : -1;
+    const asset = MAJOR_ASSETS[majorIndex];
+    if (asset) {
+      const img=document.createElement("img");
+      img.className="tarot-card-art-image";
+      img.src=asset;
+      img.alt="";
+      img.loading="lazy";
+      img.decoding="async";
+      img.draggable=false;
+      img.setAttribute("aria-hidden","true");
+      wrap.classList.add("tarot-card-art--library");
+      wrap.append(img);
+      return wrap;
+    }
+
     const svg=base(card);
     if(card.arcana === "Major") renderMajor(svg,card);
     else if(card.number >= 11) renderCourt(svg,card);
@@ -94,5 +126,5 @@
     wrap.append(svg);
     return wrap;
   };
-  window.TarotArt = Object.freeze({MAJOR_SCENES, pipPositions, renderMajor, renderPips, renderCourt, renderCardArt});
+  window.TarotArt = Object.freeze({MAJOR_ASSETS, MAJOR_SCENES, pipPositions, renderMajor, renderPips, renderCourt, renderCardArt});
 })();
