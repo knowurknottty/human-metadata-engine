@@ -29,6 +29,7 @@ New in v0.4.0 (second-order analytics on top of the encoders):
 import sys
 import os
 import json
+from typing import Optional
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -40,6 +41,10 @@ from encoders.binary_prime import binary_prime_signature
 from encoders.gematria import gematria_signature
 from encoders.isopsephy import isopsephy_signature
 from encoders.pipeline import ROADMAP_SYSTEMS, encode_symbolic_systems
+from encoders.bazi import compute_bazi
+from encoders.jyotish import compute_jyotish
+from encoders.maya_classical import compute_classical_maya
+from system_contracts import summarize_systems
 
 from analytics import (
     composite_resonance, identity_fingerprint,
@@ -169,6 +174,21 @@ def _encoder_is_available(value: object) -> bool:
         and not value.get("error")
         and value.get("available", True) is not False
     )
+
+
+def _r3_calculator_systems(birth: Optional[dict]) -> dict:
+    """Return named calculator contracts without flattening them into v2 encoders.
+
+    The systems retain their own epoch, timezone, and day-boundary adapters.
+    They are intentionally absent from legacy resonance and fingerprint logic.
+    """
+    if not birth:
+        return {}
+    return {
+        "jyotish": compute_jyotish(birth),
+        "bazi": compute_bazi(birth),
+        "maya_classical": compute_classical_maya(birth),
+    }
 
 
 def available_encoder_names(signature: dict) -> list[str]:
@@ -338,6 +358,12 @@ def compute_unified_signature(
         birth=birth,
         as_of_year=identity.get("as_of_year"),
     ))
+
+    # R3 calculator contracts are additive. They remain outside the legacy
+    # encoder namespace and its resonance/fingerprint accounting, while being
+    # directly inspectable by the live signature and synthesis layers.
+    result["systems"] = _r3_calculator_systems(birth)
+    result["system_manifest"] = summarize_systems(result["systems"])
 
     # Optional: Astrology (requires birth data)
     if birth and HAS_Astrology:

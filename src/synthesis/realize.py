@@ -100,6 +100,8 @@ def _base_text(claim: dict, mode: str) -> str:
 
 def _text(claim: dict, mode: str, analysis_id: str, used_semantic_families: set[str]) -> tuple[str, list[dict]]:
     base = _base_text(claim, mode)
+    if claim.get("metadata", {}).get("allow_lexicon_enrichment") is False:
+        return base, []
     seed = f"{analysis_id}:{claim['claim_id']}:{mode}"
     enriched = enrich_synthesis_sentence(
         base, seed=seed, mode=mode, claim_type=claim["claim_type"],
@@ -155,9 +157,13 @@ def realize(plan: dict, mode: str) -> dict:
         if planned["section_id"] == "evidence_ledger":
             continue
         all_claims.extend(planned.get("claims", []))
-    has_overclaim, overclaim_issues = contains_overclaiming_language(
-        " ".join(claim.get("text", "") for claim in all_claims)
+    realized_text = " ".join(
+        sentence["text"]
+        for section in sections
+        for paragraph in section["paragraphs"]
+        for sentence in paragraph["sentences"]
     )
+    has_overclaim, overclaim_issues = contains_overclaiming_language(realized_text)
     strength_valid, strength_issues = validate_epistemic_strength(all_claims, mode)
     # Compute aggregate evidence/contradiction counts
     total_evidence_count = sum(

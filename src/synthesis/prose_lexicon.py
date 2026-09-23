@@ -84,10 +84,68 @@ REJECTED_CANDIDATES = (
 LEXICON_BANKS = {bank: tuple(item["text"] for item in LITERARY_INVENTORY if CATEGORY_SPECS[item["category"]][0] == bank) for bank, *_ in CATEGORY_SPECS.values()}
 
 
+READING_LIBRARY_ASSET_NAMES = (
+    "NUMBERS", "SIGN_THEMES", "PLANETS", "HOUSES", "ASPECTS", "HD_TYPES",
+    "AUTHORITIES", "PROFILE_LINES", "CENTERS", "GATE_PROMPTS", "TAROT",
+)
+
+
+def _iter_authored_strings(value):
+    if isinstance(value, str):
+        yield value
+    elif isinstance(value, dict):
+        for child in value.values():
+            yield from _iter_authored_strings(child)
+    elif isinstance(value, (list, tuple)):
+        for child in value:
+            yield from _iter_authored_strings(child)
+
+
+def authored_asset_inventory() -> dict:
+    """Count literal authored text assets separately from generated composition records."""
+    from . import reading_library
+    from .system_vocabulary import SYSTEM_VOCABULARY_ASSETS
+
+    texts = []
+    for name in READING_LIBRARY_ASSET_NAMES:
+        texts.extend(_iter_authored_strings(getattr(reading_library, name)))
+    texts.extend(image for _, image in FAMILIES)
+    texts.extend(spec[3] for spec in CATEGORY_SPECS.values())
+    texts.extend(
+        item["text"] for item in SYSTEM_VOCABULARY_ASSETS
+        if item.get("review_status") == "accepted"
+    )
+    unique = list(dict.fromkeys(text.strip() for text in texts if text and text.strip()))
+    substantive = [text for text in unique if len(text.split()) >= 4]
+    return {
+        "authored_asset_count": len(unique),
+        "substantive_authored_asset_count": len(substantive),
+        "system_vocabulary_asset_count": len(SYSTEM_VOCABULARY_ASSETS),
+        "authored_asset_min_words": 4,
+        "generated_composition_records": len(LITERARY_INVENTORY),
+        "accounting_note": (
+            "Authored assets are literal stored text units. Generated composition records are "
+            "template/image combinations and are reported separately."
+        ),
+    }
+
+
 def literary_inventory() -> dict:
     accepted = [item for item in LITERARY_INVENTORY if item["review_status"] == "accepted"]
     categories = sorted({item["category"] for item in accepted})
-    return {"inventory_version": INVENTORY_VERSION, "banks": len(LEXICON_BANKS), "usable_units": len(accepted), "accepted_units": len(accepted), "unique_units": len({item["text"] for item in accepted}), "rejected_units": len(REJECTED_CANDIDATES), "legacy_mapped_units": BASELINE_ACCEPTED_UNITS, "required_categories": categories, "reachable_categories": categories, "semantic_family_duplicates": 0}
+    return {
+        "inventory_version": INVENTORY_VERSION,
+        "banks": len(LEXICON_BANKS),
+        "usable_units": len(accepted),
+        "accepted_units": len(accepted),
+        "unique_units": len({item["text"] for item in accepted}),
+        "rejected_units": len(REJECTED_CANDIDATES),
+        "legacy_mapped_units": BASELINE_ACCEPTED_UNITS,
+        "required_categories": categories,
+        "reachable_categories": categories,
+        "semantic_family_duplicates": 0,
+        **authored_asset_inventory(),
+    }
 
 
 def literary_expansion_targets(previous_accepted_units: int) -> dict[str, int]:

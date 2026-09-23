@@ -97,39 +97,21 @@ def validate_epistemic_strength(claims: list[dict], mode: str) -> tuple[bool, li
                     f"(current={strength}, recommended max={threshold})"
                 )
     
-    return len(issues) > 0, issues
+    return len(issues) == 0, issues
 
 
-def compute_epistemic_confidence_bound(evidence_count: int, contradiction_count: int = 0) -> float:
-    """Compute a confidence bound for interpretive claims based on evidence density."""
-    if evidence_count == 0:
-        return 0.1  # Very low confidence when no evidence
-    
-    # Base confidence from evidence count (diminishing returns)
-    base_confidence = min(0.9, evidence_count / max(evidence_count + 5, 1))
-    
-    # Reduce for contradictions
-    if contradiction_count > 0:
-        reduction = min(0.3, contradiction_count * 0.1)
-        base_confidence -= reduction
-    
-    return max(0.0, min(1.0, base_confidence))
-
-
-def add_epistemic_metadata_to_section(section: dict, evidence_count: int, 
-                                     contradiction_count: int = 0) -> dict:
-    """Attach epistemic metadata to a narrative section."""
-    confidence_bound = compute_epistemic_confidence_bound(evidence_count, contradiction_count)
-    
+def add_epistemic_metadata_to_section(section: dict, evidence_count: int,
+                                      contradiction_count: int = 0) -> dict:
+    """Attach descriptive audit metadata without implying truth-confidence."""
     return {
         **section,
         "epistemic_metadata": {
-            "evidence_density": evidence_count,
-            "contradiction_preserved": bool(contradiction_count > 0),
-            "confidence_bound": round(confidence_bound, 3),
+            "evidence_item_count": evidence_count,
+            "contradiction_count": contradiction_count,
+            "contradiction_preserved": bool(contradiction_count),
             "interpretive_only": True,
             "not_empirical_validation": True,
-        }
+        },
     }
 
 

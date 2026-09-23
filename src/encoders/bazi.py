@@ -33,7 +33,7 @@ CONTROLS = {"Wood": "Earth", "Earth": "Water", "Water": "Fire", "Fire": "Metal",
 
 
 def _uses_iana(birth: dict[str, Any]) -> bool:
-    return bool(birth.get("timezone_id") or birth.get("tzid"))
+    return bool(birth.get("timezone_id") or birth.get("tzid") or birth.get("timezone_name"))
 
 
 def _meta(*, time_known: bool, use_iana: bool) -> dict[str, Any]:
