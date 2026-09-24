@@ -22,7 +22,7 @@ LAYERS = ["comparisons", "correlations", "evidence", "sumerian_me_reflection", "
 
 
 def test_expansion_loads_after_core_before_app_and_wraps_not_replaces():
-    assert INDEX.index('/atlas.js?v=1.0.0') < INDEX.index('/atlas-expanded.js?v=1.0.0') < INDEX.index('/app.js?v=1.0.0')
+    assert INDEX.index('/atlas.js?v=1.0.0') < INDEX.index('/atlas-expanded.js?v=1.0.1') < INDEX.index('/app.js?v=1.0.1')
     assert "const baseBuildAtlas = window.HMEAtlas.buildAtlas;" in EXPANDED
     assert "window.HMEAtlas.buildAtlas = expandedBuildAtlas;" in EXPANDED
     assert "protectedPanels" in EXPANDED

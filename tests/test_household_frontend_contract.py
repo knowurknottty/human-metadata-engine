@@ -10,8 +10,8 @@ APP = (ROOT / "webapp/static/app.js").read_text(encoding="utf-8")
 
 
 def test_household_renderer_loads_after_atlas_extension_before_app():
-    assert INDEX.index('/atlas-expanded.js?v=1.0.0') < INDEX.index('/household.js?v=1.0.0') < INDEX.index('/app.js?v=1.0.0')
-    assert '/household.css?v=1.0.0' in INDEX
+    assert INDEX.index('/atlas-expanded.js?v=1.0.1') < INDEX.index('/household.js?v=1.0.1') < INDEX.index('/app.js?v=1.0.1')
+    assert '/household.css?v=1.0.1' in INDEX
     assert 'window.HMEHousehold' in HOUSEHOLD
     assert 'renderRelationalView' in HOUSEHOLD
 

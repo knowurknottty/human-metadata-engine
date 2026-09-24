@@ -331,7 +331,7 @@ body::before { background: linear-gradient(90deg, transparent, var(--ir-gold), t
   .atlas-workspace { grid-template-columns: minmax(0,1fr) 17rem; }
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1440px) {
   .atlas-workspace { grid-template-columns: 1fr; }
   .atlas-inspector { order: 2; }
   .inspector-sticky { position: static; max-height: none; }

@@ -198,6 +198,6 @@ The compatibility encoder map now includes `sumerian_me_ontology` as a historica
 
 ### 2026-09-24 — R4 household/Atlas/Tarot integration
 
-- Pytest collection baseline intentionally advanced from 490 tests / 68 files to **572 tests / 76 files** after merging the household composition contracts, expanded Atlas coverage, completed 78-card Tarot asset integrity checks, and associated regression suites.
+- Pytest collection baseline intentionally advanced from 490 tests / 68 files to **573 tests / 76 files** after merging the household composition contracts, expanded Atlas coverage, completed 78-card Tarot asset integrity checks, associated regression suites, and the desktop Atlas breakpoint regression that prevents the ultra-wide three-column shell from activating at ordinary desktop widths.
 - `esoteric_bridge` is explicitly classified as `project_authored_crosswalk`, remains in the `crosswalk_comparison` independence group, and is non-claim-eligible so project-authored correspondences cannot masquerade as independent evidence.
 - The protected single-person calculation contract remains `analysis-v1`; household composition is additive and default-off for paid/public use.

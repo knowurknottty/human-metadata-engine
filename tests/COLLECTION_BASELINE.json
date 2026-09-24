@@ -1,7 +1,7 @@
 {
-  "pytest_collect_tests": 572,
+  "pytest_collect_tests": 573,
   "pytest_collect_files": 76,
   "canonical_test_files": 75,
   "generated_at": "2026-09-24",
-  "note": "Intentional R4 + household/Atlas + completed 78-card Tarot integration; see SIGNATURE_V3 R4 changelog."
+  "note": "Intentional R4 + household/Atlas + completed 78-card Tarot integration; +1 desktop Atlas breakpoint regression; see SIGNATURE_V3 R4 changelog."
 }

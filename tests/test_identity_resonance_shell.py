@@ -10,16 +10,16 @@ SHELL = (STATIC / "identity-resonance-shell.css").read_text(encoding="utf-8")
 
 class IdentityResonanceShellTests(unittest.TestCase):
     def test_shell_stylesheet_is_loaded_after_canonical_styles(self):
-        base = '/styles.css?v=1.0.0'
-        shell = '/identity-resonance-shell.css?v=1.0.0'
+        base = '/styles.css?v=1.0.1'
+        shell = '/identity-resonance-shell.css?v=1.0.1'
         self.assertIn(base, HTML)
         self.assertIn(shell, HTML)
         self.assertLess(HTML.index(base), HTML.index(shell))
 
     def test_current_atlas_and_application_script_order_is_preserved(self):
         self.assertIn('/atlas.js?v=1.0.0', HTML)
-        self.assertIn('/app.js?v=1.0.0', HTML)
-        self.assertLess(HTML.index('/atlas.js?v=1.0.0'), HTML.index('/app.js?v=1.0.0'))
+        self.assertIn('/app.js?v=1.0.1', HTML)
+        self.assertLess(HTML.index('/atlas.js?v=1.0.0'), HTML.index('/app.js?v=1.0.1'))
 
     def test_original_visual_hierarchy_maps_to_all_current_primary_surfaces(self):
         for selector in (
@@ -29,6 +29,13 @@ class IdentityResonanceShellTests(unittest.TestCase):
             self.assertIn(selector, SHELL)
         self.assertIn('grid-template-areas:', SHELL)
         self.assertIn('"fingerprint astrology numerology"', SHELL)
+
+    def test_standard_desktop_drops_ultrawide_three_column_atlas_before_mobile(self):
+        self.assertIn('@media (max-width: 1440px)', SHELL)
+        compact = SHELL[SHELL.index('@media (max-width: 1440px)'):SHELL.index('@media (max-width: 760px)')]
+        self.assertIn('.atlas-workspace { grid-template-columns: 1fr; }', compact)
+        self.assertIn('grid-template-columns: minmax(13rem,.62fr) minmax(21rem,1.2fr);', compact)
+        self.assertIn('"fingerprint astrology"', compact)
 
     def test_narrow_layout_keeps_every_atlas_panel_visible(self):
         self.assertIn('@media (max-width: 760px)', SHELL)

@@ -7,7 +7,7 @@ FIX = (ROOT / "webapp" / "static" / "tarot-radio-fix.css").read_text(encoding="u
 
 
 def test_tarot_radio_override_loads_after_primary_stylesheet():
-    primary = HTML.index('/styles.css?v=1.0.0')
+    primary = HTML.index('/styles.css?v=1.0.1')
     override = HTML.index('/tarot-radio-fix.css?v=1.0.1')
     assert override > primary
 

@@ -17,7 +17,7 @@ STYLES = (ROOT / "webapp" / "static" / "styles.css").read_text(encoding="utf-8")
 class VisualAtlasContractTests(unittest.TestCase):
     def test_visualization_layer_is_separate_and_loaded_before_interactions(self):
         self.assertIn('/atlas.js?v=1.0.0', HTML)
-        self.assertLess(HTML.index('/atlas.js?v=1.0.0'), HTML.index('/app.js?v=1.0.0'))
+        self.assertLess(HTML.index('/atlas.js?v=1.0.0'), HTML.index('/app.js?v=1.0.1'))
         self.assertIn("window.HMEAtlas = {buildAtlas}", ATLAS)
         self.assertIn("window.HMEAtlas.buildAtlas", APP)
 
