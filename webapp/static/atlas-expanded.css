@@ -77,14 +77,19 @@
 .maya-cycle-card span{color:var(--text-muted);font-size:.65rem;text-transform:uppercase}
 .maya-cycle-card strong{margin-top:.45rem;color:var(--text-primary);font:1.25rem var(--font-display)}
 
-.visual-lab-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem}
+.visual-lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr));gap:.7rem}
 .visual-lab-card{min-width:0;border:1px solid var(--border-default);background:var(--surface-page)}
 .visual-lab-card--boundary{border-left:3px solid var(--border-strong)}
 .lab-card-select{display:block;width:100%;min-height:4rem;padding:.75rem;border:0;border-bottom:1px solid var(--border-default);color:var(--text-primary);background:transparent;text-align:left;cursor:pointer}
 .lab-card-select span{display:block;color:var(--accent);font:.58rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
-.lab-card-select strong{display:block;margin-top:.25rem;font:1.15rem var(--font-display);font-weight:400}
+.lab-card-select strong{display:block;margin-top:.25rem;font:1.15rem var(--font-display);font-weight:400;line-height:1.08;text-wrap:balance}
+.lab-card-select small{display:block;margin-top:.45rem;color:var(--text-muted);font:.58rem var(--font-mono);letter-spacing:.02em}
 .lab-card-select.is-selected,.lab-card-select.atlas-linked{box-shadow:inset 3px 0 var(--selection-color);background:var(--surface-subtle)}
 .visual-lab-card dl{margin:0;padding:.4rem .75rem}
+.visual-lab-card .lab-card-preview{min-height:4.7rem}
+.lab-card-more{border-top:1px solid var(--border-default);padding:.5rem .75rem .7rem}
+.lab-card-more summary{color:var(--accent);font:.62rem var(--font-mono);letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+.lab-card-more dl{padding:.4rem 0 0}
 .visual-lab-card dl div{display:grid;grid-template-columns:minmax(7rem,1fr) minmax(5rem,1fr);gap:.7rem;padding:.4rem 0;border-bottom:1px solid var(--border-default)}
 .visual-lab-card dl div:last-child{border:0}
 .visual-lab-card dt{color:var(--text-muted);font-size:.62rem;text-transform:uppercase;overflow-wrap:anywhere}

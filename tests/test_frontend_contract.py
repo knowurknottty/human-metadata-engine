@@ -182,6 +182,12 @@ class EditorialFrontendContractTests(unittest.TestCase):
         self.assertIn("No optional personal context was supplied", SCRIPT)
         self.assertIn("withholds rising sign, house cusps, aspects", SCRIPT)
         self.assertIn("instead of presenting an estimated noon as exact", SCRIPT)
+        self.assertIn("Astrology calculation basis", SCRIPT)
+        self.assertIn("Historical UTC offset", SCRIPT)
+        self.assertIn("UTC instant", SCRIPT)
+        self.assertIn("Ascendant degree", SCRIPT)
+        self.assertIn("House cusps", SCRIPT)
+        self.assertIn("Raw coordinates and timezone remain excluded from the public export/handoff payload", SCRIPT)
 
     def test_css_defines_complete_editorial_token_set(self):
         for token in (

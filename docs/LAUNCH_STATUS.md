@@ -1,3 +1,21 @@
+# Current production status — 2026-09-24
+
+The current production architecture no longer depends on GCP or a disposable Cloudflare Quick Tunnel.
+
+**Live path:** Netlify (inversionlabs-hmd) → allowlisted Netlify edge bridge → https://capt-actions.clawroulette.live/api/* → Cloudflare named tunnel → launchd-managed deterministic Human Manual server on 127.0.0.1:8084.
+
+The same public hostname keeps CAPT Actions on /v1/*; only /api/* is routed to the Human Manual engine. The Python server and Cloudflare connector are both restart-managed. HME_API_ORIGIN in Netlify production points at the durable Cloudflare route above.
+
+The public Human Manual remains non-AI by default. The local household roster is available for staging a spouse/partner, adult family member, child/adolescent, or pet in browser memory. Those added roster entries are not submitted with the primary scan. Paid US/WE relational composition remains entitlement-gated and disabled until real commerce infrastructure is configured.
+
+The 320/360/390/412/768 CSS-viewport browser/emulator matrix is accepted by the release owner for this release in lieu of separate physical-device QA.
+
+---
+
+## Historical launch evidence retained below
+
+The remainder of this file is the original 2026-09-10 deployment evidence and is retained for provenance. Statements about GCP, Quick Tunnels, and the old deploy revisions below describe that historical snapshot, not the current production chain.
+
 # Human Metadata Atlas launch evidence — 2026-09-10 UTC
 
 > **2026-09-23 local-first ingress cleanup:** current source removes the generic Netlify `/api/*` proxy and SPA catch-all rewrite. Netlify now exposes only the deterministic engine routes required by the public client; unknown API and application paths fail closed. This note does not rewrite the historical deployment evidence below.

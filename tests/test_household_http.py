@@ -61,6 +61,9 @@ class TestHouseholdHTTP:
         assert body["paid_modes"]["household"]["label"] == "WE Household"
         assert body["pricing"]["pair_amount"] is None
         assert body["pricing"]["household_amount"] is None
+        assert body["runtime"]["household_intake_enabled"] is True
+        assert body["runtime"]["household_intake_version"] == "household-intake-v1"
+        assert body["runtime"]["household_intake_storage"] == "memory_only"
         assert body["runtime"]["public_add_subject_enabled"] is False
 
     def test_entitlement_status_is_honestly_disabled(self):
@@ -88,6 +91,6 @@ class TestHouseholdHTTP:
         assert status == 200
         flags = body["feature_flags"]
         assert flags["household_contracts"] is True
-        assert flags["household_ui"] is False
+        assert flags["household_ui"] is True
         assert flags["paid_entitlement"] is False
         assert flags["demo_checkout"] is False

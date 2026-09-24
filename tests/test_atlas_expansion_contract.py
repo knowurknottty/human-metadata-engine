@@ -77,6 +77,10 @@ def test_expansion_has_responsive_and_print_safe_styles():
     for token in [".jyotish-layout", ".bazi-pillars", ".maya-long-count", ".visual-lab-grid", ".evidence-map-summary"]:
         assert token in CSS
     assert "@media" in CSS
+    assert "repeat(auto-fit,minmax(min(100%,16rem),1fr))" in CSS
+    assert "returnedMetrics.slice(0,2)" in EXPANDED
+    assert "More returned stats" in EXPANDED
+    assert "Preview · inspect for full method" in EXPANDED
 
 
 def test_grouped_labs_promote_supported_records_to_bespoke_visuals():

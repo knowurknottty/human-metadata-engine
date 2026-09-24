@@ -50,5 +50,20 @@
     "manifest_contains_birth_inputs": false,
     "manifest_contains_result_bodies": false,
     "local_subject_registry_default": true
+  },
+  "public_intake": {
+    "enabled": true,
+    "version": "household-intake-v1",
+    "max_added_members": 7,
+    "roles": [
+      "partner",
+      "adult_family",
+      "child",
+      "pet"
+    ],
+    "storage": "memory_only",
+    "submitted_with_primary_scan": false,
+    "requires_entitlement": false,
+    "note": "Roster intake is local-only. Paid US/WE composition remains entitlement-gated."
   }
 }

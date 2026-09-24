@@ -275,6 +275,92 @@ function formatDate(parts) {
   return `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
 }
 
+function angleLabel(longitude) {
+  if (!Number.isFinite(Number(longitude))) return "Not supplied";
+  const signs = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+  const normalized = ((Number(longitude) % 360) + 360) % 360;
+  const sign = signs[Math.floor(normalized / 30)];
+  const within = normalized % 30;
+  let degrees = Math.floor(within);
+  let minutes = Math.round((within - degrees) * 60);
+  if (minutes === 60) { degrees += 1; minutes = 0; }
+  return `${sign} ${degrees}°${String(minutes).padStart(2,"0")}′ · ${normalized.toFixed(4)}°`;
+}
+
+function zoneOffsetMinutesAtUtc(utcMs, timezoneName) {
+  if (!timezoneName || !Number.isFinite(utcMs)) return null;
+  try {
+    const formatter = new Intl.DateTimeFormat("en-US", {
+      timeZone: timezoneName, year:"numeric", month:"2-digit", day:"2-digit",
+      hour:"2-digit", minute:"2-digit", second:"2-digit", hourCycle:"h23",
+    });
+    const parts = Object.fromEntries(formatter.formatToParts(new Date(utcMs))
+      .filter(item => item.type !== "literal").map(item => [item.type,item.value]));
+    const representedAsUtc = Date.UTC(
+      Number(parts.year), Number(parts.month)-1, Number(parts.day),
+      Number(parts.hour), Number(parts.minute), Number(parts.second)
+    );
+    return Math.round((representedAsUtc - utcMs) / 60000);
+  } catch (_) {
+    return null;
+  }
+}
+
+function localBirthTimeBasis(birth, timezoneName) {
+  if (!birth || birth.time_accuracy === "unknown" || !timezoneName) return null;
+  const wallMs = Date.UTC(
+    Number(birth.year), Number(birth.month)-1, Number(birth.day),
+    Number(birth.hour || 0), Number(birth.minute || 0), 0
+  );
+  let offsetMinutes = zoneOffsetMinutesAtUtc(wallMs, timezoneName);
+  if (offsetMinutes === null) return null;
+  let utcMs = wallMs - offsetMinutes * 60000;
+  const corrected = zoneOffsetMinutesAtUtc(utcMs, timezoneName);
+  if (corrected !== null && corrected !== offsetMinutes) {
+    offsetMinutes = corrected;
+    utcMs = wallMs - offsetMinutes * 60000;
+  }
+  const sign = offsetMinutes < 0 ? "−" : "+";
+  const abs = Math.abs(offsetMinutes);
+  const offsetLabel = `UTC${sign}${String(Math.floor(abs/60)).padStart(2,"0")}:${String(abs%60).padStart(2,"0")}`;
+  return {
+    offsetMinutes,
+    offsetLabel,
+    utcIso: new Date(utcMs).toISOString().replace(".000Z","Z"),
+  };
+}
+
+function astrologyCalculationBasis(astrology, birth, timezoneName) {
+  if (!astrology || !birth || astrology.time_sensitive_fields_withheld) return "";
+  const timeBasis = localBirthTimeBasis(birth, timezoneName);
+  const latitude = STATE.selectedLocation?.latitude ?? birth.lat;
+  const longitude = STATE.selectedLocation?.longitude ?? birth.lon;
+  const coordinates = Number.isFinite(Number(latitude)) && Number.isFinite(Number(longitude))
+    ? `${Number(latitude).toFixed(5)}, ${Number(longitude).toFixed(5)}`
+    : "Resolved by the server; redacted from the public response";
+  const localTime = `${formatDate(birth)} ${String(birth.hour).padStart(2,"0")}:${String(birth.minute).padStart(2,"0")}`;
+  const cusps = (astrology.house_cusps || []).map((value,index) =>
+    `<li><span>House ${index+1}</span><strong>${esc(angleLabel(value))}</strong></li>`
+  ).join("");
+  return `<details class="technical-details astrology-basis">
+    <summary>Astrology calculation basis</summary>
+    <p class="section-summary">These are the coordinates and time-frame inputs used to place the local horizon and houses. Changing the birth clock, historical UTC offset, or location can change the Ascendant and house placement even when planetary signs remain nearly unchanged.</p>
+    <dl class="astrology-basis-grid">
+      <div><dt>Local birth time</dt><dd>${esc(localTime)}</dd></div>
+      <div><dt>Historical timezone</dt><dd>${esc(timezoneName || "Not supplied")}</dd></div>
+      <div><dt>Historical UTC offset</dt><dd>${esc(timeBasis?.offsetLabel || "Could not derive in browser")}</dd></div>
+      <div><dt>UTC instant</dt><dd>${esc(timeBasis?.utcIso || "Could not derive in browser")}</dd></div>
+      <div><dt>Coordinates</dt><dd>${esc(coordinates)}</dd></div>
+      <div><dt>Ephemeris</dt><dd>${esc(astrology.calculation_engine || "Configured ephemeris")}</dd></div>
+      <div><dt>House system</dt><dd>${esc(astrology.house_system || "Not supplied")}</dd></div>
+      <div><dt>Ascendant</dt><dd>${esc(angleLabel(astrology.ascendant_longitude))}</dd></div>
+      <div><dt>Midheaven</dt><dd>${esc(angleLabel(astrology.midheaven_longitude))}</dd></div>
+    </dl>
+    ${cusps ? `<div class="astrology-cusps"><h3>House cusps</h3><ol>${cusps}</ol></div>` : ""}
+    <p class="field-hint">This panel is assembled in your browser from the birth details you entered plus the returned astronomical angles. Raw coordinates and timezone remain excluded from the public export/handoff payload.</p>
+  </details>`;
+}
+
 function setSurface(id, visible) {
   const element = $(id);
   if (element) element.hidden = !visible;
@@ -676,7 +762,7 @@ function renderEditorialReport(result) {
         </div><div class="interpretation-note"><strong>Traditional interpretation.</strong> Meanings assigned to these numbers come from their named symbolic traditions. The arithmetic is reproducible; the meanings are not scientific measurements.</div><details class="technical-details"><summary>How these values were calculated</summary><p>Letters are normalized by the public input contract and passed to versioned Pythagorean, Chaldean, ordinal, gematria, and isopsephy mappings. Formula and convention details remain in the complete generated report below.</p></details>
       </section>
 
-      <section id="birth-chart" class="report-section"><p class="section-number">03</p><h2>Birth chart</h2><p class="information-type">Type of information: Astronomical calculation and traditional interpretation</p>${astrology ? `<p class="section-summary">Planetary positions were calculated with ${esc(astrology.calculation_engine || "the configured ephemeris")} for the supplied date${birth?.time_accuracy === "exact" ? ", local time," : ""} and resolved location.</p><div class="value-grid">${valueCell("Sun", astrology.sun_sign)}${valueCell("Moon", astrology.moon_sign)}${valueCell("Rising sign (Ascendant)", astrology.ascendant || "Unavailable without an exact time")}${valueCell("Lunar phase", astrology.lunar_phase)}${valueCell("Dominant element", astrology.dominant_element)}${valueCell("House system", astrology.time_sensitive_fields_withheld ? "Withheld" : astrology.house_system)}</div><p>The Ascendant, or rising sign, is the zodiac sign on the eastern horizon at the recorded birth time. A house cusp is the calculated boundary between two chart houses.</p>${astrology.time_sensitive_fields_withheld ? `<div class="limits-note"><strong>Limited by unknown time.</strong> The report withholds rising sign, house cusps, aspects, and other time-sensitive fields instead of presenting an estimated noon as exact.</div>` : `<details class="technical-details"><summary>How the chart was calculated</summary><p>${esc((astrology.planets || []).length)} planetary positions and ${esc((astrology.aspects || []).length)} configured aspects were returned. The geographic timezone identifier applies historical daylight-saving rules; the UTC offset is the difference between local time and Coordinated Universal Time at birth.</p></details>`}` : `<div class="omitted-note"><strong>Not included.</strong> No birth details were supplied, so this section makes no astronomical claims.</div>`}</section>
+      <section id="birth-chart" class="report-section"><p class="section-number">03</p><h2>Birth chart</h2><p class="information-type">Type of information: Astronomical calculation and traditional interpretation</p>${astrology ? `<p class="section-summary">Planetary positions were calculated with ${esc(astrology.calculation_engine || "the configured ephemeris")} for the supplied date${birth?.time_accuracy === "exact" ? ", local time," : ""} and resolved location.</p><div class="value-grid">${valueCell("Sun", astrology.sun_sign)}${valueCell("Moon", astrology.moon_sign)}${valueCell("Rising sign (Ascendant)", astrology.ascendant || "Unavailable without an exact time")}${valueCell("Ascendant degree", astrology.ascendant_longitude === null || astrology.ascendant_longitude === undefined ? "Unavailable" : angleLabel(astrology.ascendant_longitude))}${valueCell("Lunar phase", astrology.lunar_phase)}${valueCell("Dominant element", astrology.dominant_element)}${valueCell("House system", astrology.time_sensitive_fields_withheld ? "Withheld" : astrology.house_system)}</div><p>The Ascendant, or rising sign, is the zodiac sign on the eastern horizon at the recorded birth time. A house cusp is the calculated boundary between two chart houses.</p>${astrology.time_sensitive_fields_withheld ? `<div class="limits-note"><strong>Limited by unknown time.</strong> The report withholds rising sign, house cusps, aspects, and other time-sensitive fields instead of presenting an estimated noon as exact.</div>` : `${astrologyCalculationBasis(astrology,birth,timezone)}<details class="technical-details"><summary>How the chart was calculated</summary><p>${esc((astrology.planets || []).length)} planetary positions and ${esc((astrology.aspects || []).length)} configured aspects were returned. The geographic timezone identifier applies historical daylight-saving rules; the UTC offset is the difference between local time and Coordinated Universal Time at birth.</p></details>`}` : `<div class="omitted-note"><strong>Not included.</strong> No birth details were supplied, so this section makes no astronomical claims.</div>`}</section>
 
       <section id="human-design" class="report-section"><p class="section-number">04</p><h2>Human Design</h2><p class="information-type">Type of information: Traditional interpretation using calculated astronomical inputs</p>${humanDesign ? `<p class="section-summary">The configured Human Design adapter returned a ${esc(humanDesign.type)} result using the supplied exact birth time.</p><div class="value-grid">${valueCell("Type", humanDesign.type)}${valueCell("Strategy", humanDesign.strategy)}${valueCell("Authority", humanDesign.authority)}${valueCell("Profile", (humanDesign.profile || []).join(" / "))}${valueCell("Active gates", (humanDesign.gates || []).length)}${valueCell("Defined centers", (humanDesign.centers || []).filter(center => center.defined).length)}</div><div class="limits-note"><strong>Limits.</strong> Human Design is a symbolic system. These labels are not psychological or medical measurements.</div>` : `<div class="omitted-note"><strong>Not included.</strong> ${birth?.time_accuracy === "unknown" ? "An exact birth time is required, so this section was withheld." : "No exact birth date, time, and location were supplied."}</div>`}</section>
 

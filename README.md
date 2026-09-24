@@ -364,17 +364,23 @@ The complete single-person Human Manual remains free under the existing `analysi
 contract. Multi-subject work is a separate composition layer rather than a restricted
 version of the free report.
 
-The repository now contains the default-off `household-v1` foundation for future paid
-**US Pair** (primary + partner) and **WE Household** (partner, adult family, child, or pet)
-modes. Adult household records use privacy-minimized projections of existing analyses.
-Children use a constrained guardian-attested symbolic worksheet; pets use a care-context
-profile and do not run the human symbolic engine. Relational views expose provenance-bound
-same-system observations, readiness, roles, and availability — never compatibility,
-soulmate, parenting, child-potential, pet-temperament, fate, or ranking scores.
+The repository contains the `household-v1` foundation for future paid **US Pair**
+(primary + partner) and **WE Household** (partner, adult family, child, or pet) modes.
+The public site now exposes a **local-only household roster**: users can stage a spouse/
+partner, adult family member, child/adolescent, or pet in browser memory without sending
+those added profiles to the server or changing the primary scan. Adult roster entries may
+include optional birth details; child entries are limited to display label + age band +
+guardian authority; pets remain care-context only.
+
+Paid relational composition remains fail-closed. Adult household records use privacy-
+minimized projections of independently computed analyses; child/pet contracts do not run
+the adult relationship engine. Relational views expose provenance-bound same-system
+observations, readiness, roles, and availability — never compatibility, soulmate,
+parenting, child-potential, pet-temperament, fate, or ranking scores.
 
 No checkout or entitlement issuer is shipped. The public application can verify a future
-signed `entitlement-v1`, but paid composition remains disabled unless server-side feature
-and signing-key configuration are present. See
+signed `entitlement-v1`, but `/api/household/compose` stays disabled unless server-side
+feature and signing-key configuration are present. See
 [Household / Multi-Subject Mode v1](docs/HOUSEHOLD_MODE_V1.md).
 
 

@@ -16,10 +16,19 @@ def test_household_renderer_loads_after_atlas_extension_before_app():
     assert 'renderRelationalView' in HOUSEHOLD
 
 
-def test_household_module_is_dormant_without_public_unlock_affordance():
+def test_household_module_exposes_local_intake_without_paid_compose_or_fake_checkout():
     assert 'fetch("/api/household/compose"' not in HOUSEHOLD
     assert 'fetch("/api/household/compose"' not in APP
-    assert 'data-household-add' not in INDEX
+    assert 'data-household-add' in INDEX
+    assert 'household-intake-v1' in HOUSEHOLD
+    assert 'transmission_state:"local_only"' in HOUSEHOLD
+    assert 'Spouse / partner' in INDEX
+    assert 'Child / adolescent' in INDEX
+    assert 'Pet / companion animal' in INDEX
+    assert 'does <strong>not</strong> submit, analyze, persist, or purchase anything' in INDEX
+    assert 'Build my manual” submits only the primary profile' in INDEX
+    assert 'localStorage' not in HOUSEHOLD
+    assert 'sessionStorage' not in HOUSEHOLD
     assert 'checkout' not in HOUSEHOLD.casefold()
     assert 'unlock' not in HOUSEHOLD.casefold()
 
@@ -35,6 +44,9 @@ def test_us_pair_view_uses_neutral_composition_language():
 
 def test_we_household_view_preserves_child_and_pet_policy_boundaries():
     assert 'ME → YOU → US → WE' in HOUSEHOLD
+    assert 'roster metadata only' in INDEX
+    assert 'human symbolic engine is not applied to animals' in INDEX
+    assert 'guardian' in HOUSEHOLD
     assert 'WE · Household composition' in HOUSEHOLD
     assert 'Children use child-safe worksheet policy' in HOUSEHOLD
     assert 'Pets use care-context policy' in HOUSEHOLD
@@ -48,7 +60,7 @@ def test_stale_relational_view_renders_unavailable_instead_of_partial_result():
 
 
 def test_household_visuals_are_responsive_and_print_safe():
-    for token in ['.household-pair-lanes', '.household-member-grid', '.household-observation-table', '.household-boundary']:
+    for token in ['.household-pair-lanes', '.household-member-grid', '.household-observation-table', '.household-boundary', '.household-intake-grid', '.household-roster-card']:
         assert token in CSS
     assert '@media(max-width:720px)' in CSS
     assert '@media print' in CSS

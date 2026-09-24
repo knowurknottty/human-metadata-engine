@@ -732,6 +732,20 @@ svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3
 .is-selected { --selection-color: var(--accent-hover); }
 .atlas-linked { --selection-color: var(--focus-ring); opacity: 1 !important; }
 
+.astrology-basis { margin-top: var(--space-5); border: 1px solid var(--border-strong); background: var(--surface-subtle); }
+.astrology-basis > summary { padding: .9rem 1rem; color: var(--accent); font: 650 .68rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; cursor: pointer; }
+.astrology-basis > p, .astrology-basis > dl, .astrology-basis > div { margin-left: 1rem; margin-right: 1rem; }
+.astrology-basis-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 0; border-top: 1px solid var(--border-default); }
+.astrology-basis-grid div { min-width: 0; padding: .7rem .75rem .7rem 0; border-bottom: 1px solid var(--border-default); }
+.astrology-basis-grid dt { color: var(--text-muted); font-size: .64rem; letter-spacing: .06em; text-transform: uppercase; }
+.astrology-basis-grid dd { margin: .25rem 0 0; color: var(--text-primary); font: .76rem var(--font-mono); overflow-wrap: anywhere; }
+.astrology-cusps { padding-bottom: .8rem; }
+.astrology-cusps h3 { margin: .9rem 0 .55rem; font-family: var(--font-display); font-weight: 400; }
+.astrology-cusps ol { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: .35rem; margin: 0; padding: 0; list-style: none; }
+.astrology-cusps li { display: flex; justify-content: space-between; gap: .65rem; padding: .5rem .6rem; border: 1px solid var(--border-default); }
+.astrology-cusps li span { color: var(--text-muted); font-size: .68rem; }
+.astrology-cusps li strong { color: var(--text-secondary); font: .68rem var(--font-mono); text-align: right; }
+
 .atlas-inspector { min-width: 0; border: 1px solid var(--border-default); background: var(--surface-page); }
 .inspector-sticky { position: sticky; top: 9rem; max-height: calc(100vh - 10rem); padding: var(--space-5); overflow: auto; }
 .atlas-inspector h2 { font-size: 1.9rem; }
@@ -906,6 +920,7 @@ svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3
 }
 
 @media (max-width: 720px) {
+  .astrology-basis-grid, .astrology-cusps ol { grid-template-columns: 1fr; }
   .report-shell { width: min(calc(100% - 1rem), 96rem); }
   .atlas-header { min-height: 0; padding: var(--space-6) var(--space-4); }
   .atlas-heading h1 { font-size: clamp(3rem, 15vw, 5.2rem); }

@@ -215,6 +215,9 @@ def _household_config_payload() -> dict:
     payload = dict(payload)
     feature = household_feature_state()
     payload["runtime"] = {
+        "household_intake_enabled": feature["household_intake_enabled"],
+        "household_intake_version": feature["household_intake_version"],
+        "household_intake_storage": feature["household_intake_storage"],
         "paid_household_enabled": feature["paid_household_enabled"],
         "entitlement_verifier_configured": feature["entitlement_verifier_configured"],
         "public_add_subject_enabled": feature["public_add_subject_enabled"],
@@ -247,7 +250,7 @@ def _version_payload() -> dict:
             "remote_narrative_model": False,
             "deterministic_storytelling": True,
             "household_contracts": True,
-            "household_ui": household_feature_state()["public_add_subject_enabled"],
+            "household_ui": household_feature_state()["household_intake_enabled"],
             "paid_entitlement": household_feature_state()["public_add_subject_enabled"],
             "household_composition_foundation": True,
             "household_paid_additions": household_feature_state()["public_add_subject_enabled"],

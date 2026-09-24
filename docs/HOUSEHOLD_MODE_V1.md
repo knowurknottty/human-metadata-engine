@@ -1,6 +1,6 @@
 # Household / Multi-Subject Mode v1
 
-Status: **foundation implemented; public paid additions disabled by default**
+Status: **public local intake available; paid US/WE composition disabled by default**
 
 The Human Manual keeps its existing single-subject `analysis-v1` contract complete and free. Multi-subject modes are additive composition surfaces above independently computed subject records.
 
@@ -101,15 +101,27 @@ There is currently no checkout, webhook receiver, registry persistence or export
 
 ## UI
 
-`webapp/static/household.js` is a dormant renderer for already-authorized `relational-view-v1` artifacts.
+`webapp/static/household.js` now has two intentionally separate surfaces:
 
+1. **Local intake (`household-intake-v1`)** — public and available without payment. It
+   stores up to seven added household members in page memory only. Added roster entries
+   are not submitted with the primary scan, written to local/session storage, or sent to
+   `/api/household/compose` merely by adding them.
+2. **Relational renderer (`relational-view-v1`)** — still entitlement-gated for future
+   paid US/WE composition.
+
+- Adult intake roles: spouse/partner and adult family. Optional birth details may be staged.
+- Minor intake: display label + child/adolescent age band + guardian authority only; no adult
+  personality/compatibility/fate/diagnostic analysis runs from the roster.
+- Pet intake: display label + optional species/age band + owner/caregiver authority; pets
+  remain care-context records only.
 - **US**: two independent lanes with a neutral composition axis and same-system observation table.
 - **WE**: member cards plus provenance-bound adult observations.
 - No score, percentage, gauge, winner, ranking or red/green compatibility encoding.
-- Child and pet policy labels remain visible.
-- Stale/unresolved views render an unavailable state, not a partial relational conclusion.
+- Stale/unresolved composed views render unavailable, not a partial relational conclusion.
 
-The module loads with the application but does not expose a public add-subject or checkout control while paid entitlement is disabled.
+There is still no checkout, fake unlock, client-minted entitlement, or public paid compose
+action while commerce is disabled.
 
 ## Release gates
 

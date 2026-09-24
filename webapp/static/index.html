@@ -214,6 +214,70 @@
         </div>
       </section>
 
+      <section class="form-step household-intake-step" aria-labelledby="household-intake-title">
+        <div class="step-marker" aria-hidden="true">4</div>
+        <div class="step-content">
+          <h3 id="household-intake-title">People & household</h3>
+          <details id="household-intake" class="disclosure">
+            <summary>Add spouse, partner, children, pets, or family</summary>
+            <p>Optional local roster for future US / WE composition. Adding someone here does <strong>not</strong> submit, analyze, persist, or purchase anything. The roster exists only in this browser tab.</p>
+            <div class="household-intake-grid">
+              <div class="field-group">
+                <label for="household-member-role">Relationship / role</label>
+                <select id="household-member-role">
+                  <option value="partner">Spouse / partner</option>
+                  <option value="adult_family">Adult family member</option>
+                  <option value="child">Child / adolescent</option>
+                  <option value="pet">Pet / companion animal</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label for="household-member-label">Display name or nickname</label>
+                <input id="household-member-label" type="text" maxlength="80" autocomplete="off" placeholder="How you want them shown">
+                <p class="field-hint">A nickname is fine. This label stays local to this tab.</p>
+              </div>
+            </div>
+            <div id="household-adult-fields" class="household-role-fields">
+              <p class="field-hint">Optional staging details for an adult. These are not sent with your primary manual.</p>
+              <div class="household-intake-grid household-intake-grid--three">
+                <div class="field-group"><label for="household-adult-date">Birth date</label><input id="household-adult-date" type="date"></div>
+                <div class="field-group"><label for="household-adult-time">Birth time</label><input id="household-adult-time" type="time"></div>
+                <div class="field-group"><label for="household-adult-place">Birthplace</label><input id="household-adult-place" type="text" maxlength="160" autocomplete="off" placeholder="City, region, country"></div>
+              </div>
+              <label class="choice-control choice-control--compact" for="household-adult-time-unknown"><input id="household-adult-time-unknown" type="checkbox"><span><strong>Exact birth time unknown</strong><small>Time-sensitive astrology would remain unavailable for that profile.</small></span></label>
+            </div>
+
+            <div id="household-child-fields" class="household-role-fields" hidden>
+              <div class="field-group household-compact-field"><label for="household-child-age-band">Age band</label><select id="household-child-age-band"><option value="child">Child</option><option value="adolescent">Adolescent</option></select></div>
+              <p class="field-hint">No adult personality, compatibility, fate, diagnosis, or relationship scoring is run for a minor. This is roster metadata only.</p>
+            </div>
+
+            <div id="household-pet-fields" class="household-role-fields" hidden>
+              <div class="household-intake-grid">
+                <div class="field-group"><label for="household-pet-species">Species</label><input id="household-pet-species" type="text" maxlength="60" autocomplete="off" placeholder="Dog, cat, horse…"></div>
+                <div class="field-group"><label for="household-pet-age-band">Age band</label><select id="household-pet-age-band"><option value="unknown">Unknown / not supplied</option><option value="juvenile">Juvenile</option><option value="adult">Adult</option><option value="senior">Senior</option></select></div>
+              </div>
+              <p class="field-hint">Pets remain care-context records only; the human symbolic engine is not applied to animals.</p>
+            </div>
+            <label class="choice-control choice-control--compact household-authority" for="household-authority-attest">
+              <input id="household-authority-attest" type="checkbox">
+              <span><strong id="household-authority-label">I have this adult's permission to enter these details.</strong><small>Required before adding a member to the local roster.</small></span>
+            </label>
+
+            <div class="household-intake-actions">
+              <button type="button" class="button" data-household-add>Add to household roster</button>
+              <span id="household-intake-status" class="field-hint" role="status" aria-live="polite"></span>
+            </div>
+
+            <div id="household-roster" class="household-roster" aria-labelledby="household-roster-title">
+              <div class="household-roster-head"><h4 id="household-roster-title">Local roster</h4><span id="household-roster-count">0 / 7 added</span></div>
+              <div id="household-roster-list" class="household-roster-list"><p class="household-roster-empty">No additional household members staged yet.</p></div>
+            </div>
+            <p class="household-intake-boundary"><strong>Primary scan boundary:</strong> “Build my manual” submits only the primary profile above. US / WE relational composition remains a separate entitlement-gated mode until real commerce is configured.</p>
+          </details>
+        </div>
+      </section>
+
       <section class="review" aria-labelledby="review-title">
         <p class="eyebrow">Review</p>
         <h3 id="review-title">Before creating your analysis</h3>

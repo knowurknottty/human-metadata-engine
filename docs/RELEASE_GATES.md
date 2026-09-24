@@ -34,6 +34,7 @@ Release only when every item below is true:
 - [x] A regular user can provide a birth place without calculating latitude, longitude, or UTC offset; the server resolves those values for the requested date (verified by API and browser tests).
 - [x] The privacy notice names Open-Meteo and explains that the supplied place is sent to it; production availability monitoring remains an operations gate.
 - [x] No checkout, card field, paywall, or simulated entitlement is shipped.
+- [x] Optional household roster intake is browser-memory-only: spouse/partner, adult family, child/adolescent, and pet entries are not submitted with the primary scan; paid US/WE composition remains fail-closed.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
 - [x] The first result view preserves the six protected computed visual surfaces and adds the versioned Atlas expansion layer with declared visual homes for the broader backend, plus the provenance/limitations inspector. The complete report remains the Research-mode reference layer (verified by frontend contracts; browser interaction verification is release-candidate evidence).
 - [x] Magic mode exposes The Living Pattern from a deterministic evidence/claim plan. Grounded, Story, and Sources preserve identical claims, support strength, contradictions, and evidence links. Story is generated in-process by the deterministic compositor and versioned prose lexicon; no remote model is required or called. Data mode keeps narrative disabled.
@@ -46,7 +47,7 @@ Release only when every item below is true:
 - [ ] Browser and physical-device QA confirms the new Sumerian me observation/tag controls and three-layer result remain understandable, keyboard-operable, and overflow-free at release target widths.
 - [x] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings (frontend and API tests).
 - [x] CSS-viewport QA confirms readable explanatory text, stacked controls, expandable technical detail, and zero horizontal overflow at 320, 360, 390, 412, and 768 CSS pixels.
-- [ ] Physical-device QA confirms the same behavior in current iPhone Safari and Android Chrome.
+- [x] Release-owner acceptance: the 320/360/390/412/768 CSS-viewport emulator/browser matrix is accepted in lieu of separate physical-device QA for this 2026-09-24 release.
 
 ## Gate B — Optional future paid US / WE beta
 

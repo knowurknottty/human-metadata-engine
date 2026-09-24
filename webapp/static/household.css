@@ -33,4 +33,29 @@
 .household-view--unavailable{padding-bottom:1rem}
 .household-view--unavailable>p,.household-view--unavailable>ul{margin:.8rem 1rem;color:var(--text-muted);font-size:.72rem}
 @media(max-width:720px){.household-pair-lanes{grid-template-columns:1fr}.household-us-axis{grid-template-columns:auto 1fr auto;gap:.5rem}.household-us-axis i{width:100%;height:1px}}
-@media print{.household-view{break-inside:avoid-page}.household-observation-table-wrap{overflow:visible}}
+@media print{.household-view{break-inside:avoid-page}.household-observation-table-wrap{overflow:visible}}.household-intake-step .disclosure>p{max-width:72ch}
+.household-intake-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem;margin-top:.8rem}
+.household-intake-grid--three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.household-role-fields{margin-top:.8rem;padding:.8rem;border:1px solid var(--border-default);background:var(--surface-subtle)}
+.household-role-fields[hidden]{display:none!important}
+.household-compact-field{max-width:18rem}
+.household-authority{margin-top:.8rem}
+.household-intake-actions{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;margin-top:.8rem}
+.household-intake-actions .field-hint{margin:0}
+.household-roster{margin-top:1rem;border:1px solid var(--border-strong);background:var(--surface-page)}
+.household-roster-head{display:flex;justify-content:space-between;gap:1rem;align-items:center;padding:.7rem .8rem;border-bottom:1px solid var(--border-default)}
+.household-roster-head h4{margin:0;font:1rem var(--font-display);font-weight:400}
+.household-roster-head span{color:var(--text-muted);font:.62rem var(--font-mono)}
+.household-roster-list{display:grid;gap:.45rem;padding:.7rem}
+.household-roster-card{display:flex;justify-content:space-between;gap:.8rem;align-items:center;padding:.7rem;border:1px solid var(--border-default);background:var(--surface-subtle)}
+.household-roster-card>div{min-width:0}
+.household-roster-card span{display:block;color:var(--accent);font:.58rem var(--font-mono);text-transform:uppercase;letter-spacing:.05em}
+.household-roster-card strong{display:block;margin-top:.15rem;color:var(--text-primary);font:1.05rem var(--font-display);font-weight:400;overflow-wrap:anywhere}
+.household-roster-card small{display:block;margin-top:.25rem;color:var(--text-muted);font-size:.66rem;line-height:1.45;overflow-wrap:anywhere}
+.household-roster-remove{flex:0 0 auto;border:1px solid var(--border-default);background:transparent;color:var(--text-muted);padding:.4rem .55rem;font:.58rem var(--font-mono);text-transform:uppercase;cursor:pointer}
+.household-roster-remove:hover,.household-roster-remove:focus-visible{border-color:var(--accent);color:var(--accent)}
+.household-roster-empty{margin:0;padding:.6rem;color:var(--text-muted);font-size:.7rem}
+.household-intake-boundary{margin:.8rem 0 0;padding:.8rem;border-left:2px solid var(--accent);background:var(--surface-subtle);color:var(--text-muted);font-size:.7rem;line-height:1.55}
+.household-intake-boundary strong{color:var(--text-secondary)}
+@media(max-width:720px){.household-intake-grid,.household-intake-grid--three{grid-template-columns:1fr}.household-roster-card{align-items:flex-start}.household-roster-remove{margin-top:.1rem}}
+@media print{.household-intake-step{display:none!important}}

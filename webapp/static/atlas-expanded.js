@@ -447,10 +447,13 @@ function labPanel(id,title,subtitle,keys,encoders,selections,kind,boundary = fal
     if (!record) return "";
     const label = CATALOG.find(item => item[0] === key)?.[1] || key.replaceAll("_"," ");
     ensureSystemSelection(selections,key,label,record,kind,BOUNDARIES[key] || "");
-    const fieldRows = metrics(record,6).map(([field,value]) => `<div><dt>${esc(field.replaceAll("_"," "))}</dt><dd>${esc(compact(value))}</dd></div>`).join("");
+    const returnedMetrics = metrics(record,6);
+    const previewRows = returnedMetrics.slice(0,2).map(([field,value]) => `<div><dt>${esc(field.replaceAll("_"," "))}</dt><dd>${esc(compact(value))}</dd></div>`).join("");
+    const moreRows = returnedMetrics.slice(2).map(([field,value]) => `<div><dt>${esc(field.replaceAll("_"," "))}</dt><dd>${esc(compact(value))}</dd></div>`).join("");
     const bespoke = bespokeVisual(key,record,selections);
     const note = boundary ? `<p class="boundary-note">${esc(BOUNDARIES[key] || "Provenance boundary shown; no additional meaning is inferred.")}</p>` : "";
-    return `<article class="visual-lab-card${boundary ? " visual-lab-card--boundary" : ""}"><button type="button" class="lab-card-select atlas-select" data-atlas-select="system:${esc(key)}" data-link-keys="system:${esc(key)}"><span>${esc(kind)}</span><strong>${esc(label)}</strong></button>${bespoke}<dl>${fieldRows}</dl>${note}<details class="research-only"><summary>Returned field inventory</summary><code>${esc(Object.keys(bodyOf(record)).join(" · "))}</code></details></article>`;
+    const more = moreRows ? `<details class="lab-card-more"><summary>More returned stats</summary><dl>${moreRows}</dl></details>` : "";
+    return `<article class="visual-lab-card${boundary ? " visual-lab-card--boundary" : ""}"><button type="button" class="lab-card-select atlas-select" data-atlas-select="system:${esc(key)}" data-link-keys="system:${esc(key)}"><span>${esc(kind)}</span><strong>${esc(label)}</strong><small>Preview · inspect for full method</small></button>${bespoke}<dl class="lab-card-preview">${previewRows}</dl>${more}${note}<details class="research-only"><summary>Returned field inventory</summary><code>${esc(Object.keys(bodyOf(record)).join(" · "))}</code></details></article>`;
   }).filter(Boolean).join("");
   return cards ? panel(id,title,subtitle,`<div class="visual-lab-grid">${cards}</div>`,"",true) : unavailablePanel(id,title,"No records assigned to this visual family are available.");
 }
