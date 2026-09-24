@@ -24,12 +24,15 @@ def test_one_three_and_five_card_spreads_have_intentional_geometries():
 
 def test_tarot_cards_keep_card_proportions_and_mobile_returns_to_reading_order():
     assert "aspect-ratio: 2 / 3" in CSS
+    assert "CARD_ASSETS" in ART_JS
     assert "MAJOR_ASSETS" in ART_JS
     assert "tarot-card-art-image" in ART_JS
     assert "renderMajor(svg,card)" in ART_JS
-    assert MANIFEST["finished_major_count"] == 13
-    assert MANIFEST["remaining_major_indices"] == list(range(13, 22))
-    assert MANIFEST["remaining_minor_count"] == 56
+    assert MANIFEST["finished_card_count"] == 78
+    assert MANIFEST["finished_major_count"] == 22
+    assert MANIFEST["remaining_major_indices"] == []
+    assert MANIFEST["remaining_minor_count"] == 0
+    assert MANIFEST["remaining_total_artworks"] == 0
     mobile = CSS[CSS.index("@media (max-width: 720px)"):]
     assert "tarot-spread-stage" in mobile
     assert "grid-template-columns: 1fr" in mobile

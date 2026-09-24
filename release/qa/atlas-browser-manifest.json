@@ -1,0 +1,266 @@
+{
+  "fixture": {
+    "exactBirth": {
+      "name": "Atlas Verification Fixture",
+      "date": "1985-06-15",
+      "time": "10:30",
+      "timezone": "America/Chicago",
+      "latitude": 41.8781,
+      "longitude": -87.6298
+    },
+    "nameOnly": {
+      "name": "Atlas Name-Only Fixture"
+    },
+    "reflection": {
+      "name": "Atlas Reflection Fixture",
+      "observation": "Synthetic QA observation",
+      "capacityDomains": [
+        "crafts_and_technical_practice",
+        "knowledge_and_judgment"
+      ]
+    }
+  },
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/153.0.0.0 Safari/537.36",
+  "command": "HME_QA_PORT=8895 HME_QA_DEBUG_PORT=9449 node tools/capture_atlas_baselines.mjs",
+  "captures": [
+    {
+      "file": "desktop-first-run.png",
+      "sha256": "b47e1fb36fce315e86ef332c07ef09063db22291417fa32cfc232432598c5b5a",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 43
+    },
+    {
+      "file": "mobile-first-run.png",
+      "sha256": "0a1b968b14bdb1c3b97549b9bfda83410da145d70e77e0713a35ceafcb9b8b4d",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 43
+    },
+    {
+      "file": "mobile-privacy-before-input.png",
+      "sha256": "c4fb08f5b7cb91a2c6e199a62a38d73184967fd4bde9f58e40d8c082440488e9",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 1414
+    },
+    {
+      "file": "desktop-overview.png",
+      "sha256": "bda6d9ee06df037f2bcf5dd13e12b6627321bad9765bcaccd49f6255bb279854",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 1307
+    },
+    {
+      "file": "desktop-astrology.png",
+      "sha256": "de3c600672d32f3c191d025f49e8b3e9cbc8d27e8c0333fe41e7a19437bab8ea",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 1279
+    },
+    {
+      "file": "desktop-bodygraph.png",
+      "sha256": "f04b52b9afa4853b2a5a7770ac9224811ab7ca24b32c3957a0c874540daebacb",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 1263
+    },
+    {
+      "file": "desktop-constellation.png",
+      "sha256": "41709e891ea37335a2191a3c97a569424f981b81c15495a07d95dd94eb40057b",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 1247
+    },
+    {
+      "file": "mobile-overview.png",
+      "sha256": "99d373b92eea7e5fa68e4a611fe9becf50ccfa2e237bf286956d93909c85edb9",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 1919
+    },
+    {
+      "file": "mobile-astrology.png",
+      "sha256": "a7f038c13d0b00689b5976fb2a57f74f798262270480bcab3922cd6fbc0f65c4",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 2646
+    },
+    {
+      "file": "mobile-bodygraph.png",
+      "sha256": "a98edfed8646b8d4d7a78b8d3a8820e2826b5d910f08559a357ea1adc8350b4e",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 2877
+    },
+    {
+      "file": "desktop-research.png",
+      "sha256": "d8fdda92d533a45c1f2d5b2f9d801c6b704e83bb32977d47d77c17948bb7aca9",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 1273
+    },
+    {
+      "file": "desktop-sumerian-reflection.png",
+      "sha256": "1401cd605bd30a8ee33743bfabebb76a1633b12f4ec13d91927890257f07ff57",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 1256
+    },
+    {
+      "file": "mobile-sumerian-reflection.png",
+      "sha256": "21ae9bcfc90764f5fa0ec7b78ea9deefae12e786854f0e9ebcd4d5cc78d18789",
+      "width": 390,
+      "height": 844,
+      "mobile": true,
+      "scrollY": 1933
+    },
+    {
+      "file": "desktop-unavailable-name-only.png",
+      "sha256": "38ae61ceb3f2bf776dbe9c59eef54a0fb7805ae0eb01a71943b48a1a0a5735be",
+      "width": 1440,
+      "height": 1000,
+      "mobile": false,
+      "scrollY": 1306
+    }
+  ],
+  "checks": {
+    "firstRunNoHorizontalOverflow": {
+      "320": true,
+      "360": true,
+      "390": true,
+      "412": true,
+      "768": true
+    },
+    "firstRunTrustOrder": true,
+    "publicIdentity": true,
+    "protectedSixSurfaces": true,
+    "expandedSurfaceCount": true,
+    "uniqueIds": true,
+    "selectionMatrix": [
+      {
+        "selector": ".system-node[data-atlas-select]",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".astro-planet",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".bodygraph-center",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".gate-chip.is-active",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".tree-node",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".numerology-row",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".fingerprint-stage",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".exp-wheel-body",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".bazi-pillar",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".maya-count-cell",
+        "ok": true,
+        "selected": 1
+      },
+      {
+        "selector": ".visual-lab-card .lab-card-select",
+        "ok": true,
+        "selected": 3
+      },
+      {
+        "selector": ".visual-lab-card--boundary .lab-card-select",
+        "ok": true,
+        "selected": 2
+      },
+      {
+        "selector": ".evidence-layer-row",
+        "ok": true,
+        "selected": 2
+      }
+    ],
+    "accessibilityTree": {
+      "namedButtons": 4,
+      "calculatedRoot": true,
+      "gate": true,
+      "center": true,
+      "planet": true,
+      "jyotish": true,
+      "bazi": true,
+      "maya": true,
+      "lab": true,
+      "evidence": true
+    },
+    "modeSwitch": true,
+    "storyMode": true,
+    "agentHandoffPrompt": true,
+    "fullscreenEscape": true,
+    "noHorizontalOverflow": {
+      "320": true,
+      "360": true,
+      "390": true,
+      "412": true,
+      "768": true
+    },
+    "print": true,
+    "printAction": true,
+    "markdownDownload": true,
+    "repeatedDeterminism": true,
+    "sumerianReflection": {
+      "labels": [
+        "Personal evidence",
+        "Modern analytical bridge",
+        "Historical corpus"
+      ],
+      "matchCount": 2,
+      "matchLabels": [
+        "Crafts and technical practice",
+        "Knowledge, counsel, and judgment"
+      ],
+      "expandedText": "Crafts and technical practice1 explicit observationModern capacity crosswalk: making · technical_skill · recordingHistorical corpus items grouped here: craft of the carpenter · craft of the coppersmith · craft of the scribe · craft of the smith · craft of the leather-worker · craft of the fuller · craft of the builder · craft of the reed-workerThe grouping is modern. The historical items are corpus references, not traits assigned to the subject.",
+      "boundaryText": "Boundary. These correspondences are a Human Manual reflection surface, not evidence that the Sumerians assigned these me to you.",
+      "mobileNoOverflow": true
+    },
+    "unavailableReplacement": true,
+    "unknownTime": true,
+    "startNewHidesCharts": true,
+    "hostileName": true
+  }
+}

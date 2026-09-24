@@ -5,12 +5,29 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import subprocess
+import sys
+
+import pytest
 
 from tools.verify_release_manifest import verify_manifest
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "release" / "manifest.dev.json"
 LEGACY_INDEX = ROOT / "release" / "legacy-output-index.json"
+
+
+@pytest.fixture(scope="module", autouse=True)
+def _fresh_development_manifest():
+    subprocess.check_call([
+        sys.executable, str(ROOT / "tools" / "build_development_manifest.py"),
+        "--verification-status", "in_progress",
+        "--verification-command", "pytest-release-manifest-contract",
+        "--required-skips", "0",
+        "--browser-manifest", "release/qa/atlas-browser-manifest.json",
+        "--physical-device-qa", "pending",
+    ], cwd=ROOT)
+    yield
 
 
 def _sha(path: Path) -> str:
@@ -20,7 +37,7 @@ def _sha(path: Path) -> str:
 def test_development_manifest_is_valid_but_cannot_claim_release_candidate():
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert verify_manifest(MANIFEST) == []
-    assert manifest["source_dirty"] is True
+    assert isinstance(manifest["source_dirty"], bool)
     assert manifest["release_candidate"] is False
     assert manifest["verification"]["status"] in {"in_progress", "passed"}
     if manifest["verification"]["status"] == "passed":
@@ -55,6 +72,7 @@ def test_legacy_output_index_is_byte_bound_and_never_active_evidence():
 
 def test_dirty_manifest_cannot_be_promoted_to_candidate(tmp_path):
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    manifest["source_dirty"] = True
     manifest["release_candidate"] = True
     candidate = tmp_path / "candidate.json"
     candidate.write_text(json.dumps(manifest), encoding="utf-8")

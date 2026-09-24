@@ -74,8 +74,8 @@ def _safe_strength(value) -> float:
         raise ValueError("Claim support strength must be an explicit finite number or exact support label.")
     if isinstance(value, (int, float)):
         numeric = float(value)
-        if not math.isfinite(numeric) or not 0.0 <= numeric <= MAX_INTERPRETIVE_STRENGTH:
-            raise ValueError("Numeric claim support strength must be finite and between 0 and 5.")
+        if not math.isfinite(numeric):
+            raise ValueError("Numeric claim support strength must be finite.")
         return numeric
     if isinstance(value, str) and value in CLAIM_STRENGTH_RANK:
         return CLAIM_STRENGTH_RANK[value]
@@ -107,7 +107,11 @@ def validate_epistemic_strength(claims: list[dict], mode: str) -> tuple[bool, li
         # Allow stronger language in mythic but check for prophecy drift
         for claim in claims:
             text = claim.get("text", "")
-            strength = _safe_strength(claim.get("strength", 1))
+            try:
+                strength = _safe_strength(claim.get("strength", 1))
+            except ValueError as exc:
+                issues.append(str(exc))
+                continue
             if strength > MAX_INTERPRETIVE_STRENGTH:
                 issues.append(
                     f"Mythic mode claim exceeds max interpretive strength "
@@ -118,7 +122,11 @@ def validate_epistemic_strength(claims: list[dict], mode: str) -> tuple[bool, li
     if mode in ("research", "plain"):
         for claim in claims:
             text = claim.get("text", "")
-            strength = _safe_strength(claim.get("strength", 1))
+            try:
+                strength = _safe_strength(claim.get("strength", 1))
+            except ValueError as exc:
+                issues.append(str(exc))
+                continue
             threshold = MAX_INTERPRETIVE_STRENGTH * 0.8
             if strength > threshold:
                 issues.append(

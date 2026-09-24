@@ -452,6 +452,7 @@ def extract_roadmap_envelopes(signature: dict, _psychology: dict | None) -> list
         if not isinstance(data, dict):
             continue
         historical = system == "sumerian_me_ontology"
+        crosswalk = system == "esoteric_bridge"
         scope = data.get("scope")
         base_limit = (
             "Historical/textual evidence is preserved without inferring a modern personal mapping."
@@ -462,6 +463,9 @@ def extract_roadmap_envelopes(signature: dict, _psychology: dict | None) -> list
             value = data.get(field)
             if value is None or isinstance(value, (dict, list)):
                 continue
+            system_state = historical and field in {
+                "evidence_layer", "identity_input_used", "personal_mapping_policy", "attestation_status"
+            }
             limits = [base_limit, "This record does not independently validate a personal trait."]
             if isinstance(scope, str) and scope and field != "scope":
                 limits.append(scope)
@@ -470,7 +474,13 @@ def extract_roadmap_envelopes(signature: dict, _psychology: dict | None) -> list
                 source_path=f"signature.encoders.{system}.data.{field}",
                 value=value, symbol_family=f"roadmap_{system}_{field}",
                 ontology_system="reading_only", role="other",
-                epistemic_class="historical_textual_reference" if historical else "deterministic_calculation",
+                epistemic_class=(
+                    "system_state" if system_state
+                    else "historical_textual_reference" if historical
+                    else "project_authored_crosswalk" if crosswalk
+                    else "deterministic_calculation"
+                ),
+                claim_eligible=not (crosswalk or system_state),
                 provenance_ref=_envelope_provenance(envelope),
                 atlas_targets=[f"system:{system}"], report_target="symbolic-systems",
                 limitations=limits, independence_group=independence_group,

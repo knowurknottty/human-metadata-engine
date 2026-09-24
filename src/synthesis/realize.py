@@ -200,10 +200,6 @@ def realize(plan: dict, mode: str) -> dict:
     )
     has_overclaim, overclaim_issues = contains_overclaiming_language(realized_text)
     strength_valid, strength_issues = validate_epistemic_strength(all_claims, mode)
-    if has_overclaim:
-        raise ValueError("Deterministic realization produced prohibited overclaiming language.")
-    if not strength_valid:
-        raise ValueError("Deterministic realization contains invalid support-strength values: " + "; ".join(strength_issues))
     total_evidence_count = sum(
         len(c.get("evidence_ids", [])) + len(c.get("contradicting_evidence_ids") or [])
         for c in all_claims

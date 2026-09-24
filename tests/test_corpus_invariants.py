@@ -101,8 +101,12 @@ def test_evidence_counting_invariants():
         if item.get("symbol_family", "").startswith(("roadmap_", "binary_prime_"))
     ]
     assert reading_only
-    assert all(item["epistemic_class"] in {"deterministic_calculation", "historical_textual_reference"}
-               for item in reading_only)
+    assert all(item["epistemic_class"] in {
+        "deterministic_calculation",
+        "historical_textual_reference",
+        "project_authored_crosswalk",
+        "system_state",
+    } for item in reading_only)
 
     # Duplicate evidence row with same independence_group adds recurrence_bonus but not a new group
     duped_item = reading_only[0]

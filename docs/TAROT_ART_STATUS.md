@@ -1,24 +1,9 @@
 # Inversion Tarot Art Status
 
-Updated: 2026-09-23
+Updated: 2026-09-24
 
-The public Tarot reader remains a local, no-AI runtime. Card selection uses operating-system randomness and interpretation is project-authored. Visual artwork is a separate layer bound by the stable Major Arcana numeric index.
+All 78 runtime cards now have local Inversion Tarot artwork: 22 Major Arcana and all 56 Minor Arcana. The 13 Major assets already published by R4 retain their existing public paths; the remaining 65 assets were added from the completed 2026-09-24 Library intake.
 
-## Finished Library artwork
+`webapp/static/assets/tarot/manifest.json` binds every runtime card ID to source filename/SHA-256 and served asset/SHA-256. Artwork titles remain provenance unless separately frozen as interpretive canon; the authored reading semantics are unchanged.
 
-Major indices 0–12 have finished Inversion Tarot artwork sourced from the Human Meta Data Project Library and downloaded as original PNGs. The served site uses locally generated WebP derivatives. webapp/static/assets/tarot/manifest.json records the original filename and SHA-256 digest for every source.
-
-The artwork series has evolving custom visual titles. Those titles are currently treated as artwork provenance, not as a rewrite of the reading engine archetype names. This prevents an intermediate naming draft from silently changing the interpretive contract.
-
-## Remaining production
-
-- Major Arcana XIII–XXI: 9 artworks
-- Minor Arcana: 56 artworks
-- Total remaining: 65 artworks
-
-Until an artwork exists, the site uses the deterministic local SVG renderer. No remote image host or image-generation API is called by the public site.
-
-## Completion rule
-
-A card moves from fallback to finished art only when its source artwork is accepted, its source filename and SHA-256 are recorded, a local web derivative is checked in, the numeric binding is verified, and browser/fallback tests pass.
-
+`webapp/static/tarot-art.js` resolves local artwork by runtime card ID and falls back to the deterministic local SVG renderer if an image is missing or fails to load. No remote image host or image-generation API is called by the public site.

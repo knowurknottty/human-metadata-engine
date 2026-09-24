@@ -1,23 +1,15 @@
 {
-  "version": "inversion-tarot-art-v1",
-  "updated": "2026-09-23",
-  "policy": "Artwork is bound to Major Arcana numeric index. Reading semantics remain independently authored; custom artwork titles are descriptive provenance until the full Inversion Tarot naming canon is frozen.",
-  "finished_major_count": 13,
+  "version": "inversion-tarot-art-v2",
+  "updated": "2026-09-24",
+  "policy": "Artwork is bound to stable runtime card IDs. Reading semantics remain independently authored. Artwork titles are provenance only unless separately frozen as interpretive canon.",
+  "finished_card_count": 78,
+  "finished_major_count": 22,
   "major_total": 22,
   "minor_total": 56,
-  "remaining_major_indices": [
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    19,
-    20,
-    21
-  ],
-  "remaining_minor_count": 56,
-  "remaining_total_artworks": 65,
+  "remaining_major_indices": [],
+  "remaining_minor_count": 0,
+  "remaining_total_artworks": 0,
+  "fallback": "Deterministic local SVG renderer in webapp/static/tarot-art.js is used if a local image asset fails to load.",
   "cards": [
     {
       "major_index": 0,
@@ -34,7 +26,11 @@
         1536
       ],
       "art_title": "The Seeker",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "3a330bd6f8c5e856ab191df3e6d7ba5f380f381076130e748eedff09b205bb57",
+      "served_bytes": 448232,
+      "runtime_name": "The Fool",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 1,
@@ -51,7 +47,11 @@
         1365
       ],
       "art_title": "The Alchemist",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "59a42306375363123255e75807c25ee6133773829b2ad9f7bb77e77822719b08",
+      "served_bytes": 434756,
+      "runtime_name": "The Magician",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 2,
@@ -68,7 +68,11 @@
         1365
       ],
       "art_title": "The Mirror",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "906b082175388100bc7dc0012ffae06a6309940f5e40210e6499146bfc8e6c2c",
+      "served_bytes": 448688,
+      "runtime_name": "The High Priestess",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 3,
@@ -84,8 +88,12 @@
         1024,
         1365
       ],
-      "art_title": "The Weaver \u2014 From Many, One",
-      "status": "finished_library_art"
+      "art_title": "The Weaver — From Many, One",
+      "status": "finished_library_art",
+      "served_sha256": "f63bf29d586a14497d316c59be5620be8f43c4b0ed4cf6be4139632907b8f4e4",
+      "served_bytes": 472420,
+      "runtime_name": "The Empress",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 4,
@@ -102,7 +110,11 @@
         1536
       ],
       "art_title": "The Builder",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "dec110e5bb038e43e6457ecdaa3233c8c7424752836ada39e2296c272a7651bf",
+      "served_bytes": 545576,
+      "runtime_name": "The Emperor",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 5,
@@ -119,7 +131,11 @@
         1536
       ],
       "art_title": "The Beacon",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "a3509b679953ade175154c54b7b342a68b063013a4d14215619fddee0d4785a1",
+      "served_bytes": 473642,
+      "runtime_name": "The Hierophant",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 6,
@@ -136,7 +152,11 @@
         1536
       ],
       "art_title": "The Bridge",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "321ba8acf92a6da103dd8f9be2b178eb2302eb92c3da1d8fcaea0cdeeb4ba504",
+      "served_bytes": 544788,
+      "runtime_name": "The Lovers",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 7,
@@ -153,7 +173,11 @@
         1536
       ],
       "art_title": "The Signal",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "0e6c9fef44c3636bbe64dd0fd6fc075c229d6dc586bfa8c75196e561c308042f",
+      "served_bytes": 586954,
+      "runtime_name": "The Chariot",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 8,
@@ -169,8 +193,12 @@
         1024,
         1536
       ],
-      "art_title": "The Weaver \u2014 Patterns into Relation",
-      "status": "finished_library_art"
+      "art_title": "The Weaver — Patterns into Relation",
+      "status": "finished_library_art",
+      "served_sha256": "8964283938b175d7cac5c8cbc6cf213b649c543aa57ab084f2f9338dcad75765",
+      "served_bytes": 594156,
+      "runtime_name": "Strength",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 9,
@@ -187,7 +215,11 @@
         1536
       ],
       "art_title": "The Lantern",
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "27ec2c9d1687daf44e9e074639aced740c7ec8e9e76c09f153a6f5793f491280",
+      "served_bytes": 544492,
+      "runtime_name": "The Hermit",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 10,
@@ -204,7 +236,11 @@
         1536
       ],
       "art_title": null,
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "325256e59fff3eb59e5f246f40c4cba2e88374f162976cea98c49b7d00746ac6",
+      "served_bytes": 597196,
+      "runtime_name": "Wheel of Fortune",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 11,
@@ -221,7 +257,11 @@
         1536
       ],
       "art_title": null,
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "9a58819e907c2acda2f1a2964eb0696d38f08dab2fdb864cd0d1f98887185ed5",
+      "served_bytes": 520122,
+      "runtime_name": "Justice",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
     },
     {
       "major_index": 12,
@@ -238,7 +278,1432 @@
         1536
       ],
       "art_title": null,
-      "status": "finished_library_art"
+      "status": "finished_library_art",
+      "served_sha256": "43552ba5d3c93aed2fad236104c7ea3ae2388c2a38c06d054a57ae0ee550950d",
+      "served_bytes": 476794,
+      "runtime_name": "The Hanged Man",
+      "mapping_basis": "existing R4 published Major Arcana numeric binding"
+    },
+    {
+      "runtime_id": "major-13",
+      "runtime_name": "Death — Transformation",
+      "source_filename": "image-gen-1(8).png",
+      "source_sha256": "0ee62b035466ffc84f1f0c983bd3db4c3c8d092f6c88c199a8f7f0a0a61e8919",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-13.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "2114cc8e546d0118e84124c60268d27cce01a76571155459d6e41cfebeed6940",
+      "served_bytes": 624898,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 13
+    },
+    {
+      "runtime_id": "major-14",
+      "runtime_name": "Temperance",
+      "source_filename": "image-gen-2(8).png",
+      "source_sha256": "27c4870d2c0715e11ba1ed7290ce2f6310ee7d04a8fc7ad262450f2c6f0aadbb",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-14.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "ed094c0f59d98e281d42e42b80aa21e9e989b937efb7e0f31a148656dc97e709",
+      "served_bytes": 581586,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 14
+    },
+    {
+      "runtime_id": "major-15",
+      "runtime_name": "The Devil",
+      "source_filename": "image-gen-3(8).png",
+      "source_sha256": "d2dd5ac4cc4398f0f3238b6cbbe3aa5d596186982ad0819c12605d6dc7a5f753",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-15.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "86939cc6d87a2cec6099b9de175fabb4020d02717571a8d3c64b52f8df4166eb",
+      "served_bytes": 599670,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 15
+    },
+    {
+      "runtime_id": "major-16",
+      "runtime_name": "The Tower",
+      "source_filename": "image-gen-4.png",
+      "source_sha256": "8ca4312f2d20ee16fdff95a938216dec3cbf82498cda3fc553a019604c9bd4ce",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-16.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "42806e8ea4a941d48a18b556f64b3119b5f6c476f345943b676f67784c214c1f",
+      "served_bytes": 514368,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 16
+    },
+    {
+      "runtime_id": "major-17",
+      "runtime_name": "The Star",
+      "source_filename": "image-gen-5.png",
+      "source_sha256": "3665b18f1d73c329d27033cf25642b0f5a4fc4431bda5e54cc8f5a892c05d489",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-17.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "0f165b353de205d0fd17e553d193a7b9babb85657b4f11392727f17cbb31ff32",
+      "served_bytes": 584082,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 17
+    },
+    {
+      "runtime_id": "major-18",
+      "runtime_name": "The Moon",
+      "source_filename": "image-gen-6.png",
+      "source_sha256": "d177c7859f2b857ebf7dc3b3a1b66e26d7a4a9d615b73a267f6e26989ac37a50",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-18.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "3cd8a17bc169bd576a12352687dbaaf823811f7de715a39bf961773537916ca9",
+      "served_bytes": 517758,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 18
+    },
+    {
+      "runtime_id": "major-19",
+      "runtime_name": "The Sun",
+      "source_filename": "image-gen-7.png",
+      "source_sha256": "c6a5ad6e6d7d77f8019b27541f44315441e0d24fa783defbb9d9cfac556a98b4",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-19.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "ddf7b27c4a2c7644ca8a36aab1f92a717144c367adff0bb0cebc251682727fd7",
+      "served_bytes": 596274,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 19
+    },
+    {
+      "runtime_id": "major-20",
+      "runtime_name": "Judgement",
+      "source_filename": "image-gen-8.png",
+      "source_sha256": "62dfdc7d7c18285cfe1da465f54b5bd756797aa28cc0fc4ef5677ffc435545e7",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-20.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "fbfe5374495b251e88ea88784c10c791d30954218c448269064fb0f296db0716",
+      "served_bytes": 639666,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 20
+    },
+    {
+      "runtime_id": "major-21",
+      "runtime_name": "The World",
+      "source_filename": "image-gen-9.png",
+      "source_sha256": "c0ee34b902a438e63357d38d28041e79f3a2a6ed5acbe87b36d487fe6790567a",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/major-21.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "936ed8573799fd6928d46feb6901017abbea1e53cf2d092ed68cf4e706374a69",
+      "served_bytes": 633332,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "major_index": 21
+    },
+    {
+      "runtime_id": "wands-01",
+      "runtime_name": "Ace of Wands",
+      "source_filename": "image-gen-10.png",
+      "source_sha256": "fecf8bd26e6c57f184e381cbde2d057302ed0c7ade648e16f4b4fcf6e0a8b714",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-01.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "9d1fa69635d549ec794f8004c61e74b394a7e8da3e11ac3efb32e8477cba9b24",
+      "served_bytes": 509032,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 1
+    },
+    {
+      "runtime_id": "wands-02",
+      "runtime_name": "Two of Wands",
+      "source_filename": "image-gen-3(9).png",
+      "source_sha256": "bb475863d2ae7adb5d74000e8d00e2bcfcfa6b9376a1601d2fa863b3f1652efc",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-02.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "5fd6078d562d39a2b6def3173da693b2cb1c9f2a3981a58acc50aba1aad65fa2",
+      "served_bytes": 569036,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 2
+    },
+    {
+      "runtime_id": "wands-03",
+      "runtime_name": "Three of Wands",
+      "source_filename": "image-gen-9(1).png",
+      "source_sha256": "6842ee349cfad21b0c2a8119ddd4a2c0e50013afe436130b68edff157f5ccf01",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-03.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "3dd46321f279ba48315adfaea0150e7433ab38492e918a38076855c33460af1f",
+      "served_bytes": 596064,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 3
+    },
+    {
+      "runtime_id": "wands-04",
+      "runtime_name": "Four of Wands",
+      "source_filename": "image-gen-8(1).png",
+      "source_sha256": "586674d89a67589b8a2181859400ac87a09b1fe1de93e62304706db27197ce46",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-04.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "78c23523ee85b07504bf9c734fc8894786e0ec5b2bb0c86820db4e48c276f7b3",
+      "served_bytes": 611626,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 4
+    },
+    {
+      "runtime_id": "wands-05",
+      "runtime_name": "Five of Wands",
+      "source_filename": "image-gen-7(1).png",
+      "source_sha256": "8c569c4bb9ea1e3313cd6fd4619f12a422dfeb9ac2db229d6a169849a74b9c4a",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-05.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "04f9ad2cfca49af8863ada1e71f8c4e77ddd5c7f139ec2ae02b018e7d6d334cc",
+      "served_bytes": 580724,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 5
+    },
+    {
+      "runtime_id": "wands-06",
+      "runtime_name": "Six of Wands",
+      "source_filename": "image-gen-10(1).png",
+      "source_sha256": "3e987b316c7b0477c6ae72ea0936cb6ed1ccd1ae71a50557ecd00935df69310c",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-06.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "d0d79dd26fa362714849cc7779e8f2b0ef5ebfb1c7a5026378ab45ef9c1b6358",
+      "served_bytes": 580850,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 6
+    },
+    {
+      "runtime_id": "wands-07",
+      "runtime_name": "Seven of Wands",
+      "source_filename": "image-gen-4(1).png",
+      "source_sha256": "d372faf1b718abd1b117a5a8470662a84c41c0a99b4b34576539a46130cad6fb",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-07.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "40322f032d08149c3804087f7c132fa5e5dfe5c59dcf3db750ee12e54d50a1be",
+      "served_bytes": 562176,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 7
+    },
+    {
+      "runtime_id": "wands-08",
+      "runtime_name": "Eight of Wands",
+      "source_filename": "image-gen-2(9).png",
+      "source_sha256": "ed69fa37bccd76a0ad6333e998be570b2db062d78784ff41fbe41f5794350159",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-08.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "60c83251121b232989ae55175b04b3b4778939243384ca774b4986af3fd2ed38",
+      "served_bytes": 509408,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 8
+    },
+    {
+      "runtime_id": "wands-09",
+      "runtime_name": "Nine of Wands",
+      "source_filename": "image-gen-5(1).png",
+      "source_sha256": "47ac1885ed7506b7d3b64a722a739cdfec653455cd6c9c82a4da30ce6c706f88",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-09.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "e7cacff945631a689efef629157814667c23d0cd008ff19c150151349d685397",
+      "served_bytes": 540130,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 9
+    },
+    {
+      "runtime_id": "wands-10",
+      "runtime_name": "Ten of Wands",
+      "source_filename": "image-gen-6(1).png",
+      "source_sha256": "fbd0f633e0ac9f05dcecd41f142b008ae2697077b699421b05673fe947dbe0c3",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-10.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "57c736fe905ad5c5db8b4f525dff294a7bf985ff9e4df7b93ae8cb906b9dbe4d",
+      "served_bytes": 555766,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 10
+    },
+    {
+      "runtime_id": "wands-11",
+      "runtime_name": "Page of Wands",
+      "source_filename": "image-gen-1(9).png",
+      "source_sha256": "86c17cfee013782d7559e30b4ad896dba1a477211481fd9d40de0eecab3901c3",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-11.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "6587143996fa7cc8f4e36d2a1694c0f503ae6637fa981bf174e661f7105324d8",
+      "served_bytes": 570716,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 11
+    },
+    {
+      "runtime_id": "wands-12",
+      "runtime_name": "Knight of Wands",
+      "source_filename": "image-gen-1(10).png",
+      "source_sha256": "39c45de733803cace358752b7876ff9f55e67074d830ae818cb51c6b53cd5f71",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-12.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "70411725755255609ed57f45e71b9968aa6087668323b218ecbe23091f10512f",
+      "served_bytes": 600128,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 12
+    },
+    {
+      "runtime_id": "wands-13",
+      "runtime_name": "Queen of Wands",
+      "source_filename": "image-gen-2(10)-2.png",
+      "source_sha256": "51a8ed331fcef0949e91d2d301151056cb5af0dde37766540e7f8dfe8b0c4585",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-13.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "c2876c6bb78a06558a098ef3f12cc9a2a1b831eb5f650f64151992d6416182df",
+      "served_bytes": 640292,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 13
+    },
+    {
+      "runtime_id": "wands-14",
+      "runtime_name": "King of Wands",
+      "source_filename": "image-gen-3(10).png",
+      "source_sha256": "85ddb65f4946409e86bbdc4a4b4ea9348336cd0aad96c23eadf0d8bb702aa47e",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/wands-14.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "dc6bf3edeff6060422fa708ecab1919dde9095c84d5695043d30ec57aff55433",
+      "served_bytes": 629578,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Wands",
+      "number": 14
+    },
+    {
+      "runtime_id": "cups-01",
+      "runtime_name": "Ace of Cups",
+      "source_filename": "image-gen-4(2).png",
+      "source_sha256": "99c2718eb05fe8d4a57282463baba7aa0ae008e2de03e4f8924fdeb289320563",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-01.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "7436c5f188528a65313313981735791462f3327e062b7d57421bbc7b060aa884",
+      "served_bytes": 640628,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 1
+    },
+    {
+      "runtime_id": "cups-02",
+      "runtime_name": "Two of Cups",
+      "source_filename": "image-gen-5(2).png",
+      "source_sha256": "a47ddcec2370d400f62137b05154ae4a2330f5d7d7071f68bec6d361beb8896a",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-02.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "232fd457cc3e8161fc8fb99dbf7cc50895d869c37afda526edaabe886e0c7131",
+      "served_bytes": 621636,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 2
+    },
+    {
+      "runtime_id": "cups-03",
+      "runtime_name": "Three of Cups",
+      "source_filename": "image-gen-6(2).png",
+      "source_sha256": "8452458aaea9dfddff987a722c3a8454fd80d0985bd47ba12c83e23c6fce22d6",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-03.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "5f1202f224dbbec7feda6f648a7ebda10911126b48f769ec1b09f2a88213a17e",
+      "served_bytes": 620762,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 3
+    },
+    {
+      "runtime_id": "cups-04",
+      "runtime_name": "Four of Cups",
+      "source_filename": "image-gen-7(2).png",
+      "source_sha256": "cf30b1118e5a05b47bac149e5488c7eb36648fe35f55b94483f72c619acc292d",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-04.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "783b052a8830c5e2e8b574908bb18b2c3a0fadc0137cd984f68033d7575eaa08",
+      "served_bytes": 629402,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 4
+    },
+    {
+      "runtime_id": "cups-05",
+      "runtime_name": "Five of Cups",
+      "source_filename": "image-gen-8(2).png",
+      "source_sha256": "9bfe585981676129cd0e3a5e020e130741e11355b29ca51b2db8d96b23e18b4f",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-05.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "d1cead6ce838a961f7743606ea909d76a38754e71bf2be921ab545bd7b81a2c4",
+      "served_bytes": 548398,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 5
+    },
+    {
+      "runtime_id": "cups-06",
+      "runtime_name": "Six of Cups",
+      "source_filename": "image-gen-9(2).png",
+      "source_sha256": "b75fe0ed9c1cc5c92109bb57d9ccbf67681ede6dbff27eb6cdc646d502d7c92c",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-06.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "e365dd8daf22f65e69e21a60751c495a81b255fbabb22ac3105c9be738e4f503",
+      "served_bytes": 616562,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 6
+    },
+    {
+      "runtime_id": "cups-07",
+      "runtime_name": "Seven of Cups",
+      "source_filename": "image-gen-10(2).png",
+      "source_sha256": "1e0c6a0ae55152b8a75bf09e2a91f11fedb7ccfda3050ce69ec727f354a896e6",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-07.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "a21289e089d4482f70c2fe4b676cebb8b551c632a145919fa45bdfb0e9e09155",
+      "served_bytes": 662144,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 7
+    },
+    {
+      "runtime_id": "cups-08",
+      "runtime_name": "Eight of Cups",
+      "source_filename": "image-gen-5(3).png",
+      "source_sha256": "6b4bb2a9305310feb7b40120a8bc68e71281863b9b8349df7a43f9a8bf466870",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-08.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "bfebc7a49a563f4c9f698313ed46ebf8f7447ee3ebb784ecf648b78ac66a5ab1",
+      "served_bytes": 643772,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 8
+    },
+    {
+      "runtime_id": "cups-09",
+      "runtime_name": "Nine of Cups",
+      "source_filename": "image-gen-2(20260924-003704).png",
+      "source_sha256": "5dcde05de0b3918d1c2ed50f3e34c1621c90c12fb3cae9d38becd62c2a7cda12",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-09.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "53e6c194152011d8b45e4b26e1d06f518d572c6d9821b89461bb5d69b22cefe7",
+      "served_bytes": 621450,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 9
+    },
+    {
+      "runtime_id": "cups-10",
+      "runtime_name": "Ten of Cups",
+      "source_filename": "image-gen-4(3).png",
+      "source_sha256": "972b40718f806544c9aa17e6dd0e74b88eda3e2c24a45eaa84b9df5bb1a9c5b5",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-10.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "9bd2252cdf32aab40a6349ab9791261da8e642ae0dd6b87a074c3e86997ef112",
+      "served_bytes": 632840,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 10
+    },
+    {
+      "runtime_id": "cups-11",
+      "runtime_name": "Page of Cups",
+      "source_filename": "image-gen-1(20260924-003702).png",
+      "source_sha256": "9938be7edcbc5aa1e72b6ff67b643de0a0c7727280f4f34f3e4c494e6a11b9d7",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-11.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "920e571171f8994afd99b35a426b2aac04d9e684081a22914d77cf4854106eac",
+      "served_bytes": 645242,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 11
+    },
+    {
+      "runtime_id": "cups-12",
+      "runtime_name": "Knight of Cups",
+      "source_filename": "image-gen-3(20260924-003706).png",
+      "source_sha256": "6c590e973e78dd8c1b38495503e4a51c8feb36df523f83927e281c20a5786c8e",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-12.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "99b93e77290308f30aa05dffb94084d67f2853f07c3ae4b524285dbf17c083d9",
+      "served_bytes": 622278,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 12
+    },
+    {
+      "runtime_id": "cups-13",
+      "runtime_name": "Queen of Cups",
+      "source_filename": "image-gen-9(3).png",
+      "source_sha256": "39b273670ed807202d53f86aa22a178b94e4ad897ec48ba0cb4066cc86c73e67",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-13.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "007895a8381de454c9e6266bfb7ccea53944de4b0b392329fca58227803fac52",
+      "served_bytes": 644156,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 13
+    },
+    {
+      "runtime_id": "cups-14",
+      "runtime_name": "King of Cups",
+      "source_filename": "image-gen-8(3).png",
+      "source_sha256": "2e3d11301eb40b646647372af1371b687af16e46630990641da34c26e588d311",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/cups-14.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "090c6180b03ff735bcf0f0544dd1dee616e5668194684dbf9fc989c989a7ea59",
+      "served_bytes": 671604,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Cups",
+      "number": 14
+    },
+    {
+      "runtime_id": "swords-01",
+      "runtime_name": "Ace of Swords",
+      "source_filename": "image-gen-7(3).png",
+      "source_sha256": "b2effc9660a98ec041018233daa40526bd8bffdb995383643eaa4a5483d25dce",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-01.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "672ac63d2bbddfccced68aa2d60180f2ae32ece0efe1859b9d1017b051e6d57a",
+      "served_bytes": 590926,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 1
+    },
+    {
+      "runtime_id": "swords-02",
+      "runtime_name": "Two of Swords",
+      "source_filename": "image-gen-6(3).png",
+      "source_sha256": "c962af13ecfb900caabc1a30c4c08924eeb054cbc6794384cd61907b2e8d526e",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-02.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "8d17bef349e85dc140197e24b16d58eabd9d7fc3bb75b1d37da37826f41a64f6",
+      "served_bytes": 589580,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 2
+    },
+    {
+      "runtime_id": "swords-03",
+      "runtime_name": "Three of Swords",
+      "source_filename": "image-gen-10(3).png",
+      "source_sha256": "15405b7b9dc7d1cc988c2e61df1e01020494aa0045f35a79fe9fa994d201155e",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-03.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "e2eb42cd57072b721f3d2c69dc9d3d242e953698cb105bfe7c58f059252f9b71",
+      "served_bytes": 613524,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 3
+    },
+    {
+      "runtime_id": "swords-04",
+      "runtime_name": "Four of Swords",
+      "source_filename": "image-gen-1(20260924-014853).png",
+      "source_sha256": "9ceec013775307beb48488f50930ae084caa9b8b4d8cffdbf511820e3a7ff63a",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-04.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "b9748e728ea1a19cf65dfdaca90a87c6de77e13406e975340770eee41e89900e",
+      "served_bytes": 616086,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 4
+    },
+    {
+      "runtime_id": "swords-05",
+      "runtime_name": "Five of Swords",
+      "source_filename": "image-gen-2(20260924-014855).png",
+      "source_sha256": "bc14acd43468bf8f1d3692a1d17c43df1e2a5c6ebfe7c7747e4b0b6a048c18bd",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-05.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "1c4617e1feae60aa623b885a405d3a2623e93e3cbc7de0469e824afeba05035b",
+      "served_bytes": 617242,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 5
+    },
+    {
+      "runtime_id": "swords-06",
+      "runtime_name": "Six of Swords",
+      "source_filename": "image-gen-3(20260924-014900).png",
+      "source_sha256": "05637b214787bc5aff4c86b1cc09e534fee1856528388d17194f1d81e175313f",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-06.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "e654e44a4556fead6f62333ca55eb94512d4b7724ea3213dffc3c5f0fd22bdd6",
+      "served_bytes": 592980,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 6
+    },
+    {
+      "runtime_id": "swords-07",
+      "runtime_name": "Seven of Swords",
+      "source_filename": "image-gen-4(4).png",
+      "source_sha256": "b1a868e7ed6f70a9bc11200d1e8c38edffa4ac8f0bb2532ba8c44661ca617e20",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-07.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "5eee55e6bf8e2a8e9aa897a7c70f5c310898e86ba1ebd66d889b7e2459ea75f0",
+      "served_bytes": 577736,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 7
+    },
+    {
+      "runtime_id": "swords-08",
+      "runtime_name": "Eight of Swords",
+      "source_filename": "image-gen-5(4).png",
+      "source_sha256": "0bd6166cd48226523b5b3fd10df84062c300486f17ab7f502f50862ff195697f",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-08.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "211fdb99ff343c81a801c49c7d1b000ef8dc5ed329c29b95040d574b370bb2c4",
+      "served_bytes": 540538,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 8
+    },
+    {
+      "runtime_id": "swords-09",
+      "runtime_name": "Nine of Swords",
+      "source_filename": "image-gen-6(4).png",
+      "source_sha256": "dfa3962ddb8319dfda92ea8e77d93d667770853d1974032e17b50a35e32aa039",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-09.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "0f444e9318d57c64590b1598e04e0e3c814226aac6617ddd786c5aef9488d09b",
+      "served_bytes": 533016,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 9
+    },
+    {
+      "runtime_id": "swords-10",
+      "runtime_name": "Ten of Swords",
+      "source_filename": "image-gen-7(4).png",
+      "source_sha256": "790954c0bbd19b85c84642a6e3ae5fa199543bbc1aef4e05c5be4b5335a02dd5",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-10.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "d2561aec0860773effc4f7d8e65a2942b9902b0b8f37c5ec2f7f34ebf8628de7",
+      "served_bytes": 541482,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 10
+    },
+    {
+      "runtime_id": "swords-11",
+      "runtime_name": "Page of Swords",
+      "source_filename": "image-gen-8(4).png",
+      "source_sha256": "a51578c1307bdfcb06e71927a96ad7b2347249a455d538875cb8e7dc6ddc1bd1",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-11.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "7f0d0d5917235ebf22ac38f607f4ad70c0b0c8dca97776943ea7ffd1cbc18721",
+      "served_bytes": 627800,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 11
+    },
+    {
+      "runtime_id": "swords-12",
+      "runtime_name": "Knight of Swords",
+      "source_filename": "image-gen-9(4).png",
+      "source_sha256": "510ef44ba1d5d746f6341dd102b2a20b2f40810b78137ec2e4850ca0ab4af935",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-12.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "65e1c27ae46a93cde0cdedc199da87e9dfae34222ca8e8a2f1a4f32ce0d6e5aa",
+      "served_bytes": 585168,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 12
+    },
+    {
+      "runtime_id": "swords-13",
+      "runtime_name": "Queen of Swords",
+      "source_filename": "image-gen-10(4).png",
+      "source_sha256": "eb452ce2be0b5b3b6d93d39d52e9c2a03894985cd40e15ed93273019925c1b73",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-13.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "651e1951fb51054d33383deb6fe4794adb4a74536c517176c5a836a765903cd6",
+      "served_bytes": 628988,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 13
+    },
+    {
+      "runtime_id": "swords-14",
+      "runtime_name": "King of Swords",
+      "source_filename": "image-gen-1(20260924-021423).png",
+      "source_sha256": "afa11ec8ecfb8443bda03fdcbe325c27d5081d7696ff152b054afd5e404e0da0",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/swords-14.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "641cd04651a798d8afcb08273d9f3287c7900e47d4cb3344c1a7a4688c64d26d",
+      "served_bytes": 648820,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Swords",
+      "number": 14
+    },
+    {
+      "runtime_id": "pentacles-01",
+      "runtime_name": "Ace of Pentacles",
+      "source_filename": "image-gen-2(20260924-021425).png",
+      "source_sha256": "28408afaeacc7beb990a04991271b971a486bf4c3c4a7f15e5c6192f94400ae8",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-01.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "776b649c77f2470207cfe420da29a9d51a157556e5aaa70fe1ffe3e0d6f98b50",
+      "served_bytes": 667006,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 1
+    },
+    {
+      "runtime_id": "pentacles-02",
+      "runtime_name": "Two of Pentacles",
+      "source_filename": "image-gen-3(20260924-021427).png",
+      "source_sha256": "a91f7c9af9d4f375bd7c1503ee6aaaafbbe631f50d974c5e2bd293ae57d49dee",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-02.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "5cf7b43f0a464cb4c9874c2398705d49c07796aa0362046779f64c3f3b5c43fc",
+      "served_bytes": 656282,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 2
+    },
+    {
+      "runtime_id": "pentacles-03",
+      "runtime_name": "Three of Pentacles",
+      "source_filename": "image-gen-4(5).png",
+      "source_sha256": "9ca7352680c48ab3700038ea7f321a89de1e920cac77ff19c553d661a556befa",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-03.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "cb6a3854817dd95b564d3fdfd0e80f250403e215602d58622601b7e95f364299",
+      "served_bytes": 694660,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 3
+    },
+    {
+      "runtime_id": "pentacles-04",
+      "runtime_name": "Four of Pentacles",
+      "source_filename": "image-gen-5(5).png",
+      "source_sha256": "93b2d6d231e441469aed6301f0ea5344bae2e7258cc512168a171b05eaacef10",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-04.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "056f6d78c892801bf77722522f054473c8423deef802f8b0896c57e07235c5ee",
+      "served_bytes": 662250,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 4
+    },
+    {
+      "runtime_id": "pentacles-05",
+      "runtime_name": "Five of Pentacles",
+      "source_filename": "image-gen-6(5).png",
+      "source_sha256": "1068f35da61b611a3e8daad597215008e06965d0c9ba155e764fd95774820a7f",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-05.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "37269fd263d73e34da76e3488e558b487c9b1d8f0eb67638bd5fade6dc69aba1",
+      "served_bytes": 646020,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 5
+    },
+    {
+      "runtime_id": "pentacles-06",
+      "runtime_name": "Six of Pentacles",
+      "source_filename": "image-gen-7(5).png",
+      "source_sha256": "1c2b217aa96cfcfcacc89e3db94e20ef07aaf4e8f1158f2c6dfe484d90c5ce12",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-06.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "49527169187ef062a8236c60ff1efdaf7975681244a83ebdf3cfc3d346cdd46a",
+      "served_bytes": 653104,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 6
+    },
+    {
+      "runtime_id": "pentacles-07",
+      "runtime_name": "Seven of Pentacles",
+      "source_filename": "image-gen-8(5).png",
+      "source_sha256": "7f91ccbf9aee737d1ccaf27529a868e2d0f85f0730832eed40ee9ac0ff555c81",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-07.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "9597b65cdd48786d4ded318512cecde4c67b04a199c0f12a1495ab7b11e70509",
+      "served_bytes": 688464,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 7
+    },
+    {
+      "runtime_id": "pentacles-08",
+      "runtime_name": "Eight of Pentacles",
+      "source_filename": "image-gen-9(5).png",
+      "source_sha256": "471f21227444f86f0d4020c4d41523f82eddef501f8d3825be459265fefef1a6",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-08.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "f3dbac387ea89c00362aac96c6a52e4bbb6e0dba81934cf7ee6d36698b06f785",
+      "served_bytes": 666270,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 8
+    },
+    {
+      "runtime_id": "pentacles-09",
+      "runtime_name": "Nine of Pentacles",
+      "source_filename": "image-gen-10(5).png",
+      "source_sha256": "c87b0ac5b8e3e92270b532fdbdcf8107189a55e7c55540701e2d771ab3cf9268",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-09.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "31facf3d0bf776688c604520cf80f3d52ce92552b08e68a1fc0caec9215ab544",
+      "served_bytes": 726098,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 9
+    },
+    {
+      "runtime_id": "pentacles-10",
+      "runtime_name": "Ten of Pentacles",
+      "source_filename": "image-gen-1(20260924-032843).png",
+      "source_sha256": "93a7d13ed337377aa274f0ec34ce81c79b0b0c554fa3bbebdaab0233fa7dd327",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-10.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "7ebcbccc187c34ede6f30abea8ca30fa6a14932ce2b840dee6e146fc8ba51447",
+      "served_bytes": 724670,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 10
+    },
+    {
+      "runtime_id": "pentacles-11",
+      "runtime_name": "Page of Pentacles",
+      "source_filename": "image-gen-2(20260924-032845).png",
+      "source_sha256": "03266797412ce35067a38d97bccada5fd2c7ee1f5f69c54ec642d23ad73cbb29",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-11.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "22282216a8ef1e8f9a3472901c7bbd5550bfcc64779a5b68a72b5668d5bd7eeb",
+      "served_bytes": 649988,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 11
+    },
+    {
+      "runtime_id": "pentacles-12",
+      "runtime_name": "Knight of Pentacles",
+      "source_filename": "image-gen-3(20260924-032846).png",
+      "source_sha256": "e1146120159895d0b357f61d824ced7806ae5868cdd9096e09ac42419e220118",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-12.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "397fb3928593554145300bbbe0bf42cf74fab885582aee9b4f26786529129df1",
+      "served_bytes": 653702,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 12
+    },
+    {
+      "runtime_id": "pentacles-13",
+      "runtime_name": "Queen of Pentacles",
+      "source_filename": "image-gen-4(6).png",
+      "source_sha256": "28f1c81afffac184cdfdecf65a6f0260937716dcb07f324691605e14d0f35f0b",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-13.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "b61d7f43919b2e1ccea37534a2f4dccfaa25a01975a7dc19b72faccf75993c9e",
+      "served_bytes": 667576,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 13
+    },
+    {
+      "runtime_id": "pentacles-14",
+      "runtime_name": "King of Pentacles",
+      "source_filename": "image-gen-5(6).png",
+      "source_sha256": "39f14260a8689f4a050ecbcb77d12406e9ab7b9d231cc08f247744c8f04ee5c8",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_asset": "/assets/tarot/pentacles-14.webp",
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "served_sha256": "412ac94c327e077fc00bbe868f399601eed1c435cf15cd4d23aed7b2cad6bb1f",
+      "served_bytes": 709156,
+      "art_title": null,
+      "status": "finished_library_art",
+      "mapping_basis": "printed Minor Arcana title or Major Arcana numeral visually reviewed on 2026-09-24 contact sheets",
+      "suit": "Pentacles",
+      "number": 14
     }
   ]
 }

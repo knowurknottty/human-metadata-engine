@@ -11,3 +11,6 @@ __pycache__/
 site/
 dist/
 .netlify/
+
+# Generated, content-bound development evidence; never commit.
+release/manifest.dev.json

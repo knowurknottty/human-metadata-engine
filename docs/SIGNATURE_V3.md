@@ -195,3 +195,9 @@ The implementation does not fabricate event predictions, empirical personality v
 ## Adjacent historical/reflection boundary
 
 The compatibility encoder map now includes `sumerian_me_ontology` as a historical/textual corpus reference, and `analysis-v1` can optionally return `sumerian-me-reflection-v1`. Neither is promoted into v3 static-signature convergence by this tranche. Historical attestation is not an independence family for personality evidence, and explicit reflection tags remain user-supplied/modern-interpretive context rather than a new v3 proof source.
+
+### 2026-09-24 — R4 household/Atlas/Tarot integration
+
+- Pytest collection baseline intentionally advanced from 490 tests / 68 files to **572 tests / 76 files** after merging the household composition contracts, expanded Atlas coverage, completed 78-card Tarot asset integrity checks, and associated regression suites.
+- `esoteric_bridge` is explicitly classified as `project_authored_crosswalk`, remains in the `crosswalk_comparison` independence group, and is non-claim-eligible so project-authored correspondences cannot masquerade as independent evidence.
+- The protected single-person calculation contract remains `analysis-v1`; household composition is additive and default-off for paid/public use.

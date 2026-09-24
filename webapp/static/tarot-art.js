@@ -2,20 +2,109 @@
 (() => {
   "use strict";
   const NS = "http://www.w3.org/2000/svg";
+  const CARD_ASSETS = Object.freeze({
+    "cups-01": "/assets/tarot/cups-01.webp",
+    "cups-02": "/assets/tarot/cups-02.webp",
+    "cups-03": "/assets/tarot/cups-03.webp",
+    "cups-04": "/assets/tarot/cups-04.webp",
+    "cups-05": "/assets/tarot/cups-05.webp",
+    "cups-06": "/assets/tarot/cups-06.webp",
+    "cups-07": "/assets/tarot/cups-07.webp",
+    "cups-08": "/assets/tarot/cups-08.webp",
+    "cups-09": "/assets/tarot/cups-09.webp",
+    "cups-10": "/assets/tarot/cups-10.webp",
+    "cups-11": "/assets/tarot/cups-11.webp",
+    "cups-12": "/assets/tarot/cups-12.webp",
+    "cups-13": "/assets/tarot/cups-13.webp",
+    "cups-14": "/assets/tarot/cups-14.webp",
+    "major-00": "/assets/tarot/major-00-seeker.webp",
+    "major-01": "/assets/tarot/major-01-alchemist.webp",
+    "major-02": "/assets/tarot/major-02-mirror.webp",
+    "major-03": "/assets/tarot/major-03-weaver-many-one.webp",
+    "major-04": "/assets/tarot/major-04-builder.webp",
+    "major-05": "/assets/tarot/major-05-beacon.webp",
+    "major-06": "/assets/tarot/major-06-bridge.webp",
+    "major-07": "/assets/tarot/major-07-signal.webp",
+    "major-08": "/assets/tarot/major-08-weaver-patterns.webp",
+    "major-09": "/assets/tarot/major-09-lantern.webp",
+    "major-10": "/assets/tarot/major-10-wheel.webp",
+    "major-11": "/assets/tarot/major-11-justice.webp",
+    "major-12": "/assets/tarot/major-12-suspension.webp",
+    "major-13": "/assets/tarot/major-13.webp",
+    "major-14": "/assets/tarot/major-14.webp",
+    "major-15": "/assets/tarot/major-15.webp",
+    "major-16": "/assets/tarot/major-16.webp",
+    "major-17": "/assets/tarot/major-17.webp",
+    "major-18": "/assets/tarot/major-18.webp",
+    "major-19": "/assets/tarot/major-19.webp",
+    "major-20": "/assets/tarot/major-20.webp",
+    "major-21": "/assets/tarot/major-21.webp",
+    "pentacles-01": "/assets/tarot/pentacles-01.webp",
+    "pentacles-02": "/assets/tarot/pentacles-02.webp",
+    "pentacles-03": "/assets/tarot/pentacles-03.webp",
+    "pentacles-04": "/assets/tarot/pentacles-04.webp",
+    "pentacles-05": "/assets/tarot/pentacles-05.webp",
+    "pentacles-06": "/assets/tarot/pentacles-06.webp",
+    "pentacles-07": "/assets/tarot/pentacles-07.webp",
+    "pentacles-08": "/assets/tarot/pentacles-08.webp",
+    "pentacles-09": "/assets/tarot/pentacles-09.webp",
+    "pentacles-10": "/assets/tarot/pentacles-10.webp",
+    "pentacles-11": "/assets/tarot/pentacles-11.webp",
+    "pentacles-12": "/assets/tarot/pentacles-12.webp",
+    "pentacles-13": "/assets/tarot/pentacles-13.webp",
+    "pentacles-14": "/assets/tarot/pentacles-14.webp",
+    "swords-01": "/assets/tarot/swords-01.webp",
+    "swords-02": "/assets/tarot/swords-02.webp",
+    "swords-03": "/assets/tarot/swords-03.webp",
+    "swords-04": "/assets/tarot/swords-04.webp",
+    "swords-05": "/assets/tarot/swords-05.webp",
+    "swords-06": "/assets/tarot/swords-06.webp",
+    "swords-07": "/assets/tarot/swords-07.webp",
+    "swords-08": "/assets/tarot/swords-08.webp",
+    "swords-09": "/assets/tarot/swords-09.webp",
+    "swords-10": "/assets/tarot/swords-10.webp",
+    "swords-11": "/assets/tarot/swords-11.webp",
+    "swords-12": "/assets/tarot/swords-12.webp",
+    "swords-13": "/assets/tarot/swords-13.webp",
+    "swords-14": "/assets/tarot/swords-14.webp",
+    "wands-01": "/assets/tarot/wands-01.webp",
+    "wands-02": "/assets/tarot/wands-02.webp",
+    "wands-03": "/assets/tarot/wands-03.webp",
+    "wands-04": "/assets/tarot/wands-04.webp",
+    "wands-05": "/assets/tarot/wands-05.webp",
+    "wands-06": "/assets/tarot/wands-06.webp",
+    "wands-07": "/assets/tarot/wands-07.webp",
+    "wands-08": "/assets/tarot/wands-08.webp",
+    "wands-09": "/assets/tarot/wands-09.webp",
+    "wands-10": "/assets/tarot/wands-10.webp",
+    "wands-11": "/assets/tarot/wands-11.webp",
+    "wands-12": "/assets/tarot/wands-12.webp",
+    "wands-13": "/assets/tarot/wands-13.webp",
+    "wands-14": "/assets/tarot/wands-14.webp",
+  });
   const MAJOR_ASSETS = Object.freeze({
-    0: "/assets/tarot/major-00-seeker.webp",
-    1: "/assets/tarot/major-01-alchemist.webp",
-    2: "/assets/tarot/major-02-mirror.webp",
-    3: "/assets/tarot/major-03-weaver-many-one.webp",
-    4: "/assets/tarot/major-04-builder.webp",
-    5: "/assets/tarot/major-05-beacon.webp",
-    6: "/assets/tarot/major-06-bridge.webp",
-    7: "/assets/tarot/major-07-signal.webp",
-    8: "/assets/tarot/major-08-weaver-patterns.webp",
-    9: "/assets/tarot/major-09-lantern.webp",
-    10: "/assets/tarot/major-10-wheel.webp",
-    11: "/assets/tarot/major-11-justice.webp",
-    12: "/assets/tarot/major-12-suspension.webp",
+    0: CARD_ASSETS["major-00"],
+    1: CARD_ASSETS["major-01"],
+    2: CARD_ASSETS["major-02"],
+    3: CARD_ASSETS["major-03"],
+    4: CARD_ASSETS["major-04"],
+    5: CARD_ASSETS["major-05"],
+    6: CARD_ASSETS["major-06"],
+    7: CARD_ASSETS["major-07"],
+    8: CARD_ASSETS["major-08"],
+    9: CARD_ASSETS["major-09"],
+    10: CARD_ASSETS["major-10"],
+    11: CARD_ASSETS["major-11"],
+    12: CARD_ASSETS["major-12"],
+    13: CARD_ASSETS["major-13"],
+    14: CARD_ASSETS["major-14"],
+    15: CARD_ASSETS["major-15"],
+    16: CARD_ASSETS["major-16"],
+    17: CARD_ASSETS["major-17"],
+    18: CARD_ASSETS["major-18"],
+    19: CARD_ASSETS["major-19"],
+    20: CARD_ASSETS["major-20"],
+    21: CARD_ASSETS["major-21"],
   });
   const MAJOR_SCENES = [
     "wanderer","tools","pillars","garden","throne","arch","choice","chariot","strength","lantern","wheel",
@@ -98,13 +187,20 @@
     add(svg,"text",{x:110,y:36,"text-anchor":"middle",fill:gold,"font-size":13,"font-family":"Georgia,serif","letter-spacing":2}).textContent=n===0?"0":String(n);
     add(svg,"text",{x:110,y:220,"text-anchor":"middle",fill:pale,"font-size":9,"font-family":"system-ui,sans-serif","letter-spacing":2}).textContent=scene.toUpperCase();
   };
+  const renderFallbackArt = card => {
+    const svg=base(card);
+    if(card.arcana === "Major") renderMajor(svg,card);
+    else if(card.number >= 11) renderCourt(svg,card);
+    else renderPips(svg,card);
+    return svg;
+  };
   const renderCardArt = card => {
     const wrap=document.createElement("div");
     wrap.className="tarot-card-art";
     wrap.dataset.cardArt=card.id || card.name;
 
     const majorIndex = card.arcana === "Major" ? Number(card.number) : -1;
-    const asset = MAJOR_ASSETS[majorIndex];
+    const asset = CARD_ASSETS[card.id] || MAJOR_ASSETS[majorIndex];
     if (asset) {
       const img=document.createElement("img");
       img.className="tarot-card-art-image";
@@ -114,17 +210,16 @@
       img.decoding="async";
       img.draggable=false;
       img.setAttribute("aria-hidden","true");
+      img.addEventListener("error", () => {
+        if (img.isConnected) img.replaceWith(renderFallbackArt(card));
+      }, {once:true});
       wrap.classList.add("tarot-card-art--library");
       wrap.append(img);
       return wrap;
     }
 
-    const svg=base(card);
-    if(card.arcana === "Major") renderMajor(svg,card);
-    else if(card.number >= 11) renderCourt(svg,card);
-    else renderPips(svg,card);
-    wrap.append(svg);
+    wrap.append(renderFallbackArt(card));
     return wrap;
   };
-  window.TarotArt = Object.freeze({MAJOR_ASSETS, MAJOR_SCENES, pipPositions, renderMajor, renderPips, renderCourt, renderCardArt});
+  window.TarotArt = Object.freeze({CARD_ASSETS, MAJOR_ASSETS, MAJOR_SCENES, pipPositions, renderMajor, renderPips, renderCourt, renderFallbackArt, renderCardArt});
 })();
