@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Human Manual relational-view-v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "household_id",
+    "composition",
+    "status",
+    "degraded",
+    "degradation_reasons",
+    "subjects",
+    "observations",
+    "forbidden_inferences",
+    "policy_note"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "relational-view-v1"
+    },
+    "household_id": {
+      "type": "string"
+    },
+    "composition": {
+      "enum": [
+        "pair",
+        "household"
+      ]
+    },
+    "status": {
+      "enum": [
+        "computed",
+        "unavailable"
+      ]
+    },
+    "degraded": {
+      "type": "boolean"
+    },
+    "degradation_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "subjects": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "forbidden_inferences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "policy_note": {
+      "type": "string"
+    },
+    "view_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

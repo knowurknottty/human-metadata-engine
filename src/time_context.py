@@ -20,7 +20,9 @@ def _tzdata_version() -> str | None:
 
 
 def _zone_from_context(context: dict[str, Any]) -> tuple[tzinfo, str, str | None]:
-    zone_id = context.get("timezone_id") or context.get("tzid")
+    # ``timezone_name`` is the validated public API spelling. ``timezone_id``
+    # and ``tzid`` remain library aliases; none are inferred from coordinates.
+    zone_id = context.get("timezone_id") or context.get("tzid") or context.get("timezone_name")
     if zone_id:
         try:
             return ZoneInfo(str(zone_id)), "iana_zoneinfo", str(zone_id)

@@ -9,7 +9,7 @@ deployment, payment boundary, or privacy posture is production-ready.
 
 | Area | Evidence | Status |
 | --- | --- | --- |
-| Deterministic engine and API contracts | `python3 tools/run_tests.py --quiet`; `python3 -m pytest -q`; `python3 tools/validate_contracts.py` | Verified locally; the latest pushed commit must also pass CI |
+| Deterministic engine and API contracts | `python tools/run_tests.py --quiet`; `python -m pytest -q`; `python tools/validate_contracts.py` | Verified locally; the latest pushed commit must also pass CI |
 | Structured Know Thyself profile | Adjacent-wing API validation, compatibility tests, status round-trip tests | Verified locally |
 | Browser flow | Name-only, full Kirk fixture, unknown time, ambiguity selection, multi-error recovery, alias tokens, report focus/actions, and 320 CSS-pixel completion | Verified in the local in-app browser; physical-device QA remains |
 | Location-only birth flow | A place name is geocoded server-side; coordinates and the date-specific historical UTC offset are derived automatically | Verified locally; external service dependency remains |
@@ -35,26 +35,35 @@ Release only when every item below is true:
 - [x] The privacy notice names Open-Meteo and explains that the supplied place is sent to it; production availability monitoring remains an operations gate.
 - [x] No checkout, card field, paywall, or simulated entitlement is shipped.
 - [x] Untouched Big Five fields remain “Not answered” and are not submitted as neutral scores (verified in local browser flow and frontend contract test).
-- [x] The first result view contains analysis identity, coverage, six computed visual surfaces, and a provenance/limitations inspector. The complete report remains the Research-mode reference layer (verified by frontend contracts; browser interaction verification is release-candidate evidence).
-- [x] Magic mode exposes The Living Pattern from a deterministic evidence/claim plan. Grounded, Story, and Sources preserve identical claims, confidence, contradictions, and evidence links. Story is generated in-process by the deterministic compositor and versioned prose lexicon; no remote model is required or called. Data mode keeps narrative disabled.
+- [x] The first result view preserves the six protected computed visual surfaces and adds the versioned Atlas expansion layer with declared visual homes for the broader backend, plus the provenance/limitations inspector. The complete report remains the Research-mode reference layer (verified by frontend contracts; browser interaction verification is release-candidate evidence).
+- [x] Magic mode exposes The Living Pattern from a deterministic evidence/claim plan. Grounded, Story, and Sources preserve identical claims, support strength, contradictions, and evidence links. Story is generated in-process by the deterministic compositor and versioned prose lexicon; no remote model is required or called. Data mode keeps narrative disabled.
+- [x] Active synthesis packets are v2-only, use full-width content identities, exact claim/evidence binding, fail-closed strength/mapping validation, and separate calculation/presentation replay identities.
+- [x] Pattern Map explains alignment, preserved divergence, statement authorship/support provenance, and input sensitivity without adding evidence or motif votes.
+- [x] Agent Handoff v2 rejects legacy synthesis evidence packets and exports a reviewed projection rather than arbitrary nested response data.
+- [x] Existing generated `output/` artifacts are cryptographically indexed as quarantined historical material and excluded from active synthesis evidence.
+- [x] The development manifest records the current dirty source state as `release_candidate: false`; a clean immutable release manifest remains a release-candidate gate.
 - [x] The Human Capacity / Sumerian me request contract is opt-in, requires explicit user-selected capacity tags, rejects unknown/duplicate domain IDs, and returns no automatic score/rank/assignment.
 - [ ] Browser and physical-device QA confirms the new Sumerian me observation/tag controls and three-layer result remain understandable, keyboard-operable, and overflow-free at release target widths.
 - [x] Dynamic Enneagram wing choices expose only the two adjacent wings, and the API rejects impossible pairings (frontend and API tests).
 - [x] CSS-viewport QA confirms readable explanatory text, stacked controls, expandable technical detail, and zero horizontal overflow at 320, 360, 390, 412, and 768 CSS pixels.
 - [ ] Physical-device QA confirms the same behavior in current iPhone Safari and Android Chrome.
 
-## Gate B — Optional future paid beta
+## Gate B — Optional future paid US / WE beta
 
-Gate A must be green, plus:
+Gate A must be green, plus. The complete single-person Human Manual remains free; payment applies only to additional household subjects and relational composition.
 
-- [ ] Free analysis returns preview data only; the full report is not present in the free response or hidden only with CSS.
-- [ ] Stripe-hosted Checkout or PaymentIntent is used; raw card data never passes through the application HTML.
-- [ ] A server-verified webhook creates a signed, expiring entitlement.
-- [ ] The paid endpoint checks entitlement before returning the full report.
-- [ ] Receipts, refunds, support contact, and deletion/retention terms exist.
-- [x] Report exports include engine version, report schema version, convention-set version, build revision, and reproducibility ID.
-- [ ] At least 20–30 observed-user sessions complete the core flow without assistance.
-- [ ] Accessibility review covers focus management, form errors, chart summaries, keyboard use, reduced motion, contrast, and print output.
+- [x] `analysis-v1` remains the complete free single-person product; no report sections are withheld to manufacture an upsell.
+- [x] `household-v1`, `relational-view-v1`, child-profile-v1, pet-profile-v1, and provider-neutral entitlement verification seams exist behind a default-off paid feature state.
+- [x] Disabled deployments expose no fake checkout, fake unlock, client-minted entitlement, household persistence, or webhook receiver.
+- [ ] A real hosted checkout/payment provider is configured; raw card data never passes through the application HTML.
+- [ ] The payment provider webhook is verified server-side over raw request bytes, with timestamp/replay checks and durable event deduplication.
+- [ ] Only a verified payment event creates a signed, expiring `entitlement-v1`.
+- [ ] `/api/household/compose` verifies household binding, expiry, signature, and added-subject limits before returning `relational-view-v1`.
+- [ ] US Pair and WE Household prices, receipts, refunds, support contact, and deletion/retention terms are published.
+- [ ] Any persisted household registry has an explicit retention/deletion policy and does not put names, birth inputs, or result bodies into the household manifest.
+- [ ] Child/guardian authority wording and jurisdictional obligations receive legal/policy review before public child-profile enrollment.
+- [ ] Paid-mode accessibility review covers US/WE focus management, table summaries, member cards, unavailable/stale states, keyboard use, reduced motion, contrast, mobile layout, and print/export.
+- [ ] At least 20–30 observed-user sessions complete the US/WE flow without assistance and do not interpret same-system observations as compatibility scores.
 
 ## Gate C — General consumer release
 

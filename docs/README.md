@@ -26,3 +26,9 @@ Older screenshots, baselines, audits, or interface notes should be read as evide
 - Internal repository/engine identifiers — authoritative computation/data substrate for developers, not public product copy.
 
 Visual hierarchy never changes epistemic status: deterministic computation, supplied data, symbolic interpretation, provenance, confidence labels, contradictions, and limitations retain their existing truth classes.
+
+
+## Current R3 synthesis references
+
+- `NARRATIVE_SCHEMA_V2.md` — active nested evidence/plan/narrative and replay contracts.
+- `RECORD_COMPATIBILITY_V2.md` — legacy quarantine and mixed-version policy.

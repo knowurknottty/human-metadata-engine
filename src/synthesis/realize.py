@@ -1,12 +1,16 @@
-"""Bounded deterministic realization of synthesis-plan-v1."""
+"""Bounded deterministic realization of synthesis-plan-v2 into narrative-v2."""
 
 from __future__ import annotations
 
-import hashlib
-
-from .contracts import NARRATIVE_SCHEMA_VERSION, TEMPLATE_VERSION
+from .contracts import (
+    NARRATIVE_SCHEMA_VERSION,
+    POLICY_VERSIONS,
+    REALIZATION_POLICY_VERSION,
+    TEMPLATE_VERSION,
+)
 from .reading_library import LIBRARY_VERSION
 from .prose_lexicon import LEXICON_VERSION, enrich_synthesis_sentence
+from .replay import build_replay_identity, content_digest, namespaced_id
 from .epistemic_safety import (
     contains_overclaiming_language,
     validate_epistemic_strength,
@@ -17,13 +21,44 @@ MODES = {"plain", "mythic", "research"}
 
 
 def _sentence(claim: dict, text: str, lexicon_records: list[dict] | None = None) -> dict:
+    lexicon_records = lexicon_records or []
+    text_provenance = {
+        "kind": "deterministic_composition",
+        "asset_ids": [item["id"] for item in lexicon_records],
+        "contract_version": REALIZATION_POLICY_VERSION,
+        "asset_sha256": content_digest({
+            "claim_id": claim["claim_id"],
+            "text": text,
+            "lexicon_unit_ids": [item["id"] for item in lexicon_records],
+            "template_version": TEMPLATE_VERSION,
+            "reading_library_version": LIBRARY_VERSION,
+            "lexicon_version": LEXICON_VERSION,
+        }),
+    }
+    statement_id = namespaced_id("stmt_v1", {
+        "claim_id": claim["claim_id"],
+        "evidence_ids": claim["evidence_ids"],
+        "text_provenance": text_provenance,
+    })
     return {
-        "sentence_id": f"sentence_{claim['claim_id'].removeprefix('claim_')}", "text": text,
-        "claim_ids": [claim["claim_id"]], "evidence_ids": claim["evidence_ids"],
-        "strength": claim["strength"], "epistemic_label": "interpretive_synthesis",
+        "sentence_id": f"sentence_{claim['claim_id'].removeprefix('claim_')}",
+        "statement_id": statement_id,
+        "text": text,
+        "claim_ids": [claim["claim_id"]],
+        "evidence_ids": claim["evidence_ids"],
+        "strength": claim["strength"],
+        "support_strength": claim.get("support_strength", claim["strength"]),
+        "epistemic_label": "interpretive_synthesis",
+        "epistemic_layer": "project_authored",
+        "empirical_status": "not_established",
+        "text_provenance": text_provenance,
+        "support_provenance": {
+            "claim_ids": [claim["claim_id"]],
+            "evidence_ids": list(claim["evidence_ids"]),
+        },
         "contradiction": bool(claim["contradicting_evidence_ids"] or claim["claim_type"] == "tension"),
-        "lexicon_unit_ids": [item["id"] for item in (lexicon_records or [])],
-        "lexicon_semantic_families": [item["semantic_family"] for item in (lexicon_records or [])],
+        "lexicon_unit_ids": [item["id"] for item in lexicon_records],
+        "lexicon_semantic_families": [item["semantic_family"] for item in lexicon_records],
     }
 
 
@@ -100,6 +135,8 @@ def _base_text(claim: dict, mode: str) -> str:
 
 def _text(claim: dict, mode: str, analysis_id: str, used_semantic_families: set[str]) -> tuple[str, list[dict]]:
     base = _base_text(claim, mode)
+    if claim.get("metadata", {}).get("allow_lexicon_enrichment") is False:
+        return base, []
     seed = f"{analysis_id}:{claim['claim_id']}:{mode}"
     enriched = enrich_synthesis_sentence(
         base, seed=seed, mode=mode, claim_type=claim["claim_type"],
@@ -155,16 +192,34 @@ def realize(plan: dict, mode: str) -> dict:
         if planned["section_id"] == "evidence_ledger":
             continue
         all_claims.extend(planned.get("claims", []))
-    has_overclaim, overclaim_issues = contains_overclaiming_language(
-        " ".join(claim.get("text", "") for claim in all_claims)
+    realized_text = " ".join(
+        sentence["text"]
+        for section in sections
+        for paragraph in section["paragraphs"]
+        for sentence in paragraph["sentences"]
     )
+    has_overclaim, overclaim_issues = contains_overclaiming_language(realized_text)
     strength_valid, strength_issues = validate_epistemic_strength(all_claims, mode)
-    # Compute aggregate evidence/contradiction counts
+    if has_overclaim:
+        raise ValueError("Deterministic realization produced prohibited overclaiming language.")
+    if not strength_valid:
+        raise ValueError("Deterministic realization contains invalid support-strength values: " + "; ".join(strength_issues))
     total_evidence_count = sum(
         len(c.get("evidence_ids", [])) + len(c.get("contradicting_evidence_ids") or [])
         for c in all_claims
     )
-    canonical = plan["analysis_id"] + ":" + mode + ":" + TEMPLATE_VERSION + ":" + LIBRARY_VERSION
+    presentation_replay_id = build_replay_identity(
+        kind="presentation",
+        payload={
+            "calculation_replay_id": plan.get("calculation_replay_id"),
+            "plan": plan,
+            "mode": mode,
+            "policy_versions": POLICY_VERSIONS,
+            "template_version": TEMPLATE_VERSION,
+            "reading_library_version": LIBRARY_VERSION,
+            "lexicon_version": LEXICON_VERSION,
+        },
+    )
     return {
         "schema_version": NARRATIVE_SCHEMA_VERSION,
         "mode": mode,
@@ -173,11 +228,12 @@ def realize(plan: dict, mode: str) -> dict:
         "summary": plan["central_archetype"]["definition"],
         "disclaimer": "A deterministic symbolic reflection, not scientific personality measurement, diagnosis, prediction, or destiny.",
         "epistemic_validation": {
-            "overclaim_patterns_found": has_overclaim,
-            "overclaim_issues": overclaim_issues if has_overclaim else [],
-            "strength_valid": strength_valid,
-            "strength_issues": strength_issues if not strength_valid else [],
+            "overclaim_patterns_found": False,
+            "overclaim_issues": [],
+            "strength_valid": True,
+            "strength_issues": [],
             "total_evidence_density": total_evidence_count,
+            "empirical_validation": "not_established",
         },
         "generation_metadata": {
             "engine": "deterministic-compositor",
@@ -186,7 +242,10 @@ def realize(plan: dict, mode: str) -> dict:
             "temperature": 0,
             "generated_at": None,
             "template_version": TEMPLATE_VERSION,
-            "deterministic_input_hash": hashlib.sha256(canonical.encode()).hexdigest(),
+            "deterministic_input_hash": presentation_replay_id.removeprefix("replay_"),
+            "calculation_replay_id": plan.get("calculation_replay_id"),
+            "presentation_replay_id": presentation_replay_id,
+            "policy_versions": dict(POLICY_VERSIONS),
             "remote_provider_used": False,
             "reading_library_version": LIBRARY_VERSION,
             "lexicon_version": LEXICON_VERSION,

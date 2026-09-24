@@ -236,6 +236,26 @@ const STATUS_FIELDS = [
   ["conflict_style", "p-conflict", "Conflict style"],
 ];
 
+let REQUEST_EPOCH = 0;
+let ACTIVE_REQUEST_CONTROLLER = null;
+
+function invalidateActiveAnalysisRequest() {
+  REQUEST_EPOCH += 1;
+  if (ACTIVE_REQUEST_CONTROLLER) {
+    ACTIVE_REQUEST_CONTROLLER.abort();
+    ACTIVE_REQUEST_CONTROLLER = null;
+  }
+}
+
+function clearRenderedAnalysisState() {
+  STATE.result = null;
+  STATE.generatedAt = null;
+  STATE.synthesisEvidence = new Map();
+  STATE.atlasSelections = new Map();
+  const dashboard = $("dashboard");
+  if (dashboard) dashboard.replaceChildren();
+}
+
 function newEditorialState() {
   return {
     result: null, psychology: null, requestPayload: null,
@@ -923,6 +943,11 @@ Object.assign(app, {
       return;
     }
     STATE.requestPayload = JSON.parse(JSON.stringify(payload));
+    invalidateActiveAnalysisRequest();
+    const requestEpoch = REQUEST_EPOCH;
+    const requestController = new AbortController();
+    ACTIVE_REQUEST_CONTROLLER = requestController;
+    clearRenderedAnalysisState();
     STATE.submitting = true;
     const submitButton = $("submit-btn");
     submitButton.disabled = true;
@@ -933,10 +958,17 @@ Object.assign(app, {
     setSurface("dashboard", false);
     setSurface("processing", true);
     try {
-      const response = await fetch("/api/analyze", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(payload)});
+      const response = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload),
+        signal: requestController.signal,
+      });
+      if (requestEpoch !== REQUEST_EPOCH) return;
       let data;
       try { data = await response.json(); }
       catch (_) { throw {message: "The server returned an unreadable response. Your entries are still here.", code: "malformed_server_response"}; }
+      if (requestEpoch !== REQUEST_EPOCH) return;
       if (!response.ok) {
         if (data.code === "ambiguous_location" && Array.isArray(data.details?.choices)) {
           setSurface("form-section", true);
@@ -945,19 +977,24 @@ Object.assign(app, {
         }
         throw {message: ERROR_COPY[data.code] || data.message || "The report could not be created. Check the highlighted information and try again.", fieldId: apiErrorField(data), code: data.code};
       }
+      if (requestEpoch !== REQUEST_EPOCH) return;
       STATE.result = data;
       STATE.generatedAt = new Date().toISOString();
       renderEditorialReport(data);
     } catch (error) {
+      if (error?.name === "AbortError" || requestEpoch !== REQUEST_EPOCH) return;
       setSurface("form-section", true);
       const isNetworkError = error instanceof TypeError;
       showEditorialError(isNetworkError ? "The server could not be reached. Your entries are still here; check the connection and try again." : error.message, error.fieldId || null, error.code || (isNetworkError ? "server_unavailable" : "unexpected_error"));
     } finally {
-      STATE.submitting = false;
-      submitButton.disabled = false;
-      submitButton.removeAttribute("aria-busy");
-      submitButton.textContent = "Build my atlas";
-      setSurface("processing", false);
+      if (requestEpoch === REQUEST_EPOCH) {
+        ACTIVE_REQUEST_CONTROLLER = null;
+        STATE.submitting = false;
+        submitButton.disabled = false;
+        submitButton.removeAttribute("aria-busy");
+        submitButton.textContent = "Build my atlas";
+        setSurface("processing", false);
+      }
     }
   },
 
@@ -974,9 +1011,14 @@ Object.assign(app, {
   },
 
   startNew() {
+    invalidateActiveAnalysisRequest();
     $("analyze-form").reset();
     $("dashboard").replaceChildren();
     STATE = newEditorialState();
+    const submitButton = $("submit-btn");
+    submitButton.disabled = false;
+    submitButton.removeAttribute("aria-busy");
+    submitButton.textContent = "Build my atlas";
     clearEditorialErrors();
     $("location-choices").hidden = true;
     B5.forEach(([key]) => {
@@ -1064,8 +1106,12 @@ function initEditorial() {
       const expanded = document.querySelector(".atlas-panel.is-expanded");
       if (expanded) {
         event.preventDefault();
+        const returnButton = expanded.querySelector("[data-atlas-expand]");
         setAtlasFallback(expanded, false);
-        expanded.querySelector("[data-atlas-expand]")?.focus();
+        returnButton?.focus({preventScroll:true});
+        if (returnButton && document.activeElement !== returnButton) {
+          requestAnimationFrame(() => returnButton.focus({preventScroll:true}));
+        }
         return;
       }
     }

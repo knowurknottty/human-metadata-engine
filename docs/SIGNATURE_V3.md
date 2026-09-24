@@ -25,7 +25,7 @@ IDs, licensing/dependency notes, and limitations.
 - `environment` — place/orientation/context traditions.
 - `biometric` — explicitly supplied physiological or genetic observations.
 
-Only the first two are implemented in this tranche.
+Of these artifact classes, only `static_signature` and `timing` are implemented in this tranche. The number of implemented systems inside those classes is independent of that statement.
 
 ## Independence policy
 
@@ -43,7 +43,17 @@ empirical evidence about a person.
 
 - `bazi-v2` — Four Pillars, Day Master, hidden stems, Ten Gods, and structural Five-Phase distribution under disclosed Li Chun/Jie/civil-time conventions. An explicit IANA `timezone_id` is authoritative when supplied; date-only partial results evaluate local-day boundaries with the zone's historical offsets.
 - `jyotish-v3` — explicit Lahiri **or** Raman sidereal projection; mean **or** true Rahu/Ketu convention; 27 nakshatras/padas; D9/Navamsha; D10/Dasamsa; sidereal Placidus houses; explicit speed requests for retrograde state; and IANA-aware conversion of civil birth time to one UTC instant.
-- `maya-classical-gmt-v1` — Long Count, Tzolk'in, Haab', Calendar Round, and Lord of Night under GMT 584283.
+- `maya-classical-gmt-v1` — Long Count, Tzolk'in, Haab', Calendar Round, and Lord of Night under GMT 584283. The emitted correlation metadata identifies 584285 and 584289 as alternative published constants; this result does not silently treat GMT 584283 as the only scholarly convention.
+
+## R3 live-calculator promotion
+
+The legacy `signature-v2` result now exposes the three richer calculator envelopes additively at `signature.systems`: `jyotish`, `bazi`, and `maya_classical`. This is an inspectable contract surface, not a migration of the compatibility encoder map. Existing `vedic_jyotish` and `mayan_tzolkin` encoders remain unchanged for backward compatibility; the richer Maya result is the canonical detailed calendar contract.
+
+Each calculator remains a named adapter with its own convention: Jyotish records its Lahiri/Raman ayanamsa and node mode; BaZi records Li Chun/Jie, zone resolution, civil-midnight policy, and its explicit absence of true-solar-time correction; Classical Maya records GMT 584283 and alternatives. Only validated Gregorian/JDN primitives may be shared. No generic calendar policy can substitute one tradition's epoch or day boundary for another.
+
+The synthesis layer emits selected richer fields as deterministic, provenance-bound `reading_only` records. They have no ontology mapping, share the `birth_calculator` dependence family, and cannot add motif votes, convergence, or empirical support. Handoff v2 preserves such selected contract values only through reviewed `signature.systems.*` paths and continues to redact raw location, coordinate, and timezone fields.
+
+Golden tests lock representative inputs, convention/version strings, withholding behavior, boundary behavior, and deterministic replay. They are the code/document drift gate for the conventions listed above.
 
 ## Implemented timing systems
 

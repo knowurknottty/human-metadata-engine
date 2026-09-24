@@ -77,6 +77,8 @@ class APIHTTPContractTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertFalse(version["feature_flags"]["remote_narrative_model"])
         self.assertTrue(version["feature_flags"]["deterministic_storytelling"])
+        self.assertTrue(version["feature_flags"]["household_composition_foundation"])
+        self.assertFalse(version["feature_flags"]["household_paid_additions"])
 
     def test_expanded_report_survives_form_download_round_trip(self):
         from narrative_helpers import exact_result
@@ -88,6 +90,37 @@ class APIHTTPContractTests(unittest.TestCase):
         status, _, downloaded = self.request("GET", headers["Location"])
         self.assertEqual(status, 200)
         self.assertEqual(downloaded.decode(), markdown)
+
+
+    def test_household_capability_is_visible_but_paid_mode_is_fail_closed(self):
+        status, _, config = self.request("GET", "/api/household/config")
+        self.assertEqual(status, 200)
+        self.assertEqual(config["schema_version"], "household-config-v1")
+        self.assertTrue(config["free_single_scan"]["enabled"])
+        self.assertTrue(config["free_single_scan"]["complete_product"])
+        self.assertEqual(config["paid_modes"]["pair"]["label"], "US Pair")
+        self.assertEqual(config["paid_modes"]["household"]["label"], "WE Household")
+        self.assertFalse(config["runtime"]["public_add_subject_enabled"])
+        self.assertIsNone(config["pricing"]["pair_amount"])
+        self.assertIsNone(config["pricing"]["household_amount"])
+        self.assertIsNone(config["pricing"]["provider"])
+
+        status, _, payload = self.request(
+            "POST", "/api/household/compose",
+            json.dumps({"manifest": {}, "records": []}).encode(),
+            "application/json",
+        )
+        self.assertEqual(status, 403)
+        self.assertEqual(payload["code"], "household_paid_disabled")
+        self.assertTrue(payload["single_scan_free"])
+
+        status, _, single = self.request(
+            "POST", "/api/analyze",
+            json.dumps({"name": "Ada Lovelace", "mode": "data"}).encode(),
+            "application/json",
+        )
+        self.assertEqual(status, 200)
+        self.assertEqual(single["contract_version"], "analysis-v1")
 
     def test_operational_endpoints_have_distinct_contracts(self):
         live_status, _, live = self.request("GET", "/healthz")

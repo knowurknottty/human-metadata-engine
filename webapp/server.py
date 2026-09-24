@@ -70,6 +70,8 @@ from location_resolution import (  # noqa: E402
     resolve_birth_location,
     resolve_local_datetime,
 )
+from household import HouseholdContractError, compose_relational_view, validate_household_manifest  # noqa: E402
+from entitlements import household_feature_state, verify_entitlement_token  # noqa: E402
 from public_contract import (  # noqa: E402
     PublicContractError,
     normalize_public_name,
@@ -98,6 +100,9 @@ APP_VERSION = "1.0.0"
 SCHEMA_VERSION = "analysis-v1"
 ENGINE_VERSION = "signature-v2"
 REPORT_SCHEMA_VERSION = "report-v1"
+HOUSEHOLD_SCHEMA_VERSION = "household-v1"
+RELATIONAL_VIEW_SCHEMA_VERSION = "relational-view-v1"
+HOUSEHOLD_CONFIG_PATH = os.path.join(REPO, "config", "household.json")
 
 
 def _build_revision() -> str:
@@ -128,6 +133,7 @@ EPHEMERIS_AVAILABLE = _swisseph is not None
 REQUEST_TIMEOUT_SECONDS = float(os.environ.get("HME_REQUEST_TIMEOUT_SECONDS", "15"))
 MAX_REQUEST_BYTES = 64 * 1024
 MAX_DOWNLOAD_REQUEST_BYTES = 1024 * 1024
+MAX_HOUSEHOLD_REQUEST_BYTES = 2 * 1024 * 1024
 RATE_LIMIT_WINDOW_SECONDS = int(os.environ.get("HME_RATE_LIMIT_WINDOW_SECONDS", "60"))
 RATE_LIMIT_REQUESTS = int(os.environ.get("HME_RATE_LIMIT_REQUESTS", "20"))
 RATE_LIMIT_MAX_TRACKED_IPS = int(os.environ.get("HME_RATE_LIMIT_MAX_TRACKED_IPS", "10000"))
@@ -193,6 +199,30 @@ def _safe_request_log(method: str, target: str, status: object) -> str:
     return f"[web] {clean_method} {path} {status}"
 
 
+
+def _household_config_payload() -> dict:
+    try:
+        with open(HOUSEHOLD_CONFIG_PATH, encoding="utf-8") as handle:
+            payload = json.load(handle)
+    except (OSError, json.JSONDecodeError):
+        payload = {
+            "schema_version": "household-config-v1",
+            "free_single_scan": {"enabled": True, "contract": "analysis-v1", "complete_product": True},
+            "paid_modes": {},
+            "pricing": {"currency": None, "pair_amount": None, "household_amount": None, "provider": None},
+            "commerce": {"checkout_configured": False, "entitlement_required_for_paid_routes": True},
+        }
+    payload = dict(payload)
+    feature = household_feature_state()
+    payload["runtime"] = {
+        "paid_household_enabled": feature["paid_household_enabled"],
+        "entitlement_verifier_configured": feature["entitlement_verifier_configured"],
+        "public_add_subject_enabled": feature["public_add_subject_enabled"],
+    }
+    return payload
+
+
+
 def _version_payload() -> dict:
     return {
         "application_version": APP_VERSION,
@@ -216,6 +246,11 @@ def _version_payload() -> dict:
             "deterministic_narrative": True,
             "remote_narrative_model": False,
             "deterministic_storytelling": True,
+            "household_contracts": True,
+            "household_ui": household_feature_state()["public_add_subject_enabled"],
+            "paid_entitlement": household_feature_state()["public_add_subject_enabled"],
+            "household_composition_foundation": True,
+            "household_paid_additions": household_feature_state()["public_add_subject_enabled"],
         },
     }
 
@@ -248,7 +283,11 @@ def _redact_public_output(value, key: str | None = None):
         result = {}
         for child_key, child_value in value.items():
             normalized = str(child_key).lower()
-            if normalized in _SENSITIVE_OUTPUT_KEYS and key != "normalized_input":
+            if (
+                normalized in _SENSITIVE_OUTPUT_KEYS
+                and key != "normalized_input"
+                and not (key == "data_quality" and normalized == "birth_location")
+            ):
                 continue
             if normalized == "text" and key == "observations":
                 continue
@@ -1005,6 +1044,16 @@ class Handler(BaseHTTPRequestHandler):
                     {"id": "magic", "label": "Magic", "description": "Symbolic reflection with explicit non-measurement limits."},
                 ],
             })
+        if path == "/api/household/config":
+            return self._json(200, _household_config_payload())
+        if path == "/api/entitlement":
+            feature = household_feature_state()
+            return self._json(200, {
+                "schema_version": "entitlement-status-v1",
+                "status": "enabled" if feature["public_add_subject_enabled"] else "disabled",
+                "signature_verified": False,
+                "paid_routes_enabled": feature["public_add_subject_enabled"],
+            })
         if path == "/":
             path = "/index.html"
         fs_path = os.path.realpath(os.path.join(STATIC, path.lstrip("/")))
@@ -1020,6 +1069,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._post_sigil()
         if path == "/api/report-download":
             return self._post_report_download()
+        if path == "/api/household/compose":
+            return self._post_household_compose()
         if path not in {"/api/analyze", "/api/tarot"}:
             return self._send(404, b"Not found", "text/plain; charset=utf-8")
         client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
@@ -1059,6 +1110,77 @@ class Handler(BaseHTTPRequestHandler):
                 "error": "Analysis failed.",
                 "message": "Analysis failed.",
                 "code": "internal_error",
+            })
+        finally:
+            _ANALYSIS_SLOTS.release()
+
+    def _post_household_compose(self):
+        """Compose paid household projections only after a valid server-side entitlement."""
+        feature = household_feature_state()
+        if not feature["public_add_subject_enabled"]:
+            return self._json(403, {
+                "error": "Paid household additions are not enabled.",
+                "message": "The free single-person Human Manual remains available. Paid household additions are not enabled.",
+                "code": "household_paid_disabled",
+                "single_scan_free": True,
+            })
+
+        client_ip = _rate_limit_client_ip(self.client_address[0], self.headers)
+        if not _allow_analysis(client_ip):
+            return self._json(429, {
+                "error": "Too many household composition requests. Please try again shortly.",
+                "message": "Too many household composition requests. Please try again shortly.",
+                "code": "rate_limited",
+            }, {"Retry-After": str(RATE_LIMIT_WINDOW_SECONDS)})
+        if not _ANALYSIS_SLOTS.acquire(blocking=False):
+            return self._json(429, {
+                "error": "Household composition service is busy. Please try again shortly.",
+                "message": "Household composition service is busy. Please try again shortly.",
+                "code": "service_busy",
+            })
+        try:
+            payload = self._read_json_body(max_bytes=MAX_HOUSEHOLD_REQUEST_BYTES)
+            if not isinstance(payload, dict) or set(payload) != {"manifest", "records"}:
+                raise HouseholdContractError("Household compose request requires manifest and records.")
+            manifest = validate_household_manifest(payload["manifest"])
+            records = payload["records"]
+            if not isinstance(records, list) or not 2 <= len(records) <= 12:
+                raise HouseholdContractError("records must contain 2-12 subject record envelopes.")
+            registry = {}
+            for record in records:
+                if not isinstance(record, dict):
+                    raise HouseholdContractError("Each household record must be an object.")
+                subject_id = record.get("subject_id")
+                if not isinstance(subject_id, str) or subject_id in registry:
+                    raise HouseholdContractError("Household records require unique subject_id values.")
+                registry[subject_id] = record
+
+            added_subjects = sum(
+                1 for subject in manifest["subjects"]
+                if subject["membership"] == "member" and subject["subject_role"] != "primary"
+            )
+            authorization = self.headers.get("Authorization") or ""
+            token = authorization[7:].strip() if authorization.startswith("Bearer ") else None
+            decision = verify_entitlement_token(
+                token,
+                household_id=manifest["household_id"],
+                required_added_subjects=added_subjects,
+            )
+            if not decision.allowed:
+                return self._json(402, {
+                    "error": "A valid paid household entitlement is required.",
+                    "message": "A valid paid household entitlement is required.",
+                    "code": decision.code,
+                    "single_scan_free": True,
+                })
+            return self._json(200, compose_relational_view(manifest, registry))
+        except HTTPRequestError as exc:
+            return self._json(exc.status, _error_payload(exc))
+        except HouseholdContractError as exc:
+            return self._json(400, {
+                "error": str(exc),
+                "message": str(exc),
+                "code": "invalid_household_contract",
             })
         finally:
             _ANALYSIS_SLOTS.release()

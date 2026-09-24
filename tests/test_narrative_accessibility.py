@@ -10,7 +10,7 @@ STYLES = (ROOT / "webapp/static/styles.css").read_text(encoding="utf-8")
 
 def test_sentences_are_native_buttons_with_meaningful_announcements():
     assert '<button type="button" class="narrative-sentence"' in ATLAS
-    assert "Confidence ${esc(sentence.strength)}" in ATLAS
+    assert "Support strength ${esc(sentence.support_strength || sentence.strength)}" in ATLAS
     assert "evidence references" in ATLAS
     assert "Contradiction retained" in ATLAS
 

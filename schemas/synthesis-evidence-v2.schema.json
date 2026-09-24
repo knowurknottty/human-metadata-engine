@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "synthesis-evidence-v2.schema.json",
+  "title": "SynthesisEvidenceV2",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "analysis_id",
+    "source_contracts",
+    "policy_versions",
+    "data_quality",
+    "evidence_items",
+    "unsupported_topics",
+    "warnings",
+    "packet_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "synthesis-evidence-v2"
+    },
+    "analysis_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_contracts": {
+      "type": "object"
+    },
+    "policy_versions": {
+      "type": "object"
+    },
+    "data_quality": {
+      "type": "object"
+    },
+    "packet_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "unsupported_topics": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "evidence_id",
+          "record_id",
+          "packet_schema_version",
+          "analysis_id",
+          "system",
+          "subsystem",
+          "source_path",
+          "source_value_sha256",
+          "source_contract_id",
+          "epistemic_class",
+          "interpretation_class",
+          "claim_eligible",
+          "independence_group",
+          "limitations",
+          "source_value",
+          "provenance_ref",
+          "mapping_source_system",
+          "mapping_strength",
+          "mapping_provenance",
+          "mapping_version"
+        ],
+        "properties": {
+          "evidence_id": {
+            "type": "string",
+            "pattern": "^ev_v2_.+_[0-9a-f]{64}$"
+          },
+          "record_id": {
+            "type": "string",
+            "pattern": "^sys_v2_[0-9a-f]{64}$"
+          },
+          "packet_schema_version": {
+            "const": "synthesis-evidence-v2"
+          },
+          "analysis_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "system": {
+            "type": "string",
+            "minLength": 1
+          },
+          "subsystem": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_value_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "source_contract_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "epistemic_class": {
+            "type": "string",
+            "minLength": 1
+          },
+          "interpretation_class": {
+            "type": "string",
+            "minLength": 1
+          },
+          "claim_eligible": {
+            "type": "boolean"
+          },
+          "independence_group": {
+            "type": "string",
+            "minLength": 1
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "source_value": {},
+          "provenance_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mapping_source_system": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mapping_strength": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "enum": [
+              "strong",
+              "moderate",
+              "weak",
+              null
+            ]
+          },
+          "mapping_provenance": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "mapping_version": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

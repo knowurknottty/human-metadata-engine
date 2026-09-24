@@ -1,18 +1,39 @@
 """Version and safety contracts for narrative synthesis."""
 
-EVIDENCE_SCHEMA_VERSION = "synthesis-evidence-v1"
-PLAN_SCHEMA_VERSION = "synthesis-plan-v1"
-NARRATIVE_SCHEMA_VERSION = "narrative-v1"
+EVIDENCE_SCHEMA_VERSION = "synthesis-evidence-v2"
+PLAN_SCHEMA_VERSION = "synthesis-plan-v2"
+NARRATIVE_SCHEMA_VERSION = "narrative-v2"
+
+EVIDENCE_ID_SCHEME_VERSION = "evidence-id-v2"
+CLAIM_ID_SCHEME_VERSION = "claim-id-v3"
 ONTOLOGY_VERSION = "motif-ontology-v1"
 MAPPING_VERSION = "project-authored-symbolic-normalization-v1"
+MAPPING_POLICY_VERSION = MAPPING_VERSION
+MOTIF_RANKING_POLICY_VERSION = "motif-ranking-v2"
+REALIZATION_POLICY_VERSION = "deterministic-realization-v2"
+SYNTHESIS_REPLAY_SCHEMA_VERSION = "synthesis-replay-v2"
 TEMPLATE_VERSION = "narrative-templates-v3"
+
+POLICY_VERSIONS = {
+    "evidence_id": EVIDENCE_ID_SCHEME_VERSION,
+    "claim_id": CLAIM_ID_SCHEME_VERSION,
+    "ontology": ONTOLOGY_VERSION,
+    "mapping": MAPPING_POLICY_VERSION,
+    "motif_ranking": MOTIF_RANKING_POLICY_VERSION,
+    "realization": REALIZATION_POLICY_VERSION,
+    "replay": SYNTHESIS_REPLAY_SCHEMA_VERSION,
+    "templates": TEMPLATE_VERSION,
+}
 
 EPISTEMIC_TIERS = {
     "deterministic_calculation": 1,
     "deterministic_relationship": 2,
     "traditional_symbolic_interpretation": 3,
+    "historical_textual_reference": 3,
     "user_supplied": 4,
+    "project_authored_crosswalk": 5,
     "interpretive_synthesis": 5,
+    "system_state": 0,
 }
 
 PROHIBITED_TOPICS = [

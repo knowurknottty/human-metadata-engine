@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Human Manual pet-profile-v1",
+  "type": "object",
+  "required": [
+    "contract_version",
+    "subject_id",
+    "subject_class",
+    "authority",
+    "label",
+    "care_context",
+    "symbolic_systems",
+    "interpretation_policy",
+    "forbidden_inferences",
+    "record_digest"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "pet-profile-v1"
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^subj_[0-9a-f]{32}$"
+    },
+    "subject_class": {
+      "const": "nonhuman_animal"
+    },
+    "authority": {
+      "type": "object"
+    },
+    "label": {
+      "type": "string"
+    },
+    "care_context": {
+      "type": "object"
+    },
+    "symbolic_systems": {
+      "type": "object",
+      "maxProperties": 0
+    },
+    "interpretation_policy": {
+      "const": "care_context_only"
+    },
+    "forbidden_inferences": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "record_digest": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    }
+  }
+}

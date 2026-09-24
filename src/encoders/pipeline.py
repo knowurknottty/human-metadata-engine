@@ -587,3 +587,44 @@ def encode_symbolic_systems(
             "data": data,
         }
     return results
+
+
+def encode_selected_symbolic_systems(
+    text: str,
+    *,
+    systems: list[str] | tuple[str, ...],
+    birth: dict[str, Any] | None = None,
+    as_of_year: int | None = None,
+) -> dict[str, dict[str, Any]]:
+    """Compute only explicitly selected roadmap systems.
+
+    This exists for constrained contexts such as child-safe worksheets. It does
+    not change the existing all-systems pipeline and rejects unknown systems.
+    """
+    requested = list(dict.fromkeys(systems))
+    unknown = [system for system in requested if system not in BUILDERS]
+    if unknown:
+        raise ValueError(f"Unknown symbolic systems: {unknown}.")
+    context = prepare_encoding_input(text)
+    input_mode = "native-and-transliterated" if context["scripts"] else "latin-native"
+    results: dict[str, dict[str, Any]] = {}
+    for system in requested:
+        data = BUILDERS[system](context, birth=birth, as_of_year=as_of_year)
+        provenance = dict(SYSTEM_PROVENANCE[system])
+        provenance.update({
+            "manifest_version": MANIFEST_VERSION,
+            "input_mode": input_mode,
+            "transliteration_profile": context["transliteration_profile"],
+        })
+        interpretation = "computed" if system == "unicode_codepoint" else (
+            "historical" if system == "sumerian_me_ontology" else "symbolic"
+        )
+        results[system] = {
+            "system": system,
+            "phase": ROADMAP_SYSTEMS[system],
+            "status": "computed",
+            "interpretation_level": interpretation,
+            "provenance": provenance,
+            "data": data,
+        }
+    return results

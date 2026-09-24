@@ -1,5 +1,7 @@
 # Narrative Synthesis Engine v1
 
+> **Historical implementation record.** Current synthesis uses v2 evidence/plan/narrative contracts and Pattern Map v1; see `NARRATIVE_SCHEMA_V2.md`.
+
 The public feature is **The Living Pattern** inside **The Human Manual**. Internally, it remains the versioned deterministic narrative-synthesis subsystem. Public naming does not change the evidence, plan, or narrative schemas, and the symbolic synthesis is never presented as a scientific model of a person.
 
 ## Boundary and data flow

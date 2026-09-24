@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "release-manifest-v1.schema.json",
+  "title": "HumanManualReleaseManifestV1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "release_id",
+    "product",
+    "source_commit",
+    "source_dirty",
+    "release_candidate",
+    "build_revision",
+    "worktree",
+    "contracts",
+    "artifacts",
+    "legacy",
+    "verification",
+    "runtime",
+    "epistemic"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "human-manual-release-manifest-v1"
+    },
+    "release_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product": {
+      "const": "The Human Manual"
+    },
+    "source_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "source_dirty": {
+      "type": "boolean"
+    },
+    "release_candidate": {
+      "type": "boolean"
+    },
+    "build_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contracts": {
+      "type": "object"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "role",
+          "path",
+          "bytes",
+          "sha256"
+        ],
+        "properties": {
+          "role": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "media_type": {
+            "type": "string"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "legacy": {
+      "type": "object",
+      "required": [
+        "active_evidence_version",
+        "quarantined_indexes"
+      ],
+      "properties": {
+        "active_evidence_version": {
+          "const": "synthesis-evidence-v2"
+        },
+        "quarantined_indexes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": [
+        "status",
+        "required_skips",
+        "commands",
+        "summaries",
+        "browser_manifest",
+        "physical_device_qa"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "in_progress",
+            "passed",
+            "failed"
+          ]
+        },
+        "required_skips": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "summaries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "browser_manifest": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "physical_device_qa": {
+          "enum": [
+            "pending",
+            "passed",
+            "failed"
+          ]
+        }
+      }
+    },
+    "runtime": {
+      "type": "object"
+    },
+    "epistemic": {
+      "type": "object",
+      "required": [
+        "deterministic_replay",
+        "empirical_validation"
+      ],
+      "properties": {
+        "deterministic_replay": {
+          "type": "boolean"
+        },
+        "empirical_validation": {
+          "const": "not_established"
+        }
+      }
+    },
+    "worktree": {
+      "type": "object",
+      "required": [
+        "schema_version",
+        "digest",
+        "tracked_diff_sha256",
+        "untracked_count",
+        "dirty_path_count"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "human-manual-worktree-identity-v1"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "tracked_diff_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "untracked_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "dirty_path_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

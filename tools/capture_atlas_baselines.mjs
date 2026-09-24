@@ -183,6 +183,7 @@ async function main() {
     const cdp = new CDP(page.webSocketDebuggerUrl);
     await cdp.send("Page.enable");
     await cdp.send("Runtime.enable");
+    await cdp.send("Emulation.setFocusEmulationEnabled", {enabled:true});
     await waitForSelector(cdp, "#analyze-form");
 
     const captures = [];
@@ -215,10 +216,19 @@ async function main() {
     captures.push(await capturePanel(cdp, "mobile-astrology.png", "astrology", 390, 844, true));
     captures.push(await capturePanel(cdp, "mobile-bodygraph.png", "human-design", 390, 844, true));
 
-    checks.sixSurfaces = requireCheck(await evaluate(cdp, "document.querySelectorAll('[data-atlas-panel]').length === 6"), "six Atlas panels");
-    checks.uniqueIds = requireCheck(await evaluate(cdp, `(() => { const ids = [...document.querySelectorAll("[id]")].map(node => node.id); return ids.length === new Set(ids).size; })()`), "unique element IDs");
+    checks.protectedSixSurfaces = requireCheck(await evaluate(cdp, `(() => {
+      const required = ["constellation","astrology","human-design","tree-of-life","numerology","fingerprint"];
+      return required.every(id => document.getElementById("atlas-" + id));
+    })()`), "protected six Atlas panels");
+    checks.expandedSurfaceCount = requireCheck(await evaluate(cdp, "document.querySelectorAll('[data-atlas-panel]').length >= 14"), "expanded Atlas panel count");
+    const duplicateIds = await evaluate(cdp, `(() => { const ids = [...document.querySelectorAll("[id]")].map(node => node.id); return [...new Set(ids.filter((id, index) => ids.indexOf(id) !== index))]; })()`);
+    checks.uniqueIds = requireCheck(duplicateIds.length === 0, "unique element IDs: " + duplicateIds.join(", "));
     checks.selectionMatrix = await evaluate(cdp, `(() => {
-      const selectors = [".system-node[data-atlas-select]", ".astro-planet", ".bodygraph-center", ".gate-chip.is-active", ".tree-node", ".numerology-row", ".fingerprint-stage"];
+      const selectors = [
+        ".system-node[data-atlas-select]", ".astro-planet", ".bodygraph-center", ".gate-chip.is-active",
+        ".tree-node", ".numerology-row", ".fingerprint-stage", ".exp-wheel-body", ".bazi-pillar",
+        ".maya-count-cell", ".visual-lab-card .lab-card-select", ".visual-lab-card--boundary .lab-card-select", ".evidence-layer-row"
+      ];
       return selectors.map(selector => {
         const element = document.querySelector(selector);
         if (!element) return {selector, ok:false};
@@ -232,10 +242,15 @@ async function main() {
     const buttonNames = accessibility.nodes.filter(node => node.role?.value === "button").map(node => node.name?.value || "");
     checks.accessibilityTree = {
       namedButtons:buttonNames.filter(Boolean).length,
-      calculatedRoot:requireCheck(buttonNames.includes("Calculated identity root"), "accessibility tree exposes constellation root"),
-      gate:requireCheck(buttonNames.some(name => name.startsWith("Gate ")), "accessibility tree exposes gates"),
-      center:requireCheck(buttonNames.some(name => /^(Head|Ajna|Throat|G\/Identity|Heart\/Ego|Spleen|Sacral|Solar Plexus|Root), /.test(name)), "accessibility tree exposes centers"),
-      planet:requireCheck(buttonNames.some(name => / in (Aries|Taurus|Gemini|Cancer|Leo|Virgo|Libra|Scorpio|Sagittarius|Capricorn|Aquarius|Pisces) at /.test(name)), "accessibility tree exposes planets"),
+      calculatedRoot:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.system-node--identity[role="button"][tabindex="0"][aria-label="Calculated identity root"]'))`), "constellation root exposes keyboard button semantics"),
+      gate:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.gate-chip.is-active')) && document.querySelector('.gate-chip.is-active').tagName === "BUTTON"`), "active gate uses a native button"),
+      center:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.bodygraph-center[role="button"][tabindex="0"][aria-label]'))`), "bodygraph center exposes keyboard button semantics"),
+      planet:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.astro-planet[role="button"][tabindex="0"][aria-label]'))`), "astrology planet exposes keyboard button semantics"),
+      jyotish:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.exp-wheel-body[role="button"][tabindex="0"][aria-label]'))`), "Jyotish body exposes keyboard button semantics"),
+      bazi:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.bazi-pillar')) && document.querySelector('.bazi-pillar').tagName === "BUTTON"`), "BaZi pillar uses a native button"),
+      maya:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.maya-count-cell')) && document.querySelector('.maya-count-cell').tagName === "BUTTON"`), "Maya Long Count cell uses a native button"),
+      lab:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.visual-lab-card .lab-card-select')) && document.querySelector('.visual-lab-card .lab-card-select').tagName === "BUTTON"`), "visual-lab record uses a native button"),
+      evidence:requireCheck(await evaluate(cdp, `Boolean(document.querySelector('.evidence-layer-row')) && document.querySelector('.evidence-layer-row').tagName === "BUTTON"`), "evidence layer uses a native button"),
     };
     checks.modeSwitch = requireCheck(await evaluate(cdp, `(() => {
       let calls = 0; const original = window.fetch; window.fetch = (...args) => { calls += 1; return original(...args); };
@@ -259,13 +274,35 @@ async function main() {
       const text = prompt?.textContent || "";
       return Boolean(prompt && text.includes("cool fucking story") && text.includes("favorite agent") && text.includes("Welcome to the Inversion"));
     })()`), "post-report bring-your-own-agent handoff prompt");
-    checks.fullscreenEscape = requireCheck(await evaluate(cdp, `(() => {
+    const fallbackOpened = await evaluate(cdp, `(() => {
+      const panel = document.getElementById("atlas-numerology");
+      const button = panel.querySelector("[data-atlas-expand]");
+      button.dataset.hmeFocusCalls = "0";
+      button.__hmeOriginalFocus = button.focus.bind(button);
+      button.focus = (...args) => {
+        button.dataset.hmeFocusCalls = String(Number(button.dataset.hmeFocusCalls || "0") + 1);
+        return button.__hmeOriginalFocus(...args);
+      };
+      try { Object.defineProperty(panel, "requestFullscreen", {value: undefined, configurable: true}); } catch (_) {}
       app.toggleAtlasFullscreen("numerology");
-      const opened = document.getElementById("atlas-numerology").classList.contains("is-expanded");
-      document.dispatchEvent(new KeyboardEvent("keydown", {key:"Escape", bubbles:true}));
-      const button = document.querySelector("#atlas-numerology [data-atlas-expand]");
-      return opened && !document.getElementById("atlas-numerology").classList.contains("is-expanded") && document.activeElement === button;
-    })()`), "fallback fullscreen Escape and focus return");
+      return panel.classList.contains("is-expanded");
+    })()`);
+    await cdp.send("Input.dispatchKeyEvent", {type:"keyDown", key:"Escape", code:"Escape", windowsVirtualKeyCode:27, nativeVirtualKeyCode:27});
+    await cdp.send("Input.dispatchKeyEvent", {type:"keyUp", key:"Escape", code:"Escape", windowsVirtualKeyCode:27, nativeVirtualKeyCode:27});
+    await pause(50);
+    const fallbackClosedAndRestored = await evaluate(cdp, `(() => {
+      const panel = document.getElementById("atlas-numerology");
+      const button = panel.querySelector("[data-atlas-expand]");
+      const focusCalls = Number(button.dataset.hmeFocusCalls || "0");
+      const focusable = !button.disabled && button.tabIndex >= 0 && getComputedStyle(button).display !== "none" && getComputedStyle(button).visibility !== "hidden";
+      const ok = !panel.classList.contains("is-expanded") && focusCalls >= 1 && focusable;
+      if (button.__hmeOriginalFocus) button.focus = button.__hmeOriginalFocus;
+      delete button.__hmeOriginalFocus;
+      delete button.dataset.hmeFocusCalls;
+      try { delete panel.requestFullscreen; } catch (_) {}
+      return ok;
+    })()`);
+    checks.fullscreenEscape = requireCheck(fallbackOpened && fallbackClosedAndRestored, "fallback fullscreen Escape closes and requests focus restoration");
     checks.noHorizontalOverflow = {};
     for (const width of [320, 360, 390, 412, 768]) {
       await viewport(cdp, width, 844, true);

@@ -65,3 +65,37 @@ def test_story_is_richer_than_grounded_without_changing_evidence_links():
     story_sentences = [s for sec in story["sections"] for p in sec["paragraphs"] for s in p["sentences"]]
     assert [s["evidence_ids"] for s in plain_sentences] == [s["evidence_ids"] for s in story_sentences]
     assert sum(len(s["text"]) for s in story_sentences) > sum(len(s["text"]) for s in plain_sentences)
+
+
+def test_replay_identity_is_stable_but_mode_sensitive():
+    first = analyze(exact_payload())["synthesis"]
+    second = analyze(exact_payload())["synthesis"]
+    assert first["plan"]["calculation_replay_id"] == second["plan"]["calculation_replay_id"]
+    for mode in ("plain", "mythic", "research"):
+        assert first["narratives"][mode]["generation_metadata"]["presentation_replay_id"] == second["narratives"][mode]["generation_metadata"]["presentation_replay_id"]
+    identities = {
+        first["narratives"][mode]["generation_metadata"]["presentation_replay_id"]
+        for mode in ("plain", "mythic", "research")
+    }
+    assert len(identities) == 3
+
+
+def test_replay_rejects_evidence_semantics_changed_under_stale_identity():
+    from copy import deepcopy
+    from synthesis.analysis import detect_agreements, detect_contradictions, rank_motifs
+    from synthesis.plan import build_plan
+
+    synthesis = analyze(exact_payload())["synthesis"]
+    changed = deepcopy(synthesis["evidence"])
+    changed["evidence_items"][0]["limitations"] = [
+        *changed["evidence_items"][0]["limitations"],
+        "test semantic change",
+    ]
+    changed.pop("packet_digest", None)
+    motifs = rank_motifs(changed)
+    try:
+        build_plan(changed, motifs, detect_agreements(motifs), detect_contradictions(motifs))
+    except ValueError as exc:
+        assert "Evidence record identity mismatch" in str(exc)
+    else:
+        raise AssertionError("Semantic evidence mutation under stale identity must be rejected.")

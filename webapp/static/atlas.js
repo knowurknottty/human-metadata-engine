@@ -410,11 +410,36 @@ function livingPattern(result) {
   const evidenceById = new Map((synthesis.evidence?.evidence_items || []).map(item => [item.evidence_id, item]));
   const plan = synthesis.plan;
   const central = plan.central_archetype;
+  const patternMap = synthesis.pattern_map || {};
+  const agreementCards = (patternMap.agreement_explanations || []).slice(0, 6).map(item => {
+    const topic = (item.topic || "").replace("motif:", "").replaceAll("_", " ");
+    const dependence = item.independence_family_count === 1
+      ? "related signals, not independent confirmation"
+      : `${item.independence_family_count} distinct dependence families`;
+    return `<li><strong>${esc(topic || "Shared theme")}</strong><span>${item.system_count} systems · ${esc(dependence)}</span><small>Support strength: ${esc(item.support_strength || "unrated")} · empirical validation not established</small></li>`;
+  }).join("");
+  const disagreementCards = (patternMap.disagreement_explanations || []).slice(0, 4).map(item => {
+    const labels = (item.positions || []).map(position => position.label).join(" ↔ ");
+    return `<li><strong>${esc(labels || "Different maps")}</strong><span>${esc((item.relation || "difference").replaceAll("_", " "))} · no winner inferred</span></li>`;
+  }).join("");
+  const sensitivityCards = (patternMap.input_sensitivity || []).map(item =>
+    `<li><strong>${esc((item.input?.path || "input").replaceAll(".", " › "))}</strong><span>${esc(item.input?.disclosure || item.input?.status || "uncertain")}</span><small>${esc(item.wording || "This input could affect dependent calculations.")}</small></li>`
+  ).join("");
+  const provenanceCount = (patternMap.statement_provenance || []).length;
+  const patternMapHTML = `<section class="pattern-map" aria-labelledby="pattern-map-title">
+    <header><p class="panel-index">Pattern Map</p><h3 id="pattern-map-title">Why the maps meet, diverge, and change</h3><p>Deterministic explanation of the same evidence graph. It adds no evidence, votes, or empirical validation.</p></header>
+    <div class="pattern-map-grid">
+      <details open><summary>Together</summary><p class="field-hint">Why these systems align. Repetition is shown with its dependence families instead of being called confirmation.</p><ul>${agreementCards || "<li>No cross-system alignment met the configured support rule.</li>"}</ul></details>
+      <details><summary>Divergent</summary><p class="field-hint">Where the maps diverge. Tension, different questions, and missing inputs stay separate.</p><ul>${disagreementCards || "<li>No supported polarity was detected.</li>"}</ul></details>
+      <details><summary>Statement provenance</summary><p>${provenanceCount} evidence-linked claims expose separate text authorship and support provenance. Project-authored wording never becomes source evidence.</p></details>
+      <details><summary>Input sensitivity</summary><p class="field-hint">What could change this reading if uncertain inputs were corrected or supplied.</p><ul>${sensitivityCards || "<li>No currently missing or uncertain input dependency was detected for this result.</li>"}</ul></details>
+    </div>
+  </section>`;
   const sentenceHTML = sentence => {
     const items = sentence.evidence_ids.map(id => evidenceById.get(id)).filter(Boolean);
     const targets = [...new Set(items.flatMap(item => item.atlas_targets || []))];
     const contradiction = sentence.contradiction ? `<span class="contradiction-mark">Contradiction retained</span>` : "";
-    return `<button type="button" class="narrative-sentence" data-narrative-sentence="${esc(sentence.sentence_id)}" data-evidence-ids="${esc(sentence.evidence_ids.join(" "))}" data-atlas-targets="${esc(targets.join(" "))}" aria-label="${esc(sentence.text)} Confidence ${esc(sentence.strength)}. ${items.length} evidence references.${sentence.contradiction ? " Contradiction retained." : ""}"><span>${esc(sentence.text)}</span><small>${esc(sentence.strength)} confidence · ${items.length} evidence ${contradiction}</small></button>`;
+    return `<button type="button" class="narrative-sentence" data-narrative-sentence="${esc(sentence.sentence_id)}" data-evidence-ids="${esc(sentence.evidence_ids.join(" "))}" data-atlas-targets="${esc(targets.join(" "))}" aria-label="${esc(sentence.text)} Support strength ${esc(sentence.support_strength || sentence.strength)}. ${items.length} evidence references.${sentence.contradiction ? " Contradiction retained." : ""}"><span>${esc(sentence.text)}</span><small>${esc(sentence.support_strength || sentence.strength)} support strength · ${items.length} evidence ${contradiction}</small></button>`;
   };
   const modes = ["plain", "mythic", "research"];
   const modeLabels = {plain: "Grounded", mythic: "Story", research: "Sources"};
@@ -426,7 +451,7 @@ function livingPattern(result) {
     return `<div class="narrative-mode-panel" data-narrative-panel="${mode}"${mode === "plain" ? "" : " hidden"}>${deterministic}</div>`;
   }).join("");
   const tension = plan.originating_tension;
-  const tensionHTML = tension ? `<div class="tension-axis" role="group" aria-label="Unresolved tension between ${esc(tension.pole_a)} and ${esc(tension.pole_b)}"><strong>${esc(tension.pole_a)}</strong><span aria-hidden="true">←──────→</span><strong>${esc(tension.pole_b)}</strong><p>Unresolved ${esc(tension.type.replaceAll("_", " "))}; ${esc(tension.uncertainty)} confidence.</p></div>` : `<p class="tension-empty">No sufficiently supported polarity was detected.</p>`;
+  const tensionHTML = tension ? `<div class="tension-axis" role="group" aria-label="Unresolved tension between ${esc(tension.pole_a)} and ${esc(tension.pole_b)}"><strong>${esc(tension.pole_a)}</strong><span aria-hidden="true">←──────→</span><strong>${esc(tension.pole_b)}</strong><p>Unresolved ${esc(tension.type.replaceAll("_", " "))}; ${esc(tension.uncertainty)} support tier.</p></div>` : `<p class="tension-empty">No sufficiently supported polarity was detected.</p>`;
   const ledgerClaims = plan.narrative_sections.filter(section => section.section_id !== "evidence_ledger").flatMap(section => section.claims);
   const ledger = ledgerClaims.map(claim => {
     const items = claim.evidence_ids.map(id => evidenceById.get(id)).filter(Boolean);
@@ -436,10 +461,11 @@ function livingPattern(result) {
   }).join("");
   return `<section class="living-pattern" aria-labelledby="living-pattern-title">
     <header class="living-pattern-header"><div><p class="eyebrow">Human Manual Narrative</p><h2 id="living-pattern-title">The Living Pattern</h2><p>Evidence-linked symbolic synthesis. The six Atlas surfaces remain the calculation record.</p></div><div><div class="narrative-mode-switch" role="group" aria-label="Narrative mode">${modes.map(mode => `<button type="button" data-narrative-mode="${mode}" aria-pressed="${mode === "plain"}">${esc(modeLabels[mode])}</button>`).join("")}</div><p class="narrative-ai-note">Grounded, Story, and Sources are all deterministic and generated in-process. Story adds authored imagery and varied connective language without calling a remote model.</p></div></header>
-    <div class="central-pattern-card"><div class="archetype-seal" role="img" aria-label="Deterministic text seal for ${esc(central.title)}"><span>${esc(central.motif_ids.map(id => id.replace("motif_", "").slice(0, 2).toUpperCase()).join(" · ") || "—")}</span></div><div><p class="panel-index">Central pattern</p><h3>${esc(central.title)}</h3><p>${esc(central.definition)}</p><p><strong>${esc(central.confidence)} confidence</strong> · ${central.systems.length} participating systems</p></div></div>
+    <div class="central-pattern-card"><div class="archetype-seal" role="img" aria-label="Deterministic text seal for ${esc(central.title)}"><span>${esc(central.motif_ids.map(id => id.replace("motif_", "").slice(0, 2).toUpperCase()).join(" · ") || "—")}</span></div><div><p class="panel-index">Central pattern</p><h3>${esc(central.title)}</h3><p>${esc(central.definition)}</p><p><strong>${esc(central.support_strength || central.confidence)} support strength</strong> · ${central.systems.length} participating systems · empirical validation not established</p></div></div>
     ${tensionHTML}
+    ${patternMapHTML}
     <div class="living-pattern-narratives">${panels}</div>
-    <details class="narrative-ledger"><summary>Open the sentence-level evidence ledger</summary><div class="table-scroll"><table><caption>Claims, source systems, evidence count, confidence, contradictions, and limits</caption><thead><tr><th>Claim</th><th>Systems</th><th>Evidence</th><th>Confidence</th><th>Contradiction</th><th>Trace</th></tr></thead><tbody>${ledger}</tbody></table></div></details>
+    <details class="narrative-ledger"><summary>Open the sentence-level evidence ledger</summary><div class="table-scroll"><table><caption>Claims, source systems, evidence count, support strength, contradictions, and limits</caption><thead><tr><th>Claim</th><th>Systems</th><th>Evidence</th><th>Support strength</th><th>Contradiction</th><th>Trace</th></tr></thead><tbody>${ledger}</tbody></table></div></details>
     <p class="living-pattern-limits"><strong>Coverage:</strong> ${esc(plan.missing_or_uncertain_dimensions.join("; ") || "all requested dimensions available")}. All three narrative views are deterministic and generated in-process. Story changes language and imagery, never calculation evidence.</p>
   </section>`;
 }

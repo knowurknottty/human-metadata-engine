@@ -50,3 +50,12 @@ Evidence IDs incorporate path and canonical value, preventing silent collisions
 within a response; tests require uniqueness. Synthesis has no cross-user cache.
 Reset replaces the dashboard DOM and resets the in-memory evidence map so a new
 analysis cannot retain stale sentences.
+
+
+## Active v2 safety boundary
+
+Current narrative synthesis fails closed on malformed support-strength values, unsupported mapping provenance, mixed evidence packet versions, duplicate evidence identities, unknown evidence, and sentence evidence that differs from the exact planned claim evidence. `support_strength` is an internal deterministic synthesis-policy label and must not be presented as empirical confidence.
+
+Agent Handoff v2 accepts only the active `synthesis-evidence-v2` packet. Its evidence and normalized-input sections are explicit projections. Generated narrative text, external-agent text, and deterministic prose assets remain text provenance and cannot become evidence.
+
+The Pattern Map is explanatory only. It may state that an uncertain input *could affect* dependent calculations. It may say a value *changed* only after an actual deterministic paired recomputation; it never invents a substitute birth time, location, name, or other private value.

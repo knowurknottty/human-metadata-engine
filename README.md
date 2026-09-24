@@ -4,6 +4,12 @@
 
 **Current public experience** — **The Human Manual** opens into an evidence-linked visual workspace and **The Living Pattern** narrative. Grounded, Story, and Sources views share one deterministic claim/evidence plan. Story uses a versioned local prose lexicon and deterministic compositor; it does not call a remote language model. The downloadable Markdown includes an Agent Handoff contract for people who want to bring their own assistant afterward. The API remains `analysis-v1`, the engine remains `signature-v2`, and the report remains `report-v1`; synthesis and Sumerian-reflection contracts evolve independently.
 
+## Current synthesis contracts
+
+The public compatibility boundary remains `analysis-v1` + `signature-v2` + `report-v1`. The active nested synthesis path is `synthesis-evidence-v2` → `synthesis-plan-v2` → `narrative-v2`, with `pattern-map-v1` explaining alignment, divergence, statement provenance, and input sensitivity from the same evidence graph. Synthesis `support_strength` is a deterministic policy label, not empirical confidence; symbolic recurrence does not establish scientific validity.
+
+Legacy generated files are preserved as historical artifacts and excluded from active evidence. See `docs/NARRATIVE_SCHEMA_V2.md`, `docs/RECORD_COMPATIBILITY_V2.md`, and `release/manifest.dev.json`.
+
 ## Quick Start — Web App
 
 ```bash
@@ -203,7 +209,7 @@ bubble = create_identity_bubble(
 ```
 
 Each bubble contains:
-- **Claims** (with confidence levels and evidence)
+- **Claims** (with support-strength labels and evidence)
 - **Computations** (reproducible formulas)
 - **Procedures** (step-by-step reproduction)
 - **Risks** (limitations and caveats)
@@ -350,6 +356,27 @@ calculated. Browser, network, reverse-proxy, and infrastructure logs
 remain outside that guarantee. Request logs contain method/path/status only, not
 request bodies. See [DEPLOYMENT.md](DEPLOYMENT.md) and
 [docs/RELEASE_GATES.md](docs/RELEASE_GATES.md) for deployment and release truth.
+
+
+## Free single scan and future US / WE modes
+
+The complete single-person Human Manual remains free under the existing `analysis-v1`
+contract. Multi-subject work is a separate composition layer rather than a restricted
+version of the free report.
+
+The repository now contains the default-off `household-v1` foundation for future paid
+**US Pair** (primary + partner) and **WE Household** (partner, adult family, child, or pet)
+modes. Adult household records use privacy-minimized projections of existing analyses.
+Children use a constrained guardian-attested symbolic worksheet; pets use a care-context
+profile and do not run the human symbolic engine. Relational views expose provenance-bound
+same-system observations, readiness, roles, and availability — never compatibility,
+soulmate, parenting, child-potential, pet-temperament, fate, or ranking scores.
+
+No checkout or entitlement issuer is shipped. The public application can verify a future
+signed `entitlement-v1`, but paid composition remains disabled unless server-side feature
+and signing-key configuration are present. See
+[Household / Multi-Subject Mode v1](docs/HOUSEHOLD_MODE_V1.md).
+
 
 ## Reproducibility and provenance
 

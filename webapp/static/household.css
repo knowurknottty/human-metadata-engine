@@ -1,0 +1,36 @@
+/* The Human Manual — dormant US/WE paid composition visuals. */
+.household-view{margin-top:var(--space-6);border:1px solid var(--border-strong);background:var(--surface-page)}
+.household-view-head{padding:1rem;border-bottom:1px solid var(--border-default)}
+.household-view-head p{margin:0;color:var(--accent);font:.62rem var(--font-mono);letter-spacing:.1em}
+.household-view-head h2{margin:.3rem 0;font:1.8rem var(--font-display);font-weight:400}
+.household-view-head span{color:var(--text-muted);font-size:.75rem}
+.household-pair-lanes{display:grid;grid-template-columns:minmax(0,1fr) 7rem minmax(0,1fr);gap:.6rem;padding:1rem;align-items:stretch}
+.household-us-axis{display:grid;place-items:center;align-content:center;color:var(--text-muted);text-align:center}
+.household-us-axis span{display:grid;place-items:center;width:4rem;height:4rem;border:1px solid var(--accent);border-radius:50%;color:var(--accent-hover);font:1.15rem var(--font-display)}
+.household-us-axis i{display:block;width:1px;height:2.5rem;background:var(--border-strong)}
+.household-us-axis small{font:.55rem var(--font-mono);text-transform:uppercase}
+.household-subject-card{border:1px solid var(--border-default);background:var(--surface-subtle)}
+.household-subject-card header{display:flex;justify-content:space-between;gap:.75rem;align-items:center;padding:.7rem;border-bottom:1px solid var(--border-default)}
+.household-subject-card header strong{font:1.2rem var(--font-display);font-weight:400}
+.household-role{color:var(--accent);font:.58rem var(--font-mono);text-transform:uppercase}
+.household-subject-card dl{margin:0;padding:.5rem .7rem}
+.household-subject-card dl div{display:grid;grid-template-columns:7rem 1fr;gap:.5rem;padding:.35rem 0;border-bottom:1px solid var(--border-default)}
+.household-subject-card dt{color:var(--text-muted);font-size:.6rem;text-transform:uppercase}
+.household-subject-card dd{margin:0;color:var(--text-secondary);font-size:.72rem}
+.household-system-list,.household-policy-label{margin:.5rem .7rem;color:var(--text-muted);font-size:.66rem;line-height:1.45}
+.household-policy-label{padding-top:.5rem;border-top:1px solid var(--border-default)}
+.household-member-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:.55rem;padding:1rem}
+.household-observation-table-wrap{overflow-x:auto;border-top:1px solid var(--border-default)}
+.household-observation-table{width:100%;border-collapse:collapse;min-width:54rem}
+.household-observation-table caption{padding:.7rem;text-align:left;color:var(--text-muted);font-size:.68rem}
+.household-observation-table th,.household-observation-table td{padding:.65rem;border-top:1px solid var(--border-default);text-align:left;vertical-align:top;font-size:.7rem}
+.household-observation-table th{color:var(--text-primary);font-weight:400}
+.household-observation-table th small{display:block;margin-top:.2rem;color:var(--text-muted)}
+.household-observation-kind{display:block;color:var(--accent-hover)}
+.household-observation-table code{font:.68rem var(--font-mono);color:var(--text-secondary)}
+.household-boundary,.household-empty-observations{margin:0;padding:.8rem 1rem;border-top:1px solid var(--border-default);color:var(--text-muted);font-size:.7rem;line-height:1.5}
+.household-empty-observations strong{display:block;color:var(--text-secondary)}
+.household-view--unavailable{padding-bottom:1rem}
+.household-view--unavailable>p,.household-view--unavailable>ul{margin:.8rem 1rem;color:var(--text-muted);font-size:.72rem}
+@media(max-width:720px){.household-pair-lanes{grid-template-columns:1fr}.household-us-axis{grid-template-columns:auto 1fr auto;gap:.5rem}.household-us-axis i{width:100%;height:1px}}
+@media print{.household-view{break-inside:avoid-page}.household-observation-table-wrap{overflow:visible}}

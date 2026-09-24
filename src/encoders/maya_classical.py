@@ -87,7 +87,11 @@ def compute_classical_maya(birth: dict[str, Any]) -> dict[str, Any]:
     lord_number = ((elapsed + 8) % 9) + 1
 
     calculation = {
-        "correlation": {"name": "Goodman-Martinez-Thompson", "constant": GMT_CORRELATION},
+        "correlation": {
+            "name": "Goodman-Martinez-Thompson",
+            "constant": GMT_CORRELATION,
+            "alternative_published_constants": [584285, 584289],
+        },
         "julian_day_number": jdn,
         "elapsed_days": elapsed,
         "long_count": long_count,

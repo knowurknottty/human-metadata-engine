@@ -3,8 +3,17 @@
 from __future__ import annotations
 
 from .analysis import detect_agreements, detect_contradictions, rank_motifs
-from .contracts import MAPPING_VERSION, ONTOLOGY_VERSION, TEMPLATE_VERSION
+from .contracts import (
+    EVIDENCE_SCHEMA_VERSION,
+    MAPPING_VERSION,
+    NARRATIVE_SCHEMA_VERSION,
+    ONTOLOGY_VERSION,
+    PLAN_SCHEMA_VERSION,
+    POLICY_VERSIONS,
+    TEMPLATE_VERSION,
+)
 from .extractors import extract_evidence
+from .pattern_map import PATTERN_MAP_VERSION, build_pattern_map
 from .plan import build_plan
 from .prose_lexicon import LEXICON_VERSION
 from .realize import realize
@@ -21,9 +30,31 @@ def build_synthesis(signature: dict, psychology: dict | None, analysis_id: str) 
     verification = {mode: verify_narrative(evidence, plan, narrative) for mode, narrative in narratives.items()}
     if not all(report["valid"] for report in verification.values()):
         raise ValueError("Deterministic narrative failed its claim verifier.")
+    pattern_map = build_pattern_map(evidence, plan, narratives)
     return {
-        "evidence": evidence, "plan": plan, "narratives": narratives, "verification": verification,
-        "versions": {"ontology": ONTOLOGY_VERSION, "mapping": MAPPING_VERSION, "templates": TEMPLATE_VERSION, "lexicon": LEXICON_VERSION},
+        "evidence": evidence,
+        "plan": plan,
+        "narratives": narratives,
+        "verification": verification,
+        "pattern_map": pattern_map,
+        "versions": {
+            "evidence_schema": EVIDENCE_SCHEMA_VERSION,
+            "plan_schema": PLAN_SCHEMA_VERSION,
+            "narrative_schema": NARRATIVE_SCHEMA_VERSION,
+            "pattern_map": PATTERN_MAP_VERSION,
+            "ontology": ONTOLOGY_VERSION,
+            "mapping": MAPPING_VERSION,
+            "templates": TEMPLATE_VERSION,
+            "lexicon": LEXICON_VERSION,
+            **POLICY_VERSIONS,
+        },
+        "replay": {
+            "calculation_replay_id": plan["calculation_replay_id"],
+            "presentation_replay_ids": {
+                mode: narrative["generation_metadata"]["presentation_replay_id"]
+                for mode, narrative in narratives.items()
+            },
+        },
         "ai_realization": {"enabled": False, "required": False, "remote_provider_used": False},
     }
 
@@ -31,18 +62,43 @@ def build_synthesis(signature: dict, psychology: dict | None, analysis_id: str) 
 def narrative_markdown(synthesis: dict, mode: str = "plain") -> str:
     narrative = synthesis["narratives"][mode]
     evidence = {item["evidence_id"]: item for item in synthesis["evidence"]["evidence_items"]}
-    lines = ["## The Human Manual Narrative — The Living Pattern", "", f"- Mode: `{mode}`", f"- Schema: `{narrative['schema_version']}`", f"- Evidence schema: `{synthesis['evidence']['schema_version']}`", "", f"> {narrative['disclaimer']}", ""]
+    lines = [
+        "## The Human Manual Narrative — The Living Pattern", "",
+        f"- Mode: `{mode}`",
+        f"- Schema: `{narrative['schema_version']}`",
+        f"- Evidence schema: `{synthesis['evidence']['schema_version']}`",
+        f"- Calculation replay: `{synthesis['plan']['calculation_replay_id']}`",
+        f"- Presentation replay: `{narrative['generation_metadata']['presentation_replay_id']}`",
+        "", f"> {narrative['disclaimer']}", "",
+    ]
     for section in narrative["sections"]:
         lines.extend([f"### {section['heading']}", ""])
         for paragraph in section["paragraphs"]:
             for sentence in paragraph["sentences"]:
                 refs = ", ".join(f"`{item}`" for item in sentence["evidence_ids"])
-                lines.extend([sentence["text"], "", f"Evidence: {refs} · confidence: `{sentence['strength']}`", ""])
+                lines.extend([
+                    sentence["text"], "",
+                    f"Evidence: {refs} · support strength: `{sentence['support_strength']}` · empirical validation: `not established`",
+                    "",
+                ])
     lines.extend(["### Evidence ledger", ""])
-    used = sorted({eid for section in narrative["sections"] for paragraph in section["paragraphs"] for sentence in paragraph["sentences"] for eid in sentence["evidence_ids"]})
+    used = sorted({
+        eid
+        for section in narrative["sections"]
+        for paragraph in section["paragraphs"]
+        for sentence in paragraph["sentences"]
+        for eid in sentence["evidence_ids"]
+    })
     for evidence_id in used:
         item = evidence[evidence_id]
-        lines.append(f"- `{evidence_id}` — {item['system']} · `{item['source_path']}` = `{item['source_value']}`; {item['limitations'][0] if item['limitations'] else 'No interpretive claim attached.'}")
+        lines.append(
+            f"- `{evidence_id}` — {item['system']} · `{item['source_path']}` = "
+            f"`{item['source_value']}`; {item['limitations'][0] if item['limitations'] else 'No interpretive claim attached.'}"
+        )
     quality = synthesis["evidence"]["data_quality"]
-    lines.extend(["", "### Missing-data limits", "", *[f"- {key.replace('_', ' ')}: `{value}`" for key, value in quality.items()], ""])
+    lines.extend([
+        "", "### Missing-data limits", "",
+        *[f"- {key.replace('_', ' ')}: `{value}`" for key, value in quality.items()],
+        "",
+    ])
     return "\n".join(lines)

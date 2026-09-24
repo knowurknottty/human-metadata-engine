@@ -3,59 +3,117 @@ from __future__ import annotations
 
 from copy import deepcopy
 
+from synthesis.contracts import EVIDENCE_SCHEMA_VERSION
+
 AGENT_HANDOFF_VERSION = "human-manual-agent-handoff-v1"
 HANDOFF_V2_VERSION = "human-manual-agent-handoff-v2"
-SENSITIVE_TOKENS = ("lat", "lon", "location", "timezone", "observation", "text")
+SENSITIVE_KEYS = frozenset({
+    "lat", "latitude", "lon", "lng", "longitude",
+    "location", "place", "birth_place", "birthplace", "address",
+    "timezone", "timezone_name", "timezone_id", "tz", "tz_id",
+    "coords", "coordinates", "geo", "position",
+    "observation", "observation_text", "raw_observation",
+    "note", "notes", "comment", "comments", "subject_notes", "text",
+})
+SENSITIVE_KEY_FRAGMENTS = (
+    "latitude", "longitude", "coordinate", "coords", "timezone",
+    "birth_place", "birthplace", "observation", "subject_notes",
+)
+NORMALIZED_INPUT_EXPORT_KEYS = (
+    "name", "birth_availability", "birth_available", "time_accuracy",
+    "self_report_availability", "self_report_available",
+    "observation_availability", "observation_available",
+)
+SAFE_EVIDENCE_SOURCE_PREFIXES = ("signature.encoders.", "signature.systems.")
+
+
+def _normalized_key(key: str) -> str:
+    return key.casefold().replace("-", "_").replace(" ", "_")
+
+
+def _is_sensitive_key(key: str) -> bool:
+    normalized = _normalized_key(key)
+    if normalized in SENSITIVE_KEYS:
+        return True
+    return any(fragment in normalized for fragment in SENSITIVE_KEY_FRAGMENTS)
 
 
 def _safe(value):
-    """Remove raw location and observation material from a handoff projection."""
+    """Recursively remove fields whose schema keys are explicitly sensitive."""
     if isinstance(value, dict):
-        return {key: _safe(item) for key, item in value.items() if not any(token in key.casefold() for token in SENSITIVE_TOKENS)}
+        return {
+            key: _safe(item)
+            for key, item in value.items()
+            if not _is_sensitive_key(str(key))
+        }
     if isinstance(value, list):
         return [_safe(item) for item in value]
     return value
 
 
+def _normalized_input_projection(normalized: dict) -> dict:
+    """Export only reviewed descriptors; arbitrary normalized-input fields never transit v2."""
+    return {
+        key: deepcopy(normalized[key])
+        for key in NORMALIZED_INPUT_EXPORT_KEYS
+        if key in normalized
+    }
+
+
+def _source_path_is_safe(path: object) -> bool:
+    if not isinstance(path, str):
+        return False
+    lowered = path.casefold()
+    if any(token in lowered for token in (
+        "latitude", "longitude", "location", "timezone",
+        "birth_place", "birthplace", "observation",
+    )):
+        return False
+    return path.startswith(SAFE_EVIDENCE_SOURCE_PREFIXES)
+
+
 def _evidence_projection(item: dict) -> dict:
-    projected = _safe({
-        "evidence_id": item.get("evidence_id"), "system": item.get("system"),
-        "source_path": item.get("source_path"), "source_value": item.get("source_value"),
-        "epistemic_class": item.get("epistemic_class"), "mapping_provenance": item.get("mapping_provenance"),
-        "independence_group": item.get("independence_group"), "limitations": item.get("limitations", []),
-    })
-    # Handle nested sensitive data in source_value (dict, list, or scalar)
-    if isinstance(projected.get("source_value"), dict):
-        projected["source_value"] = _safe(projected["source_value"])
-    elif isinstance(projected.get("source_value"), list):
-        # Recursively sanitize each element of the list
-        sanitized_list = []
-        for elem in projected["source_value"]:
-            if isinstance(elem, dict):
-                sanitized_list.append(_safe(elem))
-            elif isinstance(elem, list):
-                sanitized_list.append(sanitize_nested_list(elem))
-            else:
-                sanitized_list.append(elem)
-        projected["source_value"] = sanitized_list
+    """Project evidence through an allowlist; include source values only from reviewed paths."""
+    projected = {
+        "evidence_id": item.get("evidence_id"),
+        "record_id": item.get("record_id"),
+        "packet_schema_version": item.get("packet_schema_version"),
+        "analysis_id": item.get("analysis_id"),
+        "system": item.get("system"),
+        "source_path": item.get("source_path"),
+        "source_value_sha256": item.get("source_value_sha256"),
+        "source_contract_id": item.get("source_contract_id"),
+        "epistemic_class": item.get("epistemic_class"),
+        "interpretation_class": item.get("interpretation_class"),
+        "mapping_provenance": item.get("mapping_provenance"),
+        "mapping_version": item.get("mapping_version"),
+        "claim_eligible": item.get("claim_eligible"),
+        "independence_group": item.get("independence_group"),
+        "limitations": _safe(item.get("limitations", [])),
+    }
+    if "source_value" in item:
+        if _source_path_is_safe(item.get("source_path")):
+            projected["source_value"] = _safe(deepcopy(item.get("source_value")))
+        else:
+            projected["source_value_excluded"] = "unreviewed_or_sensitive_source_path"
     return projected
 
+
 def sanitize_nested_list(lst: list) -> list:
-    """Recursively sanitize a nested list for sensitive tokens."""
-    result = []
-    for item in lst:
-        if isinstance(item, dict):
-            result.append(_safe(item))
-        elif isinstance(item, list):
-            result.append(sanitize_nested_list(item))
-        else:
-            result.append(item)
-    return result
+    """Compatibility helper retained for callers; delegates to the same schema-key policy."""
+    return [_safe(item) for item in lst]
 
 
 def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> dict:
     """Build an additive manifest from already public/redacted response data only."""
-    evidence_items = synthesis.get("evidence", {}).get("evidence_items", []) if synthesis.get("available", True) else []
+    evidence_packet = synthesis.get("evidence", {}) if synthesis.get("available", True) else {}
+    if synthesis.get("available", True):
+        packet_version = evidence_packet.get("schema_version")
+        if packet_version != EVIDENCE_SCHEMA_VERSION:
+            raise ValueError(
+                f"Agent Handoff v2 accepts only active {EVIDENCE_SCHEMA_VERSION} evidence; got {packet_version!r}."
+            )
+    evidence_items = evidence_packet.get("evidence_items", []) if synthesis.get("available", True) else []
     plan = synthesis.get("plan", {}) if synthesis.get("available", True) else {}
     normalized = response.get("normalized_input", {})
     excluded = [
@@ -77,8 +135,17 @@ def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> 
     return {
         "schema_version": HANDOFF_V2_VERSION,
         "analysis_mode": analysis_mode,
-        "subject_inputs": _safe({"normalized_input": deepcopy(normalized), "included": ["name", "birth availability", "self-report availability"], "intentionally_excluded": excluded}),
-        "deterministic_replay": {"input_hash": response.get("input_hash"), "engine_version": response.get("engine_version"), "build_revision": response.get("build_revision"), "synthesis_versions": synthesis.get("versions", {})},
+        "subject_inputs": {"normalized_input": _normalized_input_projection(normalized), "included": ["name", "birth availability", "self-report availability"], "intentionally_excluded": excluded},
+        "deterministic_replay": {
+            "input_hash": response.get("input_hash"),
+            "engine_version": response.get("engine_version"),
+            "build_revision": response.get("build_revision"),
+            "active_evidence_schema": evidence_packet.get("schema_version") if evidence_packet else None,
+            "evidence_packet_digest": evidence_packet.get("packet_digest") if evidence_packet else None,
+            "calculation_replay_id": plan.get("calculation_replay_id"),
+            "presentation_replay_ids": _safe((synthesis.get("replay") or {}).get("presentation_replay_ids", {})),
+            "synthesis_versions": _safe(synthesis.get("versions", {})),
+        },
         "unavailable_calculations": _safe({"data_quality": synthesis.get("evidence", {}).get("data_quality", {}), "missing_or_uncertain_dimensions": plan.get("missing_or_uncertain_dimensions", [])}),
         "evidence_index": [_evidence_projection(item) for item in evidence_items],
         "contradictions": _safe(plan.get("contradictions", []) or ([plan.get("originating_tension")] if plan.get("originating_tension") else [])),
@@ -86,7 +153,15 @@ def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> 
         "uncertainty_limitations": sorted({limit for item in evidence_items for limit in item.get("limitations", [])}),
         "redaction_rules": {"raw_coordinates_location_timezone": "redacted", "raw_observation_text": "redacted", "policy": response.get("privacy", {}).get("response_redaction")},
         "prohibited_inference_classes": ["diagnosis", "prediction", "destiny", "compatibility_score", "relationship_quality", "social_surveillance", "empirical_validation_from_symbolic_recurrence"],
-        "source_provenance_index": [{"evidence_id": item.get("evidence_id"), "source_path": item.get("source_path"), "epistemic_class": item.get("epistemic_class")} for item in evidence_items],
+        "source_provenance_index": [{
+            "evidence_id": item.get("evidence_id"),
+            "record_id": item.get("record_id"),
+            "source_path": item.get("source_path"),
+            "source_contract_id": item.get("source_contract_id"),
+            "source_value_sha256": item.get("source_value_sha256"),
+            "epistemic_class": item.get("epistemic_class"),
+            "interpretation_class": item.get("interpretation_class"),
+        } for item in evidence_items],
         "public_response_coverage": coverage + [{"category": item["category"], "representation": "excluded", "reason": item["reason"]} for item in excluded],
     }
 

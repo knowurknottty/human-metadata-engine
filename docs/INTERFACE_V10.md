@@ -1,5 +1,7 @@
 # v1.0 Visual Knowledge System
 
+> **Historical v1.0 interface evidence.** Current R3 synthesis uses v2 nested contracts and Pattern Map v1. Preserve this file as historical QA evidence rather than rewriting it.
+
 > **Current status (2026-09-17):** This document remains the v1.0 deep-workspace interaction, data, accessibility, provenance, and rendering contract. The public product is **The Human Manual, for and by Humans** under Inversion Labs; **Identity Resonance** names the visual grammar used by the research workspace. Public naming and brand restoration do not roll back this contract.
 
 The v1.0.0 application changes the primary result from a document-first report

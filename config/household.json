@@ -1,0 +1,54 @@
+{
+  "schema_version": "household-config-v1",
+  "free_single_scan": {
+    "enabled": true,
+    "contract": "analysis-v1",
+    "complete_product": true
+  },
+  "paid_modes": {
+    "pair": {
+      "label": "US Pair",
+      "composition": "pair",
+      "max_members": 2,
+      "allowed_added_roles": [
+        "partner"
+      ],
+      "entitlement_scope": "household_pair"
+    },
+    "household": {
+      "label": "WE Household",
+      "composition": "household",
+      "max_members": 8,
+      "allowed_added_roles": [
+        "partner",
+        "adult_family",
+        "child",
+        "pet"
+      ],
+      "entitlement_scope": "household_compose"
+    }
+  },
+  "reference_context": {
+    "paid_member": false,
+    "role": "reference",
+    "membership": "context_only"
+  },
+  "pricing": {
+    "currency": null,
+    "pair_amount": null,
+    "household_amount": null,
+    "provider": null
+  },
+  "commerce": {
+    "checkout_configured": false,
+    "webhook_verification_required": true,
+    "entitlement_contract": "entitlement-v1",
+    "entitlement_required_for_paid_routes": true
+  },
+  "privacy": {
+    "manifest_contains_names": false,
+    "manifest_contains_birth_inputs": false,
+    "manifest_contains_result_bodies": false,
+    "local_subject_registry_default": true
+  }
+}

@@ -46,3 +46,37 @@ def test_print_and_markdown_have_text_evidence_fallbacks():
     assert "sentence-level evidence ledger" in ATLAS
     assert "@media print" in STYLES
     assert ".narrative-ledger" in STYLES
+
+
+def test_pattern_map_is_exposed_before_narrative_chapters():
+    assert 'class="pattern-map"' in ATLAS
+    assert "Why the maps meet, diverge, and change" in ATLAS
+    assert "Together" in ATLAS and "Divergent" in ATLAS
+    assert "Statement provenance" in ATLAS and "Input sensitivity" in ATLAS
+    assert ATLAS.index("$" + "{patternMapHTML}") < ATLAS.index('<div class="living-pattern-narratives">')
+    assert ".pattern-map-grid" in STYLES
+
+
+def test_synthesis_ui_uses_support_strength_not_empirical_confidence():
+    living = ATLAS[ATLAS.index("function livingPattern"):ATLAS.index("function buildAtlas")]
+    assert "support strength" in living
+    assert "empirical validation not established" in living
+    assert " confidence · " not in living
+
+
+def test_submit_invalidates_and_aborts_stale_analysis_requests():
+    assert "let REQUEST_EPOCH = 0;" in APP
+    assert "let ACTIVE_REQUEST_CONTROLLER = null;" in APP
+    assert "invalidateActiveAnalysisRequest();" in APP
+    assert "new AbortController()" in APP
+    assert "signal: requestController.signal" in APP
+    assert "requestEpoch !== REQUEST_EPOCH" in APP
+    assert 'error?.name === "AbortError"' in APP
+
+
+def test_submit_clears_previous_analysis_before_fetch_and_reset_invalidates_epoch():
+    submit = APP[APP.index("async submit(event)"):APP.index("reset() { this.startNew(); }")]
+    assert submit.index("clearRenderedAnalysisState();") < submit.index('fetch("/api/analyze"')
+    start = APP[APP.index("  startNew() {"):APP.index("  downloadReport() {")]
+    assert "invalidateActiveAnalysisRequest();" in start
+    assert '$("dashboard").replaceChildren()' in start

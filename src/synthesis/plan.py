@@ -1,10 +1,17 @@
-"""Build the deterministic synthesis-plan-v1 claim graph."""
+"""Build the deterministic synthesis-plan-v2 claim graph."""
 
 from __future__ import annotations
 
-import hashlib
-
-from .contracts import PLAN_SCHEMA_VERSION, PROHIBITED_TOPICS, SYNTHESIS_LIMITATION
+from .contracts import (
+    CLAIM_ID_SCHEME_VERSION,
+    EVIDENCE_SCHEMA_VERSION,
+    PLAN_SCHEMA_VERSION,
+    POLICY_VERSIONS,
+    PROHIBITED_TOPICS,
+    SYNTHESIS_LIMITATION,
+)
+from .extractors import validate_evidence_packet_integrity
+from .replay import build_replay_identity, content_digest
 from .readings import CHAPTERS, reading_entries
 
 GIFT_LANGUAGE = {
@@ -31,20 +38,59 @@ GIFT_LANGUAGE = {
 }
 
 
-def _claim_id(section: str, motif: str, evidence_ids: list[str]) -> str:
-    digest = hashlib.sha256((section + motif + "|".join(evidence_ids)).encode()).hexdigest()[:10]
-    return f"claim_{section}_{digest}"
+def _claim_id(
+    section: str,
+    claim_type: str,
+    motif: str,
+    evidence_ids: list[str],
+    *,
+    strength: str | None = None,
+    support_strength: str | None = None,
+    contradicting: list[str] | None = None,
+    metadata: dict | None = None,
+) -> str:
+    normalized_evidence = sorted(set(evidence_ids))
+    normalized_contradicting = sorted(set(contradicting or []))
+    digest = content_digest({
+        "scheme_version": CLAIM_ID_SCHEME_VERSION,
+        "section": section,
+        "claim_type": claim_type,
+        "motif": motif,
+        "evidence_ids": normalized_evidence,
+        "strength": strength,
+        "support_strength": support_strength,
+        "contradicting_evidence_ids": normalized_contradicting,
+        "metadata": metadata or {},
+    })
+    return f"claim_v3_{section}_{digest}"
+
 
 
 def _claim(section: str, claim_type: str, motif: str, evidence_ids: list[str], strength: str,
            *, contradicting: list[str] | None = None, metadata: dict | None = None) -> dict:
+    normalized_evidence = sorted(set(evidence_ids))
+    normalized_contradicting = sorted(set(contradicting or []))
+    claim_metadata = metadata or {}
+    support_strength = strength
     return {
-        "claim_id": _claim_id(section, motif, evidence_ids), "claim_type": claim_type,
-        "motif": motif, "evidence_ids": sorted(set(evidence_ids)), "strength": strength,
+        "claim_id": _claim_id(
+            section, claim_type, motif, normalized_evidence,
+            strength=strength,
+            support_strength=support_strength,
+            contradicting=normalized_contradicting,
+            metadata=claim_metadata,
+        ),
+        "claim_type": claim_type,
+        "motif": motif,
+        "evidence_ids": normalized_evidence,
+        "strength": strength,
+        "support_strength": support_strength,
         "allowed_language": ["may", "favors", "symbolizes", "emphasizes", "suggests as reflection"],
         "forbidden_language": ["destined", "always", "cannot", "proves", "diagnoses"],
-        "contradicting_evidence_ids": sorted(set(contradicting or [])),
-        "limitation": SYNTHESIS_LIMITATION, "metadata": metadata or {},
+        "contradicting_evidence_ids": normalized_contradicting,
+        "limitation": SYNTHESIS_LIMITATION,
+        "metadata": claim_metadata,
+        "empirical_status": "not_established",
     }
 
 
@@ -54,6 +100,9 @@ def _archetype_title(primary: str, secondary: str | None) -> str:
 
 
 def build_plan(evidence_packet: dict, motifs: list[dict], agreements: list[dict], contradictions: list[dict]) -> dict:
+    if evidence_packet.get("schema_version") != EVIDENCE_SCHEMA_VERSION:
+        raise ValueError("Active synthesis requires the current evidence packet schema.")
+    packet_digest = validate_evidence_packet_integrity(evidence_packet)
     supported = [item for item in motifs if item["independent_group_count"] >= 2]
     primary = supported[0] if supported else (motifs[0] if motifs else None)
     secondary = supported[1] if len(supported) > 1 else None
@@ -79,6 +128,8 @@ def build_plan(evidence_packet: dict, motifs: list[dict], agreements: list[dict]
         "motif_ids": [item["motif_id"] for item in central_motifs],
         "evidence_ids": central_evidence, "systems": central_systems,
         "confidence": primary["confidence"] if central_supported else "low",
+        "support_strength": primary["support_strength"] if central_supported else "low",
+        "empirical_status": "not_established",
         "partial_profile": evidence_packet["data_quality"]["astronomy"] != "available",
     }
     tension = contradictions[0] if contradictions else None
@@ -162,8 +213,22 @@ def build_plan(evidence_packet: dict, motifs: list[dict], agreements: list[dict]
     ]
     quality = evidence_packet["data_quality"]
     missing = [f"{key}: {value}" for key, value in quality.items() if value in {"missing", "unknown", "partial", "unavailable", "absent"}]
+    calculation_replay_id = build_replay_identity(
+        kind="calculation",
+        payload={
+            "analysis_id": evidence_packet["analysis_id"],
+            "evidence_packet_digest": packet_digest,
+            "motifs": motifs,
+            "agreements": agreements,
+            "contradictions": contradictions,
+            "policy_versions": POLICY_VERSIONS,
+        },
+    )
     return {
         "schema_version": PLAN_SCHEMA_VERSION, "analysis_id": evidence_packet["analysis_id"],
+        "evidence_packet_digest": packet_digest,
+        "policy_versions": dict(POLICY_VERSIONS),
+        "calculation_replay_id": calculation_replay_id,
         "central_archetype": central, "originating_tension": tension,
         "dominant_motifs": motifs[:8], "agreements": agreements,
         "productive_contradictions": contradictions, "gifts": claims_by_section["gifts"],

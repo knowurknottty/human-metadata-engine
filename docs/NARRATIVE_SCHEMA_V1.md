@@ -1,5 +1,7 @@
 # Narrative schema contracts v1
 
+> **Historical contract snapshot.** The active nested synthesis contract is v2; see `NARRATIVE_SCHEMA_V2.md`. Do not treat v1 evidence as an active v2 input.
+
 The synthesis schemas are embedded under `analysis-v1.synthesis`. They version
 independently from `analysis-v1`, `signature-v2`, and `report-v1`.
 

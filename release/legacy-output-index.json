@@ -1,0 +1,687 @@
+{
+  "active_evidence_version": "synthesis-evidence-v2",
+  "artifacts": [
+    {
+      "active_evidence": false,
+      "bytes": 4324,
+      "path": "output/comparative_matrix.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "020d604e99ebe3ccabd2038a14ac8c274de67417952305e430fd367bfe73c454"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 56015,
+      "path": "output/comparative_report.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "1c2249043b2db8cc8b8742022d52de986e1bb3232d97236e041abf946a0075a7"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 5767,
+      "path": "output/comparative_report.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ce3e70638ad46d871627e68f78f631f0e1909ec38453df1ebd065f4708d70e7b"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 12829,
+      "path": "output/dashboard.html",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "431e6ec39e780ee55809239e8844648e8e039cab281619a5d4136bc384982eb5"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 610,
+      "path": "output/drift_reports.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "7a94314e45dd7a8b115bb570ca77e32611648d4feadefdb74effc71743fac055"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2586,
+      "path": "output/encoder_correlations.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "7ffbc11fada5e8f2f5350fc3a14c2300826b7c426d92ced691eef7d2e8a22b2b"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2372,
+      "path": "output/fingerprints/Ada_Lovelace.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "5de502e40db2203f4070c5b7c902c293b614477c37224a4eb3f2fbef76187ccd"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1993,
+      "path": "output/fingerprints/Alan_Turing.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "7c9e9edfdf68d1929c32ef89fc4164316d5fc3aa190fa5360ea5b21cfc26ace4"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1797,
+      "path": "output/fingerprints/Albert_Einstein.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "5549f590ca830fda69e51a1031b837f2c78d88dd82e1db980f1f4464a5151197"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1982,
+      "path": "output/fingerprints/CAPT.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "cccd0b7b868911724233aff9e8ceeec6c7c139b2439b7fbcbe17ecfe68f3573e"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2760,
+      "path": "output/fingerprints/Capt_Cortex.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "aef59f4c5d18cbab0eb388aecc44996bd3daeb01b82c8433210dbb55661aed25"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 3293,
+      "path": "output/fingerprints/Captain.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "10eacd19878c04dce302a429475675f83fd8b5fcc73efd3e3491c9380c630a03"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2941,
+      "path": "output/fingerprints/Carl_Gustav_Jung.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "24006e0c0e18e54ed0035364159afbf4e5399d5c3e3849984b83f77a6f0fbe7a"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2745,
+      "path": "output/fingerprints/David_Bowie.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "bff8856bb89438b660735ac674aecb6e266779a9e20ed8ea0c5f5484b4c3b886"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1615,
+      "path": "output/fingerprints/FrankenCAPT.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "c2f275052046fa2c703b075963d821790ee39109d562034fed7c203a1013ddb8"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1606,
+      "path": "output/fingerprints/Frida_Kahlo.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "8a6c871bd4b99d35626fe4f444f8d4dd62989e1bc110b8d17393df11645aad6a"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2945,
+      "path": "output/fingerprints/Hermes.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "fa68a52412918b9f3cbc7512eb99f08bcc62c981095a2ca4b3eb32589fb269ff"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2562,
+      "path": "output/fingerprints/Hypatia_of_Alexandria.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ee0fe318ae3b96d289134583f20a3a78ec113c152135c94025d1d0f118ee7990"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2745,
+      "path": "output/fingerprints/Inversion_Labs.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "61c1818ce6c2783e73819c92415b4c13504062471a62a46e721c6b4a1a6d3d47"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2525,
+      "path": "output/fingerprints/Jenn.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "8f8cbf2aa343ff352790feda06b9a2427276bbef4258c570279d35004a6484c7"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1983,
+      "path": "output/fingerprints/JennAI.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "a967966ca698432258df8850c097c157c83eb03c0151ae9fcd87f7f06665f396"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2756,
+      "path": "output/fingerprints/Jennifer_Jean_Larson.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ff202e6c1a91139790bbd62636f20eeb3b9722fa120f96d4e9abcff0eda3fef5"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1787,
+      "path": "output/fingerprints/John_Michael_Smith.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ed27309b376c9cf557386839d44ee2b2e43ded12d56fd44d10d74b557062cf94"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1994,
+      "path": "output/fingerprints/Kirk_Evan_Brown.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "feb0fc24a24fd36ab7693ae938825045c14bf4c219f7c5828444d89dacc7bf69"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1994,
+      "path": "output/fingerprints/Knowurknot.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "71a38b3b7a3ce40b8824da8cebc200391e9b4f412b1c48e94acf72b6dcdd34fb"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2756,
+      "path": "output/fingerprints/Leonardo_da_Vinci.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "63dcfcdc7334934639f73a3ca857c5fa4bf34ef1d66988f6d5b1fce49342b200"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2173,
+      "path": "output/fingerprints/MIMO_2.5.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "7c72868a74f265220d0886f062aac237fd84685c967b39b315a1d0c13ee1d665"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 3129,
+      "path": "output/fingerprints/Marie_Curie.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "00d09c6c3035fa190b98329c3cbcdf403f0f637e7c86e80fd9e0aa0890680864"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 3324,
+      "path": "output/fingerprints/Nikola_Tesla.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "691f6fbd8a0f80c8c4f8135fa1eba403f9b0edb9f62dc6ef7362e890f0748569"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2554,
+      "path": "output/fingerprints/OpenRouter.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "09b0f817f214824d072fc26c5f38a26f972533e9a37dfd0b1f94ed607adec509"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1608,
+      "path": "output/fingerprints/Ornith.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "957eafe4924ab18d60eb2ff64ea1aca9ae0a07f383932466f7b1b83aa8850110"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1979,
+      "path": "output/fingerprints/Sentinel.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "62a30b0a3f000f184ed646970f317fbb465f8b13dcc52fd0c608acdee3a1056c"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1774,
+      "path": "output/fingerprints/Sigil.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "af2e6c1df5cd4beaaae4816f1edc91fc2be4ccfa28bbfc78916123f9b7dc38fd"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1611,
+      "path": "output/fingerprints/SynSync.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "76d5fa654d28a93fac3e073f0c5290ab5ce33a36ffb393f5caa8c06f64d8da50"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 1990,
+      "path": "output/fingerprints/Titan.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "7f7b94039384c2807717106812ca1e5d7b04821067b8255e4a654a4c41c78eef"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2930,
+      "path": "output/fingerprints/bioCAPT.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "13ffee22f37e1896fec0634f2248abd4ef6013543a07ab5e9b6dab19ab03887e"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 8923,
+      "path": "output/graph.html",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "4e9657e679ca435664006251cc21df4a360044cc99ce7cb108dd60549d4c7913"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 5229,
+      "path": "output/graph_analysis.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "74d663705281fad5390c24a7b3b94d0cd27d9329a781966ef82c0528b7f83884"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 7250,
+      "path": "output/hd/jenn_bodygraph.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "1fba4890a67d27c512069bd7f971aa4a9b2ee5cd8024e3e521675030d453bc55"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 10133,
+      "path": "output/hd/jenn_full_hd_report.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "6929a4c301a735ee18c84b1f8d53faf3941418f0b7ed01403f742a92ee2a48ed"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 7720,
+      "path": "output/hd/kirk_bodygraph.svg",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ce87aad70861fcd232efd96503af53cf7fde3430838df870ef507ef0a143d690"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 10533,
+      "path": "output/hd/kirk_full_hd_report.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "d8767e4784cd702d7e4038e59111c614bcae736852bcffddad7957653b286939"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 18757,
+      "path": "output/identity_graph.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "0ac9567421477a6898ac99b5a6251f2a054e60d920e3b7577f5e2fc8fd780a8e"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 50551,
+      "path": "output/identity_signatures.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "b89e8f4e19a48ca93bd07371b75d1afc960924c01e34b3796e689a7bf6d4da14"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 14363,
+      "path": "output/interpretation_report.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "03d549dfb44dba7de365051368c9770a05a345227ddbf45f1418cbaf2161dd84"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 19259,
+      "path": "output/jenn_full_report.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "d5a1f6237bd1509d5fff6abd0317cfa8a1f115cddee69ac0ef6aa443bdd1da97"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 19558,
+      "path": "output/jennifer_larson_signature.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "4319783f81838f523e9b579c61e7e98152ccf5cb996f9937ced227fd5b14c186"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 18953,
+      "path": "output/john_michael_smith_signature.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "c35906674422a5e6ce50b96be91549d1e4847bd409a29e472c282be244bdd058"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 19818,
+      "path": "output/kirk_full_report.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "f5a82331701dab400c9713e9b7f3b9addce35d3c03820b2a40d3db3bdd8c03bd"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 19246,
+      "path": "output/kirk_full_report.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "975a6a8ef101a338d1fb02b7c5d882da768864f55728e5ee6624c0305d31b018"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 18109,
+      "path": "output/kirk_signature.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "911762d0613cd9d9f537418eba10ad02e90dfc6b79fd7905ffb3929a5e97a056"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 2219,
+      "path": "output/knowledge_bubbles.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "02d8d4d91ae8b0c656e082a17e7b31c2ca01777bd90377f3d7645627d49fca45"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 135579,
+      "path": "output/manual/sigil_manual.html",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ab65ba8439d011ba1e862562c1de2dc035ebed4039761a1025221426bc22c926"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 912,
+      "path": "output/narratives/Ada_Lovelace.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "c835114fc3588744d90b647d661d7e536540a9e6aedc313c51e571dcd1273019"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 875,
+      "path": "output/narratives/Alan_Turing.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "e08aa3b94f748320d9a10eb6749c80e22ff86e3d055884a7aea08f26408f739b"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 925,
+      "path": "output/narratives/Albert_Einstein.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "191d5843708560e6583752af0601924e48e10f2c7e0d390f1742ac629fff0f2e"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 892,
+      "path": "output/narratives/CAPT.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "f8967ef5cabb904677d76de63870c96d2e9d25e076fa96243576c5942e6bfc1c"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 846,
+      "path": "output/narratives/Capt_Cortex.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "e211929cde08a7eeb87ecf95e28f603f0d679b30a170d74c3a81f84935f35592"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 840,
+      "path": "output/narratives/Captain.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ef2711bd8331bd7a0b13cca1f3d7a2cfbcd55e0f74daf4f9e582d090e2c9ecf9"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 850,
+      "path": "output/narratives/Carl_Gustav_Jung.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "ee28ff7207b38f1c8c80130fb06e3bf1c2a2e164773877694e1b6a929c67c319"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 874,
+      "path": "output/narratives/David_Bowie.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "7e27d6cde6984de386feebd02166baa1c9b7b8eb5caec79f638cee5b26b89c36"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 833,
+      "path": "output/narratives/FrankenCAPT.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "da77707f7df2f3d2466547155e9b94674a63245b2314bb035ae666aa7e45aeae"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 844,
+      "path": "output/narratives/Frida_Kahlo.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "2bf24c04911f9f0dbc415352b00b0df69674fba19771b50880f84ca71847e1d4"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 883,
+      "path": "output/narratives/Hermes.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "b4ec8e3436073940e47f5d1a68b12f7248698f605b8366dfb829111a89a1d37f"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 674,
+      "path": "output/narratives/Hypatia_of_Alexandria.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "a3d4e310cec76e5f38f4e576def14323b248c302b3d98749c5f06c70ad83683c"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 848,
+      "path": "output/narratives/Inversion_Labs.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "005957cc673f94b6c80e291f145052aa398b2a7bd3ee2130d081a6e77852d9a1"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 956,
+      "path": "output/narratives/Jenn.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "edc8ee044444482f4d1bb45b0e2579bdd23e03a721e76a3181667397e253b579"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 938,
+      "path": "output/narratives/JennAI.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "6cfe333c53c3ce150850d130dceb400018af020da2b8f6d7dd6b5221c870eaf2"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 937,
+      "path": "output/narratives/Jennifer_Jean_Larson.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "814f568d8e71d284a1207091bf3c3761b2f36110681ed883cc3d543c4939e31d"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 831,
+      "path": "output/narratives/John_Michael_Smith.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "b9bdd6348a8123e1769621ec3846159f05693f3791c44313cd7b65b0b6655ab8"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 877,
+      "path": "output/narratives/Kirk_Evan_Brown.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "f0ab5f1ca6b3e3872ef2962b7db4072c22f52d61e869e8ed45cbb51195d16723"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 907,
+      "path": "output/narratives/Knowurknot.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "876eb05e6525cc575af3e5619470ad7c300ee6c767646903109cb9a17b0af986"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 896,
+      "path": "output/narratives/Leonardo_da_Vinci.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "935ad6a55cad10ffb790c1424866952722ecb0205e8f397dde0d8c476196e99c"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 882,
+      "path": "output/narratives/Marie_Curie.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "920aae604ee10a7c28cdeb7d7672cd8d68a943eb3de0c239c4a51cf1a197286f"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 855,
+      "path": "output/narratives/Nikola_Tesla.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "165c246d4a5c07cbef628c3923e820b685b22d9fb4e0d77d88b41046e1edd6f0"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 869,
+      "path": "output/narratives/OpenRouter.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "8de25be4467041b48a7cce27065690c7d123ab6b8ba2dea490bc612ddeb5fbf9"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 881,
+      "path": "output/narratives/Ornith.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "a8b0844edcd66e2c5501c094943001a0f71af52b7d56203be7e190336ba1580e"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 893,
+      "path": "output/narratives/Sentinel.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "e6483ffb280e54866413ae7db971351a46040aaf81932321ec64014922a291ea"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 873,
+      "path": "output/narratives/Sigil.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "41e7a29aabb09eaf8f72c1c017abe3dc7a8b6e64dfaa28d5e940634c62bf90f9"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 791,
+      "path": "output/narratives/SynSync.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "efac9a3bc3eb053864bfa28e001de6be88606e218aaba1bf5f8dbce44efa50ff"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 915,
+      "path": "output/narratives/Titan.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "342ddf3101605bde3bb813b4d642d3a7b489fc6f6adc234a73b7e2158532541f"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 852,
+      "path": "output/narratives/bioCAPT.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "9f74e0fc9c0527c55cb16dcb4f440c64d720d648196b77cf48b44b6a9816d1e8"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 14973,
+      "path": "output/predictions.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "e0db3811413c3954bc52390c8797a5662c6a64d769b0ef9885b2222a6d64f146"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 21349,
+      "path": "output/sample_report_kirk.md",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "444da662fb992f3c88b509ca0ead511749f18a37f63cdcdd1b6b87384333bc68"
+    },
+    {
+      "active_evidence": false,
+      "bytes": 291036,
+      "path": "output/unified_signatures.json",
+      "public_status": "quarantined_historical",
+      "reason": "Pre-v2 generated output; preserved byte-for-byte and excluded from active synthesis evidence.",
+      "sha256": "a10760bf23353b3ad71ac815fafdac469b287d043edb97d7c564aaf6f33ef9bf"
+    }
+  ],
+  "policy": "preserve_bytes_do_not_promote_to_active_evidence",
+  "schema_version": "legacy-output-index-v1"
+}

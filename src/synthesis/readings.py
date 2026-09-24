@@ -5,6 +5,7 @@ from .reading_library import (
     ASPECTS, AUTHORITIES, CENTERS, GATE_PROMPTS, HD_TYPES, HOUSES,
     LIBRARY_VERSION, NUMBERS, PLANETS, PROFILE_LINES, SIGN_THEMES, TAROT,
 )
+from .system_vocabulary import SYSTEM_VOCABULARY_VERSION, select_system_vocabulary
 
 CHAPTERS = {
     "name_reading": "The language of your name",
@@ -23,17 +24,19 @@ def reading_entries(packet: dict) -> list[dict]:
     entries = []
     items = packet["evidence_items"]
     placements = {(i["role"], i["subsystem"]): i for i in items if i["symbol_family"].startswith("planet_")}
+    seen_system_vocabulary: set[str] = set()
 
-    def add(section, item, title, plain, mythic, related=()):
+    def add(section, item, title, plain, mythic, related=(), library_version=LIBRARY_VERSION):
         evidence = [item, *related]
         research = (
             f"{title}. " + " ".join(f"{e['source_path']} returns {e['source_value']}." for e in evidence)
-            + f" The reading applies {LIBRARY_VERSION}, an authored reflection layer, without adding calculated traits or independent support. "
+            + f" The reading applies {library_version}, an authored reflection layer, without adding calculated traits or independent support. "
             + plain
         )
         entries.append({"section": section, "title": title, "evidence_ids": sorted({e["evidence_id"] for e in evidence}),
                         "texts": {"plain": plain, "mythic": mythic, "research": research},
-                        "library_version": LIBRARY_VERSION})
+                        "library_version": library_version,
+                        "allow_lexicon_enrichment": library_version != SYSTEM_VOCABULARY_VERSION})
 
     for item in items:
         family, value, role = item["symbol_family"], item["source_value"], item["role"]
@@ -129,6 +132,25 @@ def reading_entries(packet: dict) -> list[dict]:
             add("symbol_reading", item, f"{item['system'].replace('_', ' ').title()} · {value}",
                 f"The returned symbol {value} is mapped here to {themes}. This is the project's comparison vocabulary, not a claim that different traditions teach the same thing. Pick one of those themes and find a concrete example before drawing a connection with the rest of the reading. Keep the source tradition's separate context visible.",
                 f"Another margin of the atlas carries {value}, with the authored threads {themes}. Let this image sit beside the other chapters without dissolving its own history into theirs. A useful connection should illuminate a real question; resemblance alone need not become agreement.")
+        elif family.startswith("roadmap_") or family.startswith("binary_prime_"):
+            system = item["system"]
+            if system in seen_system_vocabulary:
+                continue
+            asset = select_system_vocabulary(system, item["evidence_id"], for_identity_synthesis=True)
+            if asset is None:
+                continue
+            seen_system_vocabulary.add(system)
+            system_name = system.replace("_", " ").title()
+            title = f"{system_name} · {item['subsystem'].replace('_', ' ')}"
+            plain = (
+                f"{title} returns {value}. {asset['text']} "
+                "Treat this as an inspectable coordinate from one named convention, not as another vote for the central pattern."
+            )
+            mythic = (
+                f"Another instrument in the atlas records {value} through {system_name}. {asset['text']} "
+                "Let the lens keep its own frame; the person remains larger than the coordinate."
+            )
+            add("symbol_reading", item, title, plain, mythic, library_version=SYSTEM_VOCABULARY_VERSION)
     # Stable, human-readable order; never choose symbols by opaque hash order.
     order = {k: i for i, k in enumerate(CHAPTERS)}
     entries.sort(key=lambda e: (order[e["section"]], e["title"]))

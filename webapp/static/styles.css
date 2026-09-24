@@ -1119,7 +1119,7 @@ svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3
 .tarot-card-face { aspect-ratio: 2 / 3; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: .55rem; padding: .85rem; text-align: center; border: 1px solid var(--accent); outline: 1px solid var(--border-default); outline-offset: -9px; background: radial-gradient(circle at 50% 36%, var(--surface-subtle), var(--surface-raised) 68%); color: var(--accent); box-shadow: 0 18px 50px rgba(0,0,0,.16); overflow: hidden; }
 .tarot-position { color: var(--text-secondary); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
 .tarot-card-art { width: min(100%, 13.6rem); flex: 1 1 auto; min-height: 0; display: grid; place-items: center; border-radius: .45rem; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(215,173,89,.24); background: #0b1017; }
-.tarot-card-art svg { width: 100%; height: 100%; display: block; }
+.tarot-card-art svg, .tarot-card-art img { width: 100%; height: 100%; display: block; object-fit: cover; }
 .tarot-card-mark { font-size: clamp(3.5rem, 7vw, 5rem); line-height: 1.2; }
 .tarot-card-name { font: clamp(1.4rem, 2.5vw, 2rem)/1.15 var(--font-display); color: var(--text-primary); text-wrap: balance; }
 .tarot-card-face small { color: var(--text-secondary); }
@@ -1185,3 +1185,50 @@ svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3
 .me-match p { overflow-wrap: anywhere; }
 @media (max-width: 720px) { .me-domain-grid, .me-epistemic-chain { grid-template-columns: 1fr; } }
 @media print { .me-reflection-setup { display: none !important; } .me-match { break-inside: avoid-page; } }
+
+/* Pattern Map: deterministic explanation of alignment, divergence, provenance, and sensitivity. */
+.pattern-map {
+  margin: 1rem 0 1.25rem;
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, .28);
+  border-radius: 18px;
+  background: rgba(148, 163, 184, .045);
+}
+.pattern-map > header h3 { margin: .2rem 0; }
+.pattern-map > header p:last-child { margin-bottom: .8rem; }
+.pattern-map-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .7rem;
+}
+.pattern-map-grid details {
+  min-width: 0;
+  padding: .72rem;
+  border: 1px solid rgba(148, 163, 184, .22);
+  border-radius: 14px;
+}
+.pattern-map-grid summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+}
+.pattern-map-grid ul { margin: .45rem 0 0; padding-left: 1.1rem; }
+.pattern-map-grid li { margin: .5rem 0; }
+.pattern-map-grid li strong,
+.pattern-map-grid li span,
+.pattern-map-grid li small { display: block; }
+.pattern-map-grid li span,
+.pattern-map-grid li small { margin-top: .14rem; }
+.pattern-map-grid small,
+.pattern-map-grid .field-hint { opacity: .82; }
+@media (max-width: 720px) {
+  .pattern-map-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  .pattern-map { break-inside: avoid; }
+  .pattern-map-grid { grid-template-columns: 1fr 1fr; }
+  .pattern-map-grid details { display: block; }
+  .pattern-map-grid summary { display: block; }
+}

@@ -57,79 +57,56 @@ def contains_healthy_boundaries(text: str) -> tuple[bool, list[str]]:
     return len(found_markers) > 0, found_markers
 
 
-def _safe_strength(value):
-    """Safely coerce strength to numeric for comparison."""
+CLAIM_STRENGTH_RANK = {
+    "tentative": 1.0,
+    "low": 2.0,
+    "medium": 3.0,
+    "high": 4.0,
+    "strong": 5.0,
+}
+
+
+def _safe_strength(value) -> float:
+    """Return a validated support-strength rank; never guess or default."""
+    import math
+
+    if isinstance(value, bool) or value is None:
+        raise ValueError("Claim support strength must be an explicit finite number or exact support label.")
     if isinstance(value, (int, float)):
-        return value
-    if isinstance(value, str):
-        try:
-            # Handle string representations like "1.5", "strong", etc.
-            return float(value) if value.strip().replace(".", "").isdigit() else 1.0
-        except (ValueError, AttributeError):
-            return 1.0
-    return 1.0
+        numeric = float(value)
+        if not math.isfinite(numeric) or not 0.0 <= numeric <= MAX_INTERPRETIVE_STRENGTH:
+            raise ValueError("Numeric claim support strength must be finite and between 0 and 5.")
+        return numeric
+    if isinstance(value, str) and value in CLAIM_STRENGTH_RANK:
+        return CLAIM_STRENGTH_RANK[value]
+    raise ValueError(f"Unsupported claim support strength: {value!r}")
+
 
 def validate_epistemic_strength(claims: list[dict], mode: str) -> tuple[bool, list[str]]:
-    """Ensure interpretive claims don't exceed their epistemic tier."""
-    issues = []
-    
-    # Mythic mode can be more poetic but still bounded
-    if mode == "mythic":
-        # Allow stronger language in mythic but check for prophecy drift
-        for claim in claims:
-            text = claim.get("text", "")
-            strength = _safe_strength(claim.get("strength", 1))
-            if strength > MAX_INTERPRETIVE_STRENGTH:
-                issues.append(
-                    f"Mythic mode claim exceeds max interpretive strength "
-                    f"(current={strength}, max={MAX_INTERPRETIVE_STRENGTH})"
-                )
-    
-    # Research and plain modes should be more restrained
-    if mode in ("research", "plain"):
-        for claim in claims:
-            text = claim.get("text", "")
-            strength = _safe_strength(claim.get("strength", 1))
-            threshold = MAX_INTERPRETIVE_STRENGTH * 0.8
-            if strength > threshold:
-                issues.append(
-                    f"{mode.capitalize()} mode claim has unusually high strength "
-                    f"(current={strength}, recommended max={threshold})"
-                )
-    
-    return len(issues) > 0, issues
+    """Validate support-strength values without treating them as truth confidence."""
+    if mode not in {"plain", "mythic", "research"}:
+        return False, [f"Unsupported narrative mode: {mode}"]
+    issues: list[str] = []
+    for claim in claims:
+        try:
+            _safe_strength(claim.get("strength"))
+        except (TypeError, ValueError) as exc:
+            issues.append(f"{claim.get('claim_id', 'unknown')}: {exc}")
+    return len(issues) == 0, issues
 
 
-def compute_epistemic_confidence_bound(evidence_count: int, contradiction_count: int = 0) -> float:
-    """Compute a confidence bound for interpretive claims based on evidence density."""
-    if evidence_count == 0:
-        return 0.1  # Very low confidence when no evidence
-    
-    # Base confidence from evidence count (diminishing returns)
-    base_confidence = min(0.9, evidence_count / max(evidence_count + 5, 1))
-    
-    # Reduce for contradictions
-    if contradiction_count > 0:
-        reduction = min(0.3, contradiction_count * 0.1)
-        base_confidence -= reduction
-    
-    return max(0.0, min(1.0, base_confidence))
-
-
-def add_epistemic_metadata_to_section(section: dict, evidence_count: int, 
-                                     contradiction_count: int = 0) -> dict:
-    """Attach epistemic metadata to a narrative section."""
-    confidence_bound = compute_epistemic_confidence_bound(evidence_count, contradiction_count)
-    
+def add_epistemic_metadata_to_section(section: dict, evidence_count: int,
+                                      contradiction_count: int = 0) -> dict:
+    """Attach descriptive audit metadata without implying truth-confidence."""
     return {
         **section,
         "epistemic_metadata": {
-            "evidence_density": evidence_count,
-            "contradiction_preserved": bool(contradiction_count > 0),
-            "confidence_bound": round(confidence_bound, 3),
+            "evidence_item_count": evidence_count,
+            "contradiction_count": contradiction_count,
+            "contradiction_preserved": bool(contradiction_count),
             "interpretive_only": True,
             "not_empirical_validation": True,
-        }
+        },
     }
 
 
