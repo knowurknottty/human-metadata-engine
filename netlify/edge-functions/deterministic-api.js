@@ -5,6 +5,9 @@ const ROUTES = Object.freeze({
   "/api/report-download": new Set(["GET", "POST"]),
   "/api/tarot": new Set(["POST"]),
   "/api/tarot/spreads": new Set(["GET", "HEAD"]),
+  "/api/household/config": new Set(["GET", "HEAD"]),
+  "/api/entitlement": new Set(["GET", "HEAD"]),
+  "/api/household/compose": new Set(["POST"]),
 });
 
 const json = (payload, status, extraHeaders = {}) =>
@@ -90,5 +93,8 @@ export const config = {
     "/api/report-download",
     "/api/tarot",
     "/api/tarot/spreads",
+    "/api/household/config",
+    "/api/entitlement",
+    "/api/household/compose",
   ],
 };

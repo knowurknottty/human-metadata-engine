@@ -67,6 +67,9 @@ class WebHardeningTests(unittest.TestCase):
             "/api/report-download",
             "/api/tarot",
             "/api/tarot/spreads",
+            "/api/household/config",
+            "/api/entitlement",
+            "/api/household/compose",
         ):
             self.assertIn(f'"{route}"', bridge)
 
