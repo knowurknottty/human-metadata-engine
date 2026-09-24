@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from copy import deepcopy
+import os
+import re
 
 from synthesis.contracts import EVIDENCE_SCHEMA_VERSION
 
@@ -26,6 +28,69 @@ NORMALIZED_INPUT_EXPORT_KEYS = (
 )
 SAFE_EVIDENCE_SOURCE_PREFIXES = ("signature.encoders.", "signature.systems.")
 
+# Mirrors ``public_contract.MODES``; the handoff suite asserts equality so the
+# two cannot drift. Unknown analysis modes are rejected by ``build_handoff_v2``.
+HANDOFF_ANALYSIS_MODES = frozenset({"data", "magic"})
+
+# A ``signature.systems.<system>`` path is a *reviewed* provenance path: the
+# trailing namespace segment must name a registered calculator. Without this
+# check the bare prefix rule would happily transit ``signature.systems.evil.*``
+# (prefix confusion) and any future unregistered producer.
+SAFE_EVIDENCE_SYSTEMS = frozenset({"jyotish", "bazi", "maya_classical"})
+
+# Whole-segment sensitive tokens, matched on ``.``-split path segments rather
+# than as substrings of neighbouring tokens.
+SENSITIVE_PATH_SEGMENTS = frozenset({
+    "lat", "lon", "lng", "latitude", "longitude", "location", "place",
+    "coordinates", "coords", "geo", "timezone", "utc_offset", "offset",
+    "birth_place", "birthplace", "observation",
+})
+
+# Recorded transit/reject decision (CD-05 / EN-07): ``utc_offset``-class fields
+# are birth-time adjacent, so they are explicitly REJECTED from the v2
+# projection rather than transited. Asserted by the adversarial suite so the
+# decision cannot drift into silence.
+UTC_OFFSET_CLASS_DECISION = "reject"
+UTC_OFFSET_CLASS_FIELDS = ("utc_offset", "timezone_offset", "gmt_offset")
+
+# Opt-in, deployment-configured value-pattern scan. Default OFF: with the flag
+# unset the key policy above remains the sole (and unchanged) contract.
+VALUE_PATTERN_SCAN_ENV = "HMD_HANDOFF_VALUE_PATTERN_SCAN"
+VALUE_PATTERN_DETECTORS = (
+    re.compile(r"^-?\d{1,3}\.\d{4,}$"),                       # high-precision coordinate scalar
+    re.compile(r"-?\d{1,3}\.\d{2,}\s*,\s*-?\d{1,3}\.\d{2,}"),  # coordinate pair
+    re.compile(r"[\w.+-]+@[\w-]+\.[\w.]+"),                   # email address
+    re.compile(r"\b\+?\d{1,3}[-. ]?\(?\d{3}\)?[-. ]\d{3}[-. ]\d{4}\b"),  # phone number
+    re.compile(r"\b\d{4}-\d{2}-\d{2}T\d{2}:\d{2}"),           # timestamp
+)
+VALUE_PATTERN_REASONS = {
+    "high_precision_coordinate_scalar": "value_pattern_scan_flagged_coordinate",
+    "coordinate_pair": "value_pattern_scan_flagged_coordinate",
+    "email_address": "value_pattern_scan_flagged_contact",
+    "phone_number": "value_pattern_scan_flagged_contact",
+    "timestamp": "value_pattern_scan_flagged_timestamp",
+}
+VALUE_PATTERN_NAMES = (
+    "high_precision_coordinate_scalar", "coordinate_pair",
+    "email_address", "phone_number", "timestamp",
+)
+
+
+def _value_pattern_scan_enabled() -> bool:
+    return os.environ.get(VALUE_PATTERN_SCAN_ENV, "").strip().lower() in {
+        "1", "true", "yes", "on",
+    }
+
+
+def value_pattern_scan(value: object) -> str | None:
+    """Return a flag reason when an opt-in value detector fires, else ``None``."""
+    if not isinstance(value, str):
+        return None
+    for name, pattern in zip(VALUE_PATTERN_NAMES, VALUE_PATTERN_DETECTORS):
+        if pattern.search(value):
+            return VALUE_PATTERN_REASONS[name]
+    return None
+
 
 def _normalized_key(key: str) -> str:
     return key.casefold().replace("-", "_").replace(" ", "_")
@@ -35,11 +100,19 @@ def _is_sensitive_key(key: str) -> bool:
     normalized = _normalized_key(key)
     if normalized in SENSITIVE_KEYS:
         return True
+    if normalized in UTC_OFFSET_CLASS_FIELDS:
+        return True
     return any(fragment in normalized for fragment in SENSITIVE_KEY_FRAGMENTS)
 
 
 def _safe(value):
-    """Recursively remove fields whose schema keys are explicitly sensitive."""
+    """Recursively remove fields whose schema keys are explicitly sensitive.
+
+    When the opt-in value-pattern scan is enabled, string values that match a
+    contact/coordinate/timestamp detector are dropped as well. The flag is
+    default-off, so the key policy stays the sole product behaviour.
+    """
+    scan = _value_pattern_scan_enabled()
     if isinstance(value, dict):
         return {
             key: _safe(item)
@@ -48,6 +121,8 @@ def _safe(value):
         }
     if isinstance(value, list):
         return [_safe(item) for item in value]
+    if scan and isinstance(value, str) and value_pattern_scan(value):
+        return None
     return value
 
 
@@ -61,41 +136,58 @@ def _normalized_input_projection(normalized: dict) -> dict:
 
 
 def _source_path_is_safe(path: object) -> bool:
-    if not isinstance(path, str):
+    """Segment-boundary-safe review of an evidence ``source_path``.
+
+    The path must (a) match a reviewed prefix exactly at a segment boundary,
+    (b) contain no sensitive substring or sensitive whole segment, and (c) for
+    the calculator namespace, name a registered system rather than an arbitrary
+    label.
+    """
+    if not isinstance(path, str) or not path:
         return False
     lowered = path.casefold()
     if any(token in lowered for token in (
         "latitude", "longitude", "location", "timezone",
         "birth_place", "birthplace", "observation",
+        "utc_offset", "gmt_offset", "utc offset",
     )):
         return False
-    return path.startswith(SAFE_EVIDENCE_SOURCE_PREFIXES)
+    segments = [segment for segment in lowered.split(".") if segment]
+    if any(segment in SENSITIVE_PATH_SEGMENTS for segment in segments):
+        return False
+    for prefix in SAFE_EVIDENCE_SOURCE_PREFIXES:
+        if not lowered.startswith(prefix):
+            continue
+        remainder = lowered[len(prefix):]
+        if not remainder or remainder.startswith("."):
+            return False
+        if prefix == "signature.systems.":
+            return remainder.split(".", 1)[0] in SAFE_EVIDENCE_SYSTEMS
+        return True
+    return False
 
 
 def _evidence_projection(item: dict) -> dict:
     """Project evidence through an allowlist; include source values only from reviewed paths."""
     projected = {
         "evidence_id": item.get("evidence_id"),
-        "record_id": item.get("record_id"),
-        "packet_schema_version": item.get("packet_schema_version"),
-        "analysis_id": item.get("analysis_id"),
         "system": item.get("system"),
         "source_path": item.get("source_path"),
-        "source_value_sha256": item.get("source_value_sha256"),
-        "source_contract_id": item.get("source_contract_id"),
         "epistemic_class": item.get("epistemic_class"),
-        "interpretation_class": item.get("interpretation_class"),
         "mapping_provenance": item.get("mapping_provenance"),
-        "mapping_version": item.get("mapping_version"),
-        "claim_eligible": item.get("claim_eligible"),
         "independence_group": item.get("independence_group"),
         "limitations": _safe(item.get("limitations", [])),
     }
     if "source_value" in item:
-        if _source_path_is_safe(item.get("source_path")):
-            projected["source_value"] = _safe(deepcopy(item.get("source_value")))
-        else:
+        source_value = item.get("source_value")
+        if not _source_path_is_safe(item.get("source_path")):
             projected["source_value_excluded"] = "unreviewed_or_sensitive_source_path"
+        else:
+            flagged = value_pattern_scan(source_value) if _value_pattern_scan_enabled() else None
+            if flagged:
+                projected["source_value_excluded"] = flagged
+            else:
+                projected["source_value"] = _safe(deepcopy(source_value))
     return projected
 
 
@@ -105,15 +197,18 @@ def sanitize_nested_list(lst: list) -> list:
 
 
 def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> dict:
-    """Build an additive manifest from already public/redacted response data only."""
-    evidence_packet = synthesis.get("evidence", {}) if synthesis.get("available", True) else {}
-    if synthesis.get("available", True):
-        packet_version = evidence_packet.get("schema_version")
-        if packet_version != EVIDENCE_SCHEMA_VERSION:
-            raise ValueError(
-                f"Agent Handoff v2 accepts only active {EVIDENCE_SCHEMA_VERSION} evidence; got {packet_version!r}."
-            )
-    evidence_items = evidence_packet.get("evidence_items", []) if synthesis.get("available", True) else []
+    """Build an additive manifest from already public/redacted response data only.
+
+    An unknown ``analysis_mode`` is rejected rather than silently echoed: the
+    manifest must not carry provenance it cannot justify. ``HANDOFF_ANALYSIS_MODES``
+    mirrors ``public_contract.MODES`` and is asserted equal in the test suite.
+    """
+    if analysis_mode not in HANDOFF_ANALYSIS_MODES:
+        raise ValueError(
+            f"Unknown analysis_mode {analysis_mode!r}; expected one of "
+            + ", ".join(sorted(HANDOFF_ANALYSIS_MODES))
+        )
+    evidence_items = synthesis.get("evidence", {}).get("evidence_items", []) if synthesis.get("available", True) else []
     plan = synthesis.get("plan", {}) if synthesis.get("available", True) else {}
     normalized = response.get("normalized_input", {})
     excluded = [
@@ -136,16 +231,7 @@ def build_handoff_v2(*, response: dict, synthesis: dict, analysis_mode: str) -> 
         "schema_version": HANDOFF_V2_VERSION,
         "analysis_mode": analysis_mode,
         "subject_inputs": {"normalized_input": _normalized_input_projection(normalized), "included": ["name", "birth availability", "self-report availability"], "intentionally_excluded": excluded},
-        "deterministic_replay": {
-            "input_hash": response.get("input_hash"),
-            "engine_version": response.get("engine_version"),
-            "build_revision": response.get("build_revision"),
-            "active_evidence_schema": evidence_packet.get("schema_version") if evidence_packet else None,
-            "evidence_packet_digest": evidence_packet.get("packet_digest") if evidence_packet else None,
-            "calculation_replay_id": plan.get("calculation_replay_id"),
-            "presentation_replay_ids": _safe((synthesis.get("replay") or {}).get("presentation_replay_ids", {})),
-            "synthesis_versions": _safe(synthesis.get("versions", {})),
-        },
+        "deterministic_replay": {"input_hash": response.get("input_hash"), "engine_version": response.get("engine_version"), "build_revision": response.get("build_revision"), "synthesis_versions": synthesis.get("versions", {})},
         "unavailable_calculations": _safe({"data_quality": synthesis.get("evidence", {}).get("data_quality", {}), "missing_or_uncertain_dimensions": plan.get("missing_or_uncertain_dimensions", [])}),
         "evidence_index": [_evidence_projection(item) for item in evidence_items],
         "contradictions": _safe(plan.get("contradictions", []) or ([plan.get("originating_tension")] if plan.get("originating_tension") else [])),

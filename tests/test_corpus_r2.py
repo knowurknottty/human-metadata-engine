@@ -74,3 +74,4 @@ def test_system_vocabulary_readings_are_self_contained_and_versioned():
     ]
     assert len(reading_claims) >= 10
     assert all(claim["metadata"]["allow_lexicon_enrichment"] is False for claim in reading_claims)
+

@@ -183,7 +183,7 @@ def realize(plan: dict, mode: str) -> dict:
             "section_id": planned["section_id"],
             "heading": planned["purpose"],
             "paragraphs": paragraphs,
-            "evidence_density": section_evidence,
+            "evidence_item_count": section_evidence,
             "contradictions_preserved": bool(section_contradictions > 0),
         })
     # Validate epistemic strength across all claims
@@ -228,12 +228,11 @@ def realize(plan: dict, mode: str) -> dict:
         "summary": plan["central_archetype"]["definition"],
         "disclaimer": "A deterministic symbolic reflection, not scientific personality measurement, diagnosis, prediction, or destiny.",
         "epistemic_validation": {
-            "overclaim_patterns_found": False,
-            "overclaim_issues": [],
-            "strength_valid": True,
-            "strength_issues": [],
-            "total_evidence_density": total_evidence_count,
-            "empirical_validation": "not_established",
+            "overclaim_patterns_found": has_overclaim,
+            "overclaim_issues": overclaim_issues if has_overclaim else [],
+            "strength_valid": strength_valid,
+            "strength_issues": strength_issues if not strength_valid else [],
+            "total_evidence_item_count": total_evidence_count,
         },
         "generation_metadata": {
             "engine": "deterministic-compositor",

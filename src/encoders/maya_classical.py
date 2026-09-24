@@ -100,8 +100,20 @@ def compute_classical_maya(birth: dict[str, Any]) -> dict[str, Any]:
         "calendar_round": f"{tz_number} {tz_name} {haab_day} {haab_month}",
         "lord_of_night": f"G{lord_number}",
     }
+    meta = _meta()
     return system_result(
         "maya_classical", calculation=calculation,
+        interpretation={
+            "disclosure": {
+                "convention": meta["convention"],
+                "approximation_precision": "exact_integer",
+                "precision_basis": (
+                    "Long Count, Tzolk'in, Haab', Calendar Round, and Lord of Night are exact "
+                    "integer-day arithmetic; this is calendrical precision under GMT 584283 and not "
+                    "a claim about birth-time precision."
+                ),
+            }
+        },
         limitations=[
             "This is the GMT 584283 correlation; alternative published correlations shift the mapped Gregorian date.",
             "This module computes calendrical coordinates only and does not infer personality, destiny, or future events.",

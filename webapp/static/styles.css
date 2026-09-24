@@ -1119,7 +1119,9 @@ svg [data-atlas-select]:focus-visible { outline: none; filter: drop-shadow(0 0 3
 .tarot-card-face { aspect-ratio: 2 / 3; min-height: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: .55rem; padding: .85rem; text-align: center; border: 1px solid var(--accent); outline: 1px solid var(--border-default); outline-offset: -9px; background: radial-gradient(circle at 50% 36%, var(--surface-subtle), var(--surface-raised) 68%); color: var(--accent); box-shadow: 0 18px 50px rgba(0,0,0,.16); overflow: hidden; }
 .tarot-position { color: var(--text-secondary); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
 .tarot-card-art { width: min(100%, 13.6rem); flex: 1 1 auto; min-height: 0; display: grid; place-items: center; border-radius: .45rem; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(215,173,89,.24); background: #0b1017; }
-.tarot-card-art svg, .tarot-card-art img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.tarot-card-art svg { width: 100%; height: 100%; display: block; }
+.tarot-card-art--library { background: #020304; box-shadow: inset 0 0 0 1px rgba(215,173,89,.34), 0 10px 28px rgba(0,0,0,.22); }
+.tarot-card-art-image { width: 100%; height: 100%; display: block; object-fit: contain; object-position: center; }
 .tarot-card-mark { font-size: clamp(3.5rem, 7vw, 5rem); line-height: 1.2; }
 .tarot-card-name { font: clamp(1.4rem, 2.5vw, 2rem)/1.15 var(--font-display); color: var(--text-primary); text-wrap: balance; }
 .tarot-card-face small { color: var(--text-secondary); }

@@ -422,36 +422,6 @@ ROADMAP_EVIDENCE_CONFIG = {
     "vedic_jyotish": (("birth_data_available", "calculation_status", "nakshatra", "scope"), "birth_derived_symbolic"),
 }
 
-ROADMAP_STATE_FIELDS = frozenset({
-    "available", "birth_data_available", "birth_data_used", "calculation_status",
-    "scope", "decan_scope", "input_mode", "correlation", "place_value_base",
-    "geometric_operation", "historical_claim_status", "entity_name_included",
-    "undeciphered", "personal_mapping_policy", "attestation_status",
-    "evidence_layer", "identity_input_used",
-})
-
-ROADMAP_TRADITIONAL_FIELDS = frozenset({
-    "stage", "dominant_planet", "primary_virtue", "divine_contemplation",
-    "planet", "lexical_decoding", "uniliteral_transliteration",
-    "symbolic_balance", "principle", "tzolkin_day", "shem_index", "nakshatra",
-})
-
-
-def _roadmap_field_taxonomy(system: str, field: str) -> tuple[str, str, bool]:
-    """Return explicit epistemic layer, interpretation layer, and claim eligibility."""
-    if system == "esoteric_bridge":
-        return "project_authored_crosswalk", "project_authored", False
-    if system == "sumerian_me_ontology":
-        if field in ROADMAP_STATE_FIELDS:
-            return "system_state", "none", False
-        return "historical_textual_reference", "historical_textual", True
-    if field in ROADMAP_STATE_FIELDS:
-        return "system_state", "none", False
-    if field in ROADMAP_TRADITIONAL_FIELDS:
-        return "traditional_symbolic_interpretation", "traditional_symbolic_interpretation", True
-    return "deterministic_calculation", "none", True
-
-
 
 def extract_binary_prime(signature: dict, _psychology: dict | None) -> list[dict]:
     data = (signature.get("encoders") or {}).get("binary_prime") or {}
@@ -481,22 +451,17 @@ def extract_roadmap_envelopes(signature: dict, _psychology: dict | None) -> list
         data = envelope.get("data") if envelope.get("status") == "computed" else None
         if not isinstance(data, dict):
             continue
+        historical = system == "sumerian_me_ontology"
         scope = data.get("scope")
+        base_limit = (
+            "Historical/textual evidence is preserved without inferring a modern personal mapping."
+            if historical else
+            "The returned value is deterministic within the named convention; personal meaning remains symbolic or project-authored interpretation."
+        )
         for field in fields:
             value = data.get(field)
             if value is None or isinstance(value, (dict, list)):
                 continue
-            epistemic_class, interpretation_class, claim_eligible = _roadmap_field_taxonomy(system, field)
-            if epistemic_class == "historical_textual_reference":
-                base_limit = "Historical/textual evidence is preserved without inferring a modern personal mapping."
-            elif epistemic_class == "project_authored_crosswalk":
-                base_limit = "Project-authored crosswalk metadata is inspectable but cannot count as independent support."
-            elif epistemic_class == "system_state":
-                base_limit = "System state or convention metadata describes availability/scope and is not a personal claim."
-            elif epistemic_class == "traditional_symbolic_interpretation":
-                base_limit = "Traditional symbolic label returned by the named convention; it is not empirical validation."
-            else:
-                base_limit = "The returned value is deterministic within the named convention; personal meaning remains separate."
             limits = [base_limit, "This record does not independently validate a personal trait."]
             if isinstance(scope, str) and scope and field != "scope":
                 limits.append(scope)
@@ -505,9 +470,7 @@ def extract_roadmap_envelopes(signature: dict, _psychology: dict | None) -> list
                 source_path=f"signature.encoders.{system}.data.{field}",
                 value=value, symbol_family=f"roadmap_{system}_{field}",
                 ontology_system="reading_only", role="other",
-                epistemic_class=epistemic_class,
-                interpretation_class=interpretation_class,
-                claim_eligible=claim_eligible,
+                epistemic_class="historical_textual_reference" if historical else "deterministic_calculation",
                 provenance_ref=_envelope_provenance(envelope),
                 atlas_targets=[f"system:{system}"], report_target="symbolic-systems",
                 limitations=limits, independence_group=independence_group,

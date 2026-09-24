@@ -55,6 +55,116 @@ The synthesis layer emits selected richer fields as deterministic, provenance-bo
 
 Golden tests lock representative inputs, convention/version strings, withholding behavior, boundary behavior, and deterministic replay. They are the code/document drift gate for the conventions listed above.
 
+## R4 governance, disclosure, and deliberate re-baseline
+
+### Convention governance protocol
+
+Scholar-facing conventions carried by the calculators (Jyotish ayanamsa, the
+Classical Maya correlation constant, and the BaZi Jieqi/solar-term algorithm)
+change only through this recorded procedure. It operationalises migration rules
+2 and 5 and the golden-quarantine rule; it is **not** a mechanism for moving
+constants quietly.
+
+1. **Propose** — an issue describes the convention, its current value, the
+   scholarly or in-repo source, and the expected effect on returned coordinates.
+2. **Adjudicate** — review confirms the source is verifiable. Fabricating an
+   arcsecond figure or a citation is a no-fabrication violation, not a shortcut.
+3. **Version bump** — the affected `system_version` and `convention` string are
+   bumped together; metadata renames require the version signal or a documented
+   compatibility break, never a silent in-place rename.
+4. **Re-baseline** — goldens are re-computed deliberately and the change is
+   recorded in the changelog entry referenced from the fixture header. Golden
+   fixtures are never updated automatically on a `tzdata` bump; that friction is
+   intended.
+5. **Quarantine** — a stale golden may be quarantined only with a recorded
+   changelog entry naming the convention change that invalidated it.
+
+### R4 changelog
+
+- **2026-09-23 — local-first Netlify ingress hardening.** Removed the SPA
+  catch-all rewrite and wildcard `/api/*` proxy. The Netlify bridge now exposes
+  only the six deterministic engine routes used by the public client and
+  diagnostics. Unknown application/API paths fail closed, cross-origin response
+  synthesis was removed, and a regression test locks the route allowlist.
+  Intentional collection re-baseline: **490 pytest tests / 68 pytest files** and
+  **67 canonical test files**.
+
+### Per-system disclosure block
+
+Each calculator emits an additive `interpretation.disclosure` block beside its
+result. `approximation_precision` is either the literal `undisclosed`, when no
+arcsecond figure is published in the implementation docs, or `exact_integer`
+where the calculation is exact integer-day arithmetic. The block never claims
+birth-time precision, true-solar correction, or a numeric truth-confidence
+scalar. The value is traceable to this section:
+
+| system | convention | approximation_precision | basis |
+| --- | --- | --- | --- |
+| `jyotish-v3` | `lahiri-mean-node-27-nakshatra-zone-aware-v3` | `undisclosed` | No published arcsecond figure for the sidereal projection. |
+| `bazi-v2` | `li-chun-jie-civil-time-zone-aware-v2` | `undisclosed` | Solar-term placement uses an ephemeris solar longitude; no published arcsecond figure. |
+| `maya-classical-gmt-v1` | `gmt-584283-v1` | `exact_integer` | Long Count, Tzolk'in, Haab', Calendar Round, and Lord of Night are exact integer-day arithmetic. |
+
+### Unsupported-capability registry
+
+`src/unsupported_capabilities.py` is the machine-readable negative-fact ledger.
+It records, per system, the byte-stable disclosure fragment that must remain
+present in that system's `limitations`. The registry pins the claim; the encoder
+limitations remain the published wording. The no-fabrication suite asserts both
+directions, so the two cannot drift.
+
+Enforcement surfaces for this section: `src/unsupported_capabilities.py`,
+`src/agent_handoff.py`, `src/system_contracts.py`, `src/time_context.py`, and
+`src/synthesis/realize.py`. `src/synthesis/extractors.py` remains the
+evidence-inventory owner whose `EXTRACTORS` tuple and `ROADMAP_EVIDENCE_CONFIG`
+are reconciled against the documented families.
+
+Recorded absences: BaZi true/apparent solar-time correction and alternate
+late-Zi 23:00 rollover are **not applied**; Jyotish emits no Vimshottari dasha in
+the static signature and does not substitute a noon chart; Classical Maya emits
+non-negative Long Count dates only and keeps modern Dreamspell systems separate.
+No Gene Keys backend exists or is planned in this contract, and `confidence_bound`
+remains removed.
+
+### Metadata rename compatibility note (CD-08)
+
+Narrative metadata renamed `evidence_density` to `evidence_item_count` and
+`total_evidence_density` to `total_evidence_item_count`. A repository-wide audit
+found no in-repo, web, or front-end consumer of the old keys, so this is recorded
+as a documented compatibility break rather than a dual-key window; no external
+consumer was found to justify a one-release alias. `narrative-v1` remains the
+schema identifier because the rename is metadata-only and does not alter the
+narrative envelope.
+
+### Handoff analysis-mode policy (CD-12)
+
+`agent_handoff.build_handoff_v2` rejects an unknown `analysis_mode` instead of
+echoing it. The accepted set mirrors `public_contract.MODES` and is asserted
+equal in the handoff suite.
+
+### Corpus asset id convention
+
+Every `SYSTEM_VOCABULARY_ASSETS` id follows the pattern
+`sys-<system-with-dashes>-<NNN>` for the first 12 × 10 block and
+`sys-<system-with-dashes>-r2-<NNN>` for the 24 × 5 R2 block. The single
+outlier `sys-human_design-007` (underscore in the system segment) is a
+documented exemption preserved from the R1 asset set; no alias is introduced
+and the id is stable.
+
+The nine shared-source witnesses documented in this contract are:
+`sys-gematria-007`, `sys-kabbalah-006`, `sys-pythagorean-007`,
+`sys-chaldean-005`, `sys-ordinal-003`, `sys-isopsephy-007`,
+`sys-linguistic-007`, `sys-chinese-006`, and `sys-human_design-008`.
+
+### Vocabulary eligibility declarations (CD-23)
+
+`SYSTEM_VOCABULARY_ASSETS` declares `mode_eligibility` and
+`identity_synthesis_eligible` on every asset. R4 keeps those as declarations:
+`select_system_vocabulary` enforces `identity_synthesis_eligible`, while
+`mode_eligibility` remains documentation of the register each asset was written
+for. No `readings.py` mode guard is added in this tranche; cross-mode surfacing
+is recorded as intentional for this release and the guard stays a deferred
+item.
+
 ## Implemented timing systems
 
 All dynamic artifacts require an explicit `as_of`; the engine never reads the wall clock silently.

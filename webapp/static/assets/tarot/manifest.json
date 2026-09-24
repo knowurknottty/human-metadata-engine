@@ -1,0 +1,244 @@
+{
+  "version": "inversion-tarot-art-v1",
+  "updated": "2026-09-23",
+  "policy": "Artwork is bound to Major Arcana numeric index. Reading semantics remain independently authored; custom artwork titles are descriptive provenance until the full Inversion Tarot naming canon is frozen.",
+  "finished_major_count": 13,
+  "major_total": 22,
+  "minor_total": 56,
+  "remaining_major_indices": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21
+  ],
+  "remaining_minor_count": 56,
+  "remaining_total_artworks": 65,
+  "cards": [
+    {
+      "major_index": 0,
+      "runtime_id": "major-00",
+      "source_filename": "The Seeker_ Cosmic Horizon.png",
+      "source_sha256": "87cf0b0c46f5981d74808bacfa1dbd7ce09bd54c2be793ac22d189352fb397bb",
+      "served_asset": "/assets/tarot/major-00-seeker.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": "The Seeker",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 1,
+      "runtime_id": "major-01",
+      "source_filename": "image-gen-1(4).png",
+      "source_sha256": "2a2723c1e32495b683d64cf1ba99c325532d03d94b607282bcf811bda5a257d3",
+      "served_asset": "/assets/tarot/major-01-alchemist.webp",
+      "source_dimensions": [
+        1086,
+        1448
+      ],
+      "served_dimensions": [
+        1024,
+        1365
+      ],
+      "art_title": "The Alchemist",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 2,
+      "runtime_id": "major-02",
+      "source_filename": "image-gen-2(4).png",
+      "source_sha256": "d67eaba7b609f884ac52fc78dfc1f07cda493dde9e37cc2b4070084a5a7447d3",
+      "served_asset": "/assets/tarot/major-02-mirror.webp",
+      "source_dimensions": [
+        1086,
+        1448
+      ],
+      "served_dimensions": [
+        1024,
+        1365
+      ],
+      "art_title": "The Mirror",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 3,
+      "runtime_id": "major-03",
+      "source_filename": "image-gen-3(4).png",
+      "source_sha256": "4c054e63c24c06837418a17983a98417baa9dbd131bd586c0cef918c82a89bf0",
+      "served_asset": "/assets/tarot/major-03-weaver-many-one.webp",
+      "source_dimensions": [
+        1086,
+        1448
+      ],
+      "served_dimensions": [
+        1024,
+        1365
+      ],
+      "art_title": "The Weaver \u2014 From Many, One",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 4,
+      "runtime_id": "major-04",
+      "source_filename": "image-gen-1(5).png",
+      "source_sha256": "0b05341104b56d2ef94a55e39a8f08011521c2260f5f14dc56a5507ab1adb328",
+      "served_asset": "/assets/tarot/major-04-builder.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": "The Builder",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 5,
+      "runtime_id": "major-05",
+      "source_filename": "image-gen-2(5).png",
+      "source_sha256": "81ea11887c8081866d8d590adf8cccb96211590ab24be91bdea9589e5418a333",
+      "served_asset": "/assets/tarot/major-05-beacon.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": "The Beacon",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 6,
+      "runtime_id": "major-06",
+      "source_filename": "image-gen-3(5).png",
+      "source_sha256": "be595e25166e74f3e97bfd3537432de29548136047372fa7ca3e4c356860c0b1",
+      "served_asset": "/assets/tarot/major-06-bridge.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": "The Bridge",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 7,
+      "runtime_id": "major-07",
+      "source_filename": "image-gen-1(6).png",
+      "source_sha256": "ad73e2af234eca6ad4b41bca6f06a722613769bc3b46131bb597118fe7008827",
+      "served_asset": "/assets/tarot/major-07-signal.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": "The Signal",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 8,
+      "runtime_id": "major-08",
+      "source_filename": "image-gen-2(6).png",
+      "source_sha256": "71fe3cc8969879b734dde70f01f96e80115cb32e1d620922dfd936a174cdf735",
+      "served_asset": "/assets/tarot/major-08-weaver-patterns.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": "The Weaver \u2014 Patterns into Relation",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 9,
+      "runtime_id": "major-09",
+      "source_filename": "image-gen-3(6).png",
+      "source_sha256": "af485c3a9ef859ac3873e142a944767780164050ecc1fdad92245012bd79f6eb",
+      "served_asset": "/assets/tarot/major-09-lantern.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": "The Lantern",
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 10,
+      "runtime_id": "major-10",
+      "source_filename": "image-gen-1(7).png",
+      "source_sha256": "4898a1c45c53f30aa3b8904efebddf7bedcedfa9f3acd449d18e55fd9c55d9c5",
+      "served_asset": "/assets/tarot/major-10-wheel.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": null,
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 11,
+      "runtime_id": "major-11",
+      "source_filename": "image-gen-2(7).png",
+      "source_sha256": "0fecf22891dfbdb341420f2ced3955b7e1b68d597c53204d5a1882ff93dda101",
+      "served_asset": "/assets/tarot/major-11-justice.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": null,
+      "status": "finished_library_art"
+    },
+    {
+      "major_index": 12,
+      "runtime_id": "major-12",
+      "source_filename": "image-gen-3(7).png",
+      "source_sha256": "5c53b8a73006e1486e66dd41455cb2be718aaf4c0f9ff38f9c7183ec7b0373ef",
+      "served_asset": "/assets/tarot/major-12-suspension.webp",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "served_dimensions": [
+        1024,
+        1536
+      ],
+      "art_title": null,
+      "status": "finished_library_art"
+    }
+  ]
+}

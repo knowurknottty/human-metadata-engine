@@ -83,15 +83,49 @@ def _safe_strength(value) -> float:
 
 
 def validate_epistemic_strength(claims: list[dict], mode: str) -> tuple[bool, list[str]]:
-    """Validate support-strength values without treating them as truth confidence."""
-    if mode not in {"plain", "mythic", "research"}:
-        return False, [f"Unsupported narrative mode: {mode}"]
-    issues: list[str] = []
-    for claim in claims:
-        try:
-            _safe_strength(claim.get("strength"))
-        except (TypeError, ValueError) as exc:
-            issues.append(f"{claim.get('claim_id', 'unknown')}: {exc}")
+    """Pinned return contract for interpretive strength validation.
+
+    Contract (asserted by ``tests/test_no_fabrication.py``):
+
+    * Returns ``(valid, issues)`` where ``valid`` is ``True`` if and only if
+      ``issues`` is empty.
+    * ``valid`` is ``True`` for an empty claim list or for every claim whose
+      ``strength`` stays at or below its mode threshold.
+    * ``valid`` is ``False`` and ``issues`` is non-empty whenever any claim
+      exceeds the mode's tier threshold. ``mythic`` permits up to
+      ``MAX_INTERPRETIVE_STRENGTH``; ``plain`` and ``research`` permit up to
+      ``MAX_INTERPRETIVE_STRENGTH * 0.8``.
+    * Unrecognised modes are accepted and impose no threshold, so they never
+      raise.
+    * ``valid`` is not a truth-confidence scalar; it is a bounded
+      policy-compliance flag.
+    """
+    issues = []
+    
+    # Mythic mode can be more poetic but still bounded
+    if mode == "mythic":
+        # Allow stronger language in mythic but check for prophecy drift
+        for claim in claims:
+            text = claim.get("text", "")
+            strength = _safe_strength(claim.get("strength", 1))
+            if strength > MAX_INTERPRETIVE_STRENGTH:
+                issues.append(
+                    f"Mythic mode claim exceeds max interpretive strength "
+                    f"(current={strength}, max={MAX_INTERPRETIVE_STRENGTH})"
+                )
+    
+    # Research and plain modes should be more restrained
+    if mode in ("research", "plain"):
+        for claim in claims:
+            text = claim.get("text", "")
+            strength = _safe_strength(claim.get("strength", 1))
+            threshold = MAX_INTERPRETIVE_STRENGTH * 0.8
+            if strength > threshold:
+                issues.append(
+                    f"{mode.capitalize()} mode claim has unusually high strength "
+                    f"(current={strength}, recommended max={threshold})"
+                )
+    
     return len(issues) == 0, issues
 
 

@@ -350,3 +350,4 @@ SYSTEM_VOCABULARY_ASSETS += tuple(
     for system, sentences in R2_SYSTEM_TEXTS.items()
     for index, sentence in enumerate(sentences, 1)
 )
+

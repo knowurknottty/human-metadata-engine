@@ -46,6 +46,30 @@ class WebHardeningTests(unittest.TestCase):
         self.assertIn('Referrer-Policy = "no-referrer"', config)
         self.assertIn("Strict-Transport-Security", config)
 
+    def test_netlify_has_no_spa_catch_all_or_wildcard_api_proxy(self):
+        with open(os.path.join(ROOT, "netlify.toml"), encoding="utf-8") as handle:
+            config = handle.read()
+        with open(
+            os.path.join(ROOT, "netlify", "edge-functions", "deterministic-api.js"),
+            encoding="utf-8",
+        ) as handle:
+            bridge = handle.read()
+
+        self.assertNotIn('from = "/*"', config)
+        self.assertNotIn('path = "/api/*"', config)
+        self.assertNotIn('"/api/*"', bridge)
+        self.assertNotIn("Access-Control-Allow-Origin", bridge)
+
+        for route in (
+            "/api/health",
+            "/api/version",
+            "/api/analyze",
+            "/api/report-download",
+            "/api/tarot",
+            "/api/tarot/spreads",
+        ):
+            self.assertIn(f'"{route}"', bridge)
+
     def test_proxy_ip_is_trusted_only_for_loopback_tunnel_traffic(self):
         headers = {"CF-Connecting-IP": "203.0.113.9", "X-Forwarded-For": "198.51.100.8"}
         self.assertEqual(_rate_limit_client_ip("127.0.0.1", headers, trust_proxy=True), "203.0.113.9")

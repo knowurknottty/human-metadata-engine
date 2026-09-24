@@ -1,5 +1,7 @@
 # Human Metadata Atlas launch evidence — 2026-09-10 UTC
 
+> **2026-09-23 local-first ingress cleanup:** current source removes the generic Netlify `/api/*` proxy and SPA catch-all rewrite. Netlify now exposes only the deterministic engine routes required by the public client; unknown API and application paths fail closed. This note does not rewrite the historical deployment evidence below.
+
 > **Repository delta after this launch snapshot (2026-09-16):** the `feature/sumerian-me-reflection-r1` branch adds the historical Sumerian *me* ontology, an opt-in evidence-bound Human Capacity reflection, and its public UI. Those changes are locally regression-tested but are **not evidence that either recorded demo deployment contains the feature**. Deployment/physical-browser claims below remain scoped to the 2026-09-10 revisions named in this document.
 
 ## Available demos
@@ -70,8 +72,8 @@ complete. Unrelated Android work and local untracked files were preserved.
 
 1. Validate and push a coherent source revision. Deploy backend changes with
    `scripts/deploy_gcp.sh` using that full revision.
-2. Netlify is linked to `inversionlabs-hmd`. Publish `webapp/static` together
-   with `netlify/edge-functions/api-proxy.js` and `netlify.toml`.
+2. Netlify is linked to `inversionlabs-hmd`. Publish `webapp/static` together with the allowlisted deterministic bridge in
+   `netlify/edge-functions/deterministic-api.js` and `netlify.toml`.
 3. Build Sites using `node scripts/build_sites.mjs`; push to the existing Sites
    source repository with a fresh ephemeral credential, package the exact
    source's output, save and deploy a new version for the existing project.
