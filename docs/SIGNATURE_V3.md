@@ -196,6 +196,10 @@ The implementation does not fabricate event predictions, empirical personality v
 
 The compatibility encoder map now includes `sumerian_me_ontology` as a historical/textual corpus reference, and `analysis-v1` can optionally return `sumerian-me-reflection-v1`. Neither is promoted into v3 static-signature convergence by this tranche. Historical attestation is not an independence family for personality evidence, and explicit reflection tags remain user-supplied/modern-interpretive context rather than a new v3 proof source.
 
+### 2026-09-25 — birthday input compatibility regression
+
+- Pytest collection baseline intentionally advanced from **573 to 574 tests** (76 files unchanged) to cover mobile/common birthday entry across `MM/DD/YYYY`, `YYYY-MM-DD`, and compact 8-digit forms while preserving invalid-calendar rejection and ISO canonicalization.
+
 ### 2026-09-24 — R4 household/Atlas/Tarot integration
 
 - Pytest collection baseline intentionally advanced from 490 tests / 68 files to **573 tests / 76 files** after merging the household composition contracts, expanded Atlas coverage, completed 78-card Tarot asset integrity checks, associated regression suites, and the desktop Atlas breakpoint regression that prevents the ultra-wide three-column shell from activating at ordinary desktop widths.

@@ -162,7 +162,14 @@ function mdToHTML(md) {
 }
 
 function normalizeBirthDateInput(value) {
-  const raw = String(value || "").replace(/[^\d-]/g, "").slice(0, 10);
+  const raw = String(value || "").replace(/[^\d/-]/g, "").slice(0, 10);
+  if (raw.includes("/")) {
+    const parts = raw.split("/").slice(0, 3);
+    parts[0] = parts[0].slice(0, 2);
+    if (parts.length > 1) parts[1] = parts[1].slice(0, 2);
+    if (parts.length > 2) parts[2] = parts[2].slice(0, 4);
+    return parts.join("/");
+  }
   if (raw.includes("-")) {
     const parts = raw.split("-").slice(0, 3);
     parts[0] = parts[0].slice(0, 4);
@@ -170,16 +177,41 @@ function normalizeBirthDateInput(value) {
     if (parts.length > 2) parts[2] = parts[2].slice(0, 2);
     return parts.join("-");
   }
-  const digits = raw.slice(0, 8);
+  const digits = raw.replace(/\D/g, "").slice(0, 8);
+  if (digits.length < 4) return digits;
+  const maybeYear = Number(digits.slice(0, 4));
+  const looksYearFirst = maybeYear >= 1000 && maybeYear <= new Date().getUTCFullYear();
+  if (looksYearFirst) {
+    if (digits.length <= 4) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
+    return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+  }
   if (digits.length <= 4) return digits;
-  if (digits.length <= 6) return `${digits.slice(0, 4)}-${digits.slice(4)}`;
-  return `${digits.slice(0, 4)}-${digits.slice(4, 6)}-${digits.slice(6)}`;
+  if (digits.length <= 6) return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4, 8)}`;
 }
 
 function parseBirthDateInput(value) {
-  const match = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(String(value || "").trim());
-  if (!match) return null;
-  const year = Number(match[1]), month = Number(match[2]), day = Number(match[3]);
+  const raw = String(value || "").trim();
+  let year, month, day;
+  let match = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(raw);
+  if (match) {
+    year = Number(match[1]); month = Number(match[2]); day = Number(match[3]);
+  } else {
+    match = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(raw);
+    if (match) {
+      month = Number(match[1]); day = Number(match[2]); year = Number(match[3]);
+    } else if (/^\d{8}$/.test(raw)) {
+      const maybeYear = Number(raw.slice(0, 4));
+      if (maybeYear >= 1000 && maybeYear <= new Date().getUTCFullYear()) {
+        year = maybeYear; month = Number(raw.slice(4, 6)); day = Number(raw.slice(6, 8));
+      } else {
+        month = Number(raw.slice(0, 2)); day = Number(raw.slice(2, 4)); year = Number(raw.slice(4, 8));
+      }
+    } else {
+      return null;
+    }
+  }
   const check = new Date(Date.UTC(year, month - 1, day));
   if (check.getUTCFullYear() !== year || check.getUTCMonth() !== month - 1 || check.getUTCDate() !== day) return null;
   return {year, month, day};

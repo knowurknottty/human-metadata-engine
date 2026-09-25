@@ -1,7 +1,10 @@
 """Static and semantic contracts for the public v1.0 visual interface."""
 
 from pathlib import Path
+import json
 import re
+import shutil
+import subprocess
 import unittest
 
 
@@ -43,17 +46,40 @@ class EditorialFrontendContractTests(unittest.TestCase):
 
     def test_birth_date_unknown_time_and_location_contracts_are_explicit(self):
         self.assertIn('type="text" id="b-date"', HTML)
-        self.assertIn('placeholder="YYYY-MM-DD"', HTML)
+        self.assertIn('placeholder="MM/DD/YYYY"', HTML)
         self.assertIn("function normalizeBirthDateInput", SCRIPT)
         self.assertIn("function parseBirthDateInput", SCRIPT)
         self.assertIn(r"^(\d{4})-(\d{1,2})-(\d{1,2})$", SCRIPT)
         self.assertIn("function canonicalBirthDateInput", SCRIPT)
         self.assertIn('padStart(2, "0")', SCRIPT)
-        self.assertIn("One-digit months and days are padded automatically.", HTML)
+        self.assertIn("Type MM/DD/YYYY or YYYY-MM-DD", HTML)
         self.assertIn('id="b-time-unknown"', HTML)
         self.assertIn("I do not know my exact birth time", HTML)
         self.assertIn('time_accuracy: unknownTime ? "unknown" : "exact"', SCRIPT)
         self.assertIn("time-sensitive results will be unavailable", HTML.lower())
+
+    @unittest.skipUnless(shutil.which("node"), "Node.js is required for frontend behavior checks")
+    def test_birth_date_input_accepts_us_iso_and_digit_only_formats(self):
+        start = SCRIPT.index("function normalizeBirthDateInput")
+        end = SCRIPT.index("function apiErrorField")
+        functions = SCRIPT[start:end]
+        probe = functions + """
+const cases = {
+  us: canonicalBirthDateInput("02/04/1982"),
+  iso: canonicalBirthDateInput("1982-02-04"),
+  digitsUs: canonicalBirthDateInput(normalizeBirthDateInput("02041982")),
+  digitsIso: canonicalBirthDateInput(normalizeBirthDateInput("19820204")),
+  invalid: parseBirthDateInput("02/31/1982"),
+};
+console.log(JSON.stringify(cases));
+"""
+        result = subprocess.run(["node", "-e", probe], check=True, capture_output=True, text=True)
+        cases = json.loads(result.stdout)
+        self.assertEqual(cases["us"], "1982-02-04")
+        self.assertEqual(cases["iso"], "1982-02-04")
+        self.assertEqual(cases["digitsUs"], "1982-02-04")
+        self.assertEqual(cases["digitsIso"], "1982-02-04")
+        self.assertIsNone(cases["invalid"])
 
     def test_ambiguity_is_a_choice_interaction_not_a_generic_error(self):
         self.assertIn("Which place did you mean?", HTML)
