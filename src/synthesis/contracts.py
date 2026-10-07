@@ -7,13 +7,7 @@ ONTOLOGY_VERSION = "motif-ontology-v1"
 MAPPING_VERSION = "project-authored-symbolic-normalization-v1"
 TEMPLATE_VERSION = "narrative-templates-v3"
 
-EPISTEMIC_TIERS = {
-    "deterministic_calculation": 1,
-    "deterministic_relationship": 2,
-    "traditional_symbolic_interpretation": 3,
-    "user_supplied": 4,
-    "interpretive_synthesis": 5,
-}
+from .epistemic_safety import EPISTEMIC_TIERS
 
 PROHIBITED_TOPICS = [
     "medical diagnosis", "psychiatric diagnosis", "trauma diagnosis", "abuse history",

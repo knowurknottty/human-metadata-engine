@@ -11,6 +11,7 @@ from .epistemic_safety import (
     contains_overclaiming_language,
     validate_epistemic_strength,
     add_epistemic_metadata_to_section,
+    sanitize_for_export,
 )
 
 MODES = {"plain", "mythic", "research"}
@@ -126,6 +127,7 @@ def realize(plan: dict, mode: str) -> dict:
         section_contradictions = 0
         for claim in planned["claims"]:
             text, lexicon_records = _text(claim, mode, plan["analysis_id"], used_semantic_families)
+            text = sanitize_for_export(text)
             used_semantic_families.update(item["semantic_family"] for item in lexicon_records)
             sentences.append(_sentence(claim, text, lexicon_records))
             # Accumulate evidence and contradiction counts from claim metadata
@@ -176,7 +178,7 @@ def realize(plan: dict, mode: str) -> dict:
         "mode": mode,
         "tone": "poetic" if mode == "mythic" else "grounded" if mode == "plain" else "evidence-first",
         "sections": sections,
-        "summary": plan["central_archetype"]["definition"],
+        "summary": sanitize_for_export(plan["central_archetype"]["definition"]),
         "disclaimer": "A deterministic symbolic reflection, not scientific personality measurement, diagnosis, prediction, or destiny.",
         "epistemic_validation": {
             "overclaim_patterns_found": has_overclaim,
