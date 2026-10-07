@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import re
+from .contracts import EPISTEMIC_TIERS
 
 # Prohibited language patterns that drift into overclaiming or prophecy
 PROHIBITED_OVERCLAIM_PATTERNS = [
@@ -28,13 +29,6 @@ HEALTHY_BOUNDARY_PATTERNS = [
 ]
 
 # Epistemic tier mapping for strength capping
-EPISTEMIC_TIERS = {
-    "deterministic_calculation": 1,
-    "deterministic_relationship": 2,
-    "traditional_symbolic_interpretation": 3,
-    "user_supplied": 4,
-    "interpretive_synthesis": 5,
-}
 
 MAX_INTERPRETIVE_STRENGTH = 5
 
@@ -82,58 +76,49 @@ def _safe_strength(value) -> float:
     raise ValueError(f"Unsupported claim support strength: {value!r}")
 
 
+def _claim_epistemic_class(claim: dict) -> str:
+    """Resolve the claim-level epistemic class used by the strength gate."""
+    value = (
+        claim.get("epistemic_class")
+        or claim.get("epistemic_label")
+        or (claim.get("metadata") or {}).get("epistemic_class")
+        or "interpretive_synthesis"
+    )
+    return str(value)
+
+
 def validate_epistemic_strength(claims: list[dict], mode: str) -> tuple[bool, list[str]]:
-    """Pinned return contract for interpretive strength validation.
+    """Enforce both claim epistemic tier and narrative-mode strength ceilings."""
+    issues: list[str] = []
+    if mode not in {"plain", "mythic", "research"}:
+        return False, [f"Unknown narrative mode: {mode!r}"]
 
-    Contract (asserted by ``tests/test_no_fabrication.py``):
+    mode_limit = (
+        float(MAX_INTERPRETIVE_STRENGTH)
+        if mode == "mythic"
+        else float(MAX_INTERPRETIVE_STRENGTH) * 0.8
+    )
 
-    * Returns ``(valid, issues)`` where ``valid`` is ``True`` if and only if
-      ``issues`` is empty.
-    * ``valid`` is ``True`` for an empty claim list or for every claim whose
-      ``strength`` stays at or below its mode threshold.
-    * ``valid`` is ``False`` and ``issues`` is non-empty whenever any claim
-      exceeds the mode's tier threshold. ``mythic`` permits up to
-      ``MAX_INTERPRETIVE_STRENGTH``; ``plain`` and ``research`` permit up to
-      ``MAX_INTERPRETIVE_STRENGTH * 0.8``.
-    * Unrecognised modes are accepted and impose no threshold, so they never
-      raise.
-    * ``valid`` is not a truth-confidence scalar; it is a bounded
-      policy-compliance flag.
-    """
-    issues = []
-    
-    # Mythic mode can be more poetic but still bounded
-    if mode == "mythic":
-        # Allow stronger language in mythic but check for prophecy drift
-        for claim in claims:
-            text = claim.get("text", "")
-            try:
-                strength = _safe_strength(claim.get("strength", 1))
-            except ValueError as exc:
-                issues.append(str(exc))
-                continue
-            if strength > MAX_INTERPRETIVE_STRENGTH:
-                issues.append(
-                    f"Mythic mode claim exceeds max interpretive strength "
-                    f"(current={strength}, max={MAX_INTERPRETIVE_STRENGTH})"
-                )
-    
-    # Research and plain modes should be more restrained
-    if mode in ("research", "plain"):
-        for claim in claims:
-            text = claim.get("text", "")
-            try:
-                strength = _safe_strength(claim.get("strength", 1))
-            except ValueError as exc:
-                issues.append(str(exc))
-                continue
-            threshold = MAX_INTERPRETIVE_STRENGTH * 0.8
-            if strength > threshold:
-                issues.append(
-                    f"{mode.capitalize()} mode claim has unusually high strength "
-                    f"(current={strength}, recommended max={threshold})"
-                )
-    
+    for claim in claims:
+        claim_id = str(claim.get("claim_id") or claim.get("sentence_id") or "<unknown>")
+        epistemic_class = _claim_epistemic_class(claim)
+        tier_limit = EPISTEMIC_TIERS.get(epistemic_class)
+        if tier_limit is None:
+            issues.append(f"{claim_id}: unknown epistemic class {epistemic_class!r}")
+            continue
+        try:
+            strength = _safe_strength(claim.get("strength", 1))
+        except ValueError as exc:
+            issues.append(f"{claim_id}: {exc}")
+            continue
+
+        allowed = min(float(tier_limit), mode_limit)
+        if strength > allowed:
+            issues.append(
+                f"{claim_id}: epistemic strength exceeds allowed tier/mode ceiling "
+                f"(class={epistemic_class}, current={strength}, max={allowed})"
+            )
+
     return len(issues) == 0, issues
 
 
@@ -153,20 +138,24 @@ def add_epistemic_metadata_to_section(section: dict, evidence_count: int,
 
 
 def sanitize_for_export(text: str) -> str:
-    """Remove or flag any language that could be misinterpreted as empirical claim."""
-    # Replace overclaiming phrases with softer alternatives
+    """Deterministically soften prohibited overclaim/prediction language."""
     sanitized = text
-    
-    replacements = [
-        (r"\byou are destined\b", "you may encounter patterns of"),
-        (r"this proves\b", "this suggests"),
-        (r"is a fact about you", "is an interpretive observation about"),
-        (r"scientifically measured", "symbolically associated with"),
-    ]
-    
+    replacements = (
+        (r"\byou are destined to always\b", "you may sometimes"),
+        (r"\byou are destined\b", "you may explore"),
+        (r"\byou were born to\b", "you may choose to"),
+        (r"\bthis proves\b", "this suggests"),
+        (r"\byou always\b", "you may sometimes"),
+        (r"\byou cannot\b", "you may find it difficult to"),
+        (r"\bwill definitely\b", "may"),
+        (r"\bguaranteed\b", "uncertain"),
+        (r"\bscientifically measured\b", "symbolically associated"),
+        (r"\bexact future events\b", "future possibilities"),
+        (r"\bis a fact about you\b", "is an interpretive observation about you"),
+        (r"\bdestined to\b", "may"),
+    )
     for pattern, replacement in replacements:
         sanitized = re.sub(pattern, replacement, sanitized, flags=re.IGNORECASE)
-    
     return sanitized
 
 
