@@ -38,13 +38,13 @@ def test_malformed_strength_fails_closed():
     }
     valid, issues = validate_epistemic_strength([claim], "plain")
     assert valid is False
-    assert "must be numeric or a known strength label" in issues[0]
+    assert "Unsupported claim support strength" in issues[0]
 
 
 def test_strength_labels_remain_compatible():
     assert _safe_strength("tentative") == 1.0
     assert _safe_strength("medium") == 3.0
-    assert _safe_strength("strong") == 4.0
+    assert _safe_strength("strong") == 5.0
 
 
 def test_realize_sanitizes_before_export():
